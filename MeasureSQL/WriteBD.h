@@ -1,0 +1,65 @@
+//---------------------------------------------------------------------------
+
+#ifndef WriteBDH
+#define WriteBDH
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+#include "VrButtons.hpp"
+#include "VrControls.hpp"
+#include <Dialogs.hpp>
+#include "ESBPCSDateTimeEdit.hpp"
+#include "ESBPCSPanel.hpp"
+#include <ExtCtrls.hpp>
+#include "VrProgressBar.hpp"
+#include "AdvGlassButton.hpp"
+#include "RzCmboBx.hpp"
+#include "RzEdit.hpp"
+#include <Mask.hpp>
+//---------------------------------------------------------------------------
+class TWriteForm : public TForm
+{
+__published:	// IDE-managed Components
+        TOpenDialog *OpenDialog1;
+        TLabel *Label1;
+        TLabel *Label2;
+        TLabel *Label3;
+        TLabel *Label4;
+        TESBDateTimeEdit *ESBDateTimeEdit1;
+        TVrProgressBar *VrProgressBar1;
+        TLabel *Label7;
+        TEdit *edtNominal;
+        TEdit *edtInterval;
+        TLabel *Label10;
+        TRzComboBox *cmb_Protokol_ID;
+        TRzComboBox *cmb_ID;
+        TLabel *Label9;
+        TRzComboBox *edtMsk;
+        TAdvGlassButton *btnClose;
+        TAdvGlassButton *btnSave;
+        TAdvGlassButton *btnView;
+        TAdvGlassButton *btnOpen;
+        TRzComboBox *edtType;
+        TRzComboBox *edtSpc;
+        TRzEdit *edtFile;
+        TRzEdit *edtMFile;
+        TRzComboBox *edtProtokol;
+        TAdvGlassButton *AdvGlassButton1;
+        void __fastcall btnCloseClick(TObject *Sender);
+        void __fastcall btnOpenClick(TObject *Sender);
+        void __fastcall btnSaveClick(TObject *Sender);
+        void __fastcall btnViewClick(TObject *Sender);
+        void __fastcall FormShow(TObject *Sender);
+        void __fastcall edtTypeSelect(TObject *Sender);
+        void __fastcall edtSpcSelect(TObject *Sender);
+        void __fastcall cmb_IDChange(TObject *Sender);
+private:	// User declarations
+public:		// User declarations
+        __fastcall TWriteForm(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TWriteForm *WriteForm;
+//---------------------------------------------------------------------------
+#endif

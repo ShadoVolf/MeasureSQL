@@ -1,0 +1,14 @@
+object DataModule3: TDataModule3
+  OldCreateOrder = False
+  Left = 507
+  Top = 179
+  Height = 296
+  Width = 377
+  object psi_measure_parameters: TMyQuery
+    Connection = DataModule1.CoordinatorDB
+    SQL.Strings = (
+      'select * from psi_measure_parameters order by ID')
+    Left = 88
+    Top = 104
+  end
+end

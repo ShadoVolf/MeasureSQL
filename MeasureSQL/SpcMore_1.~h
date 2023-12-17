@@ -1,0 +1,89 @@
+//---------------------------------------------------------------------------
+
+#ifndef SpcMore_1H
+#define SpcMore_1H
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+#include "AdvGlassButton.hpp"
+#include "DBAdvNavigator.hpp"
+#include <ExtCtrls.hpp>
+#include "RzDBEdit.hpp"
+#include "RzEdit.hpp"
+#include "RzLine.hpp"
+#include <Mask.hpp>
+#include "RzButton.hpp"
+#include "RzDBChk.hpp"
+#include "RzRadChk.hpp"
+//---------------------------------------------------------------------------
+class TSpcMore1 : public TForm
+{
+__published:	// IDE-managed Components
+        TAdvGlassButton *btnClose;
+        TDBAdvNavigator *DBAdvNavigator1;
+        TLabel *Label1;
+        TRzDBEdit *RzDBEdit46;
+        TRzLine *RzLine2;
+        TLabel *Label2;
+        TRzDBCheckBox *RzDBCheckBox26;
+        TLabel *Label6;
+        TRzDBEdit *RzDBEdit1;
+        TRzDBEdit *RzDBEdit2;
+        TLabel *Label7;
+        TLabel *Label8;
+        TRzDBEdit *RzDBEdit11;
+        TLabel *Label3;
+        TLabel *Label4;
+        TRzDBCheckBox *RzDBCheckBox1;
+        TRzDBEdit *RzDBEdit3;
+        TRzDBEdit *RzDBEdit4;
+        TRzDBEdit *RzDBEdit5;
+        TLabel *Label5;
+        TRzDBCheckBox *RzDBCheckBox2;
+        TRzDBEdit *RzDBEdit6;
+        TRzDBEdit *RzDBEdit7;
+        TRzDBEdit *RzDBEdit8;
+        TRzDBCheckBox *RzDBCheckBox3;
+        TRzDBEdit *RzDBEdit9;
+        TRzDBEdit *RzDBEdit10;
+        TRzDBEdit *RzDBEdit12;
+        TRzDBCheckBox *RzDBCheckBox4;
+        TRzDBEdit *RzDBEdit13;
+        TRzDBEdit *RzDBEdit14;
+        TRzDBEdit *RzDBEdit15;
+        TLabel *Label9;
+        TLabel *Label10;
+        TRzDBEdit *RzDBEdit16;
+        TRzDBEdit *RzDBEdit17;
+        TLabel *Label11;
+        TRzDBEdit *RzDBEdit18;
+        TRzDBEdit *RzDBEdit19;
+        TLabel *Label12;
+        TRzDBEdit *RzDBEdit20;
+        TRzDBEdit *RzDBEdit21;
+        TLabel *Label13;
+        TRzDBEdit *RzDBEdit22;
+        TRzDBEdit *RzDBEdit23;
+        TRzDBEdit *RzDBEdit24;
+        TRzDBEdit *RzDBEdit25;
+        TLabel *Label14;
+        TLabel *Label15;
+        TRzDBEdit *RzDBEdit26;
+        TRzDBEdit *RzDBEdit27;
+        TLabel *Label16;
+        TRzDBEdit *RzDBEdit28;
+        TRzDBEdit *RzDBEdit29;
+        TLabel *Label17;
+        TRzDBEdit *RzDBEdit30;
+        TRzDBEdit *RzDBEdit31;
+        void __fastcall btnCloseClick(TObject *Sender);
+private:	// User declarations
+public:		// User declarations
+        __fastcall TSpcMore1(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TSpcMore1 *SpcMore1;
+//---------------------------------------------------------------------------
+#endif

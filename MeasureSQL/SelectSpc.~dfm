@@ -1,0 +1,133 @@
+object SelectSpcForm: TSelectSpcForm
+  Left = 426
+  Top = 235
+  BorderStyle = bsNone
+  Caption = #1042#1099#1073#1086#1088' '#1089#1087#1077#1094#1080#1092#1080#1082#1072#1094#1080#1080
+  ClientHeight = 219
+  ClientWidth = 416
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object RzPanel1: TRzPanel
+    Left = 0
+    Top = 0
+    Width = 416
+    Height = 219
+    Align = alClient
+    Color = clBlack
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clLime
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 160
+      Top = 24
+      Width = 96
+      Height = 13
+      Caption = #1058#1080#1087' '#1088#1077#1079#1086#1085#1072#1090#1086#1088#1072
+    end
+    object Label2: TLabel
+      Left = 160
+      Top = 96
+      Width = 88
+      Height = 13
+      Caption = #1057#1087#1077#1094#1080#1092#1080#1082#1072#1094#1080#1103
+    end
+    object btnClose: TAdvGlassButton
+      Left = 287
+      Top = 173
+      Width = 121
+      Height = 32
+      BackColor = clRed
+      Caption = #1047#1072#1082#1088#1099#1090#1100
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ForeColor = clWhite
+      GlowColor = 16760205
+      InnerBorderColor = clBlack
+      OuterBorderColor = clWhite
+      ParentFont = False
+      ShineColor = clWhite
+      TabOrder = 0
+      Version = '1.2.3.0'
+      OnClick = btnCloseClick
+    end
+    object AdvGlassButton2: TAdvGlassButton
+      Left = 8
+      Top = 173
+      Width = 121
+      Height = 32
+      BackColor = clLime
+      Caption = #1042#1099#1073#1088#1072#1090#1100
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ForeColor = clWhite
+      GlowColor = 16760205
+      InnerBorderColor = clBlack
+      OuterBorderColor = clWhite
+      ParentFont = False
+      ShineColor = clWhite
+      TabOrder = 1
+      Version = '1.2.3.0'
+      OnClick = AdvGlassButton2Click
+    end
+    object edtSpc: TRzComboBox
+      Left = 48
+      Top = 120
+      Width = 329
+      Height = 21
+      Color = clBlack
+      Ctl3D = False
+      DisabledColor = clBlack
+      FlatButtonColor = clLime
+      FlatButtons = True
+      FrameColor = clYellow
+      FrameHotColor = clFuchsia
+      FrameHotTrack = True
+      FrameVisible = True
+      ItemHeight = 13
+      ParentColor = True
+      ParentCtl3D = False
+      Sorted = True
+      TabOrder = 2
+    end
+    object edtType: TRzComboBox
+      Left = 144
+      Top = 48
+      Width = 129
+      Height = 21
+      Color = clBlack
+      Ctl3D = False
+      DisabledColor = clBlack
+      FlatButtonColor = clLime
+      FlatButtons = True
+      FrameColor = clYellow
+      FrameHotColor = clFuchsia
+      FrameHotTrack = True
+      FrameVisible = True
+      ItemHeight = 13
+      ParentColor = True
+      ParentCtl3D = False
+      Sorted = True
+      TabOrder = 3
+      OnChange = edtTypeChange
+    end
+  end
+end

@@ -1,0 +1,186 @@
+//---------------------------------------------------------------------------
+
+#ifndef SpcMoreH
+#define SpcMoreH
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+#include "RzButton.hpp"
+#include "RzDBChk.hpp"
+#include "RzDBEdit.hpp"
+#include "RzEdit.hpp"
+#include "RzLine.hpp"
+#include "RzRadChk.hpp"
+#include <Mask.hpp>
+#include "RzCmboBx.hpp"
+#include "RzDBCmbo.hpp"
+#include "AdvGlassButton.hpp"
+#include "DBAdvNavigator.hpp"
+#include <ExtCtrls.hpp>
+//---------------------------------------------------------------------------
+class TFormMore : public TForm
+{
+__published:	// IDE-managed Components
+        TLabel *Label1;
+        TRzDBCheckBox *RzDBCheckBox26;
+        TRzDBEdit *RzDBEdit1;
+        TRzDBEdit *RzDBEdit2;
+        TLabel *Label2;
+        TRzDBCheckBox *RzDBCheckBox2;
+        TRzDBEdit *RzDBEdit3;
+        TRzDBEdit *RzDBEdit4;
+        TLabel *Label3;
+        TRzDBCheckBox *RzDBCheckBox3;
+        TRzDBEdit *RzDBEdit5;
+        TRzDBEdit *RzDBEdit6;
+        TLabel *Label4;
+        TRzLine *RzLine2;
+        TRzDBCheckBox *RzDBCheckBox4;
+        TRzDBEdit *RzDBEdit7;
+        TRzDBEdit *RzDBEdit8;
+        TLabel *Label5;
+        TLabel *Label6;
+        TLabel *Label7;
+        TLabel *Label8;
+        TRzDBEdit *RzDBEdit11;
+        TRzDBEdit *RzDBEdit12;
+        TLabel *Label9;
+        TRzDBCheckBox *RzDBCheckBox5;
+        TRzDBEdit *RzDBEdit13;
+        TRzDBEdit *RzDBEdit14;
+        TRzDBEdit *RzDBEdit15;
+        TLabel *Label10;
+        TRzDBCheckBox *RzDBCheckBox6;
+        TRzDBEdit *RzDBEdit16;
+        TRzDBEdit *RzDBEdit17;
+        TRzDBEdit *RzDBEdit18;
+        TLabel *Label11;
+        TRzDBCheckBox *RzDBCheckBox7;
+        TRzDBEdit *RzDBEdit19;
+        TRzDBEdit *RzDBEdit20;
+        TRzDBEdit *RzDBEdit21;
+        TLabel *Label12;
+        TRzDBCheckBox *RzDBCheckBox8;
+        TRzDBEdit *RzDBEdit22;
+        TRzDBEdit *RzDBEdit23;
+        TLabel *Label13;
+        TRzDBCheckBox *RzDBCheckBox9;
+        TLabel *Label14;
+        TRzDBCheckBox *RzDBCheckBox10;
+        TRzDBEdit *RzDBEdit9;
+        TLabel *Label15;
+        TRzDBCheckBox *RzDBCheckBox11;
+        TRzDBEdit *RzDBEdit10;
+        TRzDBEdit *RzDBEdit24;
+        TRzDBEdit *RzDBEdit25;
+        TLabel *Label16;
+        TRzDBEdit *RzDBEdit26;
+        TRzDBEdit *RzDBEdit27;
+        TRzDBCheckBox *RzDBCheckBox12;
+        TLabel *Label17;
+        TLabel *Label18;
+        TRzDBEdit *RzDBEdit28;
+        TLabel *Label19;
+        TRzDBEdit *RzDBEdit29;
+        TRzDBEdit *RzDBEdit30;
+        TRzDBCheckBox *RzDBCheckBox13;
+        TRzDBEdit *RzDBEdit31;
+        TLabel *Label20;
+        TRzDBCheckBox *RzDBCheckBox14;
+        TLabel *Label21;
+        TRzDBCheckBox *RzDBCheckBox15;
+        TLabel *Label22;
+        TRzDBCheckBox *RzDBCheckBox16;
+        TRzDBCheckBox *RzDBCheckBox17;
+        TRzDBEdit *RzDBEdit33;
+        TLabel *Label23;
+        TLabel *Label24;
+        TRzDBCheckBox *RzDBCheckBox18;
+        TRzDBEdit *RzDBEdit34;
+        TRzDBEdit *RzDBEdit35;
+        TRzDBEdit *RzDBEdit36;
+        TLabel *Label25;
+        TRzDBEdit *RzDBEdit32;
+        TRzDBEdit *RzDBEdit37;
+        TRzDBCheckBox *RzDBCheckBox19;
+        TRzDBEdit *RzDBEdit38;
+        TRzDBEdit *RzDBEdit39;
+        TRzDBCheckBox *RzDBCheckBox20;
+        TLabel *Label26;
+        TLabel *Label27;
+        TRzDBEdit *RzDBEdit40;
+        TRzDBEdit *RzDBEdit41;
+        TAdvGlassButton *btnClose;
+        TDBAdvNavigator *DBAdvNavigator1;
+        TRzDBCheckBox *RzDBCheckBox21;
+        TLabel *Label28;
+        TRzDBEdit *RzDBEdit42;
+        TRzDBEdit *RzDBEdit45;
+        TRzDBEdit *RzDBEdit48;
+        TRzDBEdit *RzDBEdit46;
+        TLabel *Label29;
+        TRzDBCheckBox *RzDBCheckBox22;
+        TRzDBEdit *RzDBEdit47;
+        TRzDBEdit *RzDBEdit49;
+        TRzDBEdit *RzDBEdit50;
+        TLabel *Label30;
+        TLabel *Label31;
+        TLabel *Label32;
+        TLabel *Label33;
+        TRzDBEdit *RzDBEdit51;
+        TLabel *Label34;
+        TRzDBEdit *RzDBEdit52;
+        TRzLine *RzLine1;
+        TRzLine *RzLine3;
+        TLabel *Label35;
+        TRzDBEdit *RzDBEdit53;
+        TLabel *Label36;
+        TRzDBEdit *RzDBEdit54;
+        TLabel *Label37;
+        TRzDBEdit *RzDBEdit55;
+        TLabel *Label38;
+        TRzDBEdit *RzDBEdit56;
+        TLabel *Label39;
+        TRzDBEdit *RzDBEdit57;
+        TLabel *Label40;
+        TRzDBEdit *RzDBEdit58;
+        TRzDBEdit *RzDBEdit59;
+        TLabel *Label41;
+        TLabel *Label42;
+        TRzDBEdit *RzDBEdit60;
+        TRzLine *RzLine4;
+        TRzLine *RzLine5;
+        TLabel *Label43;
+        TRzDBComboBox *RzDBComboBox1;
+        TLabel *Label45;
+        TRzDBComboBox *RzDBComboBox2;
+        TLabel *Label46;
+        TRzDBComboBox *RzDBComboBox3;
+        TRzDBCheckBox *RzDBCheckBox23;
+        TRzDBEdit *RzDBEdit61;
+        TRzDBEdit *RzDBEdit63;
+        TRzDBEdit *RzDBEdit65;
+        TLabel *Label47;
+        TLabel *Label48;
+        TLabel *Label49;
+        TAdvGlassButton *AdvGlassButton1;
+        TLabel *Label44;
+        TRzDBEdit *RzDBEdit44;
+        TLabel *Label50;
+        TRzDBCheckBox *RzDBCheckBox1;
+        TAdvGlassButton *AdvGlassButton2;
+        TRzDBCheckBox *RzDBCheckBox24;
+        void __fastcall btnCloseClick(TObject *Sender);
+        void __fastcall FormCreate(TObject *Sender);
+        void __fastcall AdvGlassButton1Click(TObject *Sender);
+        void __fastcall AdvGlassButton2Click(TObject *Sender);
+private:	// User declarations
+public:		// User declarations
+        __fastcall TFormMore(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TFormMore *FormMore;
+//---------------------------------------------------------------------------
+#endif

@@ -1,0 +1,21 @@
+//---------------------------------------------------------------------------
+
+#ifndef addNormH
+#define addNormH
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+//---------------------------------------------------------------------------
+class TAddNormForm : public TForm
+{
+__published:	// IDE-managed Components
+private:	// User declarations
+public:		// User declarations
+        __fastcall TAddNormForm(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TAddNormForm *AddNormForm;
+//---------------------------------------------------------------------------
+#endif

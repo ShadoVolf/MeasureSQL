@@ -1,0 +1,72 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "SelectSpc.h"
+#include "Data_RQ.h"
+#include "AddMskReal.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "RzPanel"
+#pragma link "AdvGlassButton"
+#pragma link "RzCmboBx"
+#pragma resource "*.dfm"
+TSelectSpcForm *SelectSpcForm;
+//---------------------------------------------------------------------------
+__fastcall TSelectSpcForm::TSelectSpcForm(TComponent* Owner)
+        : TForm(Owner)
+{
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TSelectSpcForm::FormShow(TObject *Sender)
+{
+RQ_Data->ResonatorTypes->Active=true;
+  edtType->Items->Clear();
+ RQ_Data->ResonatorTypes->First();
+        for (int i=0;i<RQ_Data->ResonatorTypes->RecordCount;i++){
+            edtType->Items->Add(RQ_Data->ResonatorTypes->FieldByName("Name")->AsString);
+            RQ_Data->ResonatorTypes->Next();
+        }
+ RQ_Data->ResonatorTypes->Active=false;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TSelectSpcForm::btnCloseClick(TObject *Sender)
+{
+this->Visible=false;
+}
+//---------------------------------------------------------------------------
+void __fastcall TSelectSpcForm::edtTypeChange(TObject *Sender)
+{
+
+ AnsiString sql="Select * from `resonatorType_RQ` where `Name`='"+ edtType->Text+"'";
+ RQ_Data->ResType->Active=false;
+ RQ_Data->ResType->SQL->Clear();
+ RQ_Data->ResType->SQL->Add(sql);
+ RQ_Data->ResType->Active=true;
+ RQ_Data->ResType->First();
+ AnsiString TypeID=RQ_Data->ResType->FieldByName("ID")->AsString;
+ RQ_Data->Spc_RQ->Active=false;
+ RQ_Data->Spc_RQ->SQL->Clear();
+ RQ_Data->Spc_RQ->SQL->Add("Select `наименование` from nomeklatura_rk where `РКНомер`='"+TypeID+"'");
+ RQ_Data->Spc_RQ->Active=true;
+ RQ_Data->Spc_RQ->First();
+  edtSpc->Items->Clear();
+ for (int i=0; i<RQ_Data->Spc_RQ->RecordCount;i++){
+        edtSpc->Items->Add(RQ_Data->Spc_RQ->FieldByName("наименование")->AsString);
+         RQ_Data->Spc_RQ->Next();
+ }
+  RQ_Data->Spc_RQ->Active=false;
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TSelectSpcForm::AdvGlassButton2Click(TObject *Sender)
+{
+AddMskForm->edtSpcN->Text=edtSpc->Text;
+AddMskForm->ActionList1->Actions[3]->Execute();
+this->Hide();
+
+}
+//---------------------------------------------------------------------------

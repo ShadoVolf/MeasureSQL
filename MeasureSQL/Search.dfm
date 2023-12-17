@@ -1,0 +1,89 @@
+object FastSearchForm: TFastSearchForm
+  Left = 307
+  Top = 381
+  BorderStyle = bsNone
+  Caption = 'FastSearch'
+  ClientHeight = 133
+  ClientWidth = 365
+  Color = clBlack
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clLime
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object btnClose: TVrShadowButton
+    Left = 245
+    Top = 90
+    Width = 97
+    Height = 30
+    Pen.Color = clRed
+    Caption = 'Close'
+    ParentFont = True
+    OnClick = btnCloseClick
+  end
+  object Label1: TLabel
+    Left = 24
+    Top = 24
+    Width = 19
+    Height = 13
+    Caption = #1058#1080#1087
+  end
+  object Label2: TLabel
+    Left = 152
+    Top = 24
+    Width = 75
+    Height = 13
+    Caption = #1057#1087#1077#1094#1080#1092#1080#1082#1072#1094#1080#1103
+  end
+  object btnSet: TVrShadowButton
+    Left = 21
+    Top = 90
+    Width = 97
+    Height = 30
+    Caption = 'Set'
+    ParentFont = True
+    OnClick = btnSetClick
+  end
+  object edtType: TRzComboBox
+    Left = 24
+    Top = 48
+    Width = 97
+    Height = 21
+    Color = clBlack
+    Ctl3D = False
+    DisabledColor = clBlack
+    FlatButtonColor = clLime
+    FlatButtons = True
+    FrameColor = clRed
+    FrameHotColor = clMaroon
+    FrameHotTrack = True
+    FrameVisible = True
+    ItemHeight = 13
+    ParentCtl3D = False
+    TabOrder = 0
+    OnSelect = edtTypeSelect
+  end
+  object edtSpc: TRzComboBox
+    Left = 152
+    Top = 48
+    Width = 193
+    Height = 21
+    Color = clBlack
+    Ctl3D = False
+    DisabledColor = clBlack
+    FlatButtonColor = clLime
+    FlatButtons = True
+    FrameColor = clRed
+    FrameHotColor = clMaroon
+    FrameHotTrack = True
+    FrameVisible = True
+    ItemHeight = 13
+    ParentCtl3D = False
+    TabOrder = 1
+  end
+end

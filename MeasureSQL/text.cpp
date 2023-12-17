@@ -1,0 +1,221 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "text.h"
+#include "Data.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "RzCmboBx"
+#pragma link "RzDBCmbo"
+#pragma link "RzDBEdit"
+#pragma link "RzDBNav"
+#pragma link "VrButtons"
+#pragma link "VrControls"
+#pragma resource "*.dfm"
+TTextForm *TextForm;
+//---------------------------------------------------------------------------
+__fastcall TTextForm::TTextForm(TComponent* Owner)
+        : TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall TTextForm::btnCloseClick(TObject *Sender)
+{
+TextForm->Hide();
+}
+//---------------------------------------------------------------------------
+void __fastcall TTextForm::btnCreateClick(TObject *Sender)
+{
+edtText->Lines->Add("["+DataModule1->SqlSpecification->FieldByName("Name")->AsString+"::"+DataModule1->SqlSpecification->FieldByName("Profile")->AsString+"]");
+edtText->Lines->Add("base= "+DataModule1->SqlSpecification->FieldByName("Tnastr")->AsString);
+edtText->Lines->Add("freq= "+DataModule1->SqlSpecification->FieldByName("Nominal")->AsString);
+DataModule1->Profile->First();
+for (int i=0; i<DataModule1->Profile->RecordCount; i++){
+       if (DataModule1->Profile->FieldByName("Name")->AsString==DataModule1->SqlSpecification->FieldByName("Profile")->AsString){
+          break;
+          }
+        DataModule1->Profile->Next();
+      }
+
+edtText->Lines->Add("thermo="+DataModule1->Profile->FieldByName("Temperatures")->AsString);
+  int k=0;
+  AnsiString S,S1;
+if (DataModule1->SqlSpecification->FieldByName("Ft")->AsString=="True" & DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="Series"){
+         if (DataModule1->SqlSpecification->FieldByName("Fmax")->AsString!="no" & DataModule1->SqlSpecification->FieldByName("Fmin")->AsString!="no"){
+              S=IntToStr(k)+"=Fs(val["+DataModule1->SqlSpecification->FieldByName("Tnastr")->AsString+"])<"+DataModule1->SqlSpecification->FieldByName("Fmax")->AsString+">"+DataModule1->SqlSpecification->FieldByName("Fmin")->AsString+"!F";
+              }
+           if (DataModule1->SqlSpecification->FieldByName("Fmax")->AsString!="no" & DataModule1->SqlSpecification->FieldByName("Fmin")->AsString=="no"){
+              S=IntToStr(k)+"=Fs(val["+DataModule1->SqlSpecification->FieldByName("Tnastr")->AsString+"])<"+DataModule1->SqlSpecification->FieldByName("Fmax")->AsString+"!F";
+              }
+           if (DataModule1->SqlSpecification->FieldByName("Fmax")->AsString=="no" & DataModule1->SqlSpecification->FieldByName("Fmin")->AsString!="no"){
+              S=IntToStr(k)+"=Fs(val["+DataModule1->SqlSpecification->FieldByName("Tnastr")->AsString+"])>"+DataModule1->SqlSpecification->FieldByName("Fmin")->AsString+"!F";
+              }
+       edtText->Lines->Add(S);
+       k=k+1;
+
+   }
+if (DataModule1->SqlSpecification->FieldByName("Ft")->AsString=="True" & DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="EQReact"){
+     if (DataModule1->SqlSpecification->FieldByName("Fmax")->AsString!="no" & DataModule1->SqlSpecification->FieldByName("Fmin")->AsString!="no"){
+              S=IntToStr(k)+"=Fl(val["+DataModule1->SqlSpecification->FieldByName("Tnastr")->AsString+"])<"+DataModule1->SqlSpecification->FieldByName("Fmax")->AsString+">"+DataModule1->SqlSpecification->FieldByName("Fmin")->AsString+"!F";
+              }
+           if (DataModule1->SqlSpecification->FieldByName("Fmax")->AsString!="no" & DataModule1->SqlSpecification->FieldByName("Fmin")->AsString=="no"){
+              S=IntToStr(k)+"=Fl(val["+DataModule1->SqlSpecification->FieldByName("Tnastr")->AsString+"])<"+DataModule1->SqlSpecification->FieldByName("Fmax")->AsString+"!F";
+              }
+           if (DataModule1->SqlSpecification->FieldByName("Fmax")->AsString=="no" & DataModule1->SqlSpecification->FieldByName("Fmin")->AsString!="no"){
+              S=IntToStr(k)+"=Fl(val["+DataModule1->SqlSpecification->FieldByName("Tnastr")->AsString+"])>"+DataModule1->SqlSpecification->FieldByName("Fmin")->AsString+"!F";
+              }
+       edtText->Lines->Add(S);
+       k++;
+
+   }
+if (DataModule1->SqlSpecification->FieldByName("R")->AsString=="True"){
+
+      if (DataModule1->SqlSpecification->FieldByName("Rmax")->AsString!="no" & DataModule1->SqlSpecification->FieldByName("Rmin")->AsString!="no"){
+              S=IntToStr(k)+"=R(val["+DataModule1->SqlSpecification->FieldByName("Tpar")->AsString+"])<"+DataModule1->SqlSpecification->FieldByName("Rmax")->AsString+">"+DataModule1->SqlSpecification->FieldByName("Rmin")->AsString+"!R";
+              }
+           if (DataModule1->SqlSpecification->FieldByName("Rmax")->AsString!="no" & DataModule1->SqlSpecification->FieldByName("Rmin")->AsString=="no"){
+              S=IntToStr(k)+"=R(val["+DataModule1->SqlSpecification->FieldByName("Tpar")->AsString+"])<"+DataModule1->SqlSpecification->FieldByName("Rmax")->AsString+"!R";
+              }
+           if (DataModule1->SqlSpecification->FieldByName("Rmax")->AsString=="no" & DataModule1->SqlSpecification->FieldByName("Rmin")->AsString!="no"){
+              S=IntToStr(k)+"=R(val["+DataModule1->SqlSpecification->FieldByName("Tpar")->AsString+"])>"+DataModule1->SqlSpecification->FieldByName("Rmin")->AsString+"!R";
+              }
+
+       edtText->Lines->Add(S);
+      k++;
+    }
+if (DataModule1->SqlSpecification->FieldByName("C0")->AsString=="True"){
+
+      if (DataModule1->SqlSpecification->FieldByName("C0max")->AsString!="no" & DataModule1->SqlSpecification->FieldByName("C0min")->AsString!="no"){
+              S=IntToStr(k)+"=C0(val["+DataModule1->SqlSpecification->FieldByName("Tc0")->AsString+"])<"+DataModule1->SqlSpecification->FieldByName("C0max")->AsString+">"+DataModule1->SqlSpecification->FieldByName("C0min")->AsString+"!C0";
+              }
+           if (DataModule1->SqlSpecification->FieldByName("C0max")->AsString!="no" & DataModule1->SqlSpecification->FieldByName("C0min")->AsString=="no"){
+              S=IntToStr(k)+"=C0(val["+DataModule1->SqlSpecification->FieldByName("Tc0")->AsString+"])<"+DataModule1->SqlSpecification->FieldByName("C0max")->AsString+"!C0";
+              }
+           if (DataModule1->SqlSpecification->FieldByName("C0max")->AsString=="no" & DataModule1->SqlSpecification->FieldByName("C0min")->AsString!="no"){
+              S=IntToStr(k)+"=C0(val["+DataModule1->SqlSpecification->FieldByName("Tc0")->AsString+"])>"+DataModule1->SqlSpecification->FieldByName("C0min")->AsString+"!C0";
+              }
+
+       edtText->Lines->Add(S);
+      k++;
+    }
+  if (DataModule1->SqlSpecification->FieldByName("Cq")->AsString=="True"){
+
+      if (DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString!="no" & DataModule1->SqlSpecification->FieldByName("Cqmin")->AsString!="no"){
+              S=IntToStr(k)+"=Cq(val["+DataModule1->SqlSpecification->FieldByName("Tcq")->AsString+"])<"+DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString+">"+DataModule1->SqlSpecification->FieldByName("Cqmin")->AsString+"!Cq";
+              }
+           if (DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString!="no" & DataModule1->SqlSpecification->FieldByName("Cqmin")->AsString=="no"){
+              S=IntToStr(k)+"=Cq(val["+DataModule1->SqlSpecification->FieldByName("Tcq")->AsString+"])<"+DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString+"!Cq";
+              }
+           if (DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString=="no" & DataModule1->SqlSpecification->FieldByName("Cqmin")->AsString!="no"){
+              S=IntToStr(k)+"=Cq(val["+DataModule1->SqlSpecification->FieldByName("Tcq")->AsString+"])>"+DataModule1->SqlSpecification->FieldByName("Cqmin")->AsString+"!Cq";
+              }
+
+       edtText->Lines->Add(S);
+      k++;
+    }
+  if (DataModule1->SqlSpecification->FieldByName("Q")->AsString=="True"){
+
+      if (DataModule1->SqlSpecification->FieldByName("Qmax")->AsString!="no" & DataModule1->SqlSpecification->FieldByName("Qmin")->AsString!="no"){
+              S=IntToStr(k)+"=Q(val["+DataModule1->SqlSpecification->FieldByName("Tq")->AsString+"])<"+DataModule1->SqlSpecification->FieldByName("Qmax")->AsString+">"+DataModule1->SqlSpecification->FieldByName("Qmin")->AsString+"!Q";              }
+           if (DataModule1->SqlSpecification->FieldByName("Qmax")->AsString!="no" & DataModule1->SqlSpecification->FieldByName("Qmin")->AsString=="no"){
+              S=IntToStr(k)+"=Q(val["+DataModule1->SqlSpecification->FieldByName("Tq")->AsString+"])<"+DataModule1->SqlSpecification->FieldByName("Qmax")->AsString+"!Q";
+              }
+           if (DataModule1->SqlSpecification->FieldByName("Qmax")->AsString=="no" & DataModule1->SqlSpecification->FieldByName("Qmin")->AsString!="no"){
+              S=IntToStr(k)+"=Q(val["+DataModule1->SqlSpecification->FieldByName("Tq")->AsString+"])>"+DataModule1->SqlSpecification->FieldByName("Qmin")->AsString+"!Q";
+              }
+
+       edtText->Lines->Add(S);
+      k++;
+    }
+if (DataModule1->SqlSpecification->FieldByName("Fmx")->AsString=="True" & DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="Series"){
+         if (DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsString!="no" & DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsString!="no"){
+              S=IntToStr(k)+"=Fs(max[:]-val["+DataModule1->SqlSpecification->FieldByName("Tnastr")->AsString+"])<"+DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsString+">"+DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsString+"!Fmax";
+              }
+           if (DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsString!="no" & DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsString=="no"){
+              S=IntToStr(k)+"=Fs(max[:]-val["+DataModule1->SqlSpecification->FieldByName("Tnastr")->AsString+"])<"+DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsString+"!Fmax";
+              }
+           if (DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsString=="no" & DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsString!="no"){
+              S=IntToStr(k)+"=Fs(max[:]-val["+DataModule1->SqlSpecification->FieldByName("Tnastr")->AsString+"])>"+DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsString+"!Fmax";
+              }
+       edtText->Lines->Add(S);
+       k=k+1;
+
+   }
+if (DataModule1->SqlSpecification->FieldByName("Fmx")->AsString=="True" & DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="EQReact"){
+     if (DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsString!="no" & DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsString!="no"){
+              S=IntToStr(k)+"=Fl(max[:]-val["+DataModule1->SqlSpecification->FieldByName("Tnastr")->AsString+"])<"+DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsString+">"+DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsString+"!Fmax";
+              }
+           if (DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsString!="no" & DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsString=="no"){
+              S=IntToStr(k)+"=Fl(max[:]-val["+DataModule1->SqlSpecification->FieldByName("Tnastr")->AsString+"])<"+DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsString+"!Fmax";
+              }
+           if (DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsString=="no" & DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsString!="no"){
+              S=IntToStr(k)+"=Fl(max[:]-val["+DataModule1->SqlSpecification->FieldByName("Tnastr")->AsString+"])>"+DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsString+"!Fmax";
+              }
+       edtText->Lines->Add(S);
+       k++;
+
+   }
+if (DataModule1->SqlSpecification->FieldByName("Fmn")->AsString=="True" & DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="Series"){
+         if (DataModule1->SqlSpecification->FieldByName("Fminmax")->AsString!="no" & DataModule1->SqlSpecification->FieldByName("Fminmin")->AsString!="no"){
+              S=IntToStr(k)+"=Fs(max[:]-val["+DataModule1->SqlSpecification->FieldByName("Tnastr")->AsString+"])<"+DataModule1->SqlSpecification->FieldByName("Fminmax")->AsString+">"+DataModule1->SqlSpecification->FieldByName("Fminmin")->AsString+"!Fmin";
+              }
+           if (DataModule1->SqlSpecification->FieldByName("Fminmax")->AsString!="no" & DataModule1->SqlSpecification->FieldByName("Fminmin")->AsString=="no"){
+              S=IntToStr(k)+"=Fs(max[:]-val["+DataModule1->SqlSpecification->FieldByName("Tnastr")->AsString+"])<"+DataModule1->SqlSpecification->FieldByName("Fminmax")->AsString+"!Fmin";
+              }
+           if (DataModule1->SqlSpecification->FieldByName("Fminmax")->AsString=="no" & DataModule1->SqlSpecification->FieldByName("Fminmin")->AsString!="no"){
+              S=IntToStr(k)+"=Fs(max[:]-val["+DataModule1->SqlSpecification->FieldByName("Tnastr")->AsString+"])>"+DataModule1->SqlSpecification->FieldByName("Fminmin")->AsString+"!Fmin";
+              }
+       edtText->Lines->Add(S);
+       k=k+1;
+
+   }
+if (DataModule1->SqlSpecification->FieldByName("Fmn")->AsString=="True" & DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="EQReact"){
+     if (DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsString!="no" & DataModule1->SqlSpecification->FieldByName("Fminmin")->AsString!="no"){
+              S=IntToStr(k)+"=Fl(max[:]-val["+DataModule1->SqlSpecification->FieldByName("Tnastr")->AsString+"])<"+DataModule1->SqlSpecification->FieldByName("Fminmax")->AsString+">"+DataModule1->SqlSpecification->FieldByName("Fminmin")->AsString+"!Fmin";
+              }
+           if (DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsString!="no" & DataModule1->SqlSpecification->FieldByName("Fminmin")->AsString=="no"){
+              S=IntToStr(k)+"=Fl(max[:]-val["+DataModule1->SqlSpecification->FieldByName("Tnastr")->AsString+"])<"+DataModule1->SqlSpecification->FieldByName("Fminmax")->AsString+"!Fmin";
+              }
+           if (DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsString=="no" & DataModule1->SqlSpecification->FieldByName("Fminmin")->AsString!="no"){
+              S=IntToStr(k)+"=Fl(max[:]-val["+DataModule1->SqlSpecification->FieldByName("Tnastr")->AsString+"])>"+DataModule1->SqlSpecification->FieldByName("Fminmin")->AsString+"!Fmin";
+              }
+       edtText->Lines->Add(S);
+       k++;
+
+   }
+
+   if (DataModule1->SqlSpecification->FieldByName("RR")->AsString=="True"){
+
+      if (DataModule1->SqlSpecification->FieldByName("RRmax")->AsString!="no" & DataModule1->SqlSpecification->FieldByName("RRmin")->AsString!="no"){
+              S=IntToStr(k)+"=R(max[:]/min[:])<"+DataModule1->SqlSpecification->FieldByName("RRmax")->AsString+">"+DataModule1->SqlSpecification->FieldByName("RRmin")->AsString+"!RR";              }
+           if (DataModule1->SqlSpecification->FieldByName("RRmax")->AsString!="no" & DataModule1->SqlSpecification->FieldByName("RRmin")->AsString=="no"){
+              S=IntToStr(k)+"=R(max[:]/min[:])<"+DataModule1->SqlSpecification->FieldByName("RRmax")->AsString+"!RR";
+              }
+           if (DataModule1->SqlSpecification->FieldByName("RRmax")->AsString=="no" & DataModule1->SqlSpecification->FieldByName("RRmin")->AsString!="no"){
+              S=IntToStr(k)+"=R(max[:]/min[:])>"+DataModule1->SqlSpecification->FieldByName("RRmin")->AsString+"!RR";
+              }
+
+       edtText->Lines->Add(S);
+      k++;
+    }
+ if (DataModule1->SqlSpecification->FieldByName("FTx")->AsString=="True"){
+
+      if (DataModule1->SqlSpecification->FieldByName("FTmax")->AsString!="no" & DataModule1->SqlSpecification->FieldByName("FTmin")->AsString!="no"){
+              S=IntToStr(k)+"=Fs(val["+DataModule1->SqlSpecification->FieldByName("FTxt")->AsString+"]-val["+DataModule1->SqlSpecification->FieldByName("Tnastr")->AsString+"])<"+DataModule1->SqlSpecification->FieldByName("FTmax")->AsString+">"+DataModule1->SqlSpecification->FieldByName("FTmin")->AsString+"!F(T),ppm";              }
+           if (DataModule1->SqlSpecification->FieldByName("FTmax")->AsString!="no" & DataModule1->SqlSpecification->FieldByName("RRmin")->AsString=="no"){
+              S=IntToStr(k)+"=Fs(val["+DataModule1->SqlSpecification->FieldByName("FTxt")->AsString+"]-val["+DataModule1->SqlSpecification->FieldByName("Tnastr")->AsString+"])<"+DataModule1->SqlSpecification->FieldByName("FTmax")->AsString+"!F(T),ppm";
+              }
+           if (DataModule1->SqlSpecification->FieldByName("FTmax")->AsString=="no" & DataModule1->SqlSpecification->FieldByName("FTmin")->AsString!="no"){
+              S=IntToStr(k)+"=Fs(val["+DataModule1->SqlSpecification->FieldByName("FTxt")->AsString+"]-val["+DataModule1->SqlSpecification->FieldByName("Tnastr")->AsString+"])>"+DataModule1->SqlSpecification->FieldByName("FTmin")->AsString+"!F(T),ppm";
+              }
+
+       edtText->Lines->Add(S);
+      k++;
+    }
+
+
+
+}
+//---------------------------------------------------------------------------

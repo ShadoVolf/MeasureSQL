@@ -1,0 +1,25 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "Graphics.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "RzButton"
+#pragma link "RzPanel"
+#pragma link "TeeComma"
+#pragma link "TeeEdit"
+#pragma resource "*.dfm"
+TGForm *GForm;
+//---------------------------------------------------------------------------
+__fastcall TGForm::TGForm(TComponent* Owner)
+        : TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall TGForm::btnCloseClick(TObject *Sender)
+{
+GForm->Hide();
+}
+//---------------------------------------------------------------------------

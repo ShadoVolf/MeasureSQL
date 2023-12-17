@@ -1,0 +1,84 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "FileLoad.h"
+#include "Main.h"
+#include "data1.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "AdvGlassButton"
+#pragma link "RzCmboBx"
+#pragma link "RzEdit"
+#pragma link "RzShellDialogs"
+#pragma link "AdvEdBtn"
+#pragma link "AdvEdit"
+#pragma link "AdvFileNameEdit"
+#pragma resource "*.dfm"
+TFileLoadForm *FileLoadForm;
+//---------------------------------------------------------------------------
+__fastcall TFileLoadForm::TFileLoadForm(TComponent* Owner)
+        : TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall TFileLoadForm::btnCloseClick(TObject *Sender)
+{
+this->Hide();
+MainForm->Show();
+}
+//---------------------------------------------------------------------------
+void __fastcall TFileLoadForm::btnOpenClick(TObject *Sender)
+{
+
+if (RzOpenDialog1->Execute()){
+     edtFileName->Text=RzOpenDialog1->FileName;
+       AnsiString FF;
+   for (int i=0; i<edtFileName->Text.Length(); i++){
+   AnsiString g=edtFileName->Text.SubString(edtFileName->Text.Length()-i,1);
+      if (g=="\\"){
+         FF=edtFileName->Text.SubString(edtFileName->Text.Length()-i+1,i-4);
+         break;
+      }
+
+
+   }
+   edtFileName->Text=FF;
+}
+}
+//---------------------------------------------------------------------------
+void __fastcall TFileLoadForm::BtnSeveClick(TObject *Sender)
+{
+if (edtFile->ItemIndex==-1){
+   DataModule2->Comand->SQL->Clear();
+   DataModule2->Comand->Params->CreateParam(ftBlob,"BlobFile",ptInput);
+   DataModule2->Comand->Params->ParamByName("BlobFile")->LoadFromFile(RzOpenDialog1->FileName,ftBlob);
+
+   AnsiString s="INSERT INTO print_files (FILE,Name) VALUES (:BlobFile ,'"+edtFileName->Text+"')";
+   DataModule2->Comand->SQL->Add(s);
+   DataModule2->Comand->Execute();
+
+}
+else {
+    DataModule2->Comand->SQL->Clear();
+   DataModule2->Comand->Params->CreateParam(ftBlob,"BlobFile",ptInput);
+   DataModule2->Comand->Params->ParamByName("BlobFile")->LoadFromFile(RzOpenDialog1->FileName,ftBlob);
+   AnsiString s="UPDATE print_files SET FILE=:BlobFile where Name='"+edtFile->Text+"'";
+   DataModule2->Comand->SQL->Add(s);
+   DataModule2->Comand->Execute();
+}
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TFileLoadForm::FormShow(TObject *Sender)
+{
+edtFile->Items->Clear();
+DataModule2->Print_Files->Active=true;
+DataModule2->Print_Files->First();
+for (int i=0; i<DataModule2->Print_Files->RecordCount; i++){
+         edtFile->Items->Add(DataModule2->Print_Files->FieldByName("Name")->AsString);
+         DataModule2->Print_Files->Next();
+}
+}
+//---------------------------------------------------------------------------

@@ -1,0 +1,652 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "number.h"
+#include "Data.h"
+#include "Main.h"
+#include "NumberM.h"
+#include "FileSelect.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "VrButtons"
+#pragma link "VrControls"
+#pragma link "RzDBGrid"
+#pragma link "RzPanel"
+#pragma link "VrProgressBar"
+#pragma link "RzDBNav"
+#pragma resource "*.dfm"
+TNumberForm *NumberForm;
+//---------------------------------------------------------------------------
+__fastcall TNumberForm::TNumberForm(TComponent* Owner)
+        : TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall TNumberForm::btnCloseClick(TObject *Sender)
+{
+NumberForm->Hide();
+}
+//---------------------------------------------------------------------------
+void __fastcall TNumberForm::FormShow(TObject *Sender)
+{
+DataModule1->Numbers->Active=true;
+}
+//---------------------------------------------------------------------------
+void __fastcall TNumberForm::btnF1Click(TObject *Sender)
+{
+DataModule1->Numbers->Active=false;
+DataModule1->Numbers->SQL->Clear();
+DataModule1->Numbers->SQL->Add("SELECT DISTINCT    * FROM  psi WHERE  psi.`Status` = 'Сдано' ORDER BY psi.`msk`");
+DataModule1->Numbers->Active=true;
+btnF2->Active=false;
+btnF3->Active=false;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TNumberForm::btnF2Click(TObject *Sender)
+{
+DataModule1->Numbers->Active=false;
+DataModule1->Numbers->SQL->Clear();
+DataModule1->Numbers->SQL->Add("SELECT DISTINCT    * FROM  psi WHERE  psi.`Status` = 'Передано' ORDER BY psi.`msk`");
+DataModule1->Numbers->Active=true;
+btnF1->Active=false;
+btnF3->Active=false;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TNumberForm::btnF3Click(TObject *Sender)
+{
+DataModule1->Numbers->Active=false;
+DataModule1->Numbers->SQL->Clear();
+DataModule1->Numbers->SQL->Add("SELECT DISTINCT    * FROM  psi ORDER BY psi.`msk`");
+DataModule1->Numbers->Active=true;
+btnF1->Active=false;
+btnF2->Active=false;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TNumberForm::btnSetClick(TObject *Sender)
+{
+int l;
+if(MainForm->edtMachine->Text=="Saunders" || MainForm->edtMachine->Text=="Saunders1"){
+         if (MainForm->ledFile->Active & MainForm->RzCheckList1->ItemsChecked()>0){
+                          AnsiString l1,s,s1,s3,s2,s4,s5,s6;
+                                    for(int i=0; i<MainForm->RzCheckList1->Count;i++){
+                                              if(MainForm->RzCheckList1->ItemState[i]!=0){
+                                                        l=i+1;
+                                                        break;
+                                                }
+                                      }
+                          s="Select * From configuration where Name = '"+DataModule1->FileSelect->FieldByName("FileName")->AsString+"' and nSetupFileIndex ='"+l+"' and Size ='"+DataModule1->FileSelect->FieldByName("Size")->AsString+"' and Machine='"+MainForm->edtMachine->Text+"'";
+                          s1="Select * From coordinator.`setup file headers` where Name = '"+DataModule1->FileSelect->FieldByName("FileName")->AsString+"' and nSetupFileIndex ='"+l+"' and Size ='"+DataModule1->FileSelect->FieldByName("Size")->AsString+"' and Machine='"+MainForm->edtMachine->Text+"'";
+                          s3="SELECT  * FROM `crystal data` WHERE  `crystal data`.Name = '"+DataModule1->FileSelect->FieldByName("FileName")->AsString+"' and `crystal data`.nSetupFileIndex = '"+l+"' and Size ='"+DataModule1->FileSelect->FieldByName("Size")->AsString+"' and Machine='"+MainForm->edtMachine->Text+"'";
+                          s4="SELECT * FROM `setup data` WHERE Name = '"+DataModule1->FileSelect->FieldByName("FileName")->AsString+"' and nSetupFileIndex ='"+l+"' and Size ='"+DataModule1->FileSelect->FieldByName("Size")->AsString+"' ORDER BY `strCrystalID`";
+                          s5="SELECT * FROM `post process data` WHERE Name = '"+DataModule1->FileSelect->FieldByName("FileName")->AsString+"' and nSetupFileIndex ='"+l+"' and Size ='"+DataModule1->FileSelect->FieldByName("Size")->AsString+"' and Machine='"+MainForm->edtMachine->Text+"' ORDER BY `strCrystalID`";
+                          s6="SELECT * FROM  numberall WHERE  numberall.Msk = '"+DataModule1->Numbers->FieldByName("MSK")->AsString+ "' and File = '"+DataModule1->FileSelect->FieldByName("FileName")->AsString+"' and Size ='"+DataModule1->FileSelect->FieldByName("Size")->AsString+ "' and Machine='"+MainForm->edtMachine->Text+"' ORDER BY   numberall.`Position`";
+
+//------ установка спецификации-----------------------------------------------------------------------------
+            int g=0;
+AnsiString H;
+H=DataModule1->Numbers->FieldByName("Name")->AsString;
+DataModule1->SqlSpecification->First();
+for (int i=0; i<DataModule1->SqlSpecification->RecordCount;i++){
+      if (H==DataModule1->SqlSpecification->FieldByName("Name")->AsString){
+          g=1;
+
+          MainForm->ledSpc->Active=true;
+           break;
+          }
+       DataModule1->SqlSpecification->Next();
+       }
+      if (g==0){
+         ShowMessage("Спецификация не найдена");
+         }
+//---------------------------------------------------------------------------------------------
+
+DataModule1->SqlSetupFileHeaders->Active=false;
+DataModule1->SqlSetupFileHeaders->SQL->Clear();
+DataModule1->SqlSetupFileHeaders->SQL->Add(s1);
+DataModule1->SqlSetupFileHeaders->Active=true;
+
+
+DataModule1->SqlConfiguration->Active=false;
+DataModule1->SqlConfiguration->SQL->Clear();
+DataModule1->SqlConfiguration->SQL->Add(s);
+DataModule1->SqlConfiguration->Active=true;
+
+DataModule1->SQLCrystalData->Active=false;
+DataModule1->SQLCrystalData->SQL->Clear();
+DataModule1->SQLCrystalData->SQL->Add(s3);
+DataModule1->SQLCrystalData->Active=true;
+
+DataModule1->SQLSetupData->Active=false;
+DataModule1->SQLSetupData->SQL->Clear();
+DataModule1->SQLSetupData->SQL->Add(s4);
+DataModule1->SQLSetupData->Active=true;
+
+DataModule1->SQLPostProcessData->Active=false;
+DataModule1->SQLPostProcessData->SQL->Clear();
+DataModule1->SQLPostProcessData->SQL->Add(s5);
+DataModule1->SQLPostProcessData->Active=true;
+
+DataModule1->Numberall->Active=false;
+DataModule1->Numberall->SQL->Clear();
+DataModule1->Numberall->SQL->Add(s6);
+DataModule1->Numberall->Active=true;
+
+
+
+DataModule1->NumberCurrent->Active=true;
+DataModule1->NumberBD->Active=true;
+
+DataModule1->NumberCurrent->EmptyTable();
+DataModule1->NumberBD->Append();
+NumberMForm->edtMSK->Text=DataModule1->Numbers->FieldByName("MSK")->AsString;
+NumberMForm->edtFile->Text=DataModule1->FileSelect->FieldByName("FileName")->AsString;
+DataModule1->NumberBD->FieldByName("MSK")->AsString=DataModule1->Numbers->FieldByName("MSK")->AsString;
+DataModule1->NumberBD->FieldByName("File")->AsString=DataModule1->FileSelect->FieldByName("FileName")->AsString;
+DataModule1->NumberBD->Post();
+double m;
+AnsiString m1,m2,S,S1,S2,S3,S4,m3,m5,Sn,Sn1,Sn2;
+int Wheel;
+S=DataModule1->Numbers->FieldByName("Begin")->AsString;
+S4=DataModule1->Numbers->FieldByName("End")->AsString;
+S1=DataModule1->SqlConfiguration->FieldByName("strStartCrystalID")->AsString;
+S2=DataModule1->SqlConfiguration->FieldByName("strStopCrystalID")->AsString;
+m3=DataModule1->Numbers->FieldByName("Begin")->AsString;
+m1=DataModule1->Numbers->FieldByName("Type")->AsString;
+VrProgressBar1->MaxValue=DataModule1->SQLPostProcessData->RecordCount;
+VrProgressBar1->Position=0;
+if (DataModule1->SqlSpecification->FieldByName("Type")->AsString=="HC43"){
+    Wheel=127;
+    }
+if (DataModule1->SqlSpecification->FieldByName("Type")->AsString=="HC37"){
+    Wheel=39;
+    }
+if (DataModule1->SqlSpecification->FieldByName("Type")->AsString=="HC37L"){
+    Wheel=39;
+    }
+if (DataModule1->SqlSpecification->FieldByName("Type")->AsString=="H45"){
+    Wheel=127;
+    }
+if (DataModule1->SqlSpecification->FieldByName("Type")->AsString=="HC35"){
+    Wheel=39;
+    }
+if (DataModule1->SqlSpecification->FieldByName("Type")->AsString=="HC40"){
+    Wheel=39;
+    }
+
+   if (S.Length()==4){
+            m=m3.ToInt();
+            for (int i=0;i<=DataModule1->SQLPostProcessData->RecordCount-1;i++){
+                   DataModule1->Numberall->Append();
+                   DataModule1->NumberCurrent->Append();
+                           S3="";
+                          if (S1.SubString(2,3).ToInt()+i<=Wheel){
+                                 if (S1.SubString(2,3).ToInt()+i<10){
+                                            S3="00";
+                                            }
+                                  if (S1.SubString(2,3).ToInt()+i<100&S1.SubString(2,3).ToInt()+i>=10){
+                                            S3="0";
+                                            }
+                               DataModule1->Numberall->FieldByName("Position")->AsString=S1.SubString(1,1)+S3+(S1.SubString(2,3).ToInt()+i);
+                               DataModule1->NumberCurrent->FieldByName("Position")->AsString=S1.SubString(1,1)+S3+(S1.SubString(2,3).ToInt()+i);
+
+                                            }
+                            else {
+                                  if (S1.SubString(2,3).ToInt()+i-Wheel<10){
+                                            S3="00";
+                                            }
+                                  if (S1.SubString(2,3).ToInt()+i-Wheel<100&S1.SubString(2,3).ToInt()+i-Wheel>=10){
+                                            S3="0";
+                                            }
+
+                           DataModule1->Numberall->FieldByName("Position")->AsString=S2.SubString(1,1)+S3+(S1.SubString(2,3).ToInt()+i-Wheel);
+                            DataModule1->NumberCurrent->FieldByName("Position")->AsString=S2.SubString(1,1)+S3+(S1.SubString(2,3).ToInt()+i-Wheel);
+                               }
+
+                   DataModule1->NumberCurrent->FieldByName("N")->AsString=i+1;
+                   m2=m1;
+                     if (m+i<10){
+                            m2=m1+"000";
+                      }
+                     if (m+i<100&m+i>=10){
+                            m2=m1+"00";
+                      }
+                     if (m+i<1000&m+i>=100){
+                             m2=m1+"0";
+                     }
+
+
+                   DataModule1->NumberCurrent->FieldByName("SNumber")->AsString=m2+(m+i);
+                   DataModule1->Numberall->FieldByName("SNumber")->AsString=m2+(m+i);
+                   NumberMForm->gridNumbers->Cells[2][i+1]=m2+(m+i);;
+                   DataModule1->NumberCurrent->Post();
+                   DataModule1->Numberall->FieldByName("MSK")->AsString=DataModule1->Numbers->FieldByName("MSK")->AsString;
+                   DataModule1->Numberall->FieldByName("Machine")->AsString=MainForm->edtMachine->Text;
+                   DataModule1->Numberall->FieldByName("File")->AsString=DataModule1->FileSelect->FieldByName("FileName")->AsString;
+                   DataModule1->Numberall->FieldByName("Size")->AsString=DataModule1->FileSelect->FieldByName("Size")->AsString;
+                   DataModule1->Numberall->Post();
+                   VrProgressBar1->Position=i+1;
+     }
+ }
+
+  if (S.Length()==6){
+        m=m3.SubString(3,4).ToInt();
+      if (S.SubString(1,2)==S4.SubString(1,2)){
+            for (int i=0;i<=DataModule1->SQLPostProcessData->RecordCount-1;i++){
+                   DataModule1->Numberall->Append();
+                   DataModule1->NumberCurrent->Append();
+                           S3="";
+                          if (S1.SubString(2,3).ToInt()+i<=Wheel){
+                                 if (S1.SubString(2,3).ToInt()+i<10){
+                                            S3="00";
+                                            }
+                                  if (S1.SubString(2,3).ToInt()+i<100&S1.SubString(2,3).ToInt()+i>=10){
+                                            S3="0";
+                                            }
+                               DataModule1->NumberCurrent->FieldByName("Position")->AsString=S1.SubString(1,1)+S3+(S1.SubString(2,3).ToInt()+i);
+                               DataModule1->Numberall->FieldByName("Position")->AsString=S1.SubString(1,1)+S3+(S1.SubString(2,3).ToInt()+i);
+
+                                            }
+                            if (S1.SubString(2,3).ToInt()+i<=Wheel*2&S1.SubString(2,3).ToInt()+i>Wheel){
+                                  if ((S1.SubString(2,3).ToInt()+i)-Wheel<10){
+                                            S3="00";
+                                            }
+                                  if ((S1.SubString(2,3).ToInt()+i)-Wheel<100&(S1.SubString(2,3).ToInt()+i)-Wheel>=10){
+                                            S3="0";
+                                            }
+                                Sn1=S1.SubString(1,1);
+                            if(Sn1=="A"){
+                                 Sn="B";
+                                 }
+                            if(Sn1=="B"){
+                                 Sn="C";
+                                 }
+                            if(Sn1=="C"){
+                                Sn="D";
+                                }
+                           DataModule1->NumberCurrent->FieldByName("Position")->AsString=Sn+S3+(S1.SubString(2,3).ToInt()+i-Wheel);
+                            DataModule1->Numberall->FieldByName("Position")->AsString=Sn+S3+(S1.SubString(2,3).ToInt()+i-Wheel);
+                               }
+                           if (S1.SubString(2,3).ToInt()+i>Wheel*2){
+
+                           if ((S1.SubString(2,3).ToInt()+i)-Wheel*2<10){
+                                            S3="00";
+                                            }
+                                  if ((S1.SubString(2,3).ToInt()+i)-Wheel*2<100&(S1.SubString(2,3).ToInt()+i)-Wheel*2>=10){
+                                            S3="0";
+                                            }
+                                Sn2=Sn1;
+                            if(Sn2=="A"){
+                                 Sn="C";
+                                 }
+                            if(Sn2=="B"){
+                                 Sn="D";
+                                 }
+                            DataModule1->NumberCurrent->FieldByName("Position")->AsString=Sn+S3+(S1.SubString(2,3).ToInt()+i-Wheel*2);
+                            DataModule1->Numberall->FieldByName("Position")->AsString=Sn+S3+(S1.SubString(2,3).ToInt()+i-Wheel*2);
+                               }
+
+
+                   DataModule1->NumberCurrent->FieldByName("N")->AsString=i+1;
+                   m2=m1;
+                     if (m+i<10){
+                            m2=m1+"000";
+                      }
+                     if (m+i<100&m+i>=10){
+                            m2=m1+"00";
+                      }
+                     if (m+i<1000&m+i>=100){
+                             m2=m1+"0";
+                     }
+                   DataModule1->NumberCurrent->FieldByName("SNumber")->AsString=m2+(m+i);
+                   DataModule1->Numberall->FieldByName("SNumber")->AsString=m2+(m+i);
+                   NumberMForm->gridNumbers->Cells[2][i+1]=m2+(m+i);
+                   DataModule1->NumberCurrent->Post();
+                   DataModule1->Numberall->FieldByName("MSK")->AsString=DataModule1->Numbers->FieldByName("MSK")->AsString;
+                   DataModule1->Numberall->FieldByName("Machine")->AsString=MainForm->edtMachine->Text;
+                   DataModule1->Numberall->FieldByName("File")->AsString=DataModule1->FileSelect->FieldByName("FileName")->AsString;
+                   DataModule1->Numberall->FieldByName("Size")->AsString=DataModule1->FileSelect->FieldByName("Size")->AsString;
+                   DataModule1->Numberall->Post();
+                   VrProgressBar1->Position=i+1;
+     }
+   }
+ else {
+
+
+                for (int i=0;i<=DataModule1->SQLPostProcessData->RecordCount-1;i++){
+                  DataModule1->Numberall->Append();
+                   DataModule1->NumberCurrent->Append();
+                           S3="";
+                          if (S1.SubString(2,3).ToInt()+i<=Wheel){
+                                 if (S1.SubString(2,3).ToInt()+i<10){
+                                            S3="00";
+                                            }
+                                  if (S1.SubString(2,3).ToInt()+i<100&S1.SubString(2,3).ToInt()+i>=10){
+                                            S3="0";
+                                            }
+                               DataModule1->NumberCurrent->FieldByName("Position")->AsString=S1.SubString(1,1)+S3+(S1.SubString(2,3).ToInt()+i);
+                               DataModule1->Numberall->FieldByName("Position")->AsString=S1.SubString(1,1)+S3+(S1.SubString(2,3).ToInt()+i);
+
+                                            }
+                            if (S1.SubString(2,3).ToInt()+i<=Wheel*2&S1.SubString(2,3).ToInt()+i>Wheel){
+                                  if (S1.SubString(2,3).ToInt()+i-Wheel<10){
+                                            S3="00";
+                                            }
+                                  if (S1.SubString(2,3).ToInt()+i-Wheel<100&S1.SubString(2,3).ToInt()+i-Wheel>=10){
+                                            S3="0";
+                                            }
+                              Sn1=S1.SubString(1,1);
+                            if(Sn1=="A"){
+                                 Sn="B";
+                                 }
+                            if(Sn1=="B"){
+                                 Sn="C";
+                                 }
+                            if(Sn1=="C"){
+                                Sn="D";
+                                }
+                           DataModule1->NumberCurrent->FieldByName("Position")->AsString=S2.SubString(1,1)+S3+(S1.SubString(2,3).ToInt()+i-Wheel);
+                            DataModule1->Numberall->FieldByName("Position")->AsString=S2.SubString(1,1)+S3+(S1.SubString(2,3).ToInt()+i-Wheel);
+                               }
+
+                         if (S1.SubString(2,3).ToInt()+i>Wheel*2){
+
+                           if ((S1.SubString(2,3).ToInt()+i)-Wheel*2<10){
+                                            S3="00";
+                                            }
+                                  if ((S1.SubString(2,3).ToInt()+i)-Wheel*2<100&(S1.SubString(2,3).ToInt()+i)-Wheel*2>=10){
+                                            S3="0";
+                                            }
+                                Sn2=Sn1;
+                            if(Sn2=="A"){
+                                 Sn="C";
+                                 }
+                            if(Sn2=="B"){
+                                 Sn="D";
+                                 }
+
+                           DataModule1->NumberCurrent->FieldByName("Position")->AsString=Sn+S3+(S1.SubString(2,3).ToInt()+i-Wheel*2);
+                            DataModule1->Numberall->FieldByName("Position")->AsString=Sn+S3+(S1.SubString(2,3).ToInt()+i-Wheel*2);
+                               }
+
+
+                   DataModule1->NumberCurrent->FieldByName("N")->AsString=i+1;
+                   if (m+i<=9999){
+                               m5=S.SubString(1,2);
+                                m2=m5;
+                                  if (m+i<10){
+                                        m2=m5+"000";
+                                    }
+                                   if (m+i<100&m+i>=10){
+                                        m2=m5+"00";
+                                     }
+                                    if (m+i<1000&m+i>=10){
+                                         m2=m5+"0";
+                                      }
+
+                                 DataModule1->NumberCurrent->FieldByName("SNumber")->AsString=m2+(m+i);
+                                 DataModule1->Numberall->FieldByName("SNumber")->AsString=m2+(m+i);
+
+                        }
+                      else {
+                             m5=S4.SubString(1,2);
+                                m2=m5;
+                                  if (m+i-9999<10){
+                                        m2=m5+"000";
+                                    }
+                                   if (m+i-9999<100&m+i>=10){
+                                        m2=m5+"00";
+                                     }
+                                    if (m+i-9999<1000&m+i>=10){
+                                         m2=m5+"0";
+                                      }
+
+                                 DataModule1->NumberCurrent->FieldByName("SNumber")->AsString=m2+(m+i-9999);
+                                 DataModule1->Numberall->FieldByName("SNumber")->AsString=m2+(m+i-9999);
+
+                       }
+
+                   DataModule1->NumberCurrent->Post();
+                   NumberMForm->gridNumbers->Cells[2][i+1]=DataModule1->NumberCurrent->FieldByName("SNumber")->AsString;
+                   DataModule1->Numberall->FieldByName("MSK")->AsString= DataModule1->Numbers->FieldByName("MSK")->AsString;
+                   DataModule1->Numberall->FieldByName("Machine")->AsString=MainForm->edtMachine->Text;
+                   DataModule1->Numberall->FieldByName("File")->AsString= DataModule1->FileSelect->FieldByName("FileName")->AsString;
+                   DataModule1->Numberall->FieldByName("Size")->AsString= DataModule1->FileSelect->FieldByName("Size")->AsString;
+                   DataModule1->Numberall->Post();
+                   VrProgressBar1->Position=i+1;
+     }
+   }
+ }
+
+
+DataModule1->NumberCurrent->Active=false;
+DataModule1->Numberall->Active=false;
+MainForm->ledNumbers->Active=true;
+            if (MessageDlg("Номера записаны, Установлена спецификация -->" +DataModule1->SqlSpecification->FieldByName("Name")->AsString+"    Закрыть форму?" , mtConfirmation, TMsgDlgButtons() << mbYes << mbNo,0) == mrYes){
+                     NumberForm->Hide();
+                  }
+      }
+        else {
+              ShowMessage("Не выбран файл с данными");
+             }
+}
+else {
+            AnsiString s6;
+          if (MainForm->ledFile->Active & MainForm->RzCheckList1->ItemsChecked()>0){
+                               for(int i=0; i<MainForm->RzCheckList1->Count;i++){
+                                              if(MainForm->RzCheckList1->ItemState[i]!=0){
+                                                        l=i+1;
+                                                        break;
+                                                }
+                                      }
+
+                   DataModule1->Config->First();
+                                        for (int i=0;i<DataModule1->Config->RecordCount;i++){
+                                                     if (DataModule1->Config->FieldByName("SetupN")->AsFloat==l){
+                                                                break;
+                                                       }
+                                            DataModule1->Config->Next();
+                                           }
+                  DataModule1->Transat_Temp->Filtered=false;
+                  DataModule1->Transat_Temp->Filter="SETUPNUM='"+IntToStr(l)+"' and SETPOINT='"+DataModule1->Config->FieldByName("FirstTemp")->AsString+"'";
+                  DataModule1->Transat_Temp->Filtered=true;
+                  DataModule1->Transat_Temp->First();
+                  s6="SELECT * FROM  numberall WHERE  numberall.Msk = '"+DataModule1->Numbers->FieldByName("MSK")->AsString+ "' and File = '"+DataModule1->FileSelect->FieldByName("FileName")->AsString+"' and Size ='"+DataModule1->FileSelect->FieldByName("Size")->AsString+ "' ORDER BY   numberall.`Position`";
+                  DataModule1->Numberall->Active=false;
+                  DataModule1->Numberall->SQL->Clear();
+                  DataModule1->Numberall->SQL->Add(s6);
+                  DataModule1->Numberall->Active=true;
+                  DataModule1->NumberCurrent->Active=true;
+                  DataModule1->NumberBD->Active=true;
+//------ установка спецификации-----------------------------------------------------------------------------
+                 int g=0;
+                  AnsiString H;
+                H=DataModule1->Numbers->FieldByName("Name")->AsString;
+                DataModule1->SqlSpecification->First();
+                                 for (int i=0; i<DataModule1->SqlSpecification->RecordCount;i++){
+                                                   if (H==DataModule1->SqlSpecification->FieldByName("Name")->AsString){
+                                                               g=1;
+                                                              
+                                                              MainForm->ledSpc->Active=true;
+                                                              DataModule1->Transat_Temp->Filtered=false;
+                                                              DataModule1->Transat_Temp->First();
+                                                                         for (int i=0;i<DataModule1->Transat_Temp->RecordCount;i++){
+                                                                                      DataModule1->Transat_Temp->Edit();
+                                                                                      DataModule1->Transat_Temp->FieldByName("Profile")->AsString=DataModule1->SqlSpecification->FieldByName("Profile")->AsString;
+                                                                                      DataModule1->Transat_Temp->Post();
+                                                                                      DataModule1->Transat_Temp->Next();
+                                                                             }
+                                                              DataModule1->Transat_Temp->Filtered=true;
+                                                              break;
+                                                       }
+                                          DataModule1->SqlSpecification->Next();
+                                         }
+                                  if (g==0){
+                                              ShowMessage("Спецификация не найдена");
+                                           }
+
+
+                 DataModule1->NumberCurrent->EmptyTable();
+                 DataModule1->NumberBD->Append();
+                 NumberMForm->edtMSK->Text=DataModule1->Numbers->FieldByName("MSK")->AsString;
+                 NumberMForm->edtFile->Text=DataModule1->FileSelect->FieldByName("FileName")->AsString;
+                 DataModule1->NumberBD->FieldByName("MSK")->AsString=DataModule1->Numbers->FieldByName("MSK")->AsString;
+                 DataModule1->NumberBD->FieldByName("File")->AsString=DataModule1->FileSelect->FieldByName("FileName")->AsString;
+                 DataModule1->NumberBD->Post();
+double m;
+AnsiString m1,m2,S,S4,m3;
+S=DataModule1->Numbers->FieldByName("Begin")->AsString;
+S4=DataModule1->Numbers->FieldByName("End")->AsString;
+m3=DataModule1->Numbers->FieldByName("Begin")->AsString;
+m1=DataModule1->Numbers->FieldByName("Type")->AsString;
+VrProgressBar1->MaxValue=DataModule1->Transat_Temp->RecordCount;
+VrProgressBar1->Position=0;
+if (g==1){
+   if (S.Length()==4){
+            m=m3.ToIntDef(1);
+            DataModule1->Transat_Temp->First();
+            for (int i=0;i<=DataModule1->Transat_Temp->RecordCount-1;i++){
+                   DataModule1->Numberall->Append();
+                   DataModule1->NumberCurrent->Append();
+                          if(DataModule1->Transat_Temp->FieldByName("RINGID")->AsFloat==0){
+                                        DataModule1->Numberall->FieldByName("Position")->AsString="L"+DataModule1->Transat_Temp->FieldByName("RINGPOS")->AsString;
+                                        DataModule1->NumberCurrent->FieldByName("Position")->AsString="L"+DataModule1->Transat_Temp->FieldByName("RINGPOS")->AsString;
+                                      }
+                            if(DataModule1->Transat_Temp->FieldByName("RINGID")->AsFloat==1){
+                                        DataModule1->Numberall->FieldByName("Position")->AsString="U"+DataModule1->Transat_Temp->FieldByName("RINGPOS")->AsString;
+                                        DataModule1->NumberCurrent->FieldByName("Position")->AsString="U"+DataModule1->Transat_Temp->FieldByName("RINGPOS")->AsString;
+                                      }
+                   DataModule1->NumberCurrent->FieldByName("N")->AsString=i+1;
+                   m2=m1;
+                     if (m+i<10){
+                            m2=m1+"000";
+                      }
+                     if (m+i<100&m+i>=10){
+                            m2=m1+"00";
+                      }
+                     if (m+i<1000&m+i>=100){
+                             m2=m1+"0";
+                     }
+                   DataModule1->NumberCurrent->FieldByName("SNumber")->AsString=m2+(m+i);
+                   DataModule1->Numberall->FieldByName("SNumber")->AsString=m2+(m+i);
+                   NumberMForm->gridNumbers->Cells[2][i+1]=m2+(m+i);;
+                   DataModule1->NumberCurrent->Post();
+                   DataModule1->Numberall->FieldByName("MSK")->AsString=DataModule1->Numbers->FieldByName("MSK")->AsString;
+                   DataModule1->Numberall->FieldByName("Machine")->AsString=MainForm->edtMachine->Text;
+                   DataModule1->Numberall->FieldByName("File")->AsString=DataModule1->FileSelect->FieldByName("FileName")->AsString;
+                   DataModule1->Numberall->FieldByName("Size")->AsString=DataModule1->FileSelect->FieldByName("Size")->AsString;
+                   DataModule1->Numberall->Post();
+                   VrProgressBar1->Position=i+1;
+                   DataModule1->Transat_Temp->Next();
+
+              }
+             DataModule1->Transat_Temp->Filtered=false;
+    DataModule1->Transat_Temp->First();
+                     for (int i=0;i<DataModule1->Transat_Temp->RecordCount;i++){
+                           DataModule1->Transat_Temp->Edit();
+                           DataModule1->Transat_Temp->FieldByName("Profile")->AsString=DataModule1->SqlSpecification->FieldByName("Profile")->AsString;
+                           DataModule1->Transat_Temp->Post();
+                           DataModule1->Transat_Temp->Next();
+                            }
+  DataModule1->NumberCurrent->Active=false;
+  DataModule1->Numberall->Active=false;
+  MainForm->ledNumbers->Active=true;      
+       }
+
+  if (S.Length()==6){
+        m=m3.SubString(3,4).ToInt();
+            for (int i=0;i<=DataModule1->Transat_Temp->RecordCount-1;i++){
+                   DataModule1->Numberall->Append();
+                   DataModule1->NumberCurrent->Append();
+                                if(DataModule1->Transat_Temp->FieldByName("RINGID")->AsFloat==0){
+                                        DataModule1->Numberall->FieldByName("Position")->AsString="L"+DataModule1->Transat_Temp->FieldByName("RINGPOS")->AsString;
+                                        DataModule1->NumberCurrent->FieldByName("Position")->AsString="L"+DataModule1->Transat_Temp->FieldByName("RINGPOS")->AsString;
+                                      }
+                            if(DataModule1->Transat_Temp->FieldByName("RINGID")->AsFloat==1){
+                                        DataModule1->Numberall->FieldByName("Position")->AsString="U"+DataModule1->Transat_Temp->FieldByName("RINGPOS")->AsString;
+                                        DataModule1->NumberCurrent->FieldByName("Position")->AsString="U"+DataModule1->Transat_Temp->FieldByName("RINGPOS")->AsString;
+                                      }
+                             DataModule1->NumberCurrent->FieldByName("N")->AsString=i+1;
+                             m2=m1;
+                            if (m+i<10){
+                                   m2=m1+"000";
+                               }
+                            if (m+i<100&m+i>=10){
+                               m2=m1+"00";
+                              }
+                            if (m+i<1000&m+i>=100){
+                               m2=m1+"0";
+                              }
+                   DataModule1->NumberCurrent->FieldByName("SNumber")->AsString=m2+(m+i);
+                   DataModule1->Numberall->FieldByName("SNumber")->AsString=m2+(m+i);
+                   NumberMForm->gridNumbers->Cells[2][i+1]=m2+(m+i);
+                   DataModule1->NumberCurrent->Post();
+                   DataModule1->Numberall->FieldByName("MSK")->AsString=DataModule1->Numbers->FieldByName("MSK")->AsString;
+                   DataModule1->Numberall->FieldByName("Machine")->AsString=MainForm->edtMachine->Text;
+                   DataModule1->Numberall->FieldByName("File")->AsString=DataModule1->FileSelect->FieldByName("FileName")->AsString;
+                   DataModule1->Numberall->FieldByName("Size")->AsString=DataModule1->FileSelect->FieldByName("Size")->AsString;
+                   DataModule1->Numberall->Post();
+                   VrProgressBar1->Position=i+1;
+                   DataModule1->Transat_Temp->Next();
+             }
+                DataModule1->Transat_Temp->Filtered=false;
+    DataModule1->Transat_Temp->First();
+                     for (int i=0;i<DataModule1->Transat_Temp->RecordCount;i++){
+                           DataModule1->Transat_Temp->Edit();
+                           DataModule1->Transat_Temp->FieldByName("Profile")->AsString=DataModule1->SqlSpecification->FieldByName("Profile")->AsString;
+                           DataModule1->Transat_Temp->Post();
+                           DataModule1->Transat_Temp->Next();
+                            }
+  DataModule1->NumberCurrent->Active=false;
+  DataModule1->Numberall->Active=false;
+  MainForm->ledNumbers->Active=true;
+         }
+
+
+            if (MessageDlg("Номера записаны, Установлена спецификация -->" +DataModule1->SqlSpecification->FieldByName("Name")->AsString+"    Закрыть форму?" , mtConfirmation, TMsgDlgButtons() << mbYes << mbNo,0) == mrYes){
+                     NumberForm->Hide();
+                  }
+
+    }
+    else {
+
+         ShowMessage("Не найдена спецификация, обработка остановлена");
+
+         }
+
+      }
+        else {
+              ShowMessage("Не выбран файл с данными");
+             }
+   }
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TNumberForm::btnNewClick(TObject *Sender)
+{
+NumberMForm->Show();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TNumberForm::btnRefreshClick(TObject *Sender)
+{
+DataModule1->Numbers->Active=false;
+DataModule1->Numbers->Active=true;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TNumberForm::btnDeleteClick(TObject *Sender)
+{
+DataModule1->Numbers->Active=false;
+DataModule1->Numbers->Active=true;
+DataModule1->Numbers->Delete();
+DataModule1->Numbers->Active=false;
+DataModule1->Numbers->Active=true;
+}
+//---------------------------------------------------------------------------
+
+

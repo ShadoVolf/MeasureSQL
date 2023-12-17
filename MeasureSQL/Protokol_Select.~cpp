@@ -1,0 +1,148 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "Protokol_Select.h"
+#include "Main.h"
+#include "data1.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "AdvGlassButton"
+#pragma link "RzCmboBx"
+#pragma resource "*.dfm"
+TProtokol_Select_Form *Protokol_Select_Form;
+//---------------------------------------------------------------------------
+__fastcall TProtokol_Select_Form::TProtokol_Select_Form(TComponent* Owner)
+        : TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall TProtokol_Select_Form::btnCloseClick(TObject *Sender)
+{
+this->Hide();
+MainForm->Show();
+}
+//---------------------------------------------------------------------------
+void __fastcall TProtokol_Select_Form::FormShow(TObject *Sender)
+{
+ DataModule2->Print->Active=true;
+  DataModule2->Print->First();
+   edtName->Items->Clear();
+  for (int i=0;i<DataModule2->Print->RecordCount; i++){
+       edtName->Items->Add(DataModule2->Print->FieldByName("Name")->AsString);
+       DataModule2->Print->Next();
+
+  }
+  DataModule2->Print->Active=false;
+
+ DataModule2->Print_Files->Active=true;
+ RzComboBox1->Items->Clear();
+ RzComboBox2->Items->Clear();
+ RzComboBox3->Items->Clear();
+ RzComboBox4->Items->Clear();
+ RzComboBox5->Items->Clear();
+ RzComboBox7->Items->Clear();
+ RzComboBox8->Items->Clear();
+ RzComboBox9->Items->Clear();
+ RzComboBox10->Items->Clear();
+ RzComboBox11->Items->Clear();
+ RzComboBox12->Items->Clear();
+ RzComboBox13->Items->Clear();
+ RzComboBox14->Items->Clear();
+ RzComboBox15->Items->Clear();
+   DataModule2->Print_Files->First();
+
+  for (int i=0;i<DataModule2->Print_Files->RecordCount; i++){
+       RzComboBox1->Items->Add(DataModule2->Print_Files->FieldByName("Name")->AsString);
+       RzComboBox2->Items->Add(DataModule2->Print_Files->FieldByName("Name")->AsString);
+       RzComboBox3->Items->Add(DataModule2->Print_Files->FieldByName("Name")->AsString);
+       RzComboBox4->Items->Add(DataModule2->Print_Files->FieldByName("Name")->AsString);
+       RzComboBox5->Items->Add(DataModule2->Print_Files->FieldByName("Name")->AsString);
+       RzComboBox7->Items->Add(DataModule2->Print_Files->FieldByName("Name")->AsString);
+       RzComboBox8->Items->Add(DataModule2->Print_Files->FieldByName("Name")->AsString);
+       RzComboBox9->Items->Add(DataModule2->Print_Files->FieldByName("Name")->AsString);
+       RzComboBox10->Items->Add(DataModule2->Print_Files->FieldByName("Name")->AsString);
+       RzComboBox11->Items->Add(DataModule2->Print_Files->FieldByName("Name")->AsString);
+       RzComboBox12->Items->Add(DataModule2->Print_Files->FieldByName("Name")->AsString);
+       RzComboBox13->Items->Add(DataModule2->Print_Files->FieldByName("Name")->AsString);
+       RzComboBox14->Items->Add(DataModule2->Print_Files->FieldByName("Name")->AsString);
+       RzComboBox15->Items->Add(DataModule2->Print_Files->FieldByName("Name")->AsString);
+       DataModule2->Print_Files->Next();
+
+  }
+  DataModule2->Print_Files->Active=false;
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TProtokol_Select_Form::edtNameChange(TObject *Sender)
+{
+  DataModule2->Print->Active=true;
+  DataModule2->Print->First();
+
+  for (int i=0;i<DataModule2->Print->RecordCount; i++){
+    if (edtName->Text==DataModule2->Print->FieldByName("Name")->AsString){
+
+       break;
+       }
+       DataModule2->Print->Next();
+
+  }
+  RzComboBox1->Text=DataModule2->Print->FieldByName("Measure")->AsString;
+  RzComboBox2->Text=DataModule2->Print->FieldByName("ReportOTK")->AsString;
+  RzComboBox3->Text=DataModule2->Print->FieldByName("Print")->AsString;
+  RzComboBox4->Text=DataModule2->Print->FieldByName("VP")->AsString;
+  RzComboBox5->Text=DataModule2->Print->FieldByName("VP_Z")->AsString;
+  RzComboBox7->Text=DataModule2->Print->FieldByName("Old")->AsString;
+  RzComboBox8->Text=DataModule2->Print->FieldByName("PassportPmi")->AsString;
+  RzComboBox9->Text=DataModule2->Print->FieldByName("passport")->AsString;
+  RzComboBox10->Text=DataModule2->Print->FieldByName("VP-RK")->AsString;
+  RzComboBox11->Text=DataModule2->Print->FieldByName("PR")->AsString;
+  RzComboBox12->Text=DataModule2->Print->FieldByName("VP(PSI)")->AsString;
+  RzComboBox13->Text=DataModule2->Print->FieldByName("Print(PSI)")->AsString;
+  RzComboBox14->Text=DataModule2->Print->FieldByName("ETK")->AsString;
+  RzComboBox15->Text=DataModule2->Print->FieldByName("VP-RK(ETK)")->AsString;
+  DataModule2->Print->Active=false;
+}
+//---------------------------------------------------------------------------
+void __fastcall TProtokol_Select_Form::AdvGlassButton1Click(
+      TObject *Sender)
+{
+  DataModule2->Print->Active=true;
+  DataModule2->Print->First();
+
+
+  if (edtName->ItemIndex==-1){
+   DataModule2->Print->Append();
+   DataModule2->Print->FieldByName("Name")->AsString=edtName->Text;
+  }
+  else {
+   for (int i=0;i<DataModule2->Print->RecordCount; i++){
+    if (edtName->Text==DataModule2->Print->FieldByName("Name")->AsString){
+
+       break;
+       }
+       DataModule2->Print->Next();
+
+  }
+   DataModule2->Print->Edit();
+
+  }
+  DataModule2->Print->FieldByName("Measure")->AsString=RzComboBox1->Text;
+  DataModule2->Print->FieldByName("ReportOTK")->AsString=RzComboBox2->Text;
+  DataModule2->Print->FieldByName("Print")->AsString=RzComboBox3->Text;
+  DataModule2->Print->FieldByName("VP")->AsString=RzComboBox4->Text;
+  DataModule2->Print->FieldByName("VP_Z")->AsString=RzComboBox5->Text;
+  DataModule2->Print->FieldByName("Old")->AsString=RzComboBox7->Text;
+  DataModule2->Print->FieldByName("PassportPmi")->AsString=RzComboBox8->Text;
+  DataModule2->Print->FieldByName("passport")->AsString=RzComboBox9->Text;
+  DataModule2->Print->FieldByName("VP-RK")->AsString=RzComboBox10->Text;
+  DataModule2->Print->FieldByName("PR")->AsString=RzComboBox11->Text;
+  DataModule2->Print->FieldByName("VP(PSI)")->AsString=RzComboBox12->Text;
+  DataModule2->Print->FieldByName("Print(PSI)")->AsString=RzComboBox13->Text;
+  DataModule2->Print->FieldByName("ETK")->AsString=RzComboBox14->Text;
+  DataModule2->Print->FieldByName("VP-RK(ETK)")->AsString=RzComboBox15->Text;
+  DataModule2->Print->Post();
+  DataModule2->Print->Active=false;
+}
+//---------------------------------------------------------------------------

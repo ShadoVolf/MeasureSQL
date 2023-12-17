@@ -1,0 +1,16 @@
+object AddNormForm: TAddNormForm
+  Left = 804
+  Top = 381
+  Width = 408
+  Height = 302
+  Caption = #1044#1086#1073#1072#1074#1083#1077#1085#1080#1077' '#1085#1086#1088#1084
+  Color = clBlack
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clLime
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+end

@@ -1,0 +1,157 @@
+//---------------------------------------------------------------------------
+
+#ifndef ManualRecH
+#define ManualRecH
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+#include "RzButton.hpp"
+#include "VrControls.hpp"
+#include "VrProgressBar.hpp"
+#include "RzRadChk.hpp"
+#include "RzCmboBx.hpp"
+#include "RzEdit.hpp"
+#include <Mask.hpp>
+#include "RzChkLst.hpp"
+#include "RzLstBox.hpp"
+#include "ToolPanels.hpp"
+#include <ExtCtrls.hpp>
+#include "AdvWiiProgressBar.hpp"
+#include "AdvCircularProgress.hpp"
+#include "AdvNavBar.hpp"
+#include "VrButtons.hpp"
+#include "AdvGlassButton.hpp"
+#include "frxBarcode.hpp"
+#include "frxClass.hpp"
+#include "frxDBSet.hpp"
+#include "frxExportPDF.hpp"
+#include "frxExportXLS.hpp"
+#include "frxGradient.hpp"
+#include <math.h>
+#include <ActnList.hpp>
+#include <ActnMan.hpp>
+//---------------------------------------------------------------------------
+class TRecForm : public TForm
+{
+__published:	// IDE-managed Components
+        TLabel *Label6;
+        TRzCheckList *listParameters;
+        TLabel *Label5;
+        TLabel *Label2;
+        TLabel *Label1;
+        TLabel *Label3;
+        TLabel *Label7;
+        TRzCheckBox *btnGood;
+        TVrProgressBar *VrProgressBar1;
+        TfrxReport *frxReport1;
+        TfrxDBDataset *Lianoz;
+        TfrxDBDataset *Spc;
+        TfrxDBDataset *Psi;
+        TfrxDBDataset *PsiData;
+        TfrxDBDataset *psiDataTemp;
+        TfrxDBDataset *Dopuski;
+        TfrxBarCodeObject *frxBarCodeObject1;
+        TfrxPDFExport *frxPDFExport1;
+        TfrxXLSExport *frxXLSExport1;
+        TfrxGradientObject *frxGradientObject1;
+        TAdvGlassButton *btnClose;
+        TAdvGlassButton *btnRec;
+        TRzComboBox *cmb_ID;
+        TRzCheckBox *edtAn3;
+        TRzEdit *RzEdit2;
+        TAdvGlassButton *AdvGlassButton2;
+        TRzComboBox *edtMsk;
+        TRzComboBox *edtSpc;
+        TRzComboBox *edtType;
+        TfrxDBDataset *Dopusk;
+        TLabel *Label11;
+        TRzComboBox *cmb_Protokol_ID;
+        TfrxDBDataset *psi_stat_1;
+        TActionManager *ActionManager1;
+        TAction *Action1;
+        TRzComboBox *edtM;
+        TAdvToolPanelTab *Delivery;
+        TAdvToolPanel *AdvToolPanel1;
+        TLabel *Label8;
+        TLabel *Label9;
+        TLabel *Label10;
+        TLabel *Label12;
+        TLabel *lCount;
+        TLabel *Label4;
+        TLabel *Label16;
+        TLabel *Label17;
+        TComboBox *edtProtokol;
+        TEdit *edtDate;
+        TAdvGlassButton *btnPrint;
+        TAdvGlassButton *btnSetDate;
+        TAdvGlassButton *btnSetDate1;
+        TEdit *edtDate1;
+        TAdvGlassButton *AdvGlassButton1;
+        TRzCheckList *viewNumber;
+        TAdvGlassButton *btnAll;
+        TAdvGlassButton *btnClear;
+        TCheckBox *edt;
+        TCheckBox *edtAn;
+        TComboBox *edtProtokolN;
+        TCheckBox *Lot;
+        TRzComboBox *LotNumber;
+        TRzComboBox *LotSpc;
+        TRzComboBox *LotMSK;
+        TAdvToolPanel *AdvToolPanel2;
+        TLabel *lCount2;
+        TLabel *Label13;
+        TLabel *Label14;
+        TLabel *Label15;
+        TCheckBox *edtAn2;
+        TCheckBox *edtGood;
+        TAdvGlassButton *btnNumbers2;
+        TRzCheckList *viewNumber2;
+        TAdvGlassButton *btnAll2;
+        TAdvGlassButton *btnClear2;
+        TAdvGlassButton *btnSetSpc;
+        TComboBox *cmbType;
+        TComboBox *cmbSpc;
+        void __fastcall btnCloseClick(TObject *Sender);
+        void __fastcall FormShow(TObject *Sender);
+        void __fastcall edtTypeChange(TObject *Sender);
+        void __fastcall edtSpcChange(TObject *Sender);
+        void __fastcall btnRecClick(TObject *Sender);
+        void __fastcall btnGoodClick(TObject *Sender);
+        void __fastcall VrShadowButton1Click(TObject *Sender);
+        void __fastcall AdvGlassButton1Click(TObject *Sender);
+        void __fastcall btnPrintClick(TObject *Sender);
+        void __fastcall btnAllClick(TObject *Sender);
+        void __fastcall btnClearClick(TObject *Sender);
+        void __fastcall viewNumberChange(TObject *Sender, int Index,
+          TCheckBoxState NewState);
+        void __fastcall btnSetDateClick(TObject *Sender);
+        void __fastcall btnSetDate1Click(TObject *Sender);
+        void __fastcall edtProtokolChange(TObject *Sender);
+        void __fastcall cmbTypeChange(TObject *Sender);
+        void __fastcall btnNumbers2Click(TObject *Sender);
+        void __fastcall edtAn2Click(TObject *Sender);
+        void __fastcall edtGoodClick(TObject *Sender);
+        void __fastcall edtAnClick(TObject *Sender);
+        void __fastcall edtClick(TObject *Sender);
+        void __fastcall btnSetSpcClick(TObject *Sender);
+        void __fastcall btnAll2Click(TObject *Sender);
+        void __fastcall btnClear2Click(TObject *Sender);
+        void __fastcall RzButton2Click(TObject *Sender);
+        void __fastcall cmb_Protokol_IDChange(TObject *Sender);
+        void __fastcall Action1Execute(TObject *Sender);
+        void __fastcall cmb_IDKeyPress(TObject *Sender, char &Key);
+        void __fastcall edtMskKeyPress(TObject *Sender, char &Key);
+        void __fastcall LotNumberKeyPress(TObject *Sender, char &Key);
+        void __fastcall LotClick(TObject *Sender);
+        void __fastcall LotSpcChange(TObject *Sender);
+        void __fastcall LotNumberChange(TObject *Sender);
+private:	// User declarations
+public:		// User declarations
+        __fastcall TRecForm(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TRecForm *RecForm;
+//---------------------------------------------------------------------------
+#endif

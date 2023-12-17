@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TfrxReport Version="4.9" DotMatrixReport="false" IniFile="\Software\Fast Reports" PreviewOptions.Buttons="4095" PreviewOptions.Zoom="1" PrintOptions.Printer="Ïî óìîë÷àíèþ" PrintOptions.PrintOnSheet="0" ReportOptions.CreateDate="39953.7254732639" ReportOptions.Description.Text="" ReportOptions.LastChange="40525.4440538194" ScriptLanguage="BasicScript" ScriptText.Text="                                                                                                                                                     &#13;&#10;sub MasterData1OnBeforePrint(Sender)&#13;&#10;IF &#60;frxDBDataset1.&#34;Status&#34;&#62;=&#34;Áðàê&#34; Then Memo5.Color=clRed     &#13;&#10;IF &#60;frxDBDataset1.&#34;Status&#34;&#62;=&#34;Ãîäåí&#34; Then Memo5.Color=clNone&#13;&#10;IF &#60;frxDBDataset1.&#34;Status&#34;&#62;=&#34;Áðàê&#34; Then Memo6.Color=clRed     &#13;&#10;IF &#60;frxDBDataset1.&#34;Status&#34;&#62;=&#34;Ãîäåí&#34; Then Memo6.Color=clNone&#13;&#10;IF &#60;frxDBDataset1.&#34;Status&#34;&#62;=&#34;Áðàê&#34; Then Memo7.Color=clRed     &#13;&#10;IF &#60;frxDBDataset1.&#34;Status&#34;&#62;=&#34;Ãîäåí&#34; Then Memo7.Color=clNone&#13;&#10;IF &#60;frxDBDataset1.&#34;Status&#34;&#62;=&#34;Áðàê&#34; Then Memo8.Color=clRed     &#13;&#10;IF &#60;frxDBDataset1.&#34;Status&#34;&#62;=&#34;Ãîäåí&#34; Then Memo8.Color=clNone&#13;&#10;IF &#60;frxDBDataset1.&#34;Status&#34;&#62;=&#34;Áðàê&#34; Then Memo41.Color=clRed     &#13;&#10;IF &#60;frxDBDataset1.&#34;Status&#34;&#62;=&#34;Ãîäåí&#34; Then Memo41.Color=clNone&#13;&#10;IF &#60;frxDBDataset1.&#34;Status&#34;&#62;=&#34;Áðàê&#34; Then Memo61.Color=clRed     &#13;&#10;IF &#60;frxDBDataset1.&#34;Status&#34;&#62;=&#34;Ãîäåí&#34; Then Memo61.Color=clNone&#13;&#10;IF &#60;frxDBDataset1.&#34;Status&#34;&#62;=&#34;Áðàê&#34; Then Memo9.Color=clRed     &#13;&#10;IF &#60;frxDBDataset1.&#34;Status&#34;&#62;=&#34;Ãîäåí&#34; Then Memo9.Color=clNone&#13;&#10;IF &#60;frxDBDataset1.&#34;Status&#34;&#62;=&#34;Áðàê&#34; Then Memo12.Color=clRed     &#13;&#10;IF &#60;frxDBDataset1.&#34;Status&#34;&#62;=&#34;Ãîäåí&#34; Then Memo12.Color=clNone&#13;&#10;IF &#60;frxDBDataset1.&#34;Status&#34;&#62;=&#34;Áðàê&#34; Then Memo13.Color=clRed     &#13;&#10;IF &#60;frxDBDataset1.&#34;Status&#34;&#62;=&#34;Ãîäåí&#34; Then Memo13.Color=clNone&#13;&#10;IF &#60;frxDBDataset1.&#34;Status&#34;&#62;=&#34;Áðàê&#34; Then Memo11.Color=clRed     &#13;&#10;IF &#60;frxDBDataset1.&#34;Status&#34;&#62;=&#34;Ãîäåí&#34; Then Memo11.Color=clNone&#13;&#10;IF &#60;frxDBDataset1.&#34;Status&#34;&#62;=&#34;Áðàê&#34; Then Memo4.Color=clRed     &#13;&#10;IF &#60;frxDBDataset1.&#34;Status&#34;&#62;=&#34;Ãîäåí&#34; Then Memo4.Color=clNone  &#13;&#10;end sub&#13;&#10;" PropData="044C65667403400103546F7003E00008446174617365747301010C3400000020446174615365743D22667278444244617461736574312220446174615365744E616D653D22667278444244617461736574312200010C3400000020446174615365743D22667278444244617461736574322220446174615365744E616D653D22667278444244617461736574322200010C3400000020446174615365743D22667278444244617461736574332220446174615365744E616D653D22667278444244617461736574332200010C3400000020446174615365743D22667278444244617461736574342220446174615365744E616D653D2266727844424461746173657434220000095661726961626C65730100055374796C650100">
+  <TfrxDataPage Name="Data" Height="1000" Left="0" Top="0" Width="1000"/>
+  <TfrxReportPage Name="Page1" PaperWidth="210" PaperHeight="297" PaperSize="9" LeftMargin="10" RightMargin="10" TopMargin="10" BottomMargin="10" ColumnWidth="0" ColumnPositions.Text="" Frame.Typ="15" HGuides.Text="" VGuides.Text="">
+    <TfrxReportTitle Name="ReportTitle1" Height="98.26778" Left="0" Top="18.89765" Width="718.1107">
+      <TfrxMemoView Name="Memo1" Left="18.89765" Top="11.33859" Width="222.99227" Height="18.89765" ShowHint="false" Text="ÐŸÑ€Ð¾Ñ‚Ð¾ÐºÐ¾Ð» Ð¸Ð·Ð¼ÐµÑ€ÐµÐ½Ð¸Ð¹ Ñ€ÐµÐ·Ð¾Ð½Ð°Ñ‚Ð¾Ñ€Ð¾Ð²"/>
+      <TfrxMemoView Name="Memo2" Left="544.25232" Top="11.33859" Width="158.74026" Height="18.89765" ShowHint="false" DataField="Spc" DataSet="frxDBDataset1" DataSetName="frxDBDataset1" Text="[frxDBDataset1.&#34;Spc&#34;]"/>
+      <TfrxMemoView Name="Memo3" Left="83.14966" Top="49.13389" Width="158.74026" Height="18.89765" ShowHint="false" DataField="MSK" DataSet="frxDBDataset1" DataSetName="frxDBDataset1" Text="[frxDBDataset1.&#34;MSK&#34;]"/>
+      <TfrxMemoView Name="Memo10" Left="536.69326" Top="49.13389" Width="158.74026" Height="18.89765" ShowHint="false" DataField="nominal" DataSet="frxDBDataset1" DataSetName="frxDBDataset1" Text="[frxDBDataset1.&#34;nominal&#34;]"/>
+      <TfrxMemoView Name="Memo14" Left="15.11812" Top="49.13389" Width="64.25201" Height="18.89765" ShowHint="false" Text="ÐœÐ¡Ðš"/>
+      <TfrxMemoView Name="Memo15" Left="434.64595" Top="49.13389" Width="94.48825" Height="18.89765" ShowHint="false" Text="ÐÐ¾Ð¼Ð¸Ð½Ð°Ð»"/>
+      <TfrxMemoView Name="Memo36" Left="15.11812" Top="79.37013" Width="64.25201" Height="18.89765" ShowHint="false" Text="ÐŸÐ¾Ð·Ð¸Ñ†Ð¸Ð¸"/>
+      <TfrxMemoView Name="Memo37" Left="241.88992" Top="79.37013" Width="64.25201" Height="18.89765" ShowHint="false" Text="Ð¤Ð°Ð¹Ð»"/>
+      <TfrxMemoView Name="Memo38" Left="86.92919" Top="79.37013" Width="143.62214" Height="18.89765" ShowHint="false" DataField="Position" DataSet="frxDBDataset2" DataSetName="frxDBDataset2" Text="[frxDBDataset2.&#34;Position&#34;]"/>
+      <TfrxMemoView Name="frxDBDataset1File" Left="309.92146" Top="79.37013" Width="136.06308" Height="18.89765" ShowHint="false" DataField="File" DataSet="frxDBDataset1" DataSetName="frxDBDataset1" Text="[frxDBDataset1.&#34;File&#34;]"/>
+    </TfrxReportTitle>
+    <TfrxHeader Name="Header1" Height="41.57483" Left="0" Top="177.63791" Width="718.1107">
+      <TfrxMemoView Name="Memo16" Left="3.77953" Top="15.11812" Width="83.14966" Height="18.89765" ShowHint="false" Text="ÐÐ¾Ð¼ÐµÑ€"/>
+      <TfrxMemoView Name="Memo17" Left="90.70872" Top="0" Width="68.03154" Height="34.01577" ShowHint="false" Text="Ð¢Ð¾Ñ‡Ð½Ð¾ÑÑ‚ÑŒ Ð½Ð°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸"/>
+      <TfrxMemoView Name="Memo18" Left="162.51979" Top="0" Width="68.03154" Height="34.01577" ShowHint="false" Text="Ð¡Ð¾Ð¿Ñ€Ð¾Ñ‚Ð¸Ð²Ð»ÐµÐ½Ð¸Ðµ"/>
+      <TfrxMemoView Name="Memo19" Left="230.55133" Top="0" Width="71.81107" Height="34.01577" ShowHint="false" Text="Ð”Ð¾Ð±Ñ€Ð¾Ñ‚Ð½Ð¾ÑÑ‚ÑŒ"/>
+      <TfrxMemoView Name="Memo20" Left="302.3624" Top="0" Width="60.47248" Height="34.01577" ShowHint="false" Text="Tmax"/>
+      <TfrxMemoView Name="Memo21" Left="510.23655" Top="0" Width="45.35436" Height="34.01577" ShowHint="false" Text="Rc/Rb"/>
+      <TfrxMemoView Name="Memo22" Left="559.37044" Top="0" Width="56.69295" Height="34.01577" ShowHint="false" Text="C0,pF"/>
+      <TfrxMemoView Name="Memo23" Left="616.06339" Top="0" Width="41.57483" Height="34.01577" ShowHint="false" Text="Cq,fF"/>
+      <TfrxMemoView Name="Memo24" Left="657.63822" Top="0" Width="52.91342" Height="34.01577" ShowHint="false" Text="Ð¡Ñ‚Ð°Ñ‚ÑƒÑ"/>
+      <TfrxLineView Name="Line26" Left="0" Top="0" Width="718.1107" Height="0" ShowHint="false" Frame.Typ="4"/>
+      <TfrxLineView Name="Line27" Left="0" Top="34.01577" Width="718.1107" Height="0" ShowHint="false" Frame.Typ="4"/>
+      <TfrxLineView Name="Line28" Left="90.70872" Top="0" Width="0" Height="34.01577" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line29" Left="162.51979" Top="0" Width="0" Height="34.01577" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line30" Left="230.55133" Top="0" Width="0" Height="34.01577" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line31" Left="302.3624" Top="0" Width="0" Height="34.01577" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line32" Left="362.83488" Top="0" Width="0" Height="34.01577" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line33" Left="559.37044" Top="0" Width="0" Height="34.01577" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line34" Left="612.28386" Top="0" Width="0" Height="34.01577" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line35" Left="657.63822" Top="0" Width="0" Height="34.01577" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line36" Left="718.1107" Top="0" Width="0" Height="34.01577" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line37" Left="706.77211" Top="0" Width="7.55906" Height="0" ShowHint="false" Frame.Typ="4"/>
+      <TfrxLineView Name="Line41" Left="427.08689" Top="0" Width="0" Height="34.01577" ShowHint="false" Frame.Typ="1"/>
+      <TfrxMemoView Name="Memo40" Left="362.83488" Top="0" Width="41.57483" Height="34.01577" ShowHint="false" Text="Tmin"/>
+      <TfrxLineView Name="Line65" Left="510.23655" Top="0" Width="0" Height="34.01577" ShowHint="false" Frame.Typ="1"/>
+      <TfrxMemoView Name="Memo60" Left="427.08689" Top="0" Width="75.5906" Height="34.01577" ShowHint="false" Text="TurnOver"/>
+    </TfrxHeader>
+    <TfrxMasterData Name="MasterData1" Height="18.89765" Left="0" Top="241.88992" Width="718.1107" OnBeforePrint="MasterData1OnBeforePrint" ColumnWidth="0" ColumnGap="0" DataSet="frxDBDataset1" DataSetName="frxDBDataset1" RowCount="0">
+      <TfrxMemoView Name="Memo4" Left="7.55906" Top="0" Width="83.14966" Height="18.89765" ShowHint="false" DataField="N" DataSet="frxDBDataset1" DataSetName="frxDBDataset1" Font.Charset="1" Font.Color="0" Font.Height="-11" Font.Name="Arial" Font.Style="0" ParentFont="false" Text="[frxDBDataset1.&#34;N&#34;]"/>
+      <TfrxMemoView Name="Memo5" Left="102.04731" Top="0" Width="45.35436" Height="18.89765" ShowHint="false" DataField="F" DataSet="frxDBDataset1" DataSetName="frxDBDataset1" DisplayFormat.FormatStr="%g" DisplayFormat.Kind="fkNumeric" Font.Charset="1" Font.Color="0" Font.Height="-11" Font.Name="Arial" Font.Style="0" ParentFont="false" Text="[frxDBDataset1.&#34;F&#34;]"/>
+      <TfrxMemoView Name="Memo6" Left="162.51979" Top="0" Width="68.03154" Height="18.89765" ShowHint="false" DataField="R" DataSet="frxDBDataset1" DataSetName="frxDBDataset1" DisplayFormat.FormatStr="%g" DisplayFormat.Kind="fkNumeric" Font.Charset="1" Font.Color="0" Font.Height="-11" Font.Name="Arial" Font.Style="0" ParentFont="false" Text="[frxDBDataset1.&#34;R&#34;]"/>
+      <TfrxMemoView Name="Memo7" Left="230.55133" Top="0" Width="68.03154" Height="18.89765" ShowHint="false" DataField="Q" DataSet="frxDBDataset1" DataSetName="frxDBDataset1" DisplayFormat.FormatStr="%g" DisplayFormat.Kind="fkNumeric" Font.Charset="1" Font.Color="0" Font.Height="-11" Font.Name="Arial" Font.Style="0" ParentFont="false" Text="[frxDBDataset1.&#34;Q&#34;]"/>
+      <TfrxMemoView Name="Memo8" Left="302.3624" Top="0" Width="56.69295" Height="18.89765" ShowHint="false" DataField="Tmax" DataSet="frxDBDataset1" DataSetName="frxDBDataset1" DisplayFormat.FormatStr="%g" DisplayFormat.Kind="fkNumeric" Font.Charset="1" Font.Color="0" Font.Height="-11" Font.Name="Arial" Font.Style="0" ParentFont="false" Text="[frxDBDataset1.&#34;Tmax&#34;]"/>
+      <TfrxMemoView Name="Memo9" Left="510.23655" Top="0" Width="49.13389" Height="18.89765" ShowHint="false" DataField="RcRb" DataSet="frxDBDataset1" DataSetName="frxDBDataset1" DisplayFormat.FormatStr="%g" DisplayFormat.Kind="fkNumeric" Font.Charset="1" Font.Color="0" Font.Height="-11" Font.Name="Arial" Font.Style="0" ParentFont="false" Text="[frxDBDataset1.&#34;RcRb&#34;]"/>
+      <TfrxMemoView Name="Memo12" Left="563.14997" Top="0" Width="52.91342" Height="18.89765" ShowHint="false" DataField="C0" DataSet="frxDBDataset1" DataSetName="frxDBDataset1" Font.Charset="1" Font.Color="0" Font.Height="-11" Font.Name="Arial" Font.Style="0" ParentFont="false" Text="[frxDBDataset1.&#34;C0&#34;]"/>
+      <TfrxMemoView Name="Memo13" Left="616.06339" Top="0" Width="49.13389" Height="18.89765" ShowHint="false" DataField="Cq" DataSet="frxDBDataset1" DataSetName="frxDBDataset1" Font.Charset="1" Font.Color="0" Font.Height="-11" Font.Name="Arial" Font.Style="0" ParentFont="false" Text="[frxDBDataset1.&#34;Cq&#34;]"/>
+      <TfrxMemoView Name="Memo11" Left="657.63822" Top="0" Width="60.47248" Height="18.89765" ShowHint="false" DataSet="frxDBDataset1" DataSetName="frxDBDataset1" Font.Charset="1" Font.Color="0" Font.Height="-11" Font.Name="Arial" Font.Style="0" ParentFont="false" Text="[frxDBDataset1.&#34;Status&#34;]"/>
+      <TfrxLineView Name="Line1" Left="94.48825" Top="0" Width="0" Height="18.89765" OnBeforePrint="Line1OnBeforePrint" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line2" Left="162.51979" Top="0" Width="0" Height="18.89765" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line3" Left="230.55133" Top="0" Width="0" Height="18.89765" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line4" Left="302.3624" Top="0" Width="0" Height="18.89765" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line5" Left="362.83488" Top="0" Width="0" Height="18.89765" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line6" Left="427.08689" Top="0" Width="0" Height="18.89765" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line7" Left="657.63822" Top="0" Width="0" Height="18.89765" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line8" Left="616.06339" Top="0" Width="0" Height="18.89765" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line9" Left="616.06339" Top="0" Width="102.04731" Height="0" ShowHint="false" Frame.Typ="4"/>
+      <TfrxLineView Name="Line10" Left="0" Top="0" Width="616.06339" Height="0" ShowHint="false" Frame.Typ="4"/>
+      <TfrxLineView Name="Line24" Left="0" Top="18.8976500000001" Width="718.1107" Height="0" ShowHint="false" Frame.Typ="4"/>
+      <TfrxLineView Name="Line42" Left="563.14997" Top="0" Width="0" Height="18.89765" ShowHint="false" Frame.Typ="1"/>
+      <TfrxMemoView Name="Memo41" Left="362.83488" Top="0" Width="64.25201" Height="18.89765" ShowHint="false" DataField="Tmin" DataSet="frxDBDataset1" DataSetName="frxDBDataset1" DisplayFormat.FormatStr="%g" DisplayFormat.Kind="fkNumeric" Font.Charset="1" Font.Color="0" Font.Height="-11" Font.Name="Arial" Font.Style="0" ParentFont="false" Text="[frxDBDataset1.&#34;Tmin&#34;]"/>
+      <TfrxLineView Name="Line66" Left="510.23655" Top="0" Width="0" Height="18.89765" ShowHint="false" Frame.Typ="1"/>
+      <TfrxMemoView Name="Memo61" Left="427.08689" Top="0" Width="79.37013" Height="18.89765" ShowHint="false" DataField="TurnOver" DataSet="frxDBDataset1" DataSetName="frxDBDataset1" DisplayFormat.FormatStr="%g" DisplayFormat.Kind="fkNumeric" Font.Charset="1" Font.Color="0" Font.Height="-11" Font.Name="Arial" Font.Style="0" ParentFont="false" Text="[frxDBDataset1.&#34;TurnOver&#34;]"/>
+    </TfrxMasterData>
+    <TfrxFooter Name="Footer1" Height="151.1812" Left="0" Top="283.46475" Width="718.1107">
+      <TfrxMemoView Name="Memo25" Left="98.26778" Top="0" Width="52.91342" Height="18.89765" ShowHint="false" DisplayFormat.DecimalSeparator="," DisplayFormat.FormatStr="%g" DisplayFormat.Kind="fkNumeric" Text="[MAX(&#60;frxDBDataset1.&#34;F&#34;&#62;,MasterData1)]"/>
+      <TfrxMemoView Name="Memo26" Left="3.77953" Top="0" Width="49.13389" Height="18.89765" ShowHint="false" Text="Max"/>
+      <TfrxMemoView Name="Memo27" Left="3.77953" Top="18.89765" Width="49.13389" Height="18.89765" ShowHint="false" Text="Min"/>
+      <TfrxMemoView Name="Memo28" Left="3.77953" Top="37.7953" Width="49.13389" Height="18.89765" ShowHint="false" Text="Avg"/>
+      <TfrxMemoView Name="Memo29" Left="3.77953" Top="56.69295" Width="49.13389" Height="18.89765" ShowHint="false" Text="Ð’ÑÐµÐ³Ð¾"/>
+      <TfrxSysMemoView Name="SysMemo1" Left="98.26778" Top="18.89765" Width="52.91342" Height="18.89765" ShowHint="false" DisplayFormat.DecimalSeparator="," DisplayFormat.FormatStr="%g" DisplayFormat.Kind="fkNumeric" Text="[MIN(&#60;frxDBDataset1.&#34;F&#34;&#62;,MasterData1)]"/>
+      <TfrxSysMemoView Name="SysMemo2" Left="98.26778" Top="37.7953" Width="52.91342" Height="18.89765" ShowHint="false" DisplayFormat.DecimalSeparator="," DisplayFormat.FormatStr="%2.2f" DisplayFormat.Kind="fkNumeric" Text="[AVG(&#60;frxDBDataset1.&#34;F&#34;&#62;,MasterData1)]"/>
+      <TfrxSysMemoView Name="SysMemo3" Left="661.41775" Top="56.69295" Width="56.69295" Height="18.89765" ShowHint="false" Text="[COUNT(MasterData1)]"/>
+      <TfrxSysMemoView Name="SysMemo4" Left="162.51979" Top="0" Width="56.69295" Height="18.89765" ShowHint="false" Text="[MAX(&#60;frxDBDataset1.&#34;R&#34;&#62;,MasterData1)]"/>
+      <TfrxSysMemoView Name="SysMemo5" Left="162.51979" Top="18.89765" Width="56.69295" Height="18.89765" ShowHint="false" DisplayFormat.DecimalSeparator="," DisplayFormat.FormatStr="%g" DisplayFormat.Kind="fkNumeric" Text="[MIN(&#60;frxDBDataset1.&#34;R&#34;&#62;,MasterData1)]"/>
+      <TfrxSysMemoView Name="SysMemo6" Left="162.51979" Top="37.7953" Width="60.47248" Height="18.89765" ShowHint="false" DisplayFormat.FormatStr="%2.2f" DisplayFormat.Kind="fkNumeric" Text="[AVG(&#60;frxDBDataset1.&#34;R&#34;&#62;,MasterData1)]"/>
+      <TfrxSysMemoView Name="SysMemo7" Left="230.55133" Top="0" Width="68.03154" Height="18.89765" ShowHint="false" Text="[MAX(&#60;frxDBDataset1.&#34;Q&#34;&#62;,MasterData1)]"/>
+      <TfrxSysMemoView Name="SysMemo8" Left="230.55133" Top="18.89765" Width="68.03154" Height="18.89765" ShowHint="false" Text="[MIN(&#60;frxDBDataset1.&#34;Q&#34;&#62;,MasterData1)]"/>
+      <TfrxSysMemoView Name="SysMemo9" Left="230.55133" Top="37.7953" Width="68.03154" Height="18.89765" ShowHint="false" Text="[AVG(&#60;frxDBDataset1.&#34;Q&#34;&#62;,MasterData1)]"/>
+      <TfrxLineView Name="Line11" Left="94.48825" Top="0" Width="0" Height="60.47248" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line12" Left="162.51979" Top="0" Width="0" Height="56.69295" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line13" Left="230.55133" Top="0" Width="0" Height="75.5906" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line14" Left="154.96073" Top="60.47248" Width="0" Height="15.11812" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line15" Left="94.48825" Top="60.47248" Width="0" Height="15.11812" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line16" Left="302.3624" Top="0" Width="0" Height="75.5906" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line17" Left="362.83488" Top="0" Width="0" Height="75.5906" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line18" Left="563.14997" Top="0" Width="0" Height="75.5906" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line19" Left="616.06339" Top="0" Width="0" Height="75.5906" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line20" Left="657.63822" Top="0" Width="0" Height="75.5906" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line21" Left="313.70099" Top="0" Width="404.40971" Height="0" ShowHint="false" Frame.Typ="4"/>
+      <TfrxLineView Name="Line22" Left="0" Top="0" Width="313.70099" Height="0" ShowHint="false" Frame.Typ="4"/>
+      <TfrxSysMemoView Name="SysMemo10" Left="306.14193" Top="0" Width="56.69295" Height="18.89765" ShowHint="false" Text="[MAX(&#60;frxDBDataset1.&#34;Tmax&#34;&#62;,MasterData1)]"/>
+      <TfrxSysMemoView Name="SysMemo11" Left="306.14193" Top="18.89765" Width="56.69295" Height="18.89765" ShowHint="false" Text="[MIN(&#60;frxDBDataset1.&#34;Tmax&#34;&#62;,MasterData1)]"/>
+      <TfrxSysMemoView Name="SysMemo12" Left="306.14193" Top="37.7953" Width="56.69295" Height="18.89765" ShowHint="false" DisplayFormat.FormatStr="%2.2f" DisplayFormat.Kind="fkNumeric" Text="[AVG(&#60;frxDBDataset1.&#34;Tmax&#34;&#62;,MasterData1)]"/>
+      <TfrxSysMemoView Name="SysMemo13" Left="510.23655" Top="0" Width="52.91342" Height="18.89765" ShowHint="false" DisplayFormat.DecimalSeparator="," DisplayFormat.FormatStr="%g" DisplayFormat.Kind="fkNumeric" Text="[MAX(&#60;frxDBDataset1.&#34;RcRb&#34;&#62;,MasterData1)]"/>
+      <TfrxSysMemoView Name="SysMemo14" Left="510.23655" Top="18.89765" Width="52.91342" Height="18.89765" ShowHint="false" DisplayFormat.DecimalSeparator="," DisplayFormat.FormatStr="%g" DisplayFormat.Kind="fkNumeric" Text="[MIN(&#60;frxDBDataset1.&#34;RcRb&#34;&#62;,MasterData1)]"/>
+      <TfrxSysMemoView Name="SysMemo15" Left="510.23655" Top="37.7953" Width="52.91342" Height="18.89765" ShowHint="false" DisplayFormat.DecimalSeparator="," DisplayFormat.FormatStr="%2.2f" DisplayFormat.Kind="fkNumeric" Text="[AVG(&#60;frxDBDataset1.&#34;RcRb&#34;&#62;,MasterData1)]"/>
+      <TfrxSysMemoView Name="SysMemo16" Left="570.70903" Top="0" Width="45.35436" Height="18.89765" ShowHint="false" Text="[MAX(&#60;frxDBDataset1.&#34;C0&#34;&#62;,MasterData1)]"/>
+      <TfrxSysMemoView Name="SysMemo17" Left="570.70903" Top="18.89765" Width="45.35436" Height="18.89765" ShowHint="false" Text="[MIN(&#60;frxDBDataset1.&#34;C0&#34;&#62;,MasterData1)]"/>
+      <TfrxSysMemoView Name="SysMemo18" Left="570.70903" Top="37.7953" Width="45.35436" Height="18.89765" ShowHint="false" DisplayFormat.FormatStr="%2.2f" DisplayFormat.Kind="fkNumeric" Text="[AVG(&#60;frxDBDataset1.&#34;C0&#34;&#62;,MasterData1)]"/>
+      <TfrxSysMemoView Name="SysMemo19" Left="616.06339" Top="0" Width="41.57483" Height="18.89765" ShowHint="false" Text="[MAX(&#60;frxDBDataset1.&#34;Cq&#34;&#62;,MasterData1)]"/>
+      <TfrxSysMemoView Name="SysMemo20" Left="616.06339" Top="15.11812" Width="41.57483" Height="18.89765" ShowHint="false" Text="[MIN(&#60;frxDBDataset1.&#34;Cq&#34;&#62;,MasterData1)]"/>
+      <TfrxSysMemoView Name="SysMemo21" Left="616.06339" Top="37.7953" Width="41.57483" Height="18.89765" ShowHint="false" DisplayFormat.FormatStr="%2.2f" DisplayFormat.Kind="fkNumeric" Text="[AVG(&#60;frxDBDataset1.&#34;Cq&#34;&#62;,MasterData1)]"/>
+      <TfrxLineView Name="Line23" Left="0" Top="56.69295" Width="718.1107" Height="0" ShowHint="false" Frame.Typ="4"/>
+      <TfrxLineView Name="Line25" Left="-3.77953" Top="75.5906" Width="718.1107" Height="0" ShowHint="false" Frame.Typ="4"/>
+      <TfrxLineView Name="Line38" Left="94.48825" Top="18.89765" Width="56.69295" Height="0" ShowHint="false" Frame.Typ="4"/>
+      <TfrxLineView Name="Line39" Left="94.48825" Top="37.7953" Width="521.57514" Height="0" ShowHint="false" Frame.Typ="4"/>
+      <TfrxLineView Name="Line40" Left="94.48825" Top="18.89765" Width="521.57514" Height="0" ShowHint="false" Frame.Typ="4"/>
+      <TfrxLineView Name="Line43" Left="510.23655" Top="0" Width="0" Height="75.5906" ShowHint="false" Frame.Typ="1"/>
+      <TfrxSysMemoView Name="SysMemo22" Left="362.83488" Top="0" Width="64.25201" Height="18.89765" ShowHint="false" DisplayFormat.DecimalSeparator="," DisplayFormat.FormatStr="%g" DisplayFormat.Kind="fkNumeric" Text="[MAX(&#60;frxDBDataset1.&#34;Tmin&#34;&#62;,MasterData1)]"/>
+      <TfrxSysMemoView Name="SysMemo23" Left="362.83488" Top="18.89765" Width="64.25201" Height="18.89765" ShowHint="false" DisplayFormat.DecimalSeparator="," DisplayFormat.FormatStr="%g" DisplayFormat.Kind="fkNumeric" Text="[MIN(&#60;frxDBDataset1.&#34;Tmin&#34;&#62;,MasterData1)]"/>
+      <TfrxSysMemoView Name="SysMemo24" Left="362.83488" Top="37.7953" Width="64.25201" Height="18.89765" ShowHint="false" DisplayFormat.DecimalSeparator="," DisplayFormat.FormatStr="%2.2f" DisplayFormat.Kind="fkNumeric" Text="[AVG(&#60;frxDBDataset1.&#34;Tmin&#34;&#62;,MasterData1)]"/>
+      <TfrxMemoView Name="Memo42" Left="3.77953" Top="79.37013" Width="64.25201" Height="18.89765" ShowHint="false" Text="ÐÐ¾Ñ€Ð¼Ñ‹"/>
+      <TfrxMemoView Name="Memo43" Left="15.11812" Top="105.82684" Width="75.5906" Height="18.89765" ShowHint="false" Text="ÐœÐ°ÐºÑÐ¸Ð¼ÑƒÐ¼"/>
+      <TfrxMemoView Name="Memo44" Left="15.11812" Top="128.50402" Width="75.5906" Height="18.89765" ShowHint="false" Text="ÐœÐ¸Ð½Ð¸Ð¼ÑƒÐ¼"/>
+      <TfrxLineView Name="Line44" Left="0" Top="102.04731" Width="721.89023" Height="0" ShowHint="false" Frame.Typ="4"/>
+      <TfrxLineView Name="Line45" Left="0" Top="124.72449" Width="721.89023" Height="0" ShowHint="false" Frame.Typ="4"/>
+      <TfrxLineView Name="Line46" Left="0" Top="147.40167" Width="721.89023" Height="0" ShowHint="false" Frame.Typ="4"/>
+      <TfrxLineView Name="Line47" Left="154.96073" Top="102.04731" Width="0" Height="22.67718" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line48" Left="154.96073" Top="124.72449" Width="0" Height="22.67718" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line49" Left="90.70872" Top="102.04731" Width="0" Height="22.67718" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line50" Left="90.70872" Top="124.72449" Width="0" Height="22.67718" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line51" Left="222.99227" Top="102.04731" Width="0" Height="22.67718" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line52" Left="222.99227" Top="124.72449" Width="0" Height="22.67718" ShowHint="false" Frame.Typ="1"/>
+      <TfrxMemoView Name="Memo49" Left="230.55133" Top="102.04731" Width="64.25201" Height="18.89765" ShowHint="false" DataField="Qmax" DataSet="frxDBDataset3" DataSetName="frxDBDataset3" Text="[frxDBDataset3.&#34;Qmax&#34;]"/>
+      <TfrxMemoView Name="Memo50" Left="230.55133" Top="128.50402" Width="64.25201" Height="18.89765" ShowHint="false" DataField="Qmin" DataSet="frxDBDataset3" DataSetName="frxDBDataset3" Text="[frxDBDataset3.&#34;Qmin&#34;]"/>
+      <TfrxLineView Name="Line53" Left="302.3624" Top="102.04731" Width="0" Height="22.67718" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line54" Left="302.3624" Top="124.72449" Width="0" Height="22.67718" ShowHint="false" Frame.Typ="1"/>
+      <TfrxMemoView Name="Memo51" Left="306.14193" Top="105.82684" Width="56.69295" Height="18.89765" ShowHint="false" DataField="Tmaxmax" DataSet="frxDBDataset3" DataSetName="frxDBDataset3" Text="[frxDBDataset3.&#34;Tmaxmax&#34;]"/>
+      <TfrxMemoView Name="Memo52" Left="306.14193" Top="128.50402" Width="56.69295" Height="18.89765" ShowHint="false" DataField="Tmaxmin" DataSet="frxDBDataset3" DataSetName="frxDBDataset3" Text="[frxDBDataset3.&#34;Tmaxmin&#34;]"/>
+      <TfrxLineView Name="Line55" Left="362.83488" Top="102.04731" Width="0" Height="22.67718" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line56" Left="362.83488" Top="124.72449" Width="0" Height="22.67718" ShowHint="false" Frame.Typ="1"/>
+      <TfrxMemoView Name="Memo53" Left="366.61441" Top="105.82684" Width="56.69295" Height="18.89765" ShowHint="false" DataField="Tminmax" DataSet="frxDBDataset3" DataSetName="frxDBDataset3" Text="[frxDBDataset3.&#34;Tminmax&#34;]"/>
+      <TfrxMemoView Name="Memo54" Left="362.83488" Top="128.50402" Width="60.47248" Height="18.89765" ShowHint="false" DataField="Tminmin" DataSet="frxDBDataset3" DataSetName="frxDBDataset3" Text="[frxDBDataset3.&#34;Tminmin&#34;]"/>
+      <TfrxLineView Name="Line57" Left="427.08689" Top="102.04731" Width="0" Height="22.67718" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line58" Left="427.08689" Top="124.72449" Width="0" Height="22.67718" ShowHint="false" Frame.Typ="1"/>
+      <TfrxMemoView Name="Memo55" Left="510.23655" Top="105.82684" Width="45.35436" Height="18.89765" ShowHint="false" DataField="Rc_Rbmax" DataSet="frxDBDataset3" DataSetName="frxDBDataset3" Text="[frxDBDataset3.&#34;Rc_Rbmax&#34;]"/>
+      <TfrxLineView Name="Line59" Left="563.14997" Top="102.04731" Width="0" Height="22.67718" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line60" Left="563.14997" Top="124.72449" Width="0" Height="22.67718" ShowHint="false" Frame.Typ="1"/>
+      <TfrxMemoView Name="Memo56" Left="566.9295" Top="105.82684" Width="41.57483" Height="18.89765" ShowHint="false" DataField="C0max" DataSet="frxDBDataset3" DataSetName="frxDBDataset3" Text="[frxDBDataset3.&#34;C0max&#34;]"/>
+      <TfrxMemoView Name="Memo57" Left="566.9295" Top="128.50402" Width="41.57483" Height="18.89765" ShowHint="false" DataField="C0min" DataSet="frxDBDataset3" DataSetName="frxDBDataset3" Text="[frxDBDataset3.&#34;C0min&#34;]"/>
+      <TfrxLineView Name="Line61" Left="616.06339" Top="102.04731" Width="0" Height="22.67718" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line62" Left="616.06339" Top="124.72449" Width="0" Height="22.67718" ShowHint="false" Frame.Typ="1"/>
+      <TfrxMemoView Name="Memo58" Left="619.84292" Top="105.82684" Width="41.57483" Height="18.89765" ShowHint="false" DataField="Cqmax" DataSet="frxDBDataset3" DataSetName="frxDBDataset3" Text="[frxDBDataset3.&#34;Cqmax&#34;]"/>
+      <TfrxMemoView Name="Memo59" Left="619.84292" Top="128.50402" Width="41.57483" Height="18.89765" ShowHint="false" DataField="Cqmin" DataSet="frxDBDataset3" DataSetName="frxDBDataset3" Text="[frxDBDataset3.&#34;Cqmin&#34;]"/>
+      <TfrxLineView Name="Line63" Left="661.41775" Top="102.04731" Width="0" Height="22.67718" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line64" Left="661.41775" Top="124.72449" Width="0" Height="22.67718" ShowHint="false" Frame.Typ="1"/>
+      <TfrxMemoView Name="Memo45" Left="154.96073" Top="105.82684" Width="64.25201" Height="18.89765" ShowHint="false" DataField="Rmax" DataSet="frxDBDataset3" DataSetName="frxDBDataset3" Text="[frxDBDataset3.&#34;Rmax&#34;]"/>
+      <TfrxMemoView Name="Memo46" Left="154.96073" Top="128.50402" Width="64.25201" Height="18.89765" ShowHint="false" DataField="Rmin" DataSet="frxDBDataset3" DataSetName="frxDBDataset3" Text="[frxDBDataset3.&#34;Rmin&#34;]"/>
+      <TfrxMemoView Name="Memo47" Left="94.48825" Top="105.82684" Width="56.69295" Height="18.89765" ShowHint="false" DataField="Fmax" DataSet="frxDBDataset3" DataSetName="frxDBDataset3" Text="[frxDBDataset3.&#34;Fmax&#34;]"/>
+      <TfrxMemoView Name="Memo48" Left="94.48825" Top="128.50402" Width="56.69295" Height="18.89765" ShowHint="false" DataField="Fmin" DataSet="frxDBDataset3" DataSetName="frxDBDataset3" Text="[frxDBDataset3.&#34;Fmin&#34;]"/>
+      <TfrxLineView Name="Line67" Left="427.08689" Top="0" Width="0" Height="75.5906" ShowHint="false" Frame.Typ="1"/>
+      <TfrxSysMemoView Name="SysMemo25" Left="427.08689" Top="0" Width="64.25201" Height="18.89765" ShowHint="false" DisplayFormat.DecimalSeparator="," DisplayFormat.FormatStr="%g" DisplayFormat.Kind="fkNumeric" Text="[MAX(&#60;frxDBDataset1.&#34;TurnOver&#34;&#62;,MasterData1)]"/>
+      <TfrxSysMemoView Name="SysMemo26" Left="427.08689" Top="18.89765" Width="64.25201" Height="18.89765" ShowHint="false" DisplayFormat.DecimalSeparator="," DisplayFormat.FormatStr="%g" DisplayFormat.Kind="fkNumeric" Text="[MIN(&#60;frxDBDataset1.&#34;TurnOver&#34;&#62;,MasterData1)]"/>
+      <TfrxSysMemoView Name="SysMemo27" Left="427.08689" Top="37.7953" Width="64.25201" Height="18.89765" ShowHint="false" DisplayFormat.DecimalSeparator="," DisplayFormat.FormatStr="%g" DisplayFormat.Kind="fkNumeric" Text="[AVG(&#60;frxDBDataset1.&#34;TurnOver&#34;&#62;,MasterData1)]"/>
+      <TfrxLineView Name="Line68" Left="510.23655" Top="102.04731" Width="0" Height="22.67718" ShowHint="false" Frame.Typ="1"/>
+      <TfrxLineView Name="Line69" Left="510.23655" Top="124.72449" Width="0" Height="22.67718" ShowHint="false" Frame.Typ="1"/>
+    </TfrxFooter>
+    <TfrxPageFooter Name="PageFooter1" Height="22.67718" Left="0" Top="495.11843" Width="718.1107">
+      <TfrxMemoView Name="Memo30" Left="71.81107" Top="3.77953000000002" Width="34.01577" Height="18.89765" ShowHint="false" Text="[Page#]"/>
+      <TfrxMemoView Name="Memo31" Left="238.11039" Top="3.77953000000002" Width="79.37013" Height="18.89765" ShowHint="false" Text="[Date]"/>
+      <TfrxMemoView Name="Memo32" Left="0" Top="3.77953000000002" Width="68.03154" Height="15.11812" ShowHint="false" Text="Ð¡Ñ‚Ñ€Ð°Ð½Ð¸Ñ†Ð°"/>
+      <TfrxMemoView Name="Memo33" Left="109.60637" Top="3.77953000000002" Width="30.23624" Height="18.89765" ShowHint="false" Text="Ð¸Ð·"/>
+      <TfrxMemoView Name="Memo34" Left="147.40167" Top="3.77953000000002" Width="37.7953" Height="18.89765" ShowHint="false" Text="[TotalPages#]"/>
+      <TfrxMemoView Name="Memo35" Left="332.59864" Top="3.77953000000002" Width="79.37013" Height="18.89765" ShowHint="false" Text="[Time]"/>
+      <TfrxMemoView Name="Memo62" Left="442.20501" Top="3.77953000000002" Width="94.48825" Height="18.89765" ShowHint="false" Text="Ð’Ñ‹Ð¿Ð¾Ð»Ð½Ð¸Ð»"/>
+      <TfrxMemoView Name="Memo64" Left="200.31509" Top="3.77953000000002" Width="34.01577" Height="18.89765" ShowHint="false" Text="Ð”Ð°Ñ‚Ð°"/>
+      <TfrxMemoView Name="Memo65" Left="317.48052" Top="3.77953000000002" Width="15.11812" Height="18.89765" ShowHint="false" Text="/"/>
+      <TfrxMemoView Name="Memo63" Left="551.81138" Top="3.77953000000002" Width="158.74026" Height="18.89765" ShowHint="false" DataField="Ôàìèëèÿ" DataSet="frxDBDataset4" DataSetName="frxDBDataset4" Text="[frxDBDataset4.&#34;Ð¤Ð°Ð¼Ð¸Ð»Ð¸Ñ&#34;]"/>
+    </TfrxPageFooter>
+  </TfrxReportPage>
+</TfrxReport>

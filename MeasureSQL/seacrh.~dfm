@@ -1,0 +1,27 @@
+object SearchForm: TSearchForm
+  Left = 427
+  Top = 308
+  BorderStyle = bsNone
+  Caption = 'SearchForm'
+  ClientHeight = 412
+  ClientWidth = 627
+  Color = clBlack
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clLime
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object btnClose: TVrShadowButton
+    Left = 522
+    Top = 366
+    Width = 97
+    Height = 30
+    Pen.Color = clRed
+    Caption = 'Close'
+    ParentFont = True
+    OnClick = btnCloseClick
+  end
+end

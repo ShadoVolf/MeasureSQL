@@ -1,0 +1,69 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+//---------------------------------------------------------------------------
+USEFORM("Main.cpp", MainForm);
+USEFORM("FileSelect.cpp", FileSelectForm);
+USEFORM("Data.cpp", DataModule1); /* TDataModule: File Type */
+USEFORM("number.cpp", NumberForm);
+USEFORM("spc.cpp", SpcForm);
+USEFORM("Result.cpp", ResultForm);
+USEFORM("NumberM.cpp", NumberMForm);
+USEFORM("LoadNumbers.cpp", LoadNumbersForm);
+USEFORM("dialog1.cpp", Dialog1Form);
+USEFORM("Dostup.cpp", DostupForm);
+USEFORM("Spcdetail.cpp", SpcDetailForm);
+USEFORM("SpcOptions.cpp", SpcOptionsForm);
+USEFORM("DataArchive.cpp", ArchiveForm);
+USEFORM("archive.cpp", archivedata); /* TDataModule: File Type */
+USEFORM("options.cpp", OptionsForm);
+USEFORM("archiveTable.cpp", ArchiveTableForm);
+USEFORM("seacrh.cpp", SearchForm);
+USEFORM("text.cpp", TextForm);
+USEFORM("Zapac.cpp", ZapacForm);
+//---------------------------------------------------------------------------
+WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
+{
+        try
+        {
+                 Application->Initialize();
+                 Application->CreateForm(__classid(TDostupForm), &DostupForm);
+                 Application->CreateForm(__classid(TMainForm), &MainForm);
+                 Application->CreateForm(__classid(TFileSelectForm), &FileSelectForm);
+                 Application->CreateForm(__classid(TDataModule1), &DataModule1);
+                 Application->CreateForm(__classid(TNumberForm), &NumberForm);
+                 Application->CreateForm(__classid(TSpcForm), &SpcForm);
+                 Application->CreateForm(__classid(TResultForm), &ResultForm);
+                 Application->CreateForm(__classid(TNumberMForm), &NumberMForm);
+                 Application->CreateForm(__classid(TLoadNumbersForm), &LoadNumbersForm);
+                 Application->CreateForm(__classid(TDialog1Form), &Dialog1Form);
+                 Application->CreateForm(__classid(TSpcDetailForm), &SpcDetailForm);
+                 Application->CreateForm(__classid(TSpcOptionsForm), &SpcOptionsForm);
+                 Application->CreateForm(__classid(TArchiveForm), &ArchiveForm);
+                 Application->CreateForm(__classid(Tarchivedata), &archivedata);
+                 Application->CreateForm(__classid(TOptionsForm), &OptionsForm);
+                 Application->CreateForm(__classid(TArchiveTableForm), &ArchiveTableForm);
+                 Application->CreateForm(__classid(TSearchForm), &SearchForm);
+                 Application->CreateForm(__classid(TTextForm), &TextForm);
+                 Application->CreateForm(__classid(TZapacForm), &ZapacForm);
+                 Application->Run();
+        }
+        catch (Exception &exception)
+        {
+                 Application->ShowException(&exception);
+        }
+        catch (...)
+        {
+                 try
+                 {
+                         throw Exception("");
+                 }
+                 catch (Exception &exception)
+                 {
+                         Application->ShowException(&exception);
+                 }
+        }
+        return 0;
+}
+//---------------------------------------------------------------------------

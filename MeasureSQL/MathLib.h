@@ -1,0 +1,305 @@
+//---------------------------------------------------------------------------
+
+#ifndef MathLibH
+#define MathLibH
+#include "ap.h"
+void lagrangederivative(int n,
+     const ap::real_1d_array& x,
+     ap::real_1d_array f,
+     double t,
+     double& p,
+     double& dp);
+
+bool svdsolve(ap::real_2d_array a, int m, int n, ap::real_1d_array& sol);
+double extsign(double a, double b);
+double mymax(double a, double b);
+double pythag(double a, double b);
+
+void buildpolynomialleastsquares(const ap::real_1d_array& x,
+     const ap::real_1d_array& y,
+     int n,
+     int m,
+     ap::real_1d_array& c);
+
+double newtoninterpolate(int n,
+     const ap::real_1d_array& x,
+     ap::real_1d_array y,
+     double t);
+
+
+void spline3buildtable(int n,
+     int diffn,
+     ap::real_1d_array x,
+     ap::real_1d_array y,
+     double boundl,
+     double boundr,
+     ap::real_2d_array& ctbl);
+double spline3interpolate(int n, const ap::real_2d_array& c, double x);
+void datego(double X,double Y,int &Z);
+void buildsplineleastsquares(const ap::real_1d_array& x,
+     const ap::real_1d_array& y,
+     const ap::real_1d_array& w,
+     double a,
+     double b,
+     int n,
+     int m,
+     ap::real_2d_array& ctbl);
+void TurnOver(ap::real_1d_array& X,
+               ap::real_1d_array& Y,
+               int A,
+               int B,
+               double Precision,
+               double &TMAX,
+               double &TMIN,
+               int N,
+               ap::real_1d_array& W,
+               double M);
+
+  void TurnOverGoldMax(ap::real_1d_array& X,
+               ap::real_1d_array& Y,
+               int A,
+               int B,
+               double Precision,
+               double &TMAX,
+               int N,
+               ap::real_1d_array& W,
+               double M,
+               double a,
+               double b);
+
+ void TurnOverGoldMin(ap::real_1d_array& X,
+               ap::real_1d_array& Y,
+               int A,
+               int B,
+               double Precision,
+               double &TMIN,
+               int N,
+               ap::real_1d_array& W,
+               double M,
+               double a,
+               double b);
+ void TurnOverMax(ap::real_1d_array& X,
+               ap::real_1d_array& Y,
+               int A,
+               int B,
+               double Precision,
+               double &TMIN,
+               int N,
+               ap::real_1d_array& W,
+               double M);
+ void TurnOverMin(ap::real_1d_array& X,
+               ap::real_1d_array& Y,
+               int A,
+               int B,
+               double Precision,
+               double &TMIN,
+               int N,
+               ap::real_1d_array& W,
+               double M);
+ double MeanX(double* X,double Nr);
+ double SigmaX(double* X,double Nr,double M);
+ double MinX(double* X,double Nr);
+ double MaxX(double* X,double Nr);
+ void gennormrnd(int n, ap::real_1d_array& r);
+ void tobidiagonal(ap::real_2d_array& a,
+     int m,
+     int n,
+     ap::real_1d_array& tauq,
+     ap::real_1d_array& taup);
+void unpackqfrombidiagonal(const ap::real_2d_array& qp,
+     int m,
+     int n,
+     const ap::real_1d_array& tauq,
+     int qcolumns,
+     ap::real_2d_array& q);
+void multiplybyqfrombidiagonal(const ap::real_2d_array& qp,
+     int m,
+     int n,
+     const ap::real_1d_array& tauq,
+     ap::real_2d_array& z,
+     int zrows,
+     int zcolumns,
+     bool fromtheright,
+     bool dotranspose);
+void unpackptfrombidiagonal(const ap::real_2d_array& qp,
+     int m,
+     int n,
+     const ap::real_1d_array& taup,
+     int ptrows,
+     ap::real_2d_array& pt);
+void multiplybypfrombidiagonal(const ap::real_2d_array& qp,
+     int m,
+     int n,
+     const ap::real_1d_array& taup,
+     ap::real_2d_array& z,
+     int zrows,
+     int zcolumns,
+     bool fromtheright,
+     bool dotranspose);
+void unpackdiagonalsfrombidiagonal(const ap::real_2d_array& b,
+     int m,
+     int n,
+     bool& isupper,
+     ap::real_1d_array& d,
+     ap::real_1d_array& e);
+void generatereflection(ap::real_1d_array& x, int n, double& tau);
+void applyreflectionfromtheleft(ap::real_2d_array& c,
+     double tau,
+     const ap::real_1d_array& v,
+     int m1,
+     int m2,
+     int n1,
+     int n2,
+     ap::real_1d_array& work);
+void applyreflectionfromtheright(ap::real_2d_array& c,
+     double tau,
+     const ap::real_1d_array& v,
+     int m1,
+     int m2,
+     int n1,
+     int n2,
+     ap::real_1d_array& work);
+ bool bidiagonalsvddecomposition(ap::real_1d_array& d,
+     ap::real_1d_array e,
+     int n,
+     bool isupper,
+     bool isfractionalaccuracyrequired,
+     ap::real_2d_array& u,
+     int nru,
+     ap::real_2d_array& c,
+     int ncc,
+     ap::real_2d_array& vt,
+     int ncvt);
+double extsignbdsqr(double a, double b);
+void svd2x2(double f, double g, double h, double& ssmin, double& ssmax);
+void svdv2x2(double f,
+     double g,
+     double h,
+     double& ssmin,
+     double& ssmax,
+     double& snr,
+     double& csr,
+     double& snl,
+     double& csl);
+ void applyrotationsfromtheleft(bool isforward,
+     int m1,
+     int m2,
+     int n1,
+     int n2,
+     const ap::real_1d_array& c,
+     const ap::real_1d_array& s,
+     ap::real_2d_array& a,
+     ap::real_1d_array& work);
+void applyrotationsfromtheright(bool isforward,
+     int m1,
+     int m2,
+     int n1,
+     int n2,
+     const ap::real_1d_array& c,
+     const ap::real_1d_array& s,
+     ap::real_2d_array& a,
+     ap::real_1d_array& work);
+void generaterotation(double f, double g, double& cs, double& sn, double& r);
+void lqdecomposition(ap::real_2d_array& a,
+     int m,
+     int n,
+     ap::real_1d_array& tau);
+void unpackqfromlq(const ap::real_2d_array& lq,
+     int m,
+     int n,
+     const ap::real_1d_array& tau,
+     int qrows,
+     ap::real_2d_array& q);
+void lqdecompositionunpacked(ap::real_2d_array a,
+     int m,
+     int n,
+     ap::real_2d_array& l,
+     ap::real_2d_array& q);
+void buildpolynomialleastsquaresNew(const ap::real_1d_array& x,
+     const ap::real_1d_array& y,
+     int n,
+     int m,
+     ap::real_1d_array& c);
+void buildchebyshevleastsquares(const ap::real_1d_array& x,
+     const ap::real_1d_array& y,
+     const ap::real_1d_array& w,
+     double a,
+     double b,
+     int n,
+     int m,
+     ap::real_1d_array& ctbl);
+double calculatechebyshevleastsquares(const int& m,
+     const ap::real_1d_array& a,
+     double x);
+void TurnOverNew(ap::real_1d_array& X,
+               ap::real_1d_array& Y,
+               int A,
+               int B,
+               double Precision,
+               double &TMAX,
+               double &TMIN,
+               int N,
+               ap::real_1d_array& W,
+               double M);
+void MaxMin(     double* Y,
+                 double &MAX,
+                 double &MIN,
+                 double &Peak,
+                 int N);
+ void MaxMin(     ap::real_1d_array& Y,
+                 double &MAX,
+                 double &MIN,
+                 double &Peak,
+                 int N);
+ void MonotonP(ap::real_1d_array& X,
+               ap::real_1d_array& Y,
+               int A,
+               int B,
+               double &MAX,
+               int N,
+               ap::real_1d_array& W,
+               double M, ap::real_1d_array& mono, double &MonoT);
+
+ void MonotonP1(ap::real_1d_array& X,
+               ap::real_1d_array& Y,
+               int A,
+               int B,
+               double &MAX,
+               int N,
+               ap::real_1d_array& W,
+               double M, double X1, double Y1);
+
+   void Jump(ap::real_1d_array& X,
+               ap::real_1d_array& Y,
+               int A,
+               int B,
+               double &MAX,
+               double &MIN,
+               int N,
+               ap::real_1d_array& W,
+               double M,
+               ap::real_1d_array& ju,
+               double &Tmax,
+               double &Tmin);
+
+bool Statistik(double * X,
+               double &MAX,
+               double &MIN,
+               double &AVG,
+               double &StDev,
+               double &Peak,
+               double A,
+               double B,
+               double &UpB,
+               double &LoA,
+               double &Good,
+               double &Bad,
+               double &Anomal,
+               double &Error,
+               double &TG1,
+               double &TG2,
+               double &Cp,
+               double N);
+char * ToBin(int value);
+//---------------------------------------------------------------------------
+#endif

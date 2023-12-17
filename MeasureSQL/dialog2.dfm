@@ -1,0 +1,104 @@
+object D2Form: TD2Form
+  Left = 362
+  Top = 271
+  Width = 346
+  Height = 219
+  Caption = #1042#1074#1077#1076#1080#1090#1077' '#1076#1072#1085#1085#1099#1077
+  Color = clBlack
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clLime
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 14
+    Top = 72
+    Width = 46
+    Height = 13
+    Caption = #1053#1086#1084#1080#1085#1072#1083
+  end
+  object Label2: TLabel
+    Left = 14
+    Top = 16
+    Width = 81
+    Height = 13
+    Caption = #1058#1080#1087' '#1088#1077#1079#1086#1085#1072#1090#1086#1088#1072
+  end
+  object Label3: TLabel
+    Left = 14
+    Top = 128
+    Width = 36
+    Height = 13
+    Caption = #1050#1086#1088#1087#1091#1089
+  end
+  object btnClose: TVrShadowButton
+    Left = 208
+    Top = 142
+    Width = 113
+    Height = 30
+    Pen.Color = clRed
+    ShadowColor = clLime
+    Caption = #1055#1088#1080#1085#1103#1090#1100
+    Enabled = False
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWhite
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    OnClick = btnCloseClick
+  end
+  object edtType: TRzEdit
+    Left = 16
+    Top = 148
+    Width = 97
+    Height = 21
+    DisabledColor = clBlack
+    Enabled = False
+    FocusColor = clBtnFace
+    FrameColor = clLime
+    FrameHotColor = clFuchsia
+    FrameHotTrack = True
+    FrameVisible = True
+    TabOrder = 0
+  end
+  object edtNominal: TRzEdit
+    Left = 16
+    Top = 92
+    Width = 97
+    Height = 21
+    DisabledColor = clBlack
+    Enabled = False
+    FocusColor = clBtnFace
+    FrameColor = clLime
+    FrameHotColor = clFuchsia
+    FrameHotTrack = True
+    FrameVisible = True
+    TabOrder = 1
+  end
+  object edtName: TRzComboBox
+    Left = 12
+    Top = 41
+    Width = 301
+    Height = 21
+    Color = clBlack
+    Ctl3D = False
+    DisabledColor = clBlack
+    FlatButtonColor = clLime
+    FlatButtons = True
+    FrameColor = clYellow
+    FrameHotColor = clFuchsia
+    FrameHotTrack = True
+    FrameVisible = True
+    ItemHeight = 13
+    ParentColor = True
+    ParentCtl3D = False
+    ReadOnlyColor = clBlack
+    Sorted = True
+    TabOrder = 2
+    OnChange = edtNameChange
+  end
+end

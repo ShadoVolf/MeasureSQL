@@ -1,0 +1,38 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "temperature.h"
+#include "Data.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "VrButtons"
+#pragma link "VrControls"
+#pragma link "RzDBGrid"
+#pragma link "RzDBEdit"
+#pragma link "RzEdit"
+#pragma resource "*.dfm"
+TTemperatureForm *TemperatureForm;
+//---------------------------------------------------------------------------
+__fastcall TTemperatureForm::TTemperatureForm(TComponent* Owner)
+        : TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall TTemperatureForm::btnCloseClick(TObject *Sender)
+{
+TemperatureForm->Hide();
+}
+//---------------------------------------------------------------------------
+void __fastcall TTemperatureForm::FormShow(TObject *Sender)
+{
+AnsiString S;
+S="Select * from profiledata where Name ='"+DataModule1->SqlSpecification->FieldByName("Profile")->AsString+"' order by N";
+DataModule1->ProfileData->Active=false;
+DataModule1->ProfileData->SQL->Clear();
+DataModule1->ProfileData->SQL->Add(S);
+DataModule1->ProfileData->Active=true;
+
+}
+//---------------------------------------------------------------------------

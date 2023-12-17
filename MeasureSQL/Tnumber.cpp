@@ -1,0 +1,353 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "Tnumber.h"
+#include "Main.h"
+#include "TempData.h"
+#include "Tmain.h"
+#include "NumberM.h"
+#include "Data.h"
+#include "data1.h"
+#include "MathLib.h"
+#include "math.h"
+#include "ap.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "AdvGlassButton"
+#pragma link "RzEdit"
+#pragma link "RzCmboBx"
+#pragma resource "*.dfm"
+TTnumberForm *TnumberForm;
+//---------------------------------------------------------------------------
+__fastcall TTnumberForm::TTnumberForm(TComponent* Owner)
+        : TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall TTnumberForm::btnCloseClick(TObject *Sender)
+{
+ this->Hide();
+ MainForm->Show();
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TTnumberForm::FormShow(TObject *Sender)
+{
+ edtTNumber->Clear();
+ edtChamber->Clear();
+ TempDataModule->Chambers->Active=true;
+ TempDataModule->Chambers->First();
+ for (int i=0;i<TempDataModule->Chambers->RecordCount;i++){
+
+  edtChamber->Add(TempDataModule->Chambers->FieldByName("Name")->AsString);
+  TempDataModule->Chambers->Next();
+ }
+ 
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TTnumberForm::edtTNumberKeyPress(TObject *Sender,
+      char &Key)
+{
+if (Key==13){
+int l,N,n,Nt;
+TempMainForm->TempChart->RemoveAllSeries();
+AnsiString l1,NumbersStr,temp,Sd;
+TempMainForm->TempChart->Title->Clear();
+TempDataModule->TermoDatchikData->Active=true;
+TempMainForm->TempChart->Title->Text->Add("Ошибка установки температуры в камере");
+TempMainForm->TempChart->Title->Text->Add(edtChamber->Text+"   "+MainForm->edtMachine->Text);
+double F,T,dt,T1;
+double a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10;
+   NumbersStr=edtTNumber->Text;
+TempMainForm->TempChart->Title->Text->Add("Термодатчики  №№  "+NumbersStr+"  Файл "+DataModule1->FileSelect->FieldByName("FileName")->AsString);
+   n=NumbersStr.Length();
+   int k=0;
+   int kk=0;
+   int tempi=1;
+   ap::real_1d_array Numbers;
+   Numbers.setbounds(0,StrToFloat(lCount->Text));
+   for (int i=1;i<n+1;i++){
+        temp=NumbersStr.SubString(i,1);
+        if (temp==","){
+         Sd=NumbersStr.SubString(tempi,kk);
+         Numbers(k)=StrToFloat(NumbersStr.SubString(tempi,kk));
+         tempi=i+1;
+
+         kk=0;
+          k++;
+        }
+        else {
+     kk++;
+     }
+
+   }
+
+
+   if (tempi==1){
+     Numbers(k)=StrToFloat(NumbersStr);
+     k++;
+   }
+   else {
+
+    Numbers(k)=StrToFloat(NumbersStr.SubString(tempi,kk));
+     k++;
+   }
+ if (k==StrToFloat(lCount->Text)){
+ for(int i=0; i<MainForm->RzCheckList1->Count;i++){
+                        if(MainForm->RzCheckList1->ItemState[i]!=0){
+                                              l=i+1;
+                                             break;
+                                               }
+               }
+l1="NSetupFileIndex="+FloatToStr(l);
+TempDataModule->TermoDatchik->Active=true;
+TempDataModule->TermoDatchik->First();
+ if (MainForm->edtMachine->Text=="Saunders"|| MainForm->edtMachine->Text=="Saunders1"){
+  N=DataModule1->SQLPostProcessData->RecordCount;
+   DataModule1->SQLPostProcessData->First();
+
+
+
+
+
+
+
+
+   int k=0;
+   for (int i=0;i<N;i++){
+       DataModule1->SQLCrystalData->Filtered=false;
+       DataModule1->SQLCrystalData->Filter="strCrystalID='"+DataModule1->SQLPostProcessData->FieldByName("strCrystalID")->AsString+"'";
+       DataModule1->SQLCrystalData->Filtered=true;
+        DataModule1->SQLCrystalData->First();
+        Nt=DataModule1->SQLCrystalData->RecordCount;
+        TempDataModule->TermoDatchik->First();
+            k++;
+               for (int h=0;h<TempDataModule->TermoDatchik->RecordCount;h++){
+                      if (TempDataModule->TermoDatchik->FieldByName("ID")->AsFloat==Numbers(i)){
+                        a0=TempDataModule->TermoDatchik->FieldByName("A0")->AsFloat;
+                        a1=TempDataModule->TermoDatchik->FieldByName("A1")->AsFloat;
+                        a2=TempDataModule->TermoDatchik->FieldByName("A2")->AsFloat;
+                        a3=TempDataModule->TermoDatchik->FieldByName("A3")->AsFloat;
+                        a4=TempDataModule->TermoDatchik->FieldByName("A4")->AsFloat;
+                        a5=TempDataModule->TermoDatchik->FieldByName("A5")->AsFloat;
+                        a6=TempDataModule->TermoDatchik->FieldByName("A6")->AsFloat;
+                        a7=TempDataModule->TermoDatchik->FieldByName("A7")->AsFloat;
+                        a8=TempDataModule->TermoDatchik->FieldByName("A8")->AsFloat;
+                        a9=TempDataModule->TermoDatchik->FieldByName("A9")->AsFloat;
+                        a10=TempDataModule->TermoDatchik->FieldByName("A10")->AsFloat;
+                       break;
+                      }
+
+                    TempDataModule->TermoDatchik->Next();
+               }
+        TLineSeries *iNSeries = new TLineSeries(TempMainForm->TempChart);
+               iNSeries->Name="Seriesx"+(String)(TempMainForm->TempChart->SeriesList->Count);
+               // TempMainForm->TempChart->ClearChart();
+               TempMainForm->TempChart->AddSeries(iNSeries);
+               //TempMainForm->ChartGrid1->Series=TempMainForm->TempChart->Series;
+               iNSeries->LinePen->Width=3;
+               iNSeries->SeriesColor=(TColor)RGB(TempDataModule->TermoDatchik->FieldByName("R")->AsFloat,TempDataModule->TermoDatchik->FieldByName("G")->AsFloat,TempDataModule->TermoDatchik->FieldByName("B")->AsFloat);
+                iNSeries->Title=FloatToStr(Numbers(i));
+           for (int j=0;j<Nt;j++){
+           if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<10000) {
+            F=(TempDataModule->TermoDatchik->FieldByName("Nominal")->AsFloat*1E+6+(DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat*TempDataModule->TermoDatchik->FieldByName("Nominal")->AsFloat))/1E+6;
+            T1=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+
+               T=a10*F*F*F*F*F*F*F*F*F*F+a9*F*F*F*F*F*F*F*F*F+a8*F*F*F*F*F*F*F*F+a7*F*F*F*F*F*F*F+a6*F*F*F*F*F*F+a5*F*F*F*F*F+
+              a4*F*F*F*F+a3*F*F*F+a2*F*F+a1*F+a0;
+               dt=T1-T;
+
+             iNSeries->AddXY(T1,dt);
+                 TempDataModule->TermoDatchikData->Append();
+            TempDataModule->TermoDatchikData->FieldByName("Datchik_ID")->AsString=FloatToStr(Numbers(k-1));
+            TempDataModule->TermoDatchikData->FieldByName("Chamber")->AsFloat=edtChamber->ItemIndex+1;
+            TempDataModule->TermoDatchikData->FieldByName("Machine")->AsString=MainForm->edtMachine->Text;
+            TempDataModule->TermoDatchikData->FieldByName("FileName")->AsString=DataModule1->FileSelect->FieldByName("FileName")->AsString;
+            if (dt<0.8){
+            TempDataModule->TermoDatchikData->FieldByName("Status")->AsString="Pass";
+            TempMainForm->StatusL->Caption="Pass";
+            }
+            else {
+              TempDataModule->TermoDatchikData->FieldByName("Status")->AsString="Failed";
+              TempMainForm->StatusL->Caption="Failed";
+            }
+           AnsiString S;
+                SYSTEMTIME st;
+                GetLocalTime(&st);
+                AnsiString stD,stMn,stY,stH,stM,stS;
+                stD=st.wDay;
+                stMn=st.wMonth;
+                stY=st.wYear;
+            S=stD+"."+stMn+"."+stY;
+
+          TempDataModule->TermoDatchikData->FieldByName("Date")->AsString=S;
+          TempDataModule->TermoDatchikData->FieldByName("SetPoint")->AsFloat=T1;
+          TempDataModule->TermoDatchikData->FieldByName("T")->AsFloat=T;
+          TempDataModule->TermoDatchikData->FieldByName("dT")->AsFloat=dt;
+          TempDataModule->TermoDatchikData->FieldByName("Position")->AsString=DataModule1->SQLCrystalData->FieldByName("strCrystalID")->AsString;
+          TempDataModule->TermoDatchikData->Post();
+             }
+             DataModule1->SQLCrystalData->Next();
+           }
+
+        DataModule1->SQLPostProcessData->Next();
+    }
+
+
+ }
+ else {
+      DataModule1->Transat_Temp1->TableName=DataModule1->Transat_Temp->TableName;
+      DataModule1->Transat_Temp1->Active=true;
+      DataModule1->Transat_Temp1->Filtered=false;
+
+      DataModule1->Transat_Temp1->Filter="SETUPNUM='"+IntToStr(l)+"'";
+      DataModule1->Transat_Temp1->Filtered=true;
+      DataModule1->Transat_Temp1->First();
+     int RingID;
+     int RingPos=-1;
+     TLineSeries *iNSeries;
+      int k=0;
+      for (int i=0; i<DataModule1->Transat_Temp1->RecordCount; i++){
+
+                F=DataModule1->Transat_Temp1->FieldByName("F0_MHZ")->AsFloat;
+                T1=DataModule1->Transat_Temp1->FieldByName("SETPOINT")->AsFloat;
+                TempDataModule->TermoDatchik->First();
+            if (RingPos!=DataModule1->Transat_Temp1->FieldByName("RINGPOS")->AsFloat){
+
+
+             for (int h=0;h<TempDataModule->TermoDatchik->RecordCount;h++){
+                  if (TempDataModule->TermoDatchik->FieldByName("ID")->AsFloat==Numbers(k)){
+                        a0=TempDataModule->TermoDatchik->FieldByName("A0")->AsFloat;
+                        a1=TempDataModule->TermoDatchik->FieldByName("A1")->AsFloat;
+                        a2=TempDataModule->TermoDatchik->FieldByName("A2")->AsFloat;
+                        a3=TempDataModule->TermoDatchik->FieldByName("A3")->AsFloat;
+                        a4=TempDataModule->TermoDatchik->FieldByName("A4")->AsFloat;
+                        a5=TempDataModule->TermoDatchik->FieldByName("A5")->AsFloat;
+                        a6=TempDataModule->TermoDatchik->FieldByName("A6")->AsFloat;
+                        a7=TempDataModule->TermoDatchik->FieldByName("A7")->AsFloat;
+                        a8=TempDataModule->TermoDatchik->FieldByName("A8")->AsFloat;
+                        a9=TempDataModule->TermoDatchik->FieldByName("A9")->AsFloat;
+                        a10=TempDataModule->TermoDatchik->FieldByName("A10")->AsFloat;
+                       break;
+                      }
+
+                    TempDataModule->TermoDatchik->Next();
+             }
+               RingPos=DataModule1->Transat_Temp1->FieldByName("RINGPOS")->AsFloat;
+               RingID=DataModule1->Transat_Temp1->FieldByName("RINGID")->AsFloat;
+               iNSeries = new TLineSeries(TempMainForm->TempChart);
+               iNSeries->Name="Seriesx"+(String)(TempMainForm->TempChart->SeriesList->Count)+FloatToStr(Numbers(k));
+               TempMainForm->TempChart->AddSeries(iNSeries);
+               iNSeries->LinePen->Width=3;
+               iNSeries->SeriesColor=(TColor)RGB(TempDataModule->TermoDatchik->FieldByName("R")->AsFloat,TempDataModule->TermoDatchik->FieldByName("G")->AsFloat,TempDataModule->TermoDatchik->FieldByName("B")->AsFloat);
+               iNSeries->Title=FloatToStr(Numbers(k));
+               k++;
+             }
+            T=a10*F*F*F*F*F*F*F*F*F*F+a9*F*F*F*F*F*F*F*F*F+a8*F*F*F*F*F*F*F*F+a7*F*F*F*F*F*F*F+a6*F*F*F*F*F*F+a5*F*F*F*F*F+
+              a4*F*F*F*F+a3*F*F*F+a2*F*F+a1*F+a0;
+             if (F>0){
+               dt=T1-T;
+               }
+               else
+               {
+                dt=0;
+                T=0;
+               }
+            TempDataModule->TermoDatchikData->Append();
+            TempDataModule->TermoDatchikData->FieldByName("Datchik_ID")->AsString=FloatToStr(Numbers(k-1));
+            TempDataModule->TermoDatchikData->FieldByName("Chamber")->AsFloat=edtChamber->ItemIndex+1;
+            TempDataModule->TermoDatchikData->FieldByName("Machine")->AsString=MainForm->edtMachine->Text;
+            TempDataModule->TermoDatchikData->FieldByName("FileName")->AsString=DataModule1->FileSelect->FieldByName("FileName")->AsString;
+            if (dt<0.8){
+            TempDataModule->TermoDatchikData->FieldByName("Status")->AsString="Pass";
+            TempMainForm->StatusL->Caption="Pass";
+            }
+            else {
+              TempDataModule->TermoDatchikData->FieldByName("Status")->AsString="Failed";
+              TempMainForm->StatusL->Caption="Failed";
+            }
+           AnsiString S;
+                SYSTEMTIME st;
+                GetLocalTime(&st);
+                AnsiString stD,stMn,stY,stH,stM,stS;
+                stD=st.wDay;
+                stMn=st.wMonth;
+                stY=st.wYear;
+            S=stD+"."+stMn+"."+stY;
+
+          TempDataModule->TermoDatchikData->FieldByName("Date")->AsString=S;
+          TempDataModule->TermoDatchikData->FieldByName("SetPoint")->AsFloat=T1;
+          TempDataModule->TermoDatchikData->FieldByName("T")->AsFloat=T;
+          TempDataModule->TermoDatchikData->FieldByName("dT")->AsFloat=dt;
+
+          AnsiString pos;
+          if (RingID=0){
+           pos="L"+FloatToStr(RingPos);
+
+          }
+          else {
+            pos="U"+FloatToStr(RingPos);
+          }
+          TempDataModule->TermoDatchikData->FieldByName("Position")->AsString=pos;
+          TempDataModule->TermoDatchikData->Post();
+          iNSeries->AddXY(T1,dt);
+         DataModule1->Transat_Temp1->Next();
+      }
+
+
+ }
+ TempMainForm->Show();
+ this->Hide();
+ TempDataModule->Machine->Active=true;
+TempMainForm->edtMachine->Clear();
+TempDataModule->Machine->First();
+for (int i=0;i<TempDataModule->Machine->RecordCount;i++){
+ TempMainForm->edtMachine->Add(TempDataModule->Machine->FieldByName("Name")->AsString);
+
+ TempDataModule->Machine->Next();
+}
+TempDataModule->Machine->Active=false;
+TempMainForm->edtMachine->Text=MainForm->edtMachine->Text;
+TempDataModule->Chambers->Active=true;
+ TempMainForm->edtChamber->Clear();
+ TempDataModule->Chambers->First();
+for (int i=0;i<TempDataModule->Chambers->RecordCount;i++){
+ TempMainForm->edtChamber->Add(TempDataModule->Chambers->FieldByName("Name")->AsString);
+
+ TempDataModule->Chambers->Next();
+}
+TempMainForm->edtChamber->Text=edtChamber->Text;
+
+TempDataModule->Chambers->Active=false;
+TempDataModule->TermoDatchik->Active=true;
+TempMainForm->edtTempD->Clear();
+TempDataModule->TermoDatchik->First();
+ for (int i=0;i<TempDataModule->TermoDatchik->RecordCount;i++){
+ TempMainForm->edtTempD->Add(TempDataModule->TermoDatchik->FieldByName("ID")->AsString);
+
+ TempDataModule->TermoDatchik->Next();
+}
+
+
+ TempDataModule->TermoDatchik->Active=false;
+ AnsiString ST=MainForm->RzCheckList1->Items->Strings[l-1]+"      "+"Датчик";
+ MainForm->RzCheckList1->Items->Strings[l-1]=ST;
+
+ }
+ else {
+  this->Hide();
+  MainForm->Show();
+
+ }
+ TempDataModule->TermoDatchik->Active=false;
+ TempDataModule->TermoDatchikData->Active=false;
+ }
+}
+//---------------------------------------------------------------------------
+
+
+

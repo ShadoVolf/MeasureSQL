@@ -1,0 +1,34 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "Tmain.h"
+#include "Tnumber.h"
+#include "Main.h"
+#include "TempData.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "AdvGlassButton"
+#pragma link "TeeChartGrid"
+#pragma link "TeeComma"
+#pragma link "TeeEdit"
+#pragma link "RzCmboBx"
+#pragma resource "*.dfm"
+TTempMainForm *TempMainForm;
+//---------------------------------------------------------------------------
+__fastcall TTempMainForm::TTempMainForm(TComponent* Owner)
+        : TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall TTempMainForm::btnCloseClick(TObject *Sender)
+{
+int h= TempMainForm->TempChart->SeriesList->Count;
+
+
+ this->Hide();
+ MainForm->Show();      
+}
+//---------------------------------------------------------------------------
+

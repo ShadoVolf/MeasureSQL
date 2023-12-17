@@ -1,0 +1,4 @@
+extern int numberSelect;
+extern int Old_ID;
+extern int Global_Measure_ID;
+extern int Global_Nom_ID;

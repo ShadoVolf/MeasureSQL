@@ -1,0 +1,1187 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "old.h"
+#include "Data.h"
+#include "data1.h"
+#include "Oldnumber.h"
+#include "Main.h"
+#include "oldview.h"
+#include "GlobalValues.h"
+#include "NumberM.h"
+#include "BarCodeMsk.h"
+#include "BarCodeEnter.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "RzButton"
+#pragma link "VrControls"
+#pragma link "VrProgressBar"
+#pragma link "RzRadChk"
+#pragma link "RzCmboBx"
+#pragma link "AdvGlassButton"
+#pragma resource "*.dfm"
+TOldForm *OldForm;
+int Global_Measure_ID;
+int Global_Nom_ID;
+//---------------------------------------------------------------------------
+__fastcall TOldForm::TOldForm(TComponent* Owner)
+        : TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall TOldForm::btnCloseClick(TObject *Sender)
+{
+OldForm->Hide();
+MainForm->Show();
+}
+//---------------------------------------------------------------------------
+void __fastcall TOldForm::edtMeasureChange(TObject *Sender)
+{
+if (edtMeasure->Text=="[Замер 1]"){
+
+         if (btnPsi->Checked){
+                edtType->Enabled=true;
+                 }
+
+   }
+   else{
+
+       edtType->Enabled=true;
+
+      }
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TOldForm::FormShow(TObject *Sender)
+{
+ MainForm->Hide();
+DataModule2->ResonatorType->Active=true;
+edtType->Items->Clear();
+edtMsk->Enabled=false;
+edtSpc->Enabled=false;
+if (btnPsi->Checked){
+ btnGood->Visible=true;
+ RadioGroup1->Visible=true;
+
+}
+else {
+    btnGood->Visible=false;
+ RadioGroup1->Visible=false;
+
+}
+
+DataModule2->ResonatorType->First();
+   for (int i=0; i<DataModule2->ResonatorType->RecordCount; i++){
+          edtType->Items->Add(DataModule2->ResonatorType->FieldByName("Type")->AsString);
+          DataModule2->ResonatorType->Next();
+       }
+  /*
+if (MainForm->ledFile->Active){       
+int l;
+                                    for(int i=0; i<MainForm->RzCheckList1->Count;i++){
+                                              if(MainForm->RzCheckList1->ItemState[i]!=0){
+                                                        l=i+1;
+                                                        break;
+                                                }
+                                      }
+
+        if (l>0){
+                    DataModule1->Config->First();
+                                        for (int i=0;i<DataModule1->Config->RecordCount;i++){
+                                                     if (DataModule1->Config->FieldByName("SetupN")->AsFloat==l){
+                                                                break;
+                                                       }
+                                            DataModule1->Config->Next();
+                                           }
+                  DataModule1->Transat_Temp->Filtered=false;
+                  DataModule1->Transat_Temp->Filter="SETUPNUM='"+IntToStr(l)+"' and SETPOINT='"+DataModule1->Config->FieldByName("FirstTemp")->AsString+"'";
+
+                  DataModule1->Transat_Temp->Filtered=true;
+                  DataModule1->Transat_Temp->First();
+                  NumberMForm->gridNumbers->RowCount=DataModule1->Config->FieldByName("Number")->AsFloat+1;
+                  //OldNMForm->gridNumbers->RowCount=DataModule1->Config->FieldByName("Number")->AsFloat+1;
+                  NumberMForm->edtAll->Text=OldNMForm->gridNumbers->RowCount-1;
+                  //OldNMForm->edtAll->Text=OldNMForm->gridNumbers->RowCount-1;
+                  int N=DataModule1->Transat_Temp->RecordCount;
+                  OldNMForm->edtFile->Text=DataModule1->FileSelect->FieldByName("FileName")->AsString;
+                  NumberMForm->edtFile->Text=DataModule1->FileSelect->FieldByName("FileName")->AsString;
+                           for (int i=0;i<N;i++){
+                                                      if (DataModule1->Transat_Temp->FieldByName("RINGID")->AsFloat==0){
+                                                                    OldNMForm->gridNumbers->Cells[1][1+i]="L"+DataModule1->Transat_Temp->FieldByName("RINGPOS")->AsString;
+
+                                                                                                                       }
+                                                      if (DataModule1->Transat_Temp->FieldByName("RINGID")->AsFloat==1){
+                                                                    OldNMForm->gridNumbers->Cells[1][1+i]="U"+DataModule1->Transat_Temp->FieldByName("RINGPOS")->AsString;
+                                                                    }
+                                                   OldNMForm->gridNumbers->Cells[0][1+i]=i+1;
+                                             if(OldForm->edTemp->ItemIndex==0){
+                                                  DataModule1->Transat_Temp->Next();
+                                               }
+                                               if(OldForm->edTemp->ItemIndex==1){
+                                                  DataModule1->Transat_Temp->Next();
+                                                   DataModule1->Transat_Temp->Next();
+                                                   DataModule1->Transat_Temp->Next();
+                                               }
+                                    }
+
+
+
+    }
+          else {
+               ShowMessage("Резонаторы не выбраны");
+               OldNMForm->edtMSK->Text="None";
+                }
+
+
+
+}
+
+ */
+}
+//---------------------------------------------------------------------------
+void __fastcall TOldForm::edtTypeChange(TObject *Sender)
+{
+DataModule2->SqlSpec->Active=false;
+DataModule2->SqlSpec->SQL->Clear();
+DataModule2->SqlSpec->SQL->Add("Select * from  specification where NameR='"+edtType->Text+"' ORDER BY Name");
+DataModule2->SqlSpec->Active=true;
+edtSpc->Enabled=true;
+edtSpc->Items->Clear();
+   for (int i=0;i<DataModule2->SqlSpec->RecordCount;i++){
+             edtSpc->Items->Add(DataModule2->SqlSpec->FieldByName("Name")->AsString);
+             DataModule2->SqlSpec->Next();
+
+   }
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TOldForm::edtSpcChange(TObject *Sender)
+{
+edtMsk->Items->Clear();
+AnsiString S;
+VrProgressBar1->Position=0;
+ if (edtMeasure->Text=="[Замер 1]"){
+DataModule2->psiData->Active=false;
+DataModule2->psiData->SQL->Clear();
+DataModule2->psiData->SQL->Add("Select * from psidata where Spc='"+edtSpc->Text+"' ORDER BY msk");
+DataModule2->psiData->Active=true;
+DataModule2->psiData->First();
+VrProgressBar1->MaxValue=DataModule2->psiData->RecordCount;
+edtMsk->Items->Add(DataModule2->psiData->FieldByName("Msk")->AsString);
+for (int i=0;i<DataModule2->psiData->RecordCount;i++){
+             S=DataModule2->psiData->FieldByName("Msk")->AsString;
+              DataModule2->psiData->Next();
+              VrProgressBar1->Position=i+1;
+           if (S!=DataModule2->psiData->FieldByName("Msk")->AsString){
+
+                      edtMsk->Items->Add(DataModule2->psiData->FieldByName("Msk")->AsString);
+             } //if
+      } //for
+ }
+ else {
+       DataModule2->old->Active=false;
+DataModule2->old->SQL->Clear();
+DataModule2->old->SQL->Add("Select * from old where Spc='"+edtSpc->Text+"' ORDER BY msk");
+DataModule2->old->Active=true;
+DataModule2->old->First();
+VrProgressBar1->MaxValue=DataModule2->old->RecordCount;
+edtMsk->Items->Add(DataModule2->old->FieldByName("Msk")->AsString);
+for (int i=0;i<DataModule2->old->RecordCount;i++){
+             S=DataModule2->old->FieldByName("Msk")->AsString;
+              DataModule2->old->Next();
+              VrProgressBar1->Position=i+1;
+           if (S!=DataModule2->old->FieldByName("Msk")->AsString){
+
+                      edtMsk->Items->Add(DataModule2->old->FieldByName("Msk")->AsString);
+             } //if
+      } //for
+
+
+
+      }
+
+
+ edtMsk->Enabled=true;
+}
+//---------------------------------------------------------------------------
+void __fastcall TOldForm::btnNewClick(TObject *Sender)
+{
+//OldNForm->Show();
+numberSelect=2;
+
+NumberMForm->Show();
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TOldForm::btnRecClick(TObject *Sender)
+{
+   //Получаем тип измерительной установки
+       //Инициализация переменных
+        AnsiString Measure_Type;
+        AnsiString MachineType;
+        AnsiString Machine_Serial;
+        AnsiString M_Type;
+        AnsiString Machine_ID;
+        AnsiString Machine_Call_Date;
+        bool Poverka;
+        //Подключение к БД
+       DataModule2->Machine->Active=true;
+                for (int i=0; i<DataModule2->Machine->RecordCount; i++){
+                        if (DataModule2->Machine->FieldByName("IP")->AsString==MainForm->edtMachine->Text){
+                                MachineType=DataModule2->Machine->FieldByName("Type")->AsString;
+                                Machine_Serial=DataModule2->Machine->FieldByName("Serial_N")->AsString;
+                                Machine_ID=DataModule2->Machine->FieldByName("ID")->AsString;
+                                M_Type=DataModule2->Machine->FieldByName("M_Type")->AsString;
+                                Machine_Call_Date=DataModule2->Machine->FieldByName("Call_Date")->AsString;
+                                Poverka=DataModule2->Machine->FieldByName("PoverKa")->AsBoolean;
+                                break;
+                         }
+                   DataModule2->Machine->Next();
+
+                        }
+      //*****************************************************
+ DataModule2->Machine->Active=false;   //Закрытие таблицы типа установки
+  //*****************************************************************************************
+AnsiString edText;  //Наименование единиц измерения
+AnsiString Measure_ID;
+int All=0;
+int Bad=0;
+int Good=0;
+int N_COUNT=0;
+
+         int Old_ID;
+        DataModule1->NumberCurrent->Active=true;
+        DataModule1->NumberCurrent->First();
+        if (edtMeasure->Text=="[Замер 1]"){
+
+            DataModule2->old->Active=false;
+            DataModule2->old->SQL->Clear();
+            DataModule2->old->SQL->Add("Select * from old order by N");
+            DataModule2->old->Active=true;
+            if (Global_Measure_ID>0){
+            Measure_ID=Global_Measure_ID;
+            }
+            else {
+             DataModule1->MeasureID->Active=true;
+                      DataModule1->MeasureID->Append();
+                      DataModule1->MeasureID->FieldByName("MSK")->AsString=edtMsk->Text;
+                      DataModule1->MeasureID->FieldByName("File")->AsString=DataModule1->FileSelect->FieldByName("FileName")->AsString;;
+                      DataModule1->MeasureID->Post();
+                      DataModule1->MeasureID->Last();
+                      Measure_ID=DataModule1->MeasureID->FieldByName("MeasureID")->AsString;
+                      Global_Measure_ID=StrToFloat(Measure_ID);
+            }
+
+ DataModule1->Old_ID->Active=true;
+                 DataModule1->Old_ID->Append();
+                 DataModule1->Old_ID->FieldByName("MSK")->AsString=edtMsk->Text;
+                 DataModule1->Old_ID->FieldByName("Measure_ID")->AsString=Measure_ID;
+                 DataModule1->Old_ID->FieldByName("File_1")->AsString=DataModule1->FileSelect->FieldByName("FileName")->AsString;
+                 DataModule1->Old_ID->FieldByName("Psi_Measure_ID")->AsString=cmb_ID->Text;
+                 DataModule1->Old_ID->Post();
+                 DataModule1->Old_ID->Last();
+                 Old_ID=DataModule1->Old_ID->FieldByName("ID")->AsFloat;
+                 cmb_ID->Text=Measure_ID;
+ DataModule1->MeasureID->Active=false;
+            }
+         else{
+            DataModule2->old->Active=false;
+            DataModule2->old->SQL->Clear();
+            DataModule2->old->SQL->Add("Select * from old where MeasureID='"+cmb_ID->Text+"' Order by N");
+            DataModule2->old->Active=true;
+            DataModule2->old->First();
+            Measure_ID=DataModule2->old->FieldByName("MeasureID")->AsString;
+            DataModule1->Old_ID->Active=true;
+            DataModule1->Old_ID->First();
+            for (int i=0;i<DataModule1->Old_ID->RecordCount;i++){
+                 if (DataModule1->Old_ID->FieldByName("Measure_ID")->AsString==Measure_ID){
+                  DataModule1->Old_ID->Edit();
+                  if (edtMeasure->Text=="Замер 2"){
+                  DataModule1->Old_ID->FieldByName("File_2")->AsString=NumberMForm->edtFile->Text;
+                  }
+                  else if (edtMeasure->Text=="Замер 3"){
+                  DataModule1->Old_ID->FieldByName("File_3")->AsString=NumberMForm->edtFile->Text;
+                  }
+                  else if (edtMeasure->Text=="Замер 4"){
+                  DataModule1->Old_ID->FieldByName("File_4")->AsString=NumberMForm->edtFile->Text;
+                  }
+                  else if (edtMeasure->Text=="Замер 5"){
+                  DataModule1->Old_ID->FieldByName("File_5")->AsString=NumberMForm->edtFile->Text;
+                  }
+                  All=DataModule2->old->RecordCount;
+                  DataModule1->Old_ID->Post();
+                  break;
+                 }
+                DataModule1->Old_ID->Next();
+            }
+             }
+
+  VrProgressBar1->Position=0;
+  VrProgressBar1->MaxValue=DataModule1->NumberCurrent->RecordCount-1;
+//Определение числа резонаторов
+        if (MachineType=="Saunders"){       // установка Сандерс
+                 DataModule1->SQLPostProcessData->Active=true ;
+                 DataModule1->SQLPostProcessData->First();
+                 N_COUNT=DataModule1->SQLPostProcessData->RecordCount;
+             }
+         else if(MachineType=="Transat"){
+              N_COUNT=DataModule1->NumberCurrent->RecordCount;
+           }
+  //**********************************************************
+//Выбор единиц измерения (Пользователем)
+int NN=edtEdMes->ItemIndex;
+double ed;    //Цифровое значение множитиля для единицы измерения
+
+                   switch (NN) {
+                    case  0 :
+                        ed=1E6;
+                        edText="1E-6";
+                        break;
+                    case 1  :
+                        ed=1E7;
+                        edText="1E-7";
+                        break;
+                    case 2  :
+                        ed=1E8;
+                        edText="1E-8";
+                        break;
+                     case 3  :
+                        ed=1E9;
+                        edText="1E-9";
+                        break;
+
+                     }
+ //*****************************************************
+
+
+//Получение частоты резонаторов
+for (int i=0;i<N_COUNT; i++){     // Цикл по всем имеющимся резонаторам в файле
+
+
+int l;    //Номер установочного лота
+double F;    // частота старения
+double Nominal; //Номинальная частота резонаторов
+int RingPos;  //Позиция в крунге для установки трансат
+int RingID;  //Выбор нижний или верхний круг установка трансат
+// Выбор номера установочного лота
+        for(int i=0; i<MainForm->RzCheckList1->Count;i++){
+                        if(MainForm->RzCheckList1->ItemState[i]!=0){
+                                              l=i+1;
+                                             break;
+                              }
+          }
+ //***************************************************************
+   //Формирование номеров позиций круга для установки трансат
+          if (MachineType=="Transat"){
+
+                AnsiString S;
+                        S=DataModule1->NumberCurrent->FieldByName("Position")->AsString;
+                                if (S.SubString(1,1)=="L"){
+                                        RingID=0;
+                                         }
+                                if (S.SubString(1,1)=="U"){
+                                        RingID=1;
+                                        }
+                                RingPos=S.SubString(2,S.Length()).ToInt();
+             }
+    //******************************************************
+
+
+   // Загрузка таблицы спецификации
+              DataModule2->SqlSpec->Active=false;
+              DataModule2->SqlSpec->SQL->Clear();
+              DataModule2->SqlSpec->SQL->Add("Select * from specification where name='"+edtSpc->Text+"'");
+              DataModule2->SqlSpec->Active=true;
+              Nominal=DataModule2->SqlSpec->FieldByName("Nominal")->AsFloat;
+   //***************************************************
+  int k; // Счетчик числа измерений одного резонатора
+  F=0;
+       //Загрузка данных с требуемой установки
+       if (MachineType=="Saunders"){
+
+                DataModule1->SQLCrystalData->Active=true;
+                k=DataModule1->SQLCrystalData->RecordCount;
+                DataModule1->SQLCrystalData->Filtered=false;
+                DataModule1->SQLCrystalData->Filter="strCrystalID='"+DataModule1->SQLPostProcessData->FieldByName("strCrystalID")->AsString+"'";
+                DataModule1->SQLCrystalData->Filtered=true;
+                /*DataModule1->NumberCurrent->Filtered=false;
+                DataModule1->NumberCurrent->Filter="Position='"+DataModule1->SQLPostProcessData->FieldByName("strCrystalID")->AsString+"'";
+                DataModule1->NumberCurrent->Filtered=true;
+                */
+               k=DataModule1->SQLCrystalData->RecordCount;
+                for (int n=0;n<k;n++){
+                        double F_HZ=Nominal+(Nominal/1E6)*DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat;
+                         F=F+((F_HZ-Nominal)/Nominal)*ed;
+
+                         DataModule1->SQLCrystalData->Next();
+                   }
+               DataModule1->SQLCrystalData->Filtered=false;
+               DataModule1->SQLCrystalData->Filter="";
+               DataModule1->SQLCrystalData->RecordCount;
+   
+       }
+
+       else if (MachineType=="Transat"){
+              DataModule1->Transat_Temp->Filtered=false;
+              DataModule1->Transat_Temp->Filter="SETUPNUM='"+IntToStr(l)+"' and RINGID='"+IntToStr(RingID)+"' and RINGPOS='"+IntToStr(RingPos)+"' and SETPOINT='"+DataModule2->SqlSpec->FieldByName("Told1")->AsString+"'";
+              DataModule1->Transat_Temp->Filtered=true;
+              DataModule1->Transat_Temp->First();
+                   k=DataModule1->Transat_Temp->RecordCount;
+
+                  for (int n=0;n<k;n++){
+                         F=F+((DataModule1->Transat_Temp->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*ed;
+
+                         DataModule1->Transat_Temp->Next();
+                   }
+                }
+                    F=F/k;
+
+
+
+                                       if (edtMeasure->Text=="[Замер 1]"){
+
+                                                         DataModule2->old->Append();
+                                                         DataModule2->old->FieldByName("N")->AsString=DataModule1->NumberCurrent->FieldByName("SNumber")->AsString;
+                                                         DataModule2->old->FieldByName("Msk")->AsString=edtMsk->Text;
+                                                         DataModule2->old->FieldByName("Spc")->AsString=edtSpc->Text;
+                                                         DataModule2->old->FieldByName("File1")->AsString=NumberMForm->edtFile->Text;
+                                                         //DataModule2->old->FieldByName("File1")->AsString=OldNMForm->edtFile->Text;
+                                                         DataModule2->old->FieldByName("M1")->AsString="True";
+                                                         if (F<10000 & F>-10000){
+                                                         DataModule2->old->FieldByName("Measure1")->AsFloat=F;
+                                                         DataModule2->old->FieldByName("Status")->AsString="Годен";
+                                                         }
+                                                         else{
+                                                          DataModule2->old->FieldByName("Measure1")->AsFloat=0;
+                                                          DataModule2->old->FieldByName("Status")->AsString="Брак";
+
+                                                         }
+                                                         DataModule2->old->FieldByName("MeasureID")->AsString=Measure_ID;
+                                                         DataModule2->old->FieldByName("Old_ID")->AsString=Old_ID;
+                                                         DataModule2->old->Post();
+
+                                          } //if
+                                        if (edtMeasure->Text=="Замер 2"){
+
+                                                         DataModule2->old->First();
+                                                        for (int j=0;j<DataModule2->old->RecordCount; j++){
+                                                              if (DataModule2->old->FieldByName("N")->AsString==DataModule1->NumberCurrent->FieldByName("SNumber")->AsString){
+                                                                    break;
+                                                                    }
+
+                                                          DataModule2->old->Next();
+                                                         }
+
+                                                         DataModule2->old->Edit();
+                                                         DataModule2->old->FieldByName("Msk")->AsString=edtMsk->Text;
+                                                         DataModule2->old->FieldByName("Spc")->AsString=edtSpc->Text;
+                                                         //DataModule2->old->FieldByName("File2")->AsString=OldNMForm->edtFile->Text;
+                                                         DataModule2->old->FieldByName("File2")->AsString=NumberMForm->edtFile->Text;
+                                                         DataModule2->old->FieldByName("M2")->AsString="True";
+                                                          if (F<10000 & F>-10000){
+                                                             DataModule2->old->FieldByName("Measure2")->AsFloat=F;
+                                                             DataModule2->old->FieldByName("Status")->AsString="Годен";
+                                                         }
+                                                         else{
+                                                           DataModule2->old->FieldByName("Measure2")->AsFloat=0;
+                                                           DataModule2->old->FieldByName("Status")->AsString="Брак";
+                                                          }
+                                                          if (DataModule2->old->FieldByName("M1")->AsString=="True"){
+                                                                        DataModule2->old->FieldByName("Old1B")->AsString="True";
+                                                                        DataModule2->old->FieldByName("Old1")->AsFloat=DataModule2->old->FieldByName("Measure2")->AsFloat-DataModule2->old->FieldByName("Measure1")->AsFloat;
+                                                                                                   if (DataModule2->SqlSpec->FieldByName("Old1max")->AsString!="no"){
+                                                                                                                     if(DataModule2->old->FieldByName("Old1")->AsFloat>StrToFloat(DataModule2->SqlSpec->FieldByName("Old1max")->AsString)){
+                                                                                                                                    DataModule2->old->FieldByName("Status")->AsString="Брак";
+                                                                                                                       }
+                                                                                                     }
+                                                                                                  if (DataModule2->SqlSpec->FieldByName("Old1min")->AsString!="no"){
+                                                                                                                    if(DataModule2->old->FieldByName("Old1")->AsFloat<StrToFloat(DataModule2->SqlSpec->FieldByName("Old1min")->AsString)){
+                                                                                                                                  DataModule2->old->FieldByName("Status")->AsString="Брак";
+                                                                                                                       }
+                                                                                                  }
+                                                             }
+                                                             DataModule2->old->FieldByName("MeasureID")->AsString=Measure_ID;
+                                                         DataModule2->old->Post();
+
+                                        } //if
+                                        if (edtMeasure->Text=="Замер 3"){
+                                                         DataModule2->old->First();
+                                                        for (int j=0;j<DataModule2->old->RecordCount; j++){
+                                                              if (DataModule2->old->FieldByName("N")->AsString==DataModule1->NumberCurrent->FieldByName("SNumber")->AsString){
+                                                                    break;
+                                                                    }
+
+                                                          DataModule2->old->Next();
+                                                         }
+
+                                                         DataModule2->old->Edit();
+                                                         DataModule2->old->FieldByName("Msk")->AsString=edtMsk->Text;
+                                                         DataModule2->old->FieldByName("Spc")->AsString=edtSpc->Text;
+                                                         //DataModule2->old->FieldByName("File3")->AsString=OldNMForm->edtFile->Text;
+                                                         DataModule2->old->FieldByName("File3")->AsString=NumberMForm->edtFile->Text;
+                                                         DataModule2->old->FieldByName("M3")->AsString="True";
+                                                         if (F<10000 & F>-10000){
+                                                         DataModule2->old->FieldByName("Measure3")->AsFloat=F;
+                                                         }
+                                                         else{
+                                                           DataModule2->old->FieldByName("Measure3")->AsFloat=0;
+                                                          }
+                                                          if (DataModule2->old->FieldByName("M1")->AsString=="True" & DataModule2->SqlSpec->FieldByName("Old2")->AsString=="True"){
+                                                                                DataModule2->old->FieldByName("Old2B")->AsString="True";
+                                                                                DataModule2->old->FieldByName("Old2")->AsFloat=DataModule2->old->FieldByName("Measure3")->AsFloat-DataModule2->old->FieldByName("Measure1")->AsFloat;
+                                                                                                       if (DataModule2->SqlSpec->FieldByName("Old2")->AsString=="True"){
+                                                                                                                   if (DataModule2->SqlSpec->FieldByName("Old2max")->AsString!="no"){
+                                                                                                                             if(DataModule2->old->FieldByName("Old2")->AsFloat>StrToFloat(DataModule2->SqlSpec->FieldByName("Old2max")->AsString)){
+                                                                                                                                       DataModule2->old->FieldByName("Status")->AsString="Брак";
+                                                                                                                               }
+                                                                                                                    }
+                                                                                                                   if (DataModule2->SqlSpec->FieldByName("Old2min")->AsString!="no"){
+                                                                                                                               if(DataModule2->old->FieldByName("Old2")->AsFloat<StrToFloat(DataModule2->SqlSpec->FieldByName("Old2min")->AsString)){
+                                                                                                                                          DataModule2->old->FieldByName("Status")->AsString="Брак";
+                                                                                                                                 }
+                                                                                                                   }
+                                                                                                          }
+                                                             }
+                                                           if (DataModule2->old->FieldByName("M2")->AsString=="True" & DataModule2->SqlSpec->FieldByName("Old2n")->AsString=="True"){
+                                                                      DataModule2->old->FieldByName("Old4B")->AsString="True";
+                                                                         DataModule2->old->FieldByName("Old4")->AsFloat=DataModule2->old->FieldByName("Measure3")->AsFloat-DataModule2->old->FieldByName("Measure2")->AsFloat;
+                                                                                          if (DataModule2->SqlSpec->FieldByName("Old2n")->AsString=="True"){
+                                                                                                             if (DataModule2->SqlSpec->FieldByName("Old2max")->AsString!="no"){
+                                                                                                                             if(DataModule2->old->FieldByName("Old2")->AsFloat>StrToFloat(DataModule2->SqlSpec->FieldByName("Old2max")->AsString)){
+                                                                                                                                     DataModule2->old->FieldByName("Status")->AsString="Брак";
+                                                                                                                             }
+                                                                                                                 }
+                                                                                                            if (DataModule2->SqlSpec->FieldByName("Old2min")->AsString!="no"){
+                                                                                                                              if(DataModule2->old->FieldByName("Old2")->AsFloat<StrToFloat(DataModule2->SqlSpec->FieldByName("Old2min")->AsString)){
+                                                                                                                                        DataModule2->old->FieldByName("Status")->AsString="Брак";
+                                                                                                                               }
+                                                                                                            }
+                                                                                            }
+
+                                                               }
+                                                               DataModule2->old->FieldByName("MeasureID")->AsString=Measure_ID;
+                                                           DataModule2->old->Post();    
+                                                         } //if
+                                        if (edtMeasure->Text=="Замер 4"){
+                                                         DataModule2->old->First();
+                                                        for (int j=0;j<DataModule2->old->RecordCount; j++){
+                                                              if (DataModule2->old->FieldByName("N")->AsString==DataModule1->NumberCurrent->FieldByName("SNumber")->AsString){
+                                                                    break;
+                                                                    }
+
+                                                          DataModule2->old->Next();
+                                                         }
+
+                                                         DataModule2->old->Edit();
+                                                         DataModule2->old->FieldByName("Msk")->AsString=edtMsk->Text;
+                                                         DataModule2->old->FieldByName("Spc")->AsString=edtSpc->Text;
+                                                         DataModule2->old->FieldByName("File4")->AsString=NumberMForm->edtFile->Text;
+                                                         //DataModule2->old->FieldByName("File4")->AsString=OldNMForm->edtFile->Text;
+                                                         DataModule2->old->FieldByName("M4")->AsString="True";
+                                                          if (F<10000 & F>-10000){
+                                                         DataModule2->old->FieldByName("Measure4")->AsFloat=F;
+                                                         }
+                                                         else{
+                                                           DataModule2->old->FieldByName("Measure4")->AsFloat=0;
+                                                          }
+                                                         if (DataModule2->old->FieldByName("M1")->AsString=="True"){
+                                                              DataModule2->old->FieldByName("Old3B")->AsString="True";
+                                                              DataModule2->old->FieldByName("Old3")->AsFloat=DataModule2->old->FieldByName("Measure4")->AsFloat-DataModule2->old->FieldByName("Measure1")->AsFloat;
+                                                                  if (DataModule2->SqlSpec->FieldByName("Old3")->AsString=="True"){
+                                                                                  if (DataModule2->SqlSpec->FieldByName("Old3max")->AsString!="no"){
+                                                                                          if(DataModule2->old->FieldByName("Old3")->AsFloat>StrToFloat(DataModule2->SqlSpec->FieldByName("Old3max")->AsString)){
+                                                                                                 DataModule2->old->FieldByName("Status")->AsString="Брак";
+                                                                                            }
+                                                                                  }
+                                                                    if (DataModule2->SqlSpec->FieldByName("Old3min")->AsString!="no"){
+                                                                                    if(DataModule2->old->FieldByName("Old3")->AsFloat<StrToFloat(DataModule2->SqlSpec->FieldByName("Old3min")->AsString)){
+                                                                                                   DataModule2->old->FieldByName("Status")->AsString="Брак";
+                                                                                       }
+                                                                       }
+                                                                  }
+                                                          }
+                                                          DataModule2->old->FieldByName("MeasureID")->AsString=Measure_ID;
+                                                         DataModule2->old->Post();
+
+                                         } //if
+                                        if (edtMeasure->Text=="Замер 5"){
+                                                         DataModule2->old->First();
+                                                        for (int j=0;j<DataModule2->old->RecordCount; j++){
+                                                              if (DataModule2->old->FieldByName("N")->AsString==DataModule1->NumberCurrent->FieldByName("SNumber")->AsString){
+                                                                    break;
+                                                                    }
+
+                                                          DataModule2->old->Next();
+                                                         }
+
+                                                         DataModule2->old->Edit();
+                                                         DataModule2->old->FieldByName("Msk")->AsString=edtMsk->Text;
+                                                         DataModule2->old->FieldByName("Spc")->AsString=edtSpc->Text;
+                                                         DataModule2->old->FieldByName("File5")->AsString=NumberMForm->edtFile->Text;
+                                                         //DataModule2->old->FieldByName("File5")->AsString=OldNMForm->edtFile->Text;
+                                                         DataModule2->old->FieldByName("M5")->AsString="True";
+                                                          if (F<10000 & F>-10000){
+                                                         DataModule2->old->FieldByName("Measure5")->AsFloat=F;
+                                                         }
+                                                         else{
+                                                           DataModule2->old->FieldByName("Measure5")->AsFloat=0;
+                                                          }
+                                                          DataModule2->old->FieldByName("MeasureID")->AsString=Measure_ID;
+                                                         DataModule2->old->Post();
+
+                                        } //if
+
+
+//----------------------------------------------------------------------------------
+ DataModule1->NumberCurrent->Next();
+        if (MachineType=="Saunders"){
+                DataModule1->SQLPostProcessData->Next();
+            }
+ VrProgressBar1->Position=i;
+  }//for
+  btnView->Enabled=true;
+    DataModule2->old->Active=false;
+    DataModule2->old->SQL->Clear();
+    DataModule2->old->SQL->Add("Select * from old where MeasureID='"+cmb_ID->Text+"' order by N");
+    DataModule2->old->Active=true;
+  DataModule2->old->First();
+  int k=0;
+  int N[12];
+  OldViewForm->RSGrid->Cells[0][0]="Номер";
+  N[0]=k;
+  k++;
+  if (DataModule2->old->FieldByName("M1")->AsString=="True"){
+     OldViewForm->RSGrid->Cells[k][0]="F1,"+edText;
+     N[1]=k;
+     k++;
+    }
+    if (DataModule2->old->FieldByName("M2")->AsString=="True"){
+     OldViewForm->RSGrid->Cells[k][0]="F2,"+edText;
+     N[2]=k;
+     k++;
+    }
+     if (DataModule2->old->FieldByName("M3")->AsString=="True"){
+     OldViewForm->RSGrid->Cells[k][0]="F3,"+edText;
+     N[3]=k;
+     k++;
+    }
+     if (DataModule2->old->FieldByName("M4")->AsString=="True"){
+     OldViewForm->RSGrid->Cells[k][0]="F4,"+edText;
+     N[4]=k;
+     k++;
+    }
+     if (DataModule2->old->FieldByName("M5")->AsString=="True"){
+     OldViewForm->RSGrid->Cells[k][0]="F5,"+edText;
+     N[5]=k;
+     k++;
+    }
+     if (DataModule2->old->FieldByName("Old1B")->AsString=="True" & DataModule2->SqlSpec->FieldByName("Old1")->AsString=="True"){
+     OldViewForm->RSGrid->Cells[k][0]="F2-F1,"+edText;
+     N[6]=k;
+     k++;
+
+    }
+      if (DataModule2->old->FieldByName("Old2B")->AsString=="True" & DataModule2->SqlSpec->FieldByName("Old2")->AsString=="True"){
+     OldViewForm->RSGrid->Cells[k][0]="F3-F1,"+edText;
+     N[7]=k;
+     k++;
+    }
+      if (DataModule2->old->FieldByName("Old4B")->AsString=="True" & DataModule2->SqlSpec->FieldByName("Old2n")->AsString=="True"){
+     OldViewForm->RSGrid->Cells[k][0]="F3-F2,"+edText;
+     N[8]=k;
+     k++;
+    }
+      if (DataModule2->old->FieldByName("Old3B")->AsString=="True" & DataModule2->SqlSpec->FieldByName("Old3")->AsString=="True"){
+     OldViewForm->RSGrid->Cells[k][0]="F4-F1,"+edText;
+     N[9]=k;
+     k++;
+    }
+    OldViewForm->RSGrid->Cells[k][0]="Статус";
+    N[10]=k;
+    OldViewForm->RSGrid->RowCount=DataModule2->old->RecordCount+1;
+    OldViewForm->RSGrid->ColCount=k+1;
+ for (int i=0; i<DataModule2->old->RecordCount; i++){
+          int k=0;
+               if (DataModule2->old->FieldByName("M1")->AsString=="True"){
+                      OldViewForm->RSGrid->Cells[N[1]][i+1]=DataModule2->old->FieldByName("Measure1")->AsString;
+
+                   }
+                  if (DataModule2->old->FieldByName("M2")->AsString=="True"){
+                      OldViewForm->RSGrid->Cells[N[2]][i+1]=DataModule2->old->FieldByName("Measure2")->AsString;
+
+                   }
+                    if (DataModule2->old->FieldByName("M3")->AsString=="True"){
+                      OldViewForm->RSGrid->Cells[N[3]][i+1]=DataModule2->old->FieldByName("Measure3")->AsString;
+
+                   }
+                    if (DataModule2->old->FieldByName("M4")->AsString=="True"){
+                      OldViewForm->RSGrid->Cells[N[4]][i+1]=DataModule2->old->FieldByName("Measure4")->AsString;
+
+                   }
+                    if (DataModule2->old->FieldByName("M5")->AsString=="True"){
+                      OldViewForm->RSGrid->Cells[N[5]][i+1]=DataModule2->old->FieldByName("Measure5")->AsString;
+
+                   }
+                    if (DataModule2->old->FieldByName("Old1B")->AsString=="True"){
+                              if (DataModule2->SqlSpec->FieldByName("Old1")->AsString=="True"){
+                                OldViewForm->RSGrid->Cells[N[6]][i+1]=DataModule2->old->FieldByName("old1")->AsString;
+                               }
+                   }
+                    if (DataModule2->old->FieldByName("Old2B")->AsString=="True"){
+                              if (DataModule2->SqlSpec->FieldByName("Old2")->AsString=="True"){
+                                OldViewForm->RSGrid->Cells[N[7]][i+1]=DataModule2->old->FieldByName("old2")->AsString;
+                               }
+                   }
+                    if (DataModule2->old->FieldByName("Old4B")->AsString=="True"){
+                              if (DataModule2->SqlSpec->FieldByName("Old2n")->AsString=="True"){
+                                OldViewForm->RSGrid->Cells[N[8]][i+1]=DataModule2->old->FieldByName("old4")->AsString;
+                               }
+                   }
+                    if (DataModule2->old->FieldByName("Old3B")->AsString=="True"){
+                              if (DataModule2->SqlSpec->FieldByName("Old3")->AsString=="True"){
+                                OldViewForm->RSGrid->Cells[N[9]][i+1]=DataModule2->old->FieldByName("old3")->AsString;
+                               }
+                   }
+                   OldViewForm->RSGrid->Cells[N[0]][i+1]=DataModule2->old->FieldByName("N")->AsString;
+                   OldViewForm->RSGrid->Cells[N[10]][i+1]=DataModule2->old->FieldByName("Status")->AsString;
+                   if (DataModule2->old->FieldByName("Status")->AsString=="Годен"){
+                    Good++;
+                   }
+                   else {
+                    Bad++;
+                   }
+
+
+  DataModule2->old->Next();
+   }
+
+   DataModule1->Old_ID->Edit();
+   DataModule1->Old_ID->FieldByName("all_counter")->AsString=All;
+  DataModule1->Old_ID->FieldByName("bad_counter")->AsString=Bad;
+  DataModule1->Old_ID->FieldByName("good_counter")->AsString=Good;
+   DataModule1->Old_ID->Post();
+   Global_Measure_ID=0;
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TOldForm::edtMskChange(TObject *Sender)
+{
+AnsiString S,S2;
+cmb_ID->Items->Clear();
+VrProgressBar1->Position=0;
+ if (edtMeasure->Text=="[Замер 1]"){
+DataModule2->psiData->Active=false;
+DataModule2->psiData->SQL->Clear();
+DataModule2->psiData->SQL->Add("Select * from psidata where Msk='"+edtMsk->Text+"' order by Measure_ID");
+DataModule2->psiData->Active=true;
+DataModule2->psiData->First();
+VrProgressBar1->MaxValue=DataModule2->psiData->RecordCount;
+for (int i=0;i<DataModule2->psiData->RecordCount;i++){
+              int p1=1;
+
+         S2=DataModule2->psiData->FieldByName("Measure_ID")->AsString;
+         for (int j1=0;j1<cmb_ID->Items->Count; j1++){
+               if (S2==cmb_ID->Items->Strings[j1]){
+               p1=0;
+               break;
+               }
+             p1=1;
+          }
+          if (p1==1 & !S2.IsEmpty()){
+           cmb_ID->Items->Add(S2);
+
+          }
+
+         DataModule2->psiData->Next();
+      } //for
+ }
+ else {
+       DataModule2->old->Active=false;
+DataModule2->old->SQL->Clear();
+DataModule2->old->SQL->Add("Select * from old where Msk='"+edtMsk->Text+"' ORDER BY N");
+
+
+DataModule2->old->Active=true;
+DataModule2->old->First();
+DataModule1->NumberCurrent->Active=true;
+DataModule1->NumberCurrent->EmptyTable();
+VrProgressBar1->MaxValue=DataModule2->old->RecordCount;
+for (int i=0;i<DataModule2->old->RecordCount;i++){
+             
+             S2=DataModule2->old->FieldByName("MeasureID")->AsString;
+             int p1=1;
+             for (int j1=0;j1<cmb_ID->Items->Count; j1++){
+               if (S2==cmb_ID->Items->Strings[j1]){
+               p1=0;
+               break;
+               }
+             p1=1;
+          }
+          if (p1==1 &!S2.IsEmpty()){
+           cmb_ID->Items->Add(S2);
+
+          }
+
+      DataModule2->old->Next();
+      } //for
+  //OldNMForm->edtMSK->Text=edtMsk->Text;
+     NumberMForm->edtMSK->Text=edtMsk->Text;
+      btnRec->Enabled=true;
+      }
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TOldForm::btnNumbersClick(TObject *Sender)
+{
+
+numberSelect=2;//OldNMForm->Show();
+NumberMForm->Show();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TOldForm::btnViewClick(TObject *Sender)
+{
+OldViewForm->Show();
+}
+//---------------------------------------------------------------------------
+
+
+
+void __fastcall TOldForm::btnLoadClick(TObject *Sender)
+{
+    DataModule2->SqlSpec->Active=false;
+    DataModule2->SqlSpec->SQL->Clear();
+
+    AnsiString edText;
+    int NN=edtEdMes->ItemIndex;
+                   double ed;
+
+                   switch (NN) {
+                    case  0 :
+
+                        edText="1E-6";
+                        break;
+                    case 1  :
+
+                        edText="1E-7";
+                        break;
+                    case 2  :
+
+                        edText="1E-8";
+                        break;
+                     case 3  :
+
+                        edText="1E-9";
+                        break;
+
+                   }
+   DataModule2->SqlSpec->SQL->Add("Select * from specification where name='"+edtSpc->Text+"'");
+  DataModule2->SqlSpec->Active=true;
+    DataModule2->old->Active=false;
+    DataModule2->old->SQL->Clear();
+    AnsiString sql;
+    if (cmb_ID->Text.IsEmpty() || cmb_ID->Text==""){
+    sql="Select * from old where msk='"+edtMsk->Text+"'";
+    }
+    else {
+     sql="Select * from old where MeasureID='"+cmb_ID->Text+"'";
+    }
+    sql=sql+" Order by N";
+    DataModule2->old->SQL->Add(sql);
+    DataModule2->old->Active=true;
+  DataModule2->old->First();
+  int k=0;
+  int N[12];
+  OldViewForm->RSGrid->Cells[0][0]="Номер";
+  N[0]=k;
+  k++;
+  if (DataModule2->old->FieldByName("M1")->AsString=="True"){
+     OldViewForm->RSGrid->Cells[k][0]="F1,"+edText;
+     N[1]=k;
+     k++;
+    }
+    if (DataModule2->old->FieldByName("M2")->AsString=="True"){
+     OldViewForm->RSGrid->Cells[k][0]="F2,"+edText;
+     N[2]=k;
+     k++;
+    }
+     if (DataModule2->old->FieldByName("M3")->AsString=="True"){
+     OldViewForm->RSGrid->Cells[k][0]="F3,"+edText;
+     N[3]=k;
+     k++;
+    }
+     if (DataModule2->old->FieldByName("M4")->AsString=="True"){
+     OldViewForm->RSGrid->Cells[k][0]="F4,"+edText;
+     N[4]=k;
+     k++;
+    }
+     if (DataModule2->old->FieldByName("M5")->AsString=="True"){
+     OldViewForm->RSGrid->Cells[k][0]="F5,"+edText;
+     N[5]=k;
+     k++;
+    }
+     if (DataModule2->old->FieldByName("Old1B")->AsString=="True" & DataModule2->SqlSpec->FieldByName("Old1")->AsString=="True"){
+     OldViewForm->RSGrid->Cells[k][0]="F2-F1,"+edText;
+     N[6]=k;
+     k++;
+
+    }
+      if (DataModule2->old->FieldByName("Old2B")->AsString=="True" & DataModule2->SqlSpec->FieldByName("Old2")->AsString=="True"){
+     OldViewForm->RSGrid->Cells[k][0]="F3-F1,"+edText;
+     N[7]=k;
+     k++;
+    }
+      if (DataModule2->old->FieldByName("Old4B")->AsString=="True" & DataModule2->SqlSpec->FieldByName("Old2n")->AsString=="True"){
+     OldViewForm->RSGrid->Cells[k][0]="F3-F2,"+edText;
+     N[8]=k;
+     k++;
+    }
+      if (DataModule2->old->FieldByName("Old3B")->AsString=="True" & DataModule2->SqlSpec->FieldByName("Old3")->AsString=="True"){
+     OldViewForm->RSGrid->Cells[k][0]="F4-F1,"+edText;
+     N[9]=k;
+     k++;
+    }
+    OldViewForm->RSGrid->Cells[k][0]="Статус";
+    N[10]=k;
+    OldViewForm->RSGrid->RowCount=DataModule2->old->RecordCount+1;
+    OldViewForm->RSGrid->ColCount=k+1;
+ for (int i=0; i<DataModule2->old->RecordCount; i++){
+          int k=0;
+               if (DataModule2->old->FieldByName("M1")->AsString=="True"){
+                      OldViewForm->RSGrid->Cells[N[1]][i+1]=DataModule2->old->FieldByName("Measure1")->AsString;
+
+                   }
+                  if (DataModule2->old->FieldByName("M2")->AsString=="True"){
+                      OldViewForm->RSGrid->Cells[N[2]][i+1]=DataModule2->old->FieldByName("Measure2")->AsString;
+
+                   }
+                    if (DataModule2->old->FieldByName("M3")->AsString=="True"){
+                      OldViewForm->RSGrid->Cells[N[3]][i+1]=DataModule2->old->FieldByName("Measure3")->AsString;
+
+                   }
+                    if (DataModule2->old->FieldByName("M4")->AsString=="True"){
+                      OldViewForm->RSGrid->Cells[N[4]][i+1]=DataModule2->old->FieldByName("Measure4")->AsString;
+
+                   }
+                    if (DataModule2->old->FieldByName("M5")->AsString=="True"){
+                      OldViewForm->RSGrid->Cells[N[5]][i+1]=DataModule2->old->FieldByName("Measure5")->AsString;
+
+                   }
+                    if (DataModule2->old->FieldByName("Old1B")->AsString=="True"){
+                              if (DataModule2->SqlSpec->FieldByName("Old1")->AsString=="True"){
+                                OldViewForm->RSGrid->Cells[N[6]][i+1]=DataModule2->old->FieldByName("old1")->AsString;
+                               }
+                   }
+                    if (DataModule2->old->FieldByName("Old2B")->AsString=="True"){
+                              if (DataModule2->SqlSpec->FieldByName("Old2")->AsString=="True"){
+                                OldViewForm->RSGrid->Cells[N[7]][i+1]=DataModule2->old->FieldByName("old2")->AsString;
+                               }
+                   }
+                    if (DataModule2->old->FieldByName("Old4B")->AsString=="True"){
+                              if (DataModule2->SqlSpec->FieldByName("Old2n")->AsString=="True"){
+                                OldViewForm->RSGrid->Cells[N[8]][i+1]=DataModule2->old->FieldByName("old4")->AsString;
+                               }
+                   }
+                    if (DataModule2->old->FieldByName("Old3B")->AsString=="True"){
+                              if (DataModule2->SqlSpec->FieldByName("Old3")->AsString=="True"){
+                                OldViewForm->RSGrid->Cells[N[9]][i+1]=DataModule2->old->FieldByName("old3")->AsString;
+                               }
+                   }
+                   OldViewForm->RSGrid->Cells[N[0]][i+1]=DataModule2->old->FieldByName("N")->AsString;
+                   OldViewForm->RSGrid->Cells[N[10]][i+1]=DataModule2->old->FieldByName("Status")->AsString;
+
+
+
+  DataModule2->old->Next();
+   }
+}
+//---------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------
+
+void __fastcall TOldForm::cmb_IDChange(TObject *Sender)
+{
+ if (edtMeasure->Text=="[Замер 1]"){
+ AnsiString sql;
+    if (btnPsi->Checked){
+    DataModule1->NumberCurrent->Active=true;
+     DataModule1->NumberCurrent->EmptyTable();
+        DataModule2->psiData->Active=false;
+        DataModule2->psiData->SQL->Clear();
+        if (btnGood->Checked){
+           if (RadioGroup1->ItemIndex==0){
+                sql="Select * from psidata where Measure_ID='"+cmb_ID->Text+"' and Status='Годен' ORDER BY ID" ;
+           }
+           else {
+                sql="Select * from psidata where Measure_ID='"+cmb_ID->Text+"' and Status='Годен' ORDER BY N" ;
+              }
+        }
+        else {
+        if (RadioGroup1->ItemIndex==1){
+                sql="Select * from psidata where Measure_ID='"+cmb_ID->Text+"' ORDER BY ID" ;
+           }
+           else {
+                sql="Select * from psidata where Measure_ID='"+cmb_ID->Text+"' ORDER BY N" ;
+              }
+        }
+        DataModule2->psiData->SQL->Add(sql);
+        DataModule2->psiData->Active=true;
+        DataModule2->psiData->First();
+          int N=NumberMForm->gridNumbers->RowCount-1;
+      for (int i=0;i<N;i++){
+             DataModule1->NumberCurrent->Append();
+              DataModule1->NumberCurrent->FieldByName("Position")->AsString=NumberMForm->gridNumbers->Cells[1][i+1];
+              DataModule1->NumberCurrent->FieldByName("Snumber")->AsString=DataModule2->psiData->FieldByName("N")->AsString;
+              DataModule1->NumberCurrent->FieldByName("N")->AsString=i+1;
+              DataModule1->NumberCurrent->Post();
+             NumberMForm->gridNumbers->Cells[2][i+1]=DataModule2->psiData->FieldByName("N")->AsString;
+
+
+              DataModule2->psiData->Next();
+
+
+      }
+
+    }
+    if (DataModule2->psiData->RecordCount>0){
+   NumberMForm->edtMSK->Text=DataModule2->psiData->FieldByName("MSK")->AsString;
+    if (DataModule2->psiData->RecordCount>0){
+       edtMsk->Text=DataModule2->psiData->FieldByName("MSK")->AsString;
+  edtSpc->Text=DataModule2->psiData->FieldByName("Spc")->AsString;
+
+    DataModule1->SqlSpecification->First();
+  for (int i=0;i<DataModule1->SqlSpecification->RecordCount;i++){
+       if (DataModule1->SqlSpecification->FieldByName("Name")->AsString==DataModule2->psiData->FieldByName("Spc")->AsString){
+         edtType->Text=DataModule1->SqlSpecification->FieldByName("NameR")->AsString;
+         break;
+       }
+
+   DataModule1->SqlSpecification->Next();
+  }
+  }
+  }
+ }
+ else {
+DataModule2->old->SQL->Clear();
+if (cmb_ID->Text.IsEmpty() || cmb_ID->Text==""){
+DataModule2->old->SQL->Add("Select * from old where Msk='"+edtMsk->Text+"' ORDER BY N");
+}
+else {
+DataModule2->old->SQL->Add("Select * from old where MeasureID='"+cmb_ID->Text+"' ORDER BY N");
+}
+
+DataModule2->old->Active=true;
+DataModule2->old->First();
+DataModule1->NumberCurrent->Active=true;
+DataModule1->NumberCurrent->EmptyTable();
+VrProgressBar1->MaxValue=DataModule2->old->RecordCount;
+for (int i=0;i<DataModule2->old->RecordCount;i++){
+              DataModule1->NumberCurrent->Append();
+              DataModule1->NumberCurrent->FieldByName("Position")->AsString=NumberMForm->gridNumbers->Cells[1][i+1];
+              DataModule1->NumberCurrent->FieldByName("Snumber")->AsString=DataModule2->old->FieldByName("N")->AsString;
+              DataModule1->NumberCurrent->FieldByName("N")->AsString=i+1;
+              DataModule1->NumberCurrent->Post();
+             NumberMForm->gridNumbers->Cells[2][i+1]=DataModule2->old->FieldByName("N")->AsString;
+
+
+      DataModule2->old->Next();
+      } //for
+     NumberMForm->edtMSK->Text=DataModule2->old->FieldByName("MSK")->AsString;
+     edtMsk->Text=DataModule2->old->FieldByName("MSK")->AsString;
+  edtSpc->Text=DataModule2->old->FieldByName("Spc")->AsString;
+
+    DataModule1->SqlSpecification->First();
+  for (int i=0;i<DataModule1->SqlSpecification->RecordCount;i++){
+       if (DataModule1->SqlSpecification->FieldByName("Name")->AsString==DataModule2->old->FieldByName("Spc")->AsString){
+         edtType->Text=DataModule1->SqlSpecification->FieldByName("NameR")->AsString;
+         break;
+       }
+
+   DataModule1->SqlSpecification->Next();
+  }
+      btnRec->Enabled=true;
+      }
+
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TOldForm::RzCheckBox1Click(TObject *Sender)
+{
+if (btnPsi->Checked){
+ btnGood->Visible=true;
+ RadioGroup1->Visible=true;
+
+}
+else {
+    btnGood->Visible=false;
+ RadioGroup1->Visible=false;
+
+}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TOldForm::btnBarCodeClick(TObject *Sender)
+{
+numberSelect=2;
+BarCodeMskForm->Show();
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TOldForm::btnRecPsiClick(TObject *Sender)
+{
+DataModule1->Old_ID->Active=true;
+DataModule1->Old_ID->First();
+  for (int i=0; i<DataModule1->Old_ID->RecordCount; i++){
+           if (DataModule1->Old_ID->FieldByName("Measure_ID")->AsString==cmb_ID->Text){
+                  if (!DataModule1->Old_ID->FieldByName("Psi_Measure_ID")->AsString.IsEmpty() & DataModule1->Old_ID->FieldByName("Psi_Measure_ID")->AsFloat!=0){
+                      DataModule2->psiData->Active=false;
+                      DataModule2->psiData->SQL->Clear();
+                      DataModule2->psiData->SQL->Add("Select * from psidata where Measure_ID='"+DataModule1->Old_ID->FieldByName("Psi_Measure_ID")->AsString+"'");
+                      DataModule2->psiData->Active=true;
+                      DataModule2->old->Active=false;
+                      DataModule2->old->SQL->Clear();
+                      DataModule2->old->SQL->Add("Select * from old where MeasureID='"+cmb_ID->Text+"' Order by N");
+                      DataModule2->old->Active=true;
+                        if (DataModule2->psiData->RecordCount>0){
+                          DataModule2->psiData->First();
+                          DataModule2->old->First();
+                                for (int j=0; j<DataModule2->old->RecordCount; j++){
+                                       DataModule2->psiData->First();
+                                        for (int k=0; k<DataModule2->psiData->RecordCount; k++){
+                                                if (DataModule2->psiData->FieldByName("N")->AsString==DataModule2->old->FieldByName("N")->AsString){
+                                                   DataModule2->psiData->Edit();
+                                                    DataModule2->psiData->FieldByName("Old1")->AsString=DataModule2->old->FieldByName("old1")->AsString;
+                                                    DataModule2->psiData->FieldByName("Old2")->AsString=DataModule2->old->FieldByName("old2")->AsString;
+                                                    DataModule2->psiData->FieldByName("Old3")->AsString=DataModule2->old->FieldByName("old3")->AsString;
+                                                    DataModule2->psiData->Post();
+                                                }
+                                         DataModule2->psiData->Next();
+                                        }
+
+                                   DataModule2->old->Next();
+                                }
+                        }
+                        else {
+                           ShowMessage("Отсутствуют данные о замере ПСИ введите их вручную");
+                           BarCodeEnterForm->Show();
+
+                        }
+                      }
+                    else {
+                          ShowMessage("Отсутствуют данные о замере ПСИ введите их вручную");
+                          BarCodeEnterForm->Show();
+                         }
+                  break;
+               }
+
+       DataModule1->Old_ID->Next();
+  }
+
+
+
+}
+//---------------------------------------------------------------------------
+

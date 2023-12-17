@@ -1,0 +1,497 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "LoadNumbers.h"
+#include "NumberM.h"
+#include "Data.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "VrButtons"
+#pragma link "VrControls"
+#pragma link "RzDBGrid"
+#pragma link "RzListVw"
+#pragma link "RzChkLst"
+#pragma link "RzLstBox"
+#pragma link "AdvStickyPopupMenu"
+#pragma link "RzButton"
+#pragma link "AdvMenus"
+#pragma resource "*.dfm"
+TLoadNumbersForm *LoadNumbersForm;
+//---------------------------------------------------------------------------
+__fastcall TLoadNumbersForm::TLoadNumbersForm(TComponent* Owner)
+        : TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall TLoadNumbersForm::btnCloseClick(TObject *Sender)
+{
+LoadNumbersForm->Hide();
+}
+//---------------------------------------------------------------------------
+void __fastcall TLoadNumbersForm::FormShow(TObject *Sender)
+{
+DataModule1->Numberall->SQL->Clear();
+DataModule1->Numberall->SQL->Add("Select * from numberall ORDER BY numberall.Msk");
+DataModule1->Numberall->Active=true;
+DataModule1->Numberall->First();
+viewLoad->Clear();
+viewLoad1->Clear();
+viewNumbers->Clear();
+viewPosition->Clear();
+int k;
+AnsiString S,S1,S2;
+k=DataModule1->Numberall->RecordCount;
+for (int i=0;i<k;i++){
+                     S=DataModule1->Numberall->FieldByName("MSK")->AsString;
+
+                     DataModule1->Numberall->Next();
+                     S1=DataModule1->Numberall->FieldByName("MSK")->AsString;
+                         if (S1!=S){
+                                   viewLoad->Items->Add(S);
+                                    S=S1;
+                                    }
+  }
+}
+
+//---------------------------------------------------------------------------
+
+
+void __fastcall TLoadNumbersForm::menuMSKClick(TObject *Sender)
+{
+if (!menuMSK->Checked) {
+    DataModule1->Numberall->Active=false;
+    DataModule1->Numberall->SQL->Clear();
+    DataModule1->Numberall->SQL->Add("Select * from numberall ORDER BY numberall.Msk");
+    DataModule1->Numberall->Active=true;
+    DataModule1->Numberall->First();
+    menuMSK->Checked=true;
+    menuFile->Checked=false;
+    Label1->Caption="Выбор МСК";
+    Label2->Caption="Выбор файла";
+    viewLoad->Clear();
+    viewLoad1->Clear();
+    viewNumbers->Clear();
+    viewPosition->Clear();
+    DataModule1->Numberall->First();
+int k;
+AnsiString S,S1;
+k=DataModule1->Numberall->RecordCount;
+for (int i=0;i<k;i++){
+                     S=DataModule1->Numberall->FieldByName("MSK")->AsString;
+
+                     DataModule1->Numberall->Next();
+                     S1=DataModule1->Numberall->FieldByName("MSK")->AsString;
+                         if (S1!=S){
+                                   viewLoad->Items->Add(S);
+                                    S=S1;
+                                    }
+  }
+   }
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TLoadNumbersForm::menuFileClick(TObject *Sender)
+{
+if (!menuFile->Checked) {
+    DataModule1->Numberall->Active=false;
+    DataModule1->Numberall->SQL->Clear();
+    DataModule1->Numberall->SQL->Add("Select * from numberall ORDER BY numberall.File");
+    DataModule1->Numberall->Active=true;
+    DataModule1->Numberall->First();
+    menuFile->Checked=true;
+    menuMSK->Checked=false;
+    Label2->Caption="Выбор МСК";
+    Label1->Caption="Выбор файла";
+    viewLoad->Clear();
+    viewLoad1->Clear();
+    viewNumbers->Clear();
+    viewPosition->Clear();
+    DataModule1->Numberall->First();
+int k;
+AnsiString S,S1;
+k=DataModule1->Numberall->RecordCount;
+for (int i=0;i<k;i++){
+                     S=DataModule1->Numberall->FieldByName("File")->AsString;
+
+                     DataModule1->Numberall->Next();
+                     S1=DataModule1->Numberall->FieldByName("File")->AsString;
+                         if (S1!=S){
+                                   viewLoad->Items->Add(S);
+                                    S=S1;
+                                    }
+  }
+   }
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TLoadNumbersForm::viewLoadClick(TObject *Sender)
+{
+if (menuMSK->Checked){
+                      AnsiString S,S1,S2,S3,Smax,Smin,S6;
+                      S=viewLoad->Items->Strings[viewLoad->ItemIndex];
+                      S1="Select * from numberall where numberall.Msk ='"+S+"' ORDER BY numberall.File";
+                      DataModule1->Numberall->Active=false;
+                      DataModule1->Numberall->SQL->Clear();
+                      DataModule1->Numberall->SQL->Add(S1);
+                      DataModule1->Numberall->Active=true;
+                      DataModule1->Numberall->First();
+                      viewLoad1->Clear();
+                      viewNumbers->Clear();
+                      S2=DataModule1->Numberall->FieldByName("File")->AsString;
+                          viewLoad1->Items->Add(S2);
+                          Smax=DataModule1->Numberall->FieldByName("Position")->AsString;
+                          Smin=DataModule1->Numberall->FieldByName("Position")->AsString;
+                          for(int i=0;i<DataModule1->Numberall->RecordCount;i++){
+                              viewNumbers->Items->Add(DataModule1->Numberall->FieldByName("Snumber")->AsString+" --> "+DataModule1->Numberall->FieldByName("Position")->AsString);
+                                  if (Smax<DataModule1->Numberall->FieldByName("Position")->AsString){
+                                           Smax=DataModule1->Numberall->FieldByName("Position")->AsString;
+                                      }
+                                   if (Smin>DataModule1->Numberall->FieldByName("Position")->AsString){
+                                           Smin=DataModule1->Numberall->FieldByName("Position")->AsString;
+                                      }
+
+                               DataModule1->Numberall->Next();
+                              S3=DataModule1->Numberall->FieldByName("File")->AsString;
+                                 if (S2!=S3){
+                                     viewLoad1->Items->Add(S3);
+                                    S2=S3;
+                                  }
+                          S6=Smin+"..."+Smax;
+                          viewPosition->Clear();
+                          viewPosition->Items->Add(S6);
+                            }
+ }
+
+ if (menuFile->Checked){
+                       AnsiString S,S1,S2,S3,Smax,Smin,S6;
+                       S=viewLoad->Items->Strings[viewLoad->ItemIndex];
+                       S1="Select * from numberall where numberall.File ='"+S+"' ORDER BY numberall.Msk";
+                       DataModule1->Numberall->Active=false;
+                       DataModule1->Numberall->SQL->Clear();
+                       DataModule1->Numberall->SQL->Add(S1);
+                       DataModule1->Numberall->Active=true;
+                       DataModule1->Numberall->First();
+                       viewLoad1->Clear();
+                       viewNumbers->Clear();
+                       S2=DataModule1->Numberall->FieldByName("Msk")->AsString;
+                       Smax=DataModule1->Numberall->FieldByName("Position")->AsString;
+                       Smin=DataModule1->Numberall->FieldByName("Position")->AsString;
+                        viewLoad1->Items->Add(S2);
+                          for(int i=0;i<DataModule1->Numberall->RecordCount;i++){
+                               if (Smax<DataModule1->Numberall->FieldByName("Position")->AsString){
+                                           Smax=DataModule1->Numberall->FieldByName("Position")->AsString;
+                                      }
+                                   if (Smin>DataModule1->Numberall->FieldByName("Position")->AsString){
+                                           Smin=DataModule1->Numberall->FieldByName("Position")->AsString;
+                                      }
+                              viewNumbers->Items->Add(DataModule1->Numberall->FieldByName("Snumber")->AsString+" --> "+DataModule1->Numberall->FieldByName("Position")->AsString);
+                              DataModule1->Numberall->Next();
+                              S3=DataModule1->Numberall->FieldByName("Msk")->AsString;
+                                 if (S2!=S3){
+                                           viewLoad1->Items->Add(S3);
+                                           S2=S3;
+                                  }
+
+                            }
+                        S6=Smin+"..."+Smax;
+                        viewPosition->Clear();
+                        viewPosition->Items->Add(S6);
+   }
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TLoadNumbersForm::btnLoadClick(TObject *Sender)
+{
+int l,k1,k2;
+AnsiString s,Xmsk,Xfile;
+k1=0;
+k2=0;
+DataModule1->Numberall->Active=false;
+DataModule1->Numberall->SQL->Clear();
+      if (menuMSK->Checked){
+                          for (int i=0;i<viewLoad->Count;i++){
+                                    if(viewLoad->ItemState[i]!=0){
+                                    l=i;  k1=1;
+                                    break;
+                                    }
+                           }
+                          Xmsk=viewLoad->Items->Strings[l];
+                            for (int i=0;i<viewLoad1->Count;i++){
+                                    if(viewLoad1->ItemState[i]!=0){
+                                    l=i;  k2=1;
+                                    break;
+                                    }
+                           }
+                          Xfile=viewLoad1->Items->Strings[l];
+                   if(k1*k2>0){
+                              s="Select * from numberall where numberall.Msk='"+Xmsk+"' and numberall.File='"+Xfile+"' ORDER BY numberall.Position";
+                             DataModule1->Numberall->SQL->Add(s);
+                             DataModule1->Numberall->Active=true;
+                             NumberMForm->edtAll->Text=DataModule1->Numberall->RecordCount;
+                             DataModule1->Numberall->First();
+                             NumberMForm->edtMSK->Text=Xmsk;
+                             NumberMForm->edtFile->Text=Xfile;
+                             NumberMForm->gridNumbers->CleanupInstance();
+                             NumberMForm->gridNumbers->RowCount=DataModule1->Numberall->RecordCount+1;
+                             NumberMForm->gridNumbers->Cells[0][0]="№";
+                             NumberMForm->gridNumbers->Cells[1][0]="Позиция";
+                             NumberMForm->gridNumbers->Cells[2][0]="Номер";
+                                for(int i=0;i<DataModule1->Numberall->RecordCount;i++){
+                                                 NumberMForm->gridNumbers->Cells[0][i+1]=i+1;
+                                                 NumberMForm->gridNumbers->Cells[1][i+1]=DataModule1->Numberall->FieldByName("Position")->AsString;
+                                                 NumberMForm->gridNumbers->Cells[2][i+1]=DataModule1->Numberall->FieldByName("SNumber")->AsString;
+                                                 DataModule1->Numberall->Next();
+                                                }
+                     }
+                    else{
+                          if (k1==0){
+                                     ShowMessage("Не выбрана МСК");
+                                     }
+                           if(k2==0){
+                                     ShowMessage("Не выбран файл");
+                                     }
+                         }
+         }
+    if (menuFile->Checked){
+                          for (int i=0;i<viewLoad->Count;i++){
+                                    if(viewLoad->ItemState[i]!=0){
+                                    l=i;  k1=1;
+                                    break;
+                                    }
+                           }
+                          Xfile=viewLoad->Items->Strings[l];
+                            for (int i=0;i<viewLoad1->Count;i++){
+                                    if(viewLoad1->ItemState[i]!=0){
+                                    l=i;  k2=1;
+                                    break;
+                                    }
+                           }
+                          Xmsk=viewLoad1->Items->Strings[l];
+                   if(k1*k2>0){
+                              s="Select * from numberall where numberall.Msk='"+Xmsk+"' and numberall.File='"+Xfile+"' ORDER BY numberall.Position";
+                             DataModule1->Numberall->SQL->Add(s);
+                             DataModule1->Numberall->Active=true;
+                             NumberMForm->edtAll->Text=DataModule1->Numberall->RecordCount;
+                             DataModule1->Numberall->First();
+                             NumberMForm->edtMSK->Text=Xmsk;
+                             NumberMForm->edtFile->Text=Xfile;
+                             NumberMForm->gridNumbers->CleanupInstance();
+                             NumberMForm->gridNumbers->RowCount=DataModule1->Numberall->RecordCount+1;
+                             NumberMForm->gridNumbers->Cells[0][0]="№";
+                             NumberMForm->gridNumbers->Cells[1][0]="Позиция";
+                             NumberMForm->gridNumbers->Cells[2][0]="Номер";
+                                for(int i=0;i<DataModule1->Numberall->RecordCount;i++){
+                                                 NumberMForm->gridNumbers->Cells[0][i+1]=i+1;
+                                                 NumberMForm->gridNumbers->Cells[1][i+1]=DataModule1->Numberall->FieldByName("Position")->AsString;
+                                                 NumberMForm->gridNumbers->Cells[2][i+1]=DataModule1->Numberall->FieldByName("SNumber")->AsString;
+                                                 DataModule1->Numberall->Next();
+                                                }
+                     }
+                    else{
+                          if (k2==0){
+                                     ShowMessage("Не выбрана МСК");
+                                     }
+                           if(k1==0){
+                                     ShowMessage("Не выбран файл");
+                                     }
+                         }
+         }
+
+
+LoadNumbersForm->Hide();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TLoadNumbersForm::btnDeleteClick(TObject *Sender)
+{
+ int k1,k2,k3,l,l1;
+ k1=0;k2=0;k3=0;
+ AnsiString S,Xfile,Xmsk,S1;
+ DataModule1->Numberall->Active=false;
+ DataModule1->Numberall->SQL->Clear();
+    if (menuMSK->Checked){
+                          for (int i=0;i<viewLoad->Count;i++){
+                                    if(viewLoad->ItemState[i]!=0){
+                                    l=i;  k1=1;
+                                    break;
+                                    }
+                           }
+                          Xmsk=viewLoad->Items->Strings[l];
+                            for (int i=0;i<viewLoad1->Count;i++){
+                                    if(viewLoad1->ItemState[i]!=0){
+                                    l1=i;  k2=1;
+                                    break;
+                                    }
+                           }
+                          Xfile=viewLoad1->Items->Strings[l1];
+                   if(k1!=0&k2==0){
+                              S="Select * from numberall where numberall.Msk='"+Xmsk+"' ORDER BY numberall.Position";
+                              S1="numberall.Msk="+Xmsk;
+                             }
+                    if(k1==0&k2!=0){
+                              S="Select * from numberall where numberall.File='"+Xfile+"' ORDER BY numberall.Position";
+                              S1="numberall.File='"+Xfile+"'";
+                             }
+                     if(k1!=0&k2!=0){
+                              S="Select * from numberall where numberall.Msk='"+Xmsk+"' and numberall.File='"+Xfile+"' ORDER BY numberall.Position";
+                              S1="numberall.Msk="+Xmsk+" and numberall.File='"+Xfile+"'";
+                             }
+                     DataModule1->Numberall->SQL->Add(S);
+                     DataModule1->Numberall->Active=true;
+                     DataModule1->Numberall->First();
+                     k3=DataModule1->Numberall->RecordCount;
+                        if(viewNumbers->ItemsChecked()==0){
+                                         for(int i=0;i<k3;i++){
+                                                 DataModule1->Numberall->Delete();
+                                                 //DataModule1->Numberall->Next();
+                                          }
+                                 viewNumbers->Clear();
+                                 viewPosition->Clear();
+                                 viewLoad->Items->Delete(l);
+                                 viewLoad->Items->Delete(l1);
+                          }
+                       else{
+                               for(int i=0;i<k3;i++){
+                                          if(viewNumbers->ItemState[i]!=0){
+                                                      DataModule1->Numberall->First();
+                                                      for(int j=0;j<k3;j++){
+                                                               if(viewNumbers->Items->Strings[i]==DataModule1->Numberall->FieldByName("SNumber")->AsString+" --> "+DataModule1->Numberall->FieldByName("Position")->AsString){
+                                                                         DataModule1->Numberall->Delete();
+                                                                         viewNumbers->Items->Delete(i);
+                                                                         break;
+                                                                  }
+                                                             DataModule1->Numberall->Next();
+                                                       }
+                                            }
+                                 }
+                           }
+   }
+
+   if (menuFile->Checked){
+                          for (int i=0;i<viewLoad->Count;i++){
+                                    if(viewLoad->ItemState[i]!=0){
+                                    l=i;  k1=1;
+                                    break;
+                                    }
+                           }
+                          Xfile=viewLoad->Items->Strings[l];
+                            for (int i=0;i<viewLoad1->Count;i++){
+                                    if(viewLoad1->ItemState[i]!=0){
+                                    l1=i;  k2=1;
+                                    break;
+                                    }
+                           }
+                          Xmsk=viewLoad1->Items->Strings[l1];
+                   if(k2!=0&k1==0){
+                              S="Select * from numberall where numberall.Msk='"+Xmsk+"' ORDER BY numberall.Position";
+                              S1="numberall.Msk='"+Xmsk+"'";
+                             }
+                    if(k2==0&k1!=0){
+                              S="Select * from numberall where numberall.File='"+Xfile+"' ORDER BY numberall.Position";
+                              S1="numberall.File='"+Xfile+"'";
+                             }
+                     if(k1!=0&k2!=0){
+                              S="Select * from numberall where numberall.Msk='"+Xmsk+"' and numberall.File='"+Xfile+"' ORDER BY numberall.Position";
+                              S1="numberall.Msk='"+Xmsk+"' and numberall.File='"+Xfile+"'";
+                             }
+                     DataModule1->Numberall->SQL->Add(S);
+                     DataModule1->Numberall->Active=true;
+                     DataModule1->Numberall->First();
+                     k3=DataModule1->Numberall->RecordCount;
+                        if(viewNumbers->ItemsChecked()==0){
+                                         for(int i=0;i<k3;i++){
+                                                 DataModule1->Numberall->First();
+                                                 DataModule1->Numberall->Delete();
+                                                 //DataModule1->Numberall->Post();
+                                                 //DataModule1->Numberall->Next();
+                                          }
+                                 viewNumbers->Clear();
+                                 viewPosition->Clear();
+                                 viewLoad->Items->Delete(l);
+                                 viewLoad->Items->Delete(l1);
+                                //DataModule1->Numberall->Post();
+                          }
+                       else{
+                               for(int i=0;i<k3;i++){
+                                          if(viewNumbers->ItemState[i]!=0){
+                                                      DataModule1->Numberall->First();
+                                                      for(int j=0;j<k3;j++){
+                                                               if(viewNumbers->Items->Strings[i]==DataModule1->Numberall->FieldByName("SNumber")->AsString){
+                                                                         DataModule1->Numberall->Delete();
+                                                                         viewNumbers->Items->Delete(i);
+                                                                         //DataModule1->Numberall->Post();
+                                                                         break;
+                                                                  }
+                                                             DataModule1->Numberall->Next();
+                                                       }
+                                            }
+                                 }
+                           }
+   }
+
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TLoadNumbersForm::viewLoad1Click(TObject *Sender)
+{
+if (menuMSK->Checked){
+                      AnsiString S,S1,S2,S3,Smax,Smin,S6,S7;
+                      S=viewLoad->Items->Strings[viewLoad->ItemIndex];
+                      S7=viewLoad1->Items->Strings[viewLoad1->ItemIndex];
+                      S1="Select * from numberall where numberall.Msk ='"+S+"' and numberall.File ='"+S7+"' ORDER BY numberall.Position";
+                      DataModule1->Numberall->Active=false;
+                      DataModule1->Numberall->SQL->Clear();
+                      DataModule1->Numberall->SQL->Add(S1);
+                      DataModule1->Numberall->Active=true;
+                      DataModule1->Numberall->First();
+                      viewNumbers->Clear();
+                      Smax=DataModule1->Numberall->FieldByName("Position")->AsString;
+                       Smin=DataModule1->Numberall->FieldByName("Position")->AsString;
+                          for(int i=0;i<DataModule1->Numberall->RecordCount;i++){
+                              if (Smax<DataModule1->Numberall->FieldByName("Position")->AsString){
+                                           Smax=DataModule1->Numberall->FieldByName("Position")->AsString;
+                                      }
+                                   if (Smin>DataModule1->Numberall->FieldByName("Position")->AsString){
+                                           Smin=DataModule1->Numberall->FieldByName("Position")->AsString;
+                                      }
+                              viewNumbers->Items->Add(DataModule1->Numberall->FieldByName("Snumber")->AsString+" --> "+DataModule1->Numberall->FieldByName("Position")->AsString);
+                               DataModule1->Numberall->Next();
+                            }
+                        S6=Smin+"..."+Smax;
+                        viewPosition->Clear();
+                        viewPosition->Items->Add(S6);
+ }
+
+ if (menuFile->Checked){
+                       AnsiString S,S1,S2,S3,Smax,Smin,S6,S7;
+                      S=viewLoad->Items->Strings[viewLoad->ItemIndex];
+                      S7=viewLoad1->Items->Strings[viewLoad1->ItemIndex];
+                      S1="Select * from numberall where numberall.Msk ='"+S7+"' and numberall.File ='"+S+"' ORDER BY numberall.Position";
+                      DataModule1->Numberall->Active=false;
+                      DataModule1->Numberall->SQL->Clear();
+                      DataModule1->Numberall->SQL->Add(S1);
+                      DataModule1->Numberall->Active=true;
+                      DataModule1->Numberall->First();
+                      viewNumbers->Clear();
+                      Smax=DataModule1->Numberall->FieldByName("Position")->AsString;
+                       Smin=DataModule1->Numberall->FieldByName("Position")->AsString;
+                          for(int i=0;i<DataModule1->Numberall->RecordCount;i++){
+                              if (Smax<DataModule1->Numberall->FieldByName("Position")->AsString){
+                                           Smax=DataModule1->Numberall->FieldByName("Position")->AsString;
+                                      }
+                                   if (Smin>DataModule1->Numberall->FieldByName("Position")->AsString){
+                                           Smin=DataModule1->Numberall->FieldByName("Position")->AsString;
+                                      }
+                              viewNumbers->Items->Add(DataModule1->Numberall->FieldByName("Snumber")->AsString+" --> "+DataModule1->Numberall->FieldByName("Position")->AsString);
+                               DataModule1->Numberall->Next();
+                            }
+                            S6=Smin+"..."+Smax;
+                        viewPosition->Clear();
+                        viewPosition->Items->Add(S6);
+ }
+}
+//---------------------------------------------------------------------------
+

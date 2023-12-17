@@ -1,0 +1,1269 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "archiveTable.h"
+#include "archive.h"
+#include "DataArchive.h"
+#include "Data.h"
+#include "options.h"
+#include <ComObj.hpp>
+#include  <utilcls.h>
+#include "data1.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "RzDBGrid"
+#pragma link "RzPanel"
+#pragma link "VrButtons"
+#pragma link "VrControls"
+#pragma link "RzButton"
+#pragma link "RzEdit"
+#pragma link "frxClass"
+#pragma link "frxDBSet"
+#pragma link "frxExportPDF"
+#pragma link "RzRadChk"
+#pragma resource "*.dfm"
+TArchiveTableForm *ArchiveTableForm;
+Variant  vVarApp,vVarBooks,vVarBook,vVarSheets,
+                 vVarSheet,vVarCells,vVarCell;
+bool fStart;
+//---------------------------------------------------------------------------
+__fastcall TArchiveTableForm::TArchiveTableForm(TComponent* Owner)
+        : TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall TArchiveTableForm::btnCloseClick(TObject *Sender)
+{
+ArchiveTableForm->Hide();
+}
+//---------------------------------------------------------------------------
+void __fastcall TArchiveTableForm::FormShow(TObject *Sender)
+{
+AnsiString S,S1,S2,Sd,S3;
+int sd,sm,sy;
+int k1=0;
+int k2=0;
+ArchiveTableForm->Color=OptionsForm->ColorBox1->Selected;
+ArchiveTableForm->Font->Name=DataModule1->Options->FieldByName("Font")->AsString;
+ArchiveTableForm->Font->Color=OptionsForm->ColorBox2->Selected;
+ArchiveTableForm->btnClose->Brush->Color=OptionsForm->colorBTN->Selected;
+RzDBGrid1->FixedColor=OptionsForm->colorFixGrid->Selected;
+ArchiveForm->Repaint();
+if (ArchiveForm->cmb_ID->Text=="" || ArchiveForm->cmb_ID->Text==NULL){
+
+  for( int i=0;i<ArchiveForm->viewMSK->Count;i++){
+                        if(ArchiveForm->viewMSK->ItemState[i]!=0){
+                                    S=ArchiveForm->viewMSK->Items->Strings[ArchiveForm->viewMSK->ItemIndex];
+                                    break;
+                                    }
+                }
+    for( int i=0;i<ArchiveForm->viewDate->Count;i++){
+                        if(ArchiveForm->viewDate->ItemState[i]!=0){
+                                    S1=ArchiveForm->viewDate->Items->Strings[ArchiveForm->viewDate->ItemIndex];
+                                    k1=1;
+                                    sd=S1.SubString(1,2).ToIntDef(1);
+                                    sm=S1.SubString(4,2).ToIntDef(1);
+                                    sy=S1.SubString(7,4).ToIntDef(1900);
+                                    edt1->Text=sd;
+                                    Sd=edt1->Text;
+                                    edt1->Text=sm;
+                                    Sd=Sd+"."+edt1->Text;
+                                    edt1->Text=sy;
+                                    Sd=Sd+"."+edt1->Text;
+                                    break;
+                                    }
+                }
+   for( int i=0;i<ArchiveForm->viewFile->Count;i++){
+                        if(ArchiveForm->viewFile->ItemState[i]!=0){
+                                    S3=ArchiveForm->viewFile->Items->Strings[ArchiveForm->viewFile->ItemIndex];
+                                    k2=1;
+                                    break;
+                                    }
+                }
+
+
+     if (!ArchiveForm->allMeasureChk->Checked){
+           if (k1!=0&k2==0){
+              S2="Select * from psidata where msk='"+S+"' and date='"+Sd+"' order by N";
+
+              }
+           if (k1==0&k2==0){
+                       if (!ArchiveForm->edtAnomal->Checked){
+                            if (ArchiveForm->edtM->Text==""){
+
+                            S2="Select * from psidata where msk='"+S+"'  order by N";
+                            }
+                            else {
+                             S2="Select * from psidata where msk='"+S+"' and `MSK-M`='"+ArchiveForm->edtM->Text+"'  order by N";
+
+                            }
+                        }
+                        else {
+
+                            if (ArchiveForm->edtM->Text==""){
+                            S2="Select * from psidata where msk='"+S+"' and Status2='Good'  order by N" ;
+
+                         }
+                         else {
+                             S2="Select * from psidata where msk='"+S+"' and Status2='Good' and  `MSK-M`='"+ArchiveForm->edtM->Text+"' order by N";
+
+                         }
+
+                        }
+         }
+         if (k1!=0&k2!=0){
+                  S2="Select * from psidata where msk='"+S+"' and date='"+Sd+"' and file='"+S3+"' order by N";
+
+            }
+
+            if (k1==0&k2!=0){
+                  S2="Select * from psidata where msk='"+S+"' and file='"+S3+"' order by N";
+
+            }
+
+   }
+
+    else {
+      S2="select * from `psidata` where N in (Select N from psidata where msk='"+S+"'    )";
+
+   }   }
+   else {
+
+    S2="Select * from psidata where measure_id='"+ArchiveForm->cmb_ID->Text+"' ORDER BY N";
+    
+    }
+
+
+
+
+ archivedata->PSIData1->Active=false;
+archivedata->PSIData1->SQL->Clear();
+ archivedata->PSIData1->SQL->Add(S2);
+archivedata->PSIData1->Active=true;
+archivedata->PSIData1->First();
+edtMSK->Text=S;
+edtFile->Text=archivedata->PSIData1->FieldByName("File")->AsString;
+edtSpc->Text=archivedata->PSIData1->FieldByName("spc")->AsString;
+edtDate->Text=archivedata->PSIData1->FieldByName("date")->AsString;
+edtTime->Text=archivedata->PSIData1->FieldByName("time")->AsString;
+edtNominal->Text=archivedata->PSIData1->FieldByName("nominal")->AsString;
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TArchiveTableForm::Print1Click(TObject *Sender)
+{
+AnsiString S,S1,S2;
+int k;
+
+k=DataModule1->SqlSpecification->RecordCount;
+S1=ArchiveForm->viewMSK->Items->Strings[ArchiveForm->viewMSK->ItemIndex];
+  DataModule1->SqlSpecification->First();
+
+   for (int i=0;i<k;i++){
+                       if(DataModule1->SqlSpecification->FieldByName("Name")->AsString==archivedata->PSIData1->FieldByName("spc")->AsString){
+                         break;
+                         }
+            DataModule1->SqlSpecification->Next();
+                      }
+ DataModule1->DropStatTable->SQL->Clear();
+DataModule1->DropStatTable->SQL->Add("Drop Table IF EXISTS  `Psi_stat_"+DataModule1->Dostup->FieldByName("ID")->AsString+"`");
+DataModule1->DropStatTable->Execute();
+
+DataModule2->Parameters->Active=true;
+DataModule2->Parameters->First();
+
+DataModule1->DropStatTable->SQL->Clear();
+DataModule1->DropStatTable->SQL->Add("Drop Table IF EXISTS  `Psi_stat_"+DataModule1->Dostup->FieldByName("ID")->AsString+"`");
+DataModule1->DropStatTable->Execute();
+
+DataModule1->CreateStatTable->SQL->Clear();
+DataModule1->CreateStatTable->SQL->Add("CREATE TABLE `Psi_stat_"+DataModule1->Dostup->FieldByName("ID")->AsString+"`");
+DataModule1->CreateStatTable->SQL->Add("(`ID` int(11) NOT NULL auto_increment,`Measure_ID` int(11) default NULL,");
+                for (int i=0; i<DataModule2->Parameters->RecordCount; i++){
+                        if (DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_Spc_Field")->AsString)->AsString=="True"){
+                          AnsiString P_Name=DataModule2->Parameters->FieldByName("Parametr_Name")->AsString;
+                          DataModule1->CreateStatTable->SQL->Add("`"+P_Name+"_AVG_A` double(15,3) default NULL,");
+                          DataModule1->CreateStatTable->SQL->Add("`"+P_Name+"_Max_A` double(15,3) default NULL,");
+                          DataModule1->CreateStatTable->SQL->Add("`"+P_Name+"_Min_A` double(15,3) default NULL,");
+                           DataModule1->CreateStatTable->SQL->Add("`"+P_Name+"_ST_DEV_A` double(15,3) default NULL,");
+                          DataModule1->CreateStatTable->SQL->Add("`"+P_Name+"_CPK` double(15,3) default NULL,");
+                           }
+                        DataModule2->Parameters->Next();
+                     }
+DataModule1->CreateStatTable->SQL->Add("   PRIMARY KEY  (`ID`),  UNIQUE KEY `ID` USING BTREE (`ID`)) ENGINE=MEMORY DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
+DataModule1->CreateStatTable->Execute();
+
+DataModule1->psi_stat_1->Active=false;
+DataModule1->psi_stat_1->SQL->Clear();
+DataModule1->psi_stat_1->SQL->Add("Select * from `Psi_stat_"+DataModule1->Dostup->FieldByName("ID")->AsString+"`");
+DataModule1->psi_stat_1->Active=true;
+DataModule1->psi_stat_1->Append();
+DataModule1->psi_stat_1->FieldByName("Measure_ID")->AsString=archivedata->PSIData1->FieldByName("Measure_ID")->AsString;
+
+        DataModule2->Statistika->Active=false;
+        DataModule2->Statistika->SQL->Clear();
+        DataModule2->Statistika->SQL->Add("Select * from psi_statistika where Measure_ID='"+archivedata->PSIData1->FieldByName("Measure_ID")->AsString+"'");
+        DataModule2->Statistika->Active=true;
+        DataModule2->Statistika->First();
+ for (int i=0; i<DataModule2->Statistika->RecordCount; i++){
+            DataModule2->Parameters->First();
+          for (int j=0; j<DataModule2->Parameters->RecordCount; j++){
+              if (DataModule2->Parameters->FieldByName("ID")->AsString==DataModule2->Statistika->FieldByName("Parametr_ID")->AsString){
+               AnsiString PP_name=DataModule2->Parameters->FieldByName("Parametr_Name")->AsString;
+               if (DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_Spc_Field")->AsString)->AsString=="True"){
+               DataModule1->psi_stat_1->FieldByName(PP_name+"_AVG_A")->AsString=DataModule2->Statistika->FieldByName("AVG_A")->AsString;
+               DataModule1->psi_stat_1->FieldByName(PP_name+"_Max_A")->AsString=DataModule2->Statistika->FieldByName("Max_A")->AsString;
+               DataModule1->psi_stat_1->FieldByName(PP_name+"_Min_A")->AsString=DataModule2->Statistika->FieldByName("Min_A")->AsString;
+               DataModule1->psi_stat_1->FieldByName(PP_name+"_ST_DEV_A")->AsString=DataModule2->Statistika->FieldByName("STDEV_A")->AsString;
+               DataModule1->psi_stat_1->FieldByName(PP_name+"_CPK")->AsString=DataModule2->Statistika->FieldByName("CPK")->AsString;
+               }
+               break;
+              }
+              DataModule2->Parameters->Next();
+          }
+
+       DataModule2->Statistika->Next();
+ }
+DataModule1->psi_stat_1->Post();
+DataModule1->Print->Active=false;
+DataModule1->Print->SQL->Clear();
+DataModule1->Print->SQL->Add("Select * from print_data where ID='"+DataModule1->SqlSpecification->FieldByName("PrintProfile")->AsString+"'");
+DataModule1->Print->Active=true;
+AnsiString PrintFileName=DataModule1->Print->FieldByName("Measure")->AsString;
+DataModule1->Print->Active=false;
+
+DataModule2->Print_Files->Active=false;
+DataModule2->Print_Files->SQL->Clear();
+DataModule2->Print_Files->SQL->Add("Select * from `print_files` where `Name`='"+PrintFileName+"'");
+DataModule2->Print_Files->Active=true;
+DataModule2->Print_Files->First();
+
+
+          TStream *FStream;
+          FStream=DataModule2->Print_Files->CreateBlobStream(DataModule2->Print_Files->FieldByName("File"),bmRead);
+          frxReport1->LoadFromStream(FStream);
+          DataModule2->Print_Files->Active=false;
+PsiData->RangeEndCount=archivedata->PSIData1->RecordCount;
+DataModule1->NumbersTemp->Active=false;
+DataModule1->NumbersTemp->SQL->Clear();
+S2="Select * from psi where psi.MSK='"+S1+"'";
+DataModule1->NumbersTemp->SQL->Add(S2);
+DataModule1->NumbersTemp->Active=true;
+frxReport1->PrepareReport(true);
+frxReport1->ShowPreparedReport();
+DataModule1->NumbersTemp->Active=false;
+DataModule1->DropStatTable->SQL->Clear();
+DataModule1->DropStatTable->SQL->Add("Drop table IF EXISTS `Psi_stat_"+DataModule1->Dostup->FieldByName("ID")->AsString+"`");
+DataModule1->DropStatTable->Execute();
+
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TArchiveTableForm::ExcelClick(TObject *Sender)
+{
+ AnsiString S;
+ int k=0;
+ int N[40];
+ DataModule1->SqlSpecification->First();
+ for (int i=0;i<DataModule1->SqlSpecification->RecordCount;i++){
+            if(DataModule1->SqlSpecification->FieldByName("Name")->AsString==edtSpc->Text){
+                 break;
+               }
+        DataModule1->SqlSpecification->Next();
+       }
+if(!fStart)
+                           {
+                          try
+                             {
+                               vVarApp=CreateOleObject("Excel.Application");
+                               fStart=true;
+                              }
+                           catch(...)
+                                    {
+                                     MessageBox(0, "Ошибка при открытии сервера Excel",
+                                   "Ошибка", MB_OK);
+                                    return;
+                                     }
+                                     }
+      vVarBooks=vVarApp.OlePropertyGet("Workbooks");
+    vVarApp.OlePropertySet("SheetsInNewWorkbook",1);
+    vVarBooks.OleProcedure("Add");
+   vVarBook=vVarBooks.OlePropertyGet("Item",1);
+    vVarSheets=vVarBook.OlePropertyGet("Worksheets") ;
+    vVarSheet=vVarSheets.OlePropertyGet("Item",1);
+    vVarSheet.OlePropertySet("Name","Data");
+
+    vVarCell=vVarSheet.OlePropertyGet("Cells").
+                   OlePropertyGet("Item",1,1);
+   vVarCell.OlePropertySet("HorizontalAlignment",-4108);
+   vVarCell.OlePropertySet("VerticalAlignment",-4108);
+   vVarCell.OlePropertyGet("Font").OlePropertySet("Size",10);
+   vVarCell.OlePropertySet("ColumnWidth",15);
+   vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+   vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+   vVarCell.OlePropertyGet("Font").OlePropertySet("Name","Arial");
+   S="МСК "+edtMSK->Text;
+   vVarCell.OlePropertySet("Value",S.c_str());
+       vVarCell=vVarSheet.OlePropertyGet("Cells").
+                   OlePropertyGet("Item",1,2);
+   vVarCell.OlePropertySet("HorizontalAlignment",-4108);
+     vVarCell.OlePropertySet("VerticalAlignment",-4108);
+   vVarCell.OlePropertySet("ColumnWidth",35);
+   vVarCell.OlePropertyGet("Font").OlePropertySet("Size",10);
+   vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+   vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+   vVarCell.OlePropertyGet("Font").OlePropertySet("Name","Arial");
+   S="Спецификация "+edtSpc->Text;
+   vVarCell.OlePropertySet("Value",S.c_str());
+       vVarCell=vVarSheet.OlePropertyGet("Cells").
+                   OlePropertyGet("Item",1,3);
+   vVarCell.OlePropertySet("HorizontalAlignment",-4108);
+   vVarCell.OlePropertySet("VerticalAlignment",-4108);
+   vVarCell.OlePropertyGet("Font").OlePropertySet("Size",10);
+   vVarCell.OlePropertySet("ColumnWidth",30);
+   vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+   vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+   vVarCell.OlePropertyGet("Font").OlePropertySet("Name","Arial");
+   S="File  "+edtFile->Text;
+   vVarCell.OlePropertySet("Value",S.c_str());
+   int Y=archivedata->PSIData1->RecordCount;
+//------------------------------------------------------------------------------------------------
+if (DataModule1->SqlSpecification->FieldByName("Position")->AsString=="True"){
+      N[0]=k+1;
+      k++;
+     vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[0]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="Позиция";
+      vVarCell.OlePropertySet("Value",S.c_str());
+      if (DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+4,N[0]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S="Нормы";
+              vVarCell.OlePropertySet("Value",S.c_str());
+              }
+
+     }
+//-----------------------------------------------------------------------------------------------
+if (DataModule1->SqlSpecification->FieldByName("Snumber")->AsString=="True"){
+      N[1]=k+1;
+      k++;
+      vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[1]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="Номер";
+    vVarCell.OlePropertySet("Value",S.c_str());
+        if (DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+5,N[1]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S="Макс";
+              vVarCell.OlePropertySet("Value",S.c_str());
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+4,N[1]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S="Мин";
+              vVarCell.OlePropertySet("Value",S.c_str());
+              }
+
+
+    }
+//-----------------------------------------------------------------------------------------------
+if (DataModule1->SqlSpecification->FieldByName("Ft")->AsString=="True"){
+      N[2]=k+1;
+      k++;
+      vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[2]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="F,ppm";
+    vVarCell.OlePropertySet("Value",S.c_str());
+        if (DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+5,N[2]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Fmax")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+4,N[2]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Fmin")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              }
+    }
+//-------------------------------------------------------------------------------------------------
+if (DataModule1->SqlSpecification->FieldByName("R")->AsString=="True"){
+      N[3]=k+1;
+      k++;
+      vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[3]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="R,Ohm";
+    vVarCell.OlePropertySet("Value",S.c_str());
+       if (DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+5,N[3]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Rmax")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+4,N[3]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Rmin")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              }
+   }
+//--------------------------------------------------------------------------------------------------
+if (DataModule1->SqlSpecification->FieldByName("C0")->AsString=="True"){
+      N[4]=k+1;
+      k++;
+     vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[4]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="C0,pf";
+    vVarCell.OlePropertySet("Value",S.c_str());
+     if (DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+5,N[4]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("C0max")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+4,N[4]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("C0min")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              }
+    }
+//-------------------------------------------------------------------------------------------------
+if (DataModule1->SqlSpecification->FieldByName("Cq")->AsString=="True"){
+      N[5]=k+1;
+      k++;
+       vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[5]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="Cq,fF";
+    vVarCell.OlePropertySet("Value",S.c_str());
+     if (DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+5,N[5]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+4,N[5]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Cqmin")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              }
+    }
+//---------------------------------------------------------------------------------------------------
+if (DataModule1->SqlSpecification->FieldByName("Q")->AsString=="True"){
+     N[6]=k+1;
+      k++;
+    vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[6]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="Qx1000";
+    vVarCell.OlePropertySet("Value",S.c_str());
+     if (DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+5,N[6]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Qmax")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+4,N[6]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Qmin")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              }
+    }
+//---------------------------------------------------------------------------------------------------
+if (DataModule1->SqlSpecification->FieldByName("Tmax")->AsString=="True"){
+     N[7]=k+1;
+      k++;
+      vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[7]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="Tmax,C";
+    vVarCell.OlePropertySet("Value",S.c_str());
+     if (DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+5,N[7]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Tmaxmax")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+4,N[7]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Tmaxmin")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              }
+   }
+//--------------------------------------------------------------------------------------------------
+if (DataModule1->SqlSpecification->FieldByName("Tmin")->AsString=="True"){
+     N[8]=k+1;
+      k++;
+    vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[8]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="Tmin,C";
+    vVarCell.OlePropertySet("Value",S.c_str());
+     if (DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+5,N[8]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Tminmax")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+4,N[8]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Tminmin")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              }
+ }
+//--------------------------------------------------------------------------------------------------
+if (DataModule1->SqlSpecification->FieldByName("TurnOver")->AsString=="True"){
+     N[9]=k+1;
+      k++;
+    vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[9]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="IT,C";
+    vVarCell.OlePropertySet("Value",S.c_str());
+     if (DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+5,N[9]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Tomax")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+4,N[9]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Tomin")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              }
+    }
+//-------------------------------------------------------------------------------------------------
+if (DataModule1->SqlSpecification->FieldByName("Rc_Rb")->AsString=="True"){
+     N[10]=k+1;
+      k++;
+    vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[10]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="Rc/Rb";
+    vVarCell.OlePropertySet("Value",S.c_str());
+     if (DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+5,N[10]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Rc_Rbmax")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              }
+     }
+//--------------------------------------------------------------------------------------------------
+if (DataModule1->SqlSpecification->FieldByName("Fmx")->AsString=="True"){
+     N[11]=k+1;
+      k++;
+    vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[11]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="Fmax,ppm";
+    vVarCell.OlePropertySet("Value",S.c_str());
+     if (DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+5,N[11]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+4,N[11]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              }
+    }
+//--------------------------------------------------------------------------------------------------
+if (DataModule1->SqlSpecification->FieldByName("Fmn")->AsString=="True"){
+     N[12]=k+1;
+      k++;
+    vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[12]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="Fmin,ppm";
+    vVarCell.OlePropertySet("Value",S.c_str());
+     if (DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+5,N[12]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Fminmax")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+4,N[12]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Fminmin")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              }
+    }
+//---------------------------------------------------------------------------------------------------
+if (DataModule1->SqlSpecification->FieldByName("M")->AsString=="True"){
+     N[13]=k+1;
+      k++;
+   vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[13]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="Mono,10E-6";
+    vVarCell.OlePropertySet("Value",S.c_str());
+     if (DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+5,N[13]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Mmax")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+4,N[13]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Mmin")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              }
+    }
+//------------------------------------------------------------------------------------------------
+if (DataModule1->SqlSpecification->FieldByName("Fptp")->AsString=="True"){
+     N[14]=k+1;
+      k++;
+    vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[14]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="Fptp,ppm";
+    vVarCell.OlePropertySet("Value",S.c_str());
+     if (DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+5,N[14]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Fptpmax")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+4,N[14]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Fptpmin")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              }
+    }
+//-----------------------------------------------------------------------------------------------
+  if (DataModule1->SqlSpecification->FieldByName("Fptp_2")->AsString=="True"){
+     N[21]=k+1;
+      k++;
+    vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[21]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="Fptp/2,ppm";
+    vVarCell.OlePropertySet("Value",S.c_str());
+     if (DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+5,N[21]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Fptp_2max")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+4,N[21]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Fptp_2min")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              }
+    }
+//------------------------------------------------------------------------------------------------
+if (DataModule1->SqlSpecification->FieldByName("Rmx")->AsString=="True"){
+     N[15]=k+1;
+      k++;
+    vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[15]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="Rmax,Ohm";
+    vVarCell.OlePropertySet("Value",S.c_str());
+     if (DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+5,N[15]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Rmaxmax")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+4,N[15]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Rmaxmin")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              }
+    }
+//--------------------------------------------------------------------------------------------------
+if (DataModule1->SqlSpecification->FieldByName("RR")->AsString=="True"){
+     N[16]=k+1;
+      k++;
+    vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[16]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="Rmax/Rmin";
+    vVarCell.OlePropertySet("Value",S.c_str());
+     if (DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+5,N[16]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("RRmax")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+4,N[16]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("RRmin")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              }
+  }
+//--------------------------------------------------------------------------------------------------
+if (DataModule1->SqlSpecification->FieldByName("Shum")->AsString=="True"){
+     N[17]=k+1;
+      k++;
+    vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[17]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="Phase noise,dB";
+    vVarCell.OlePropertySet("Value",S.c_str());
+     if (DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+5,N[17]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("ShMax")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+4,N[17]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("ShMin")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              }
+  }
+
+
+
+//--------------------------------------------------------------------------------------------------
+if (DataModule1->SqlSpecification->FieldByName("Fmaxm")->AsString=="True"){
+     N[18]=k+1;
+      k++;
+    vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[18]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="FmaxM";
+    vVarCell.OlePropertySet("Value",S.c_str());
+     if (DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+5,N[18]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+4,N[18]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Fminmin")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              }
+  }
+
+ if (DataModule1->SqlSpecification->FieldByName("RR2")->AsString=="True"){
+     N[20]=k+1;
+      k++;
+    vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[20]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="Rmax/R25";
+    vVarCell.OlePropertySet("Value",S.c_str());
+     if (DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+5,N[20]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("RR2max")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+4,N[20]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("RR2min")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              }
+  }
+
+  if (DataModule1->SqlSpecification->FieldByName("Rsp1")->AsString=="True"){
+     N[25]=k+1;
+      k++;
+    vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[25]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="Spur,dB";
+    vVarCell.OlePropertySet("Value",S.c_str());
+     if (DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+5,N[25]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Rsp1max")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+4,N[25]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Rsp1min")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              }
+  }
+
+   if (DataModule1->SqlSpecification->FieldByName("C1_2C0")->AsString=="True"){
+     N[22]=k+1;
+      k++;
+    vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[22]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="Перестройка";
+    vVarCell.OlePropertySet("Value",S.c_str());
+     if (DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+5,N[22]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("C1_2C0max")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+4,N[22]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("C1_2C0min")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              }
+  }
+     if (DataModule1->SqlSpecification->FieldByName("S")->AsString=="True"){
+     N[23]=k+1;
+      k++;
+    vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[23]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="Наклон,ppm";
+    vVarCell.OlePropertySet("Value",S.c_str());
+     if (DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+5,N[23]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Smax")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+4,N[23]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Smin")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              }
+  }
+     if (DataModule1->SqlSpecification->FieldByName("L")->AsString=="True"){
+     N[24]=k+1;
+      k++;
+    vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[24]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="Индуктивность,mH";
+    vVarCell.OlePropertySet("Value",S.c_str());
+     if (DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+5,N[24]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Lmax")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+4,N[24]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Lmin")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              }
+  }
+
+    if (DataModule1->SqlSpecification->FieldByName("Ftgk")->AsString=="True"){
+     N[26]=k+1;
+      k++;
+    vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[26]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="Точность настройки ТГК,ГЦ";
+    vVarCell.OlePropertySet("Value",S.c_str());
+     if (DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+5,N[26]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              if (DataModule1->SqlSpecification->FieldByName("Fmax")->AsString!="no"){
+              S=DataModule1->SqlSpecification->FieldByName("Fmax")->AsString*DataModule1->SqlSpecification->FieldByName("Nominal")->AsString;
+              }
+              else {
+               S="no";
+              }
+              vVarCell.OlePropertySet("Value",S.c_str());
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+4,N[26]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              if (DataModule1->SqlSpecification->FieldByName("Fmin")->AsString!="no"){
+              S=DataModule1->SqlSpecification->FieldByName("Fmin")->AsString*DataModule1->SqlSpecification->FieldByName("Nominal")->AsString;
+               }
+              else {
+               S="no";
+              }
+              vVarCell.OlePropertySet("Value",S.c_str());
+              }
+  }
+
+     if (DataModule1->SqlSpecification->FieldByName("Rtgk")->AsString=="True"){
+     N[27]=k+1;
+      k++;
+    vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[27]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="Сопротивление ТГК,Ом";
+    vVarCell.OlePropertySet("Value",S.c_str());
+     if (DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+5,N[27]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Rmax")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",Y+4,N[27]);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Color",clBlue);
+              vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+              S=DataModule1->SqlSpecification->FieldByName("Rmin")->AsString;
+              vVarCell.OlePropertySet("Value",S.c_str());
+              }
+  }
+
+//--------------------------------------------------------------------------------------------------
+
+if (DataModule1->SqlSpecification->FieldByName("Status")->AsString=="True"){
+     N[19]=k+1;
+      k++;
+       vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[19]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="Статус";
+    vVarCell.OlePropertySet("Value",S.c_str());
+    }
+//------------------------------------------------------------------------------------------------
+if (coeff->Checked){
+   N[28]=k+1;
+       k++;
+      vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[28]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="A0";
+     vVarCell.OlePropertySet("Value",S.c_str());
+   N[29]=k+1;
+       k++;
+      vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[29]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="A1";
+      vVarCell.OlePropertySet("Value",S.c_str());
+  N[30]=k+1;
+       k++;
+      vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[30]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="A2";
+      vVarCell.OlePropertySet("Value",S.c_str());
+      N[31]=k+1;
+       k++;
+      vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[31]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="A3";
+      vVarCell.OlePropertySet("Value",S.c_str());
+      N[32]=k+1;
+       k++;
+      vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",2,N[32]);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Size",11);
+      vVarCell.OlePropertyGet("Font").OlePropertySet("Bold",true);
+      S="A4";
+      vVarCell.OlePropertySet("Value",S.c_str());
+}
+
+//------------------------------------------------------------------------------------------------
+       archivedata->PSIData1->First();
+
+for (int i=0;i<archivedata->PSIData1->RecordCount;i++){
+     if (DataModule1->SqlSpecification->FieldByName("Snumber")->AsString=="True"){
+        vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[1]);
+        S=archivedata->PSIData1->FieldByName("N")->AsString;
+        vVarCell.OlePropertySet("Value",S.c_str());
+        }
+      if (DataModule1->SqlSpecification->FieldByName("Ft")->AsString=="True"){
+        vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[2]);
+        S=archivedata->PSIData1->FieldByName("F")->AsString;
+        vVarCell.OlePropertySet("Value",S.c_str());
+        }
+       if (DataModule1->SqlSpecification->FieldByName("R")->AsString=="True"){
+         vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[3]);
+        S=archivedata->PSIData1->FieldByName("R")->AsString;
+        vVarCell.OlePropertySet("Value",S.c_str());
+        }
+       if (DataModule1->SqlSpecification->FieldByName("C0")->AsString=="True"){
+        vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[4]);
+        S=archivedata->PSIData1->FieldByName("C0")->AsString;
+        vVarCell.OlePropertySet("Value",S.c_str());
+        }
+
+        if (DataModule1->SqlSpecification->FieldByName("Cq")->AsString=="True"){
+        vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[5]);
+        S=archivedata->PSIData1->FieldByName("Cq")->AsString;
+        vVarCell.OlePropertySet("Value",S.c_str());
+        }
+        if (DataModule1->SqlSpecification->FieldByName("Q")->AsString=="True"){
+             vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[6]);
+             S=archivedata->PSIData1->FieldByName("Q")->AsString;
+             vVarCell.OlePropertySet("Value",S.c_str());
+        }
+        if (DataModule1->SqlSpecification->FieldByName("Tmax")->AsString=="True"){
+           vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[7]);
+           S=archivedata->PSIData1->FieldByName("Tmax")->AsString;
+           vVarCell.OlePropertySet("Value",S.c_str());
+        }
+        if (DataModule1->SqlSpecification->FieldByName("Tmin")->AsString=="True"){
+           vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[8]);
+           S=archivedata->PSIData1->FieldByName("Tmin")->AsString;
+           vVarCell.OlePropertySet("Value",S.c_str());
+        }
+        if (DataModule1->SqlSpecification->FieldByName("TurnOver")->AsString=="True"){
+            vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[9]);
+            S=archivedata->PSIData1->FieldByName("TurnOver")->AsString;
+            vVarCell.OlePropertySet("Value",S.c_str());
+        }
+        if (DataModule1->SqlSpecification->FieldByName("Status")->AsString=="True"){
+           vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[19]);
+           S=archivedata->PSIData1->FieldByName("Status")->AsString;
+           vVarCell.OlePropertySet("Value",S.c_str());
+        }
+        if (DataModule1->SqlSpecification->FieldByName("Rc_Rb")->AsString=="True"){
+           vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[10]);
+           S=archivedata->PSIData1->FieldByName("RcRb")->AsString;
+           vVarCell.OlePropertySet("Value",S.c_str());
+        }
+        if (DataModule1->SqlSpecification->FieldByName("Position")->AsString=="True"){
+            vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[0]);
+            S=archivedata->PSIData1->FieldByName("Position")->AsString;
+            vVarCell.OlePropertySet("Value",S.c_str());
+        }
+        if (DataModule1->SqlSpecification->FieldByName("Fmx")->AsString=="True"){
+           vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[11]);
+           S=archivedata->PSIData1->FieldByName("Fmax")->AsString;
+           vVarCell.OlePropertySet("Value",S.c_str());
+        }
+        if (DataModule1->SqlSpecification->FieldByName("Fmn")->AsString=="True"){
+           vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[12]);
+           S=archivedata->PSIData1->FieldByName("Fmin")->AsString;
+           vVarCell.OlePropertySet("Value",S.c_str());
+        }
+        if (DataModule1->SqlSpecification->FieldByName("M")->AsString=="True"){
+            vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[13]);
+            S=archivedata->PSIData1->FieldByName("Mono")->AsString;
+            vVarCell.OlePropertySet("Value",S.c_str());
+        }
+        if (DataModule1->SqlSpecification->FieldByName("Fptp")->AsString=="True"){
+          vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[14]);
+          S=archivedata->PSIData1->FieldByName("Fptp")->AsString;
+          vVarCell.OlePropertySet("Value",S.c_str());
+        }
+        if (DataModule1->SqlSpecification->FieldByName("Rmx")->AsString=="True"){
+           vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[15]);
+           S=archivedata->PSIData1->FieldByName("Rmax")->AsString;
+           vVarCell.OlePropertySet("Value",S.c_str());
+        }
+        if (DataModule1->SqlSpecification->FieldByName("RR")->AsString=="True"){
+        vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[16]);
+        S=archivedata->PSIData1->FieldByName("R1R2")->AsString;
+        vVarCell.OlePropertySet("Value",S.c_str());
+        }
+          if (DataModule1->SqlSpecification->FieldByName("Shum")->AsString=="True"){
+        vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[17]);
+        S=archivedata->PSIData1->FieldByName("Shum")->AsString;
+        vVarCell.OlePropertySet("Value",S.c_str());
+        }
+           if (DataModule1->SqlSpecification->FieldByName("Rsp1")->AsString=="True"){
+        vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[25]);
+        S=archivedata->PSIData1->FieldByName("Spur")->AsString;
+        vVarCell.OlePropertySet("Value",S.c_str());
+        }
+        if (DataModule1->SqlSpecification->FieldByName("Fmaxm")->AsString=="True"){
+        vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[18]);
+        S=archivedata->PSIData1->FieldByName("Fmaxm")->AsString;
+        vVarCell.OlePropertySet("Value",S.c_str());
+        }
+         if (DataModule1->SqlSpecification->FieldByName("RR2")->AsString=="True"){
+        vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[20]);
+        S=archivedata->PSIData1->FieldByName("RR2")->AsString;
+        vVarCell.OlePropertySet("Value",S.c_str());
+        }
+         if (DataModule1->SqlSpecification->FieldByName("Fptp_2")->AsString=="True"){
+        vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[21]);
+        S=archivedata->PSIData1->FieldByName("Fptp_2")->AsString;
+        vVarCell.OlePropertySet("Value",S.c_str());
+        }
+        if (DataModule1->SqlSpecification->FieldByName("C1_2C0")->AsString=="True"){
+        vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[22]);
+        S=archivedata->PSIData1->FieldByName("C1_2C0")->AsString;
+        vVarCell.OlePropertySet("Value",S.c_str());
+        }
+         if (DataModule1->SqlSpecification->FieldByName("S")->AsString=="True"){
+        vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[23]);
+        S=archivedata->PSIData1->FieldByName("Slope")->AsString;
+        vVarCell.OlePropertySet("Value",S.c_str());
+        }
+          if (DataModule1->SqlSpecification->FieldByName("L")->AsString=="True"){
+        vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[24]);
+        S=archivedata->PSIData1->FieldByName("L")->AsString;
+        vVarCell.OlePropertySet("Value",S.c_str());
+        }
+            if (DataModule1->SqlSpecification->FieldByName("Ftgk")->AsString=="True"){
+        vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[26]);
+        S=archivedata->PSIData1->FieldByName("Ftgk")->AsString;
+        vVarCell.OlePropertySet("Value",S.c_str());
+        }
+             if (DataModule1->SqlSpecification->FieldByName("Rtgk")->AsString=="True"){
+        vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[27]);
+        S=archivedata->PSIData1->FieldByName("Rtgk")->AsString;
+        vVarCell.OlePropertySet("Value",S.c_str());
+        }
+            if (coeff->Checked){
+        vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[28]);
+        S=archivedata->PSIData1->FieldByName("A0")->AsString;
+        vVarCell.OlePropertySet("Value",S.c_str());
+          vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[29]);
+        S=archivedata->PSIData1->FieldByName("A1")->AsString;
+        vVarCell.OlePropertySet("Value",S.c_str());
+          vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[30]);
+        S=archivedata->PSIData1->FieldByName("A2")->AsString;
+        vVarCell.OlePropertySet("Value",S.c_str());
+          vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[31]);
+        S=archivedata->PSIData1->FieldByName("A3")->AsString;
+        vVarCell.OlePropertySet("Value",S.c_str());
+          vVarCell=vVarSheet.OlePropertyGet("Cells").OlePropertyGet("Item",i+3,N[32]);
+        S=archivedata->PSIData1->FieldByName("A4")->AsString;
+        vVarCell.OlePropertySet("Value",S.c_str());
+        }
+        archivedata->PSIData1->Next();
+
+
+
+    }
+
+
+    vVarApp.OlePropertySet("Visible",true);
+
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TArchiveTableForm::N1Click(TObject *Sender)
+{
+AnsiString S,S1,S2;
+int k;
+k=DataModule1->SqlSpecification->RecordCount;
+S1=ArchiveForm->viewMSK->Items->Strings[ArchiveForm->viewMSK->ItemIndex];
+  DataModule1->SqlSpecification->First();
+   for (int i=0;i<k;i++){
+                       if(DataModule1->SqlSpecification->FieldByName("Name")->AsString==archivedata->PSIData1->FieldByName("spc")->AsString){
+                         break;
+                         }
+            DataModule1->SqlSpecification->Next();
+                      }
+DataModule1->Print->Active=false;
+DataModule1->Print->SQL->Clear();
+DataModule1->Print->SQL->Add("Select * from print_data where ID='"+DataModule1->SqlSpecification->FieldByName("PrintProfile")->AsString+"'");
+DataModule1->Print->Active=true;
+DataModule2->Print_Files->Active=true;
+           DataModule2->Print_Files->First();
+           for (int i=0; i<DataModule2->Print_Files->RecordCount; i++){
+               if (DataModule1->Print->FieldByName("Print")->AsString==DataModule2->Print_Files->FieldByName("Name")->AsString) {
+                  break;
+               }
+            DataModule2->Print_Files->Next();
+           }
+
+          TStream *FStream;
+          FStream=DataModule2->Print_Files->CreateBlobStream(DataModule2->Print_Files->FieldByName("File"),bmRead);
+          frxReport1->LoadFromStream(FStream);
+          DataModule2->Print_Files->Active=false;
+PsiData->RangeEndCount=archivedata->PSIData1->RecordCount;
+DataModule1->NumbersTemp->Active=false;
+DataModule1->NumbersTemp->SQL->Clear();
+S2="Select * from psi where psi.MSK='"+S1+"'";
+DataModule1->NumbersTemp->SQL->Add(S2);
+DataModule1->NumbersTemp->Active=true;
+
+
+AnsiString S3;
+if (archivedata->PSIData1->FieldByName("Measure_ID")->AsFloat>0){
+ S3="Select * from psidatatemp where Measure_ID='"+archivedata->PSIData->FieldByName("Measure_ID")->AsString+"' Order BY Temp";
+}
+else {
+
+ S3="Select * from psidatatemp where msk='"+archivedata->PSIData->FieldByName("Msk")->AsString+"' Order BY Temp";
+}
+archivedata->PSIDataTemp->Active=false;
+archivedata->PSIDataTemp->SQL->Clear();
+archivedata->PSIDataTemp->SQL->Add(S3);
+archivedata->PSIDataTemp->Active=true;
+
+frxReport1->PrepareReport(true);
+frxReport1->ShowPreparedReport();
+archivedata->PSIDataTemp->Active=false;
+DataModule1->NumbersTemp->Active=false;
+}
+//---------------------------------------------------------------------------
+
+
+

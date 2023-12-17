@@ -1,0 +1,344 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "dialog1.h"
+#include "Data.h"
+#include "NumberM.h"
+#include "Main.h"
+#include "options.h"
+#include "number.h"
+#include "data1.h"
+#include "GlobalValues.h"
+#include "old.h"
+#include "New_Data4.h"
+#include "Dostup.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "RzEdit"
+#pragma link "VrButtons"
+#pragma link "VrControls"
+#pragma link "RzCmboBx"
+#pragma link "AdvGlassButton"
+#pragma resource "*.dfm"
+TDialog1Form *Dialog1Form;
+//---------------------------------------------------------------------------
+__fastcall TDialog1Form::TDialog1Form(TComponent* Owner)
+        : TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall TDialog1Form::FormShow(TObject *Sender)
+{
+AnsiString Sql2="Select `КодНоменклатуры` from msk_rk where `мскРеал`='"+MainForm->MSK_Label->Caption+"'";
+AnsiString MSK_NOM_Name;
+AnsiString MSK_NOM_ID;
+ AnsiString sqlNomenklatura;
+ edtSpcV->Visible=false;
+
+ Label5->Visible=false;
+        if (MainForm->MSK_Label->Caption!=""){
+                 New_Data->MSK_RQ->Active=false;
+                 New_Data->MSK_RQ->SQL->Clear();
+                 New_Data->MSK_RQ->SQL->Add(Sql2);
+                 New_Data->MSK_RQ->Active=true;
+                 New_Data->MSK_RQ->First();
+               MSK_NOM_ID=New_Data->MSK_RQ->FieldByName("КодНоменклатуры")->AsString;
+
+        }
+        if (New_Data->MSK_RQ->RecordCount>0){
+                 New_Data->Spc_RQ->Active=false;
+                 New_Data->Spc_RQ->SQL->Clear();
+                 New_Data->Spc_RQ->SQL->Add("Select `наименование` from nomeklatura_rk where `номенклатура`='"+MSK_NOM_ID+"'");
+                 New_Data->Spc_RQ->Active=true;
+                 New_Data->Spc_RQ->First();
+                 MSK_NOM_Name=New_Data->Spc_RQ->FieldByName("наименование")->AsString;
+                 New_Data->Spc_RQ->Active=false;
+                 New_Data->MSK_RQ->Active=false;
+
+                 Nomenklatura->Items->Clear();
+                 Nomenklatura->Items->Add(MSK_NOM_Name);
+                 Nomenklatura->ItemIndex=0;
+
+                 DataModule2->Nomenklatura_RK_PSI->Active=false;
+                 DataModule2->Nomenklatura_RK_PSI->SQL->Clear();
+                 sqlNomenklatura="Select * from nomeklatura_rk_psi where `NomenklaturaID`='"+MSK_NOM_ID+"'";
+                 DataModule2->Nomenklatura_RK_PSI->SQL->Add(sqlNomenklatura);
+                 DataModule2->Nomenklatura_RK_PSI->Active=true;
+                 DataModule2->Nomenklatura_RK_PSI->First();
+                      if (DataModule2->Nomenklatura_RK_PSI->RecordCount>0){
+                                edtSpcV->Items->Clear();
+                                for (int i=0; i<DataModule2->Nomenklatura_RK_PSI->RecordCount; i++){
+                                        edtSpcV->Items->Add(DataModule2->Nomenklatura_RK_PSI->FieldByName("SpcName")->AsString);
+                                        DataModule2->Nomenklatura_RK_PSI->Next();
+
+                                }
+                              edtSpcV->ItemIndex=0;
+                            edtSpcV->Visible=true;
+                            Label5->Visible=true;
+
+
+                      }
+
+
+        }
+
+DataModule1->ResonatorType->Active=true;
+DataModule1->ResonatorType->First();
+edtTypeR->Items->Clear();
+for (int i=0; i<DataModule1->ResonatorType->RecordCount; i++){
+     edtTypeR->Items->Add(DataModule1->ResonatorType->FieldByName("Type")->AsString);
+     DataModule1->ResonatorType->Next();
+}
+
+DataModule1->ResonatorType->Active=false;
+DataModule2->Nomenklatura_RK_PSI->Active=false;
+
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TDialog1Form::edtNameChange(TObject *Sender)
+{
+
+ DataModule1->Specification_Temp->Active=false;
+  DataModule1->Specification_Temp->SQL->Clear();
+  DataModule1->Specification_Temp->SQL->Add("Select * from specification where Name='"+edtName->Text+"'");
+   DataModule1->Specification_Temp->Active=true;
+
+ edtNominal->Text=DataModule1->Specification_Temp->FieldByName("Nominal")->AsString;
+ edtType->Text=DataModule1->Specification_Temp->FieldByName("Type")->AsString;
+ btnClose->Enabled=true;
+}
+//---------------------------------------------------------------------------
+void __fastcall TDialog1Form::btnCloseClick(TObject *Sender)
+{
+
+AnsiString MachineType;
+AnsiString sql="Select `Type` from `machines` where `IP`='"+MainForm->edtMachine->Text+"'";
+New_Data->MachineType->Active=false;
+New_Data->MachineType->SQL->Clear();
+New_Data->MachineType->SQL->Add(sql);
+New_Data->MachineType->Active=true;
+MachineType=New_Data->MachineType->FieldByName("Type")->AsString;
+New_Data->MachineType->Active=false;
+
+   DataModule1->SqlSpecification->First();
+     for (int i=0; i<DataModule1->SqlSpecification->RecordCount;i++){
+          if (edtName->Text==DataModule1->SqlSpecification->FieldByName("Name")->AsString){
+                //MainForm->ledSpc->Active=true;
+                MainForm->ActionList1->Actions[0]->Execute();
+                break;
+          }
+            DataModule1->SqlSpecification->Next();
+     }
+   // MainForm->ledSpc->Active=true;
+
+ if (MachineType=="Transat"){
+
+       DataModule1->TTS100_Alter->SQL->Clear();
+       DataModule1->TTS100_Alter->SQL->Add("ALTER TABLE `transat_temp_"+DataModule1->Dostup->FieldByName("ID")->AsString+"` ADD `Profile` VARCHAR(50) NULL;");
+       DataModule1->TTS100_Alter->Execute();
+       AnsiString sql_TR="Update `transat_temp_"+DataModule1->Dostup->FieldByName("ID")->AsString+"` set `Profile`='"+DataModule1->SqlSpecification->FieldByName("Profile")->AsString+"'";
+       New_Data->Update_Transat->SQL->Clear();
+       New_Data->Update_Transat->SQL->Add(sql_TR);
+       New_Data->Update_Transat->Execute();
+
+                            
+
+        }
+       AnsiString S;
+       AnsiString Measure_ID=MainForm->Edit1->Text;
+
+//S="SELECT * from psi WHERE Measure_ID='"+Measure_ID+"'";
+S="Update `psi` set `Spc1`='"+edtName->Text+"' where `Measure_ID`='"+Measure_ID+"'";
+New_Data->Update_PSI->SQL->Clear();
+New_Data->Update_PSI->SQL->Add(S);
+New_Data->Update_PSI->Execute();
+
+
+if (Nomenklatura->ItemIndex==-1){
+        AnsiString Nominal =DataModule1->SqlSpecification->FieldByName("Nominal")->AsString;
+        AnsiString Type =DataModule1->SqlSpecification->FieldByName("Type")->AsString;
+        S="Update `psi` set `Name`='"+edtName->Text+"',`Nominal`='"+Nominal+"',`Type`='"+Type+"' where `Measure_ID`='"+Measure_ID+"'";
+        New_Data->Update_PSI->SQL->Clear();
+        New_Data->Update_PSI->SQL->Add(S);
+        New_Data->Update_PSI->Execute();
+}
+/*DataModule1->NumbersTemp->Active=false;
+DataModule1->NumbersTemp->SQL->Clear();
+DataModule1->NumbersTemp->SQL->Add(S);
+DataModule1->NumbersTemp->Active=true;
+DataModule1->NumbersTemp->Edit();
+DataModule1->NumbersTemp->FieldByName("Spc1")->AsString=edtName->Text;
+*/
+/*if (edtNom->Text=="0"){
+                DataModule2->Nomenklatura_RK_PSI->Active=false;
+                DataModule2->Nomenklatura_RK_PSI->SQL->Clear();
+                AnsiString sqlNomenklatura="Select * from nomeklatura_rk_psi where `SpcName`='"+edtName->Text+"'";
+                DataModule2->Nomenklatura_RK_PSI->SQL->Add(sqlNomenklatura);
+                DataModule2->Nomenklatura_RK_PSI->Active=true;
+                if (DataModule2->Nomenklatura_RK_PSI->RecordCount>0){
+                   DataModule1->NumbersTemp->FieldByName("Name")->AsString=DataModule2->Nomenklatura_RK_PSI->FieldByName("NomenklaturaName")->AsString;
+
+                   DataModule2->Nomenklatura_RK->Active=false;
+                  DataModule2->Nomenklatura_RK->SQL->Clear();
+                  AnsiString sqlNomenklatura="Select * from nomeklatura_rk where `номенклатура`='"+DataModule2->Nomenklatura_RK_PSI->FieldByName("NomenklaturaID")->AsString+"'";
+                  DataModule2->Nomenklatura_RK->SQL->Add(sqlNomenklatura);
+                  DataModule2->Nomenklatura_RK->Active=true;
+
+                   Double ff=DataModule2->Nomenklatura_RK->FieldByName("Частота")->AsFloat;
+                         if (DataModule2->Nomenklatura_RK->FieldByName("Гармоника")->AsFloat>1){
+                                                              ff=ff/1000;
+                                                                }
+                          DataModule1->NumbersTemp->FieldByName("Nominal")->AsString=FloatToStr(ff);
+                }
+                else {
+                  DataModule1->NumbersTemp->FieldByName("Name")->AsString=edtName->Text;
+                  }
+          DataModule1->NumbersTemp->FieldByName("Type")->AsString=DataModule1->SqlSpecification->FieldByName("Type")->AsString;
+ }
+ */
+//DataModule1->NumbersTemp->Post();
+//DataModule1->NumbersTemp->Active=false;
+          NumberMForm->Hide();
+          Dialog1Form->Hide();
+
+  if (numberSelect==1){
+  MainForm->Show();
+  }
+  else if (numberSelect==2){
+   OldForm->Show();
+   OldForm->edtSpc->Text=edtName->Text;
+   OldForm->edtType->Text=edtType->Text;
+     }
+}
+//---------------------------------------------------------------------------
+void __fastcall TDialog1Form::edtTypeRChange(TObject *Sender)
+{
+
+  DataModule1->Specification_Temp->Active=false;
+  DataModule1->Specification_Temp->SQL->Clear();
+  DataModule1->Specification_Temp->SQL->Add("Select * from specification where NameR='"+edtTypeR->Text+"'");
+   DataModule1->Specification_Temp->Active=true;
+ DataModule1->Specification_Temp->First();
+ edtName->Clear();
+ for (int i=0; i<DataModule1->Specification_Temp->RecordCount; i++){
+
+    edtName->Items->Add(DataModule1->Specification_Temp->FieldByName("Name")->AsString);
+
+DataModule1->Specification_Temp->Next();
+}
+DataModule1->Specification_Temp->Active=false;
+
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TDialog1Form::btnSaveClick(TObject *Sender)
+{
+   AnsiString sqlNomenklatura;
+   AnsiString SpcCode;
+   AnsiString NomCode;
+
+   AnsiString MachineType;
+   AnsiString sql="Select `Type` from `machines` where `IP`='"+MainForm->edtMachine->Text+"'";
+                New_Data->MachineType->Active=false;
+                New_Data->MachineType->SQL->Clear();
+                New_Data->MachineType->SQL->Add(sql);
+                New_Data->MachineType->Active=true;
+                MachineType=New_Data->MachineType->FieldByName("Type")->AsString;
+                New_Data->MachineType->Active=false;
+
+                DataModule2->Nomenklatura_RK_PSI->Active=false;
+                DataModule2->Nomenklatura_RK_PSI->SQL->Clear();
+                sqlNomenklatura="Select * from `nomeklatura_rk_psi` where `NomenklaturaName`='"+Nomenklatura->Text+"' and `SpcName`='"+edtName->Text+"'";
+                DataModule2->Nomenklatura_RK_PSI->SQL->Add(sqlNomenklatura);
+                DataModule2->Nomenklatura_RK_PSI->Active=true;
+                        if (DataModule2->Nomenklatura_RK_PSI->RecordCount>0){
+
+                             DataModule1->Specification_Temp->Active=false;
+                             DataModule1->Specification_Temp->SQL->Clear();
+                             DataModule1->Specification_Temp->SQL->Add("Select * from specification where Name='"+edtName->Text+"'");
+                             DataModule1->Specification_Temp->Active=true;
+                             SpcCode=DataModule1->Specification_Temp->FieldByName("ID")->AsString;
+                             DataModule1->Specification_Temp->Active=false;
+
+                             AnsiString SqlUpdate="Update `nomeklatura_rk_psi` set `SpcName`='"+edtName->Text+"',`SpcID`='"+SpcCode+"' where `NomenklaturaID`='"+NomCode+"'";
+                             New_Data->UpdateMSK_RQ->SQL->Clear();
+                             New_Data->UpdateMSK_RQ->SQL->Add(SqlUpdate);
+                             New_Data->UpdateMSK_RQ->Execute();
+                        }
+                        else {
+                             DataModule1->Specification_Temp->Active=false;
+                             DataModule1->Specification_Temp->SQL->Clear();
+                             DataModule1->Specification_Temp->SQL->Add("Select * from specification where Name='"+edtName->Text+"'");
+                             DataModule1->Specification_Temp->Active=true;
+                             SpcCode=DataModule1->Specification_Temp->FieldByName("ID")->AsString;
+                             DataModule1->Specification_Temp->Active=false;
+
+                             AnsiString sql="Select `номенклатура` from `nomeklatura_rk` where `наименование`='"+Nomenklatura->Text+"'";
+                             New_Data->Spc_RQ->Active=false;
+                             New_Data->Spc_RQ->SQL->Clear();
+                             New_Data->Spc_RQ->SQL->Add(sql);
+                             New_Data->Spc_RQ->Active=true;
+                             NomCode=New_Data->Spc_RQ->FieldByName("номенклатура")->AsString;
+                             New_Data->Spc_RQ->Active=false;
+
+                             AnsiString SqlInsert="Insert into `nomeklatura_rk_psi` (`SpcName`,`SpcID`,`NomenklaturaID`,`NomenklaturaName`) VALUES ('"+edtName->Text+"','"+SpcCode+"','"+NomCode+"','"+Nomenklatura->Text+"')";
+                             New_Data->UpdateMSK_RQ->SQL->Clear();
+                             New_Data->UpdateMSK_RQ->SQL->Add(SqlInsert);
+                             New_Data->UpdateMSK_RQ->Execute();
+
+                        }
+         AnsiString Measure_ID=MainForm->Edit1->Text;
+         AnsiString S="Update `psi` set `Spc1`='"+edtName->Text+"' where `Measure_ID`='"+Measure_ID+"'";
+         New_Data->Update_PSI->SQL->Clear();
+         New_Data->Update_PSI->SQL->Add(S);
+         New_Data->Update_PSI->Execute();
+
+        DataModule1->SqlSpecification->First();
+     for (int i=0; i<DataModule1->SqlSpecification->RecordCount;i++){
+          if (edtName->Text==DataModule1->SqlSpecification->FieldByName("Name")->AsString){
+                MainForm->ActionList1->Actions[0]->Execute();
+                break;
+          }
+            DataModule1->SqlSpecification->Next();
+     }
+
+    MainForm->ledSpc->Active=true;
+   if (MachineType=="Transat"){
+                DataModule1->TTS100_Alter->SQL->Clear();
+                DataModule1->TTS100_Alter->SQL->Add("ALTER TABLE `transat_temp_"+DataModule1->Dostup->FieldByName("ID")->AsString+"` ADD `Profile` VARCHAR(50) NULL;");
+                DataModule1->TTS100_Alter->Execute();
+                AnsiString sql_TR="Update `transat_temp_"+DataModule1->Dostup->FieldByName("ID")->AsString+"` set `Profile`='"+DataModule1->SqlSpecification->FieldByName("Profile")->AsString+"'";
+                New_Data->Update_Transat->SQL->Clear();
+                New_Data->Update_Transat->SQL->Add(sql_TR);
+                New_Data->Update_Transat->Execute();
+
+        }
+
+          Dialog1Form->Hide();
+          if (numberSelect==1){
+                 MainForm->Show();
+         }
+  else if (numberSelect==2){
+   OldForm->Show();
+   OldForm->edtSpc->Text=edtName->Text;
+   OldForm->edtType->Text=edtType->Text;
+     }
+
+
+                
+}
+//---------------------------------------------------------------------------
+
+
+
+void __fastcall TDialog1Form::edtSpcVChange(TObject *Sender)
+{
+ edtName->Items->Clear();
+ edtName->Items->Add(edtSpcV->Text);
+ edtName->ItemIndex=0;
+}
+//---------------------------------------------------------------------------
+

@@ -1,0 +1,16 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "BarCodeEnter.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TBarCodeEnterForm *BarCodeEnterForm;
+//---------------------------------------------------------------------------
+__fastcall TBarCodeEnterForm::TBarCodeEnterForm(TComponent* Owner)
+        : TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------

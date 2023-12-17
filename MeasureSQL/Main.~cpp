@@ -1,0 +1,11081 @@
+#include <vcl.h>
+#pragma hdrstop
+
+#include "Main.h"
+#include "FileSelect.h"
+#include "Data.h"
+#include "number.h"
+#include "spc.h"
+#include "Result.h"
+#include "NumberM.h"
+#include "Dostup.h"
+#include "DataArchive.h"
+#include "options.h"
+#include "dataview.h"
+#include "MathLib.h"
+#include "ap.h"
+#include "protokol.h"
+#include "data1.h"
+#include "ManualRec.h"
+#include "termo.h"
+#include "old.h"
+#include "Graph.h"
+#include "WriteBD.h"
+#include "PM.h"
+#include "NewSpc.h"
+#include "Modif.h"
+#include "protokolbuild.h"
+#include "Tnumber.h"
+#include "Tmain.h"
+#include "TempData.h"
+#include "BarCodeMsk.h"
+#include "dialog1.h"
+#include <math.h>
+#include "FileLoad.h"
+#include "Protokol_Select.h"
+#include "GlobalValues.h"
+#include "PhazeNoise.h"
+#include "Par.h"
+#include "SortResult.h"
+#include "SpektrOLD.h"
+#include "Protokol_Proverke_PH.h"
+#include "Protokol_Print.h"
+#include "AddMskReal.h"
+#include "Data_MeasureModule.h"
+# include "md5wrapper.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "VrControls"
+#pragma link "VrDeskTop"
+#pragma link "VrCompass"
+#pragma link "VrScope"
+#pragma link "VrLcd"
+#pragma link "VrMatrix"
+#pragma link "VrScanner"
+#pragma link "VrSystem"
+#pragma link "VrTrayGauge"
+#pragma link "VrSwitch"
+#pragma link "RzChkLst"
+#pragma link "RzLstBox"
+#pragma link "VrButtons"
+#pragma link "VrLeds"
+#pragma link "VrProgressBar"
+#pragma link "VrFormShape"
+#pragma link "ESBPCSEdit"
+#pragma link "ESBPCSEdit2"
+#pragma link "ESBPCSDateTimeEdit"
+#pragma link "ESBPCSPanel"
+#pragma link "RzEdit"
+#pragma link "RzButton"
+#pragma link "AdvGlassButton"
+#pragma link "AdvMenus"
+#pragma link "AdvMenuStylers"
+#pragma link "RzBckgnd"
+#pragma resource "*.dfm"
+TMainForm *MainForm;
+int numberSelect;
+AnsiString MeasureID;
+//---------------------------------------------------------------------------
+__fastcall TMainForm::TMainForm(TComponent* Owner)
+        : TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+
+
+
+void __fastcall TMainForm::btnCloseClick(TObject *Sender)
+{
+DataModule1->DropLianozTable->Execute();
+DataModule1->DropTransatTemp->Execute();
+DataModule1->DropNumberCurrent->Execute();
+DataModule1->DropTransatConfig->Execute();
+DataModule1->DropPostProcessData->Execute();
+DataModule1->CrystalDataDrop->Execute();
+DataModule1->SetupDataDrop->Execute();
+DataModule1->ConfigurationDrop->Execute();
+DataModule1->SetupHeadersDrop->Execute();
+MainForm->Close();
+DostupForm->Close();
+
+
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::btnFileClick(TObject *Sender)
+{
+FileSelectForm->Show();
+
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::btnNumbersClick(TObject *Sender)
+{
+numberSelect=1;
+NumberMForm->Show();
+
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::btnSpcClick(TObject *Sender)
+{
+SpcForm->Show();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::RzCheckList1Change(TObject *Sender, int Index,
+      TCheckBoxState NewState)
+{
+
+ if (NewState==true){
+int l;
+AnsiString l1,s,s1,s3,s2,s4,s5,s6;
+
+ AnsiString MachineType;
+DataModule2->Machine->Active=true;
+for (int i=0; i<DataModule2->Machine->RecordCount; i++){
+  if (DataModule2->Machine->FieldByName("IP")->AsString==MainForm->edtMachine->Text){
+     MachineType=DataModule2->Machine->FieldByName("Type")->AsString;
+     break;
+  }
+DataModule2->Machine->Next();
+
+}
+ DataModule2->Machine->Active=false;
+
+if (MachineType=="Saunders"){
+for(int i=0; i<MainForm->RzCheckList1->Count;i++){
+                 if(MainForm->RzCheckList1->ItemState[i]!=0){
+                                 l=i+1;
+                                 break;
+                   }
+             }
+
+  s="Select * From configuration_"+DataModule1->Dostup->FieldByName("ID")->AsString+" where nSetupFileIndex ='"+l+"'";
+s1="Select * From setup_file_headers_"+DataModule1->Dostup->FieldByName("ID")->AsString+" where  nSetupFileIndex ='"+l+"'";
+s3="SELECT  * FROM crystal_data_"+DataModule1->Dostup->FieldByName("ID")->AsString+" WHERE  nSetupFileIndex = '"+l+"' ORDER BY `strCrystalID`,`fSetTemperature`";
+s4="SELECT * FROM setup_data_"+DataModule1->Dostup->FieldByName("ID")->AsString+" WHERE nSetupFileIndex ='"+l+"' ORDER BY `strCrystalID`,`fSetTemperature`";
+s5="SELECT * FROM post_process_data_"+DataModule1->Dostup->FieldByName("ID")->AsString+" WHERE  nSetupFileIndex ='"+l+"'  ORDER BY `strCrystalID`";
+ DataModule1->SqlSetupFileHeaders->Active=false;
+DataModule1->SqlSetupFileHeaders->SQL->Clear();
+DataModule1->SqlSetupFileHeaders->SQL->Add(s1);
+DataModule1->SqlSetupFileHeaders->Active=true;
+
+
+DataModule1->SqlConfiguration->Active=false;
+DataModule1->SqlConfiguration->SQL->Clear();
+DataModule1->SqlConfiguration->SQL->Add(s);
+DataModule1->SqlConfiguration->Active=true;
+
+DataModule1->SQLCrystalData->Active=false;
+DataModule1->SQLCrystalData->SQL->Clear();
+DataModule1->SQLCrystalData->SQL->Add(s3);
+DataModule1->SQLCrystalData->Active=true;
+
+DataModule1->SQLSetupData->Active=false;
+DataModule1->SQLSetupData->SQL->Clear();
+DataModule1->SQLSetupData->SQL->Add(s4);
+DataModule1->SQLSetupData->Active=true;
+
+DataModule1->SQLPostProcessData->Active=false;
+DataModule1->SQLPostProcessData->SQL->Clear();
+DataModule1->SQLPostProcessData->SQL->Add(s5);
+DataModule1->SQLPostProcessData->Active=true;
+
+if (l>0){
+        NumberMForm->gridNumbers->RowCount=DataModule1->SQLPostProcessData->RecordCount+1;
+        NumberMForm->edtAll->Text=NumberMForm->gridNumbers->RowCount-1;
+        NumberMForm->edtFile->Text=DataModule1->FileSelect->FieldByName("FileName")->AsString;
+        NumberMForm->gridNumbers->Cells[0][0]="#";
+        NumberMForm->gridNumbers->Cells[1][0]="Позиция";
+        NumberMForm->gridNumbers->ColCount=3;
+        NumberMForm->gridNumbers->Cells[2][0]="Номер";
+        DataModule1->SQLPostProcessData->First();
+        NumberMForm->edtFirstPosition->Items->Clear();
+        NumberMForm->edtEndPosition->Items->Clear();
+                for (int i=0;i<DataModule1->SQLPostProcessData->RecordCount;i++){
+                         NumberMForm->gridNumbers->Cells[1][1+i]=DataModule1->SQLPostProcessData->FieldByName("strCrystalID")->AsString;
+                         NumberMForm->gridNumbers->Cells[0][1+i]=i+1;
+                         NumberMForm->edtFirstPosition->Items->Add(DataModule1->SQLPostProcessData->FieldByName("strCrystalID")->AsString);
+                         NumberMForm->edtEndPosition->Items->Add(DataModule1->SQLPostProcessData->FieldByName("strCrystalID")->AsString);
+                         DataModule1->SQLPostProcessData->Next();
+                         }
+                NumberMForm->edtFirstPosition->ItemIndex=0;
+                NumberMForm->edtEndPosition->ItemIndex=DataModule1->SQLPostProcessData->RecordCount-1;
+                NumberMForm->edtFirstPosition->Repaint();
+                NumberMForm->edtEndPosition->Repaint();
+        TnumberForm->lCount->Text=DataModule1->SQLPostProcessData->RecordCount;
+
+    }
+
+ }
+ else if(MachineType=="Transat") {
+ for(int i=0; i<MainForm->RzCheckList1->Count;i++){
+                 if(MainForm->RzCheckList1->ItemState[i]!=0){
+                                 l=i+1;
+                                 break;
+                   }
+             }
+  if (l>0){
+                    DataModule1->Config->First();
+                                        for (int i=0;i<DataModule1->Config->RecordCount;i++){
+                                                     if (DataModule1->Config->FieldByName("SetupN")->AsFloat==l){
+                                                                break;
+                                                       }
+                                            DataModule1->Config->Next();
+                                           }
+                  DataModule1->Transat_Temp->Filtered=false;
+                  DataModule1->Transat_Temp->Filter="SETUPNUM='"+IntToStr(l)+"' and SETPOINT='"+DataModule1->Config->FieldByName("FirstTemp")->AsString+"'";
+                  DataModule1->Transat_Temp->Filtered=true;
+                  DataModule1->Transat_Temp->First();
+                  
+                  NumberMForm->gridNumbers->RowCount=DataModule1->Config->FieldByName("Number")->AsFloat+1;
+                  NumberMForm->edtAll->Text=NumberMForm->gridNumbers->RowCount-1;
+                  NumberMForm->edtFile->Text=DataModule1->FileSelect->FieldByName("FileName")->AsString;
+                  NumberMForm->gridNumbers->Cells[0][0]="#";
+                  NumberMForm->gridNumbers->Cells[1][0]="Позиция";
+                  NumberMForm->gridNumbers->ColCount=3;
+                  NumberMForm->gridNumbers->Cells[2][0]="Номер";
+                  NumberMForm->edtFirstPosition->Items->Clear();
+                  NumberMForm->edtEndPosition->Items->Clear();
+                  double tempr=-1;
+                  double tempp=-1;
+                  int kk=0;
+                           for (int i=0;i<DataModule1->Transat_Temp->RecordCount;i++){
+                                                     if (DataModule1->Transat_Temp->FieldByName("RINGPOS")->AsFloat!=tempr || DataModule1->Transat_Temp->FieldByName("RINGID")->AsFloat!=tempp){
+                                                      if (DataModule1->Transat_Temp->FieldByName("RINGID")->AsFloat==0){
+                                                                    NumberMForm->gridNumbers->Cells[1][1+kk]="L"+DataModule1->Transat_Temp->FieldByName("RINGPOS")->AsString;
+                                                                    NumberMForm->edtFirstPosition->Items->Add("L"+DataModule1->Transat_Temp->FieldByName("RINGPOS")->AsString);
+                                                                    NumberMForm->edtEndPosition->Items->Add("L"+DataModule1->Transat_Temp->FieldByName("RINGPOS")->AsString);
+                                                                                                                       }
+                                                      if (DataModule1->Transat_Temp->FieldByName("RINGID")->AsFloat==1){
+                                                                    NumberMForm->gridNumbers->Cells[1][1+kk]="U"+DataModule1->Transat_Temp->FieldByName("RINGPOS")->AsString;
+                                                                    NumberMForm->edtFirstPosition->Items->Add("U"+DataModule1->Transat_Temp->FieldByName("RINGPOS")->AsString);
+                                                                    NumberMForm->edtEndPosition->Items->Add("U"+DataModule1->Transat_Temp->FieldByName("RINGPOS")->AsString);
+                                                                    }
+                                                            tempr=DataModule1->Transat_Temp->FieldByName("RINGPOS")->AsFloat;
+                                                            tempp=DataModule1->Transat_Temp->FieldByName("RINGID")->AsFloat;
+                                                            NumberMForm->gridNumbers->Cells[0][1+kk]=kk+1;
+                                                            kk++;
+                                                           }
+
+                                                    DataModule1->Transat_Temp->Next();
+                                    }
+    NumberMForm->edtFirstPosition->ItemIndex=0;
+    NumberMForm->edtEndPosition->ItemIndex=kk-1;
+    NumberMForm->edtFirstPosition->Repaint();
+    NumberMForm->edtEndPosition->Repaint();
+    }
+TnumberForm->lCount->Text=ListBox1->Items->Strings[l-1];
+
+ }
+ else if (MachineType=="KH7700"){
+    for(int i=0; i<MainForm->RzCheckList1->Count;i++){
+                 if(MainForm->RzCheckList1->ItemState[i]!=0){
+                                 l=i+1;
+                                 break;
+                   }
+             }
+  if (l>0){
+      DataModule1->KH7700_Config->First();
+             for (int i=0;i<DataModule1->KH7700_Config->RecordCount;i++){
+                        if (DataModule1->KH7700_Config->FieldByName("SetupN")->AsFloat==l){
+                                         break;
+                              }
+                    DataModule1->KH7700_Config->Next();
+                }
+         DataModule1->KH7700_Temp->Filtered=false;
+         DataModule1->KH7700_Temp->Filter="TEMP='"+DataModule1->KH7700_Config->FieldByName("FirstTemp")->AsString+"'";
+         DataModule1->KH7700_Temp->Filtered=true;
+         DataModule1->KH7700_Temp->First();
+
+         NumberMForm->gridNumbers->RowCount=DataModule1->KH7700_Config->FieldByName("Number")->AsFloat+1;
+         NumberMForm->edtAll->Text=NumberMForm->gridNumbers->RowCount-1;
+         NumberMForm->edtFile->Text=DataModule1->FileSelect->FieldByName("FileName")->AsString;
+         NumberMForm->gridNumbers->Cells[0][0]="#";
+         NumberMForm->gridNumbers->Cells[1][0]="Позиция";
+         NumberMForm->gridNumbers->ColCount=3;
+         NumberMForm->gridNumbers->Cells[2][0]="Номер";
+         NumberMForm->edtFirstPosition->Items->Clear();
+         NumberMForm->edtEndPosition->Items->Clear();
+
+        int kk=0;
+        for (int i=0;i<DataModule1->KH7700_Temp->RecordCount;i++){
+                      NumberMForm->gridNumbers->Cells[1][1+kk]=DataModule1->KH7700_Temp->FieldByName("XTALROW")->AsString;
+                      NumberMForm->edtFirstPosition->Items->Add(DataModule1->KH7700_Temp->FieldByName("XTALROW")->AsString);
+                      NumberMForm->edtEndPosition->Items->Add(DataModule1->KH7700_Temp->FieldByName("XTALROW")->AsString);
+                      NumberMForm->gridNumbers->Cells[0][1+kk]=kk+1;
+                      kk++;
+                      DataModule1->KH7700_Temp->Next();
+      }
+     NumberMForm->edtFirstPosition->ItemIndex=0;
+    NumberMForm->edtEndPosition->ItemIndex=kk-1;
+    NumberMForm->edtFirstPosition->Repaint();
+    NumberMForm->edtEndPosition->Repaint();
+   TnumberForm->lCount->Text=ListBox1->Items->Strings[l-1];
+   }
+ }
+
+MainForm->ledNumbers->Active=false;
+MainForm->ledSpc->Active=false;
+}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::btnResultClick(TObject *Sender)
+{
+ResultForm->Show();
+}
+//---------------------------------------------------------------------------
+
+
+
+void __fastcall TMainForm::btnWorkClick(TObject *Sender)
+{
+                 AnsiString Status2;
+ double R,Fnastr;
+for (int i=0;i<ResultForm->ResultGrid->RowCount;i++){
+ResultForm->ResultGrid->Rows[i]->Clear();
+}
+
+ AnsiString Measure_ID=Edit1->Text;
+ ResultForm->Measure_ID->Text=Measure_ID;
+ AddMskForm->Protokol_ID->Caption=Measure_ID;
+ DataModule1->MeasureID->Active=false;
+ AnsiString Measure_Type;
+ AnsiString MachineType;
+ AnsiString Machine_Serial;
+ AnsiString M_Type;
+ AnsiString Machine_ID;
+ AnsiString Machine_Call_Date;
+ bool Poverka;
+
+  DataModule2->Machine->Active=true;
+for (int i=0; i<DataModule2->Machine->RecordCount; i++){
+  if (DataModule2->Machine->FieldByName("IP")->AsString==edtMachine->Text){
+     MachineType=DataModule2->Machine->FieldByName("Type")->AsString;
+     Machine_Serial=DataModule2->Machine->FieldByName("Serial_N")->AsString;
+     Machine_ID=DataModule2->Machine->FieldByName("ID")->AsString;
+     M_Type=DataModule2->Machine->FieldByName("M_Type")->AsString;
+     Machine_Call_Date=DataModule2->Machine->FieldByName("Call_Date")->AsString;
+     Poverka=DataModule2->Machine->FieldByName("PoverKa")->AsBoolean;
+     break;
+  }
+DataModule2->Machine->Next();
+
+}
+ int Nar[35];
+ DataModule2->Machine->Active=false;
+ DataModule1->temperatureprofile->Active=true;
+ DataModule1->temperatureprofile->First();
+ AnsiString intervalGF;
+ for (int tyy=0; tyy<DataModule1->temperatureprofile->RecordCount;tyy++){
+   if (DataModule1->temperatureprofile->FieldByName("Name")->AsString==DataModule1->SqlSpecification->FieldByName("Profile")->AsString){
+      intervalGF=DataModule1->temperatureprofile->FieldByName("IntervalName")->AsString;
+     break;
+   }
+  DataModule1->temperatureprofile->Next();
+ }
+ if (MachineType=="Saunders"){
+ double Fm1,Fm2;
+     if (DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="EqReact"){
+         Measure_Type="Saunders (FR+FL)";
+
+     }
+     else if (DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="Series"){
+               Measure_Type="Saunders(FR)";
+     }
+     else if (DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="Physical"){
+          Measure_Type="Saunders(FL)";
+     }
+     else {
+        Measure_Type=DataModule1->SqlSpecification->FieldByName("LoadType")->AsString;
+     }
+
+int l,N,Nt,k;
+ResultForm->edtSpc->Text=DataModule1->SqlSpecification->FieldByName("Name")->AsString;
+AddMskForm->Protokol_Spc->Caption=DataModule1->SqlSpecification->FieldByName("Name")->AsString;
+AnsiString l1;
+ for(int i=0; i<MainForm->RzCheckList1->Count;i++){
+                        if(MainForm->RzCheckList1->ItemState[i]!=0){
+                                              l=i+1;
+                                             break;
+                                               }
+               }
+l1="NSetupFileIndex="+FloatToStr(l);
+AnsiString S,S1,S2;
+DataModule1->SQLPostProcessData->First();
+N=DataModule1->SQLPostProcessData->RecordCount;
+ResultForm->ResultGrid->RowCount=N;
+SYSTEMTIME st;
+GetLocalTime(&st);
+AnsiString stD,stMn,stY,stH,stM,stS;
+stD=st.wDay;
+stMn=st.wMonth;
+stY=st.wYear;
+stH=st.wHour;
+stM=st.wMinute;
+stS=st.wSecond;
+k=0;
+//***************Задание столбца вывода и печать заголовков************
+//*******************************************************************
+if(DataModule1->SqlSpecification->FieldByName("Number")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="#";
+
+  Nar[0]=k;
+  k=k+1;
+  }
+//*******************************************************************
+ if(DataModule1->SqlSpecification->FieldByName("position")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Позиция";
+  Nar[1]=k;
+  k=k+1;
+
+  }
+//******************************************************************
+ if(DataModule1->SqlSpecification->FieldByName("Snumber")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Номер";
+
+  Nar[2]=k;
+  k=k+1;
+  }
+
+  //*****************************************************************
+   //if(DataModule1->SqlSpecification->FieldByName("Ft")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Точность настройки,PPM";
+  Nar[3]=k;
+  k=k+1;
+  //}
+  //****************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("R")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Сопротивление,Ом";
+  Nar[4]=k;
+  k=k+1;
+  }
+ //******************************************************************
+   if(DataModule1->SqlSpecification->FieldByName("C0")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Статическая емкость,пФ";
+  Nar[5]=k;
+  k=k+1;
+  }
+ //******************************************************************
+   if(DataModule1->SqlSpecification->FieldByName("Cq")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Динамическая емкость,фФ";
+  Nar[6]=k;
+  k=k+1;
+  }
+  //****************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("Q")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Добротность,x1000";
+  Nar[7]=k;
+  k=k+1;
+  }
+  //*******************************************************************
+   if(DataModule1->SqlSpecification->FieldByName("Rb")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Rb,Ohm";
+
+  Nar[8]=k;
+  k=k+1;
+  }
+  //*******************************************************************
+   if(DataModule1->SqlSpecification->FieldByName("Rc_Rb")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="RC/RB";
+  Nar[10]=k;
+        if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                        ResultForm->ResultGrid->Cells[Nar[10]][N+2]=DataModule1->SqlSpecification->FieldByName("Rc_Rbmax")->AsString;
+         }
+  k=k+1;
+  }
+  //******************************************************************
+ if(DataModule1->SqlSpecification->FieldByName("L")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="L,mH";
+  Nar[9]=k;
+  k=k+1;
+  }
+  //****************************************************************
+    if(DataModule1->SqlSpecification->FieldByName("Tmax")->AsString=="True"){
+       ResultForm->ResultGrid->Cells[k][0]="Tmax,C";
+       Nar[11]=k;
+         if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                               if(DataModule1->SqlSpecification->FieldByName("Tmaxmax")->AsString!="no"){
+                                           ResultForm->ResultGrid->Cells[Nar[11]][N+2]=DataModule1->SqlSpecification->FieldByName("Tmaxmax")->AsFloat;
+                                 }
+                                 if(DataModule1->SqlSpecification->FieldByName("Tmaxmin")->AsString!="no"){
+                                           ResultForm->ResultGrid->Cells[Nar[11]][N+3]=DataModule1->SqlSpecification->FieldByName("Tmaxmin")->AsFloat;
+                                 }
+          }
+      k=k+1;
+     }
+  //****************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("Tmin")->AsString=="True"){
+              ResultForm->ResultGrid->Cells[k][0]="Tmin,C";
+              Nar[12]=k;
+              if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Tminmax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[12]][N+2]=DataModule1->SqlSpecification->FieldByName("Tminmax")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("Tminmin")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[12]][N+3]=DataModule1->SqlSpecification->FieldByName("Tminmin")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+  //*****************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("TurnOver")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="IT,C";
+  Nar[13]=k;
+              if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                       if(DataModule1->SqlSpecification->FieldByName("Tomax")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[13]][N+2]=DataModule1->SqlSpecification->FieldByName("Tomax")->AsString;
+                         }
+                       if(DataModule1->SqlSpecification->FieldByName("Tomin")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[13]][N+3]=DataModule1->SqlSpecification->FieldByName("Tomin")->AsString;
+                         }
+
+                    }
+
+  k=k+1;
+  }
+//******************************************************************
+if(DataModule1->SqlSpecification->FieldByName("Rmx")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Rmax,Ом";
+  Nar[14]=k;
+  k=k+1;
+  }
+//******************************************************************
+if(DataModule1->SqlSpecification->FieldByName("Rmn")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Rmin,Ом";
+  Nar[15]=k;
+  k=k+1;
+  }
+//******************************************************************
+ if(DataModule1->SqlSpecification->FieldByName("RR")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Rmax/Rmin";
+  Nar[16]=k;
+  k=k+1;
+  }
+  //***********************************************************
+ if(DataModule1->SqlSpecification->FieldByName("Fmx")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Fmax,ppm";
+  Nar[17]=k;
+  k=k+1;
+  }
+  //*************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("Fmn")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Fmin,ppm";
+  Nar[18]=k;
+  k=k+1;
+  }
+  //**************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("Fptp")->AsString=="True" || DataModule1->SqlSpecification->FieldByName("Fptp_2")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Fptp,ppm";
+  Nar[19]=k;
+  k=k+1;
+  }
+  //*************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("M")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Монотонность,ppm";
+  Nar[20]=k;
+  k=k+1;
+  }
+ //**************************************************************
+if(DataModule1->SqlSpecification->FieldByName("S")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Наклон,ppm";
+  Nar[21]=k;
+  k=k+1;
+  }                                           
+    //**********************************************************************
+if(DataModule1->SqlSpecification->FieldByName("C0_C1")->AsString=="True"){
+  Nar[22]=k;
+  ResultForm->ResultGrid->Cells[k][0]="C0/C1";
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+             ResultForm->ResultGrid->Cells[Nar[22]][N+2]=DataModule1->SqlSpecification->FieldByName("C0_C1max")->AsString;
+             ResultForm->ResultGrid->Cells[Nar[22]][N+3]=DataModule1->SqlSpecification->FieldByName("C0_C1min")->AsString;
+         }
+
+  k=k+1;
+  }
+  if(DataModule1->SqlSpecification->FieldByName("C1_2C0")->AsString=="True"){
+  Nar[25]=k;
+  ResultForm->ResultGrid->Cells[k][0]="Перестройка";
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+             ResultForm->ResultGrid->Cells[Nar[25]][N+2]=DataModule1->SqlSpecification->FieldByName("C1_2C0max")->AsString;
+             ResultForm->ResultGrid->Cells[Nar[25]][N+3]=DataModule1->SqlSpecification->FieldByName("C1_2C0min")->AsString;
+         }
+
+  k=k+1;
+  }
+  if(DataModule1->SqlSpecification->FieldByName("Rsp1")->AsString=="True"){
+  Nar[24]=k;
+  ResultForm->ResultGrid->Cells[k][0]="Spur#1";
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+             ResultForm->ResultGrid->Cells[Nar[24]][N+2]=DataModule1->SqlSpecification->FieldByName("Rsp1max")->AsString;
+             ResultForm->ResultGrid->Cells[Nar[24]][N+3]=DataModule1->SqlSpecification->FieldByName("Rsp1min")->AsString;
+         }
+
+  k=k+1;
+  }
+ //-------------------------------------------------------------------------------------------------------------------------------
+ if(DataModule1->SqlSpecification->FieldByName("Rmax-Rmin")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Rmax-Rmin";
+  Nar[26]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("RR1max")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[26]][N+2]=DataModule1->SqlSpecification->FieldByName("RR1max")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("RR1min")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[26]][N+3]=DataModule1->SqlSpecification->FieldByName("RR1min")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+ //*************************************************************************************************************************
+ if(DataModule1->SqlSpecification->FieldByName("RR2")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Rmax/R25";
+  Nar[27]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("RR2max")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[27]][N+2]=DataModule1->SqlSpecification->FieldByName("RR2max")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("RR2min")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[27]][N+3]=DataModule1->SqlSpecification->FieldByName("RR2min")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+
+//***************************************************************************************************************************
+if(DataModule1->SqlSpecification->FieldByName("RR3")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="R25/Rmin";
+  Nar[28]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("RR3max")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[28]][N+2]=DataModule1->SqlSpecification->FieldByName("RR3max")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("RR3min")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[28]][N+3]=DataModule1->SqlSpecification->FieldByName("RR3min")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+//****************************************************************************************************************************
+ if(DataModule1->SqlSpecification->FieldByName("RR4")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="(Rmax-R25)/R25*100%";
+  Nar[29]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("RR4max")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[29]][N+2]=DataModule1->SqlSpecification->FieldByName("RR4max")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("RR4min")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[29]][N+3]=DataModule1->SqlSpecification->FieldByName("RR4min")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+//*****************************************************************************************************************************
+ if(DataModule1->SqlSpecification->FieldByName("RR5")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="(Rmin-R25)/R25*100%";
+  Nar[30]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("RR5max")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[30]][N+2]=DataModule1->SqlSpecification->FieldByName("RR5max")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("RR5min")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[30]][N+3]=DataModule1->SqlSpecification->FieldByName("RR5min")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+
+
+
+  //**********************************************************************
+  //*****************************************************************************************************************************
+ if(DataModule1->SqlSpecification->FieldByName("Rsphere")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Радиус сферы 1";
+  Nar[31]=k;
+
+  k=k+1;
+  ResultForm->ResultGrid->Cells[k][0]="Радиус сферы 2";
+  Nar[32]=k;
+  k=k+1;
+  }
+   //************************************************************************
+   //*****************************************************************************************************************************
+   if(DataModule1->SqlSpecification->FieldByName("FTx")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]=" F(T="+DataModule1->SqlSpecification->FieldByName("Ftxt")->AsString+")";
+  Nar[33]=k;
+  k=k+1;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                       if(DataModule1->SqlSpecification->FieldByName("FTmax")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[33]][N+2]=DataModule1->SqlSpecification->FieldByName("FTmax")->AsString;
+                         }
+                       if(DataModule1->SqlSpecification->FieldByName("FTmin")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[33]][N+3]=DataModule1->SqlSpecification->FieldByName("FTmin")->AsString;
+                         }
+
+                    }
+
+
+
+  }
+     //*****************************************************************************************************************************
+   if(DataModule1->SqlSpecification->FieldByName("Ft1")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]=" F(T="+DataModule1->SqlSpecification->FieldByName("Ft1t")->AsString+")";
+  Nar[34]=k;
+  k=k+1;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                       if(DataModule1->SqlSpecification->FieldByName("Ft1max")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[34]][N+2]=DataModule1->SqlSpecification->FieldByName("Ft1max")->AsString;
+                         }
+                       if(DataModule1->SqlSpecification->FieldByName("Ft1min")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[34]][N+3]=DataModule1->SqlSpecification->FieldByName("Ft1min")->AsString;
+                         }
+
+                    }
+
+
+
+  }
+
+    //*****************************************************************************************************************************
+   if(DataModule1->SqlSpecification->FieldByName("Ft2")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]=" F(T="+DataModule1->SqlSpecification->FieldByName("Ft2t")->AsString+")";
+  Nar[35]=k;
+  k=k+1;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                       if(DataModule1->SqlSpecification->FieldByName("Ft2max")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[35]][N+2]=DataModule1->SqlSpecification->FieldByName("Ft2max")->AsString;
+                         }
+                       if(DataModule1->SqlSpecification->FieldByName("Ft2min")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[35]][N+3]=DataModule1->SqlSpecification->FieldByName("Ft2min")->AsString;
+                         }
+
+                    }
+
+
+
+  }
+   if(DataModule1->SqlSpecification->FieldByName("Ft3")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]=" F(T="+DataModule1->SqlSpecification->FieldByName("Ft3t")->AsString+")";
+  Nar[36]=k;
+  k=k+1;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                       if(DataModule1->SqlSpecification->FieldByName("Ft3max")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[36]][N+2]=DataModule1->SqlSpecification->FieldByName("Ft3max")->AsString;
+                         }
+                       if(DataModule1->SqlSpecification->FieldByName("Ft3min")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[36]][N+3]=DataModule1->SqlSpecification->FieldByName("Ft3min")->AsString;
+                         }
+
+                    }
+
+
+
+  }
+  //************************************************************************************************************************************************
+    if(DataModule1->SqlSpecification->FieldByName("Ft4")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]=" F(T="+DataModule1->SqlSpecification->FieldByName("Ft4t")->AsString+")";
+  Nar[37]=k;
+  k=k+1;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                       if(DataModule1->SqlSpecification->FieldByName("Ft4max")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[37]][N+2]=DataModule1->SqlSpecification->FieldByName("Ft4max")->AsString;
+                         }
+                       if(DataModule1->SqlSpecification->FieldByName("Ft4min")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[37]][N+3]=DataModule1->SqlSpecification->FieldByName("Ft4min")->AsString;
+                         }
+
+       }             }
+
+ //**************************************************************************************************************************************************
+    if(DataModule1->SqlSpecification->FieldByName("Rsp2")->AsString=="True"){
+  Nar[38]=k;
+  ResultForm->ResultGrid->Cells[k][0]="Spur#2";
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+             ResultForm->ResultGrid->Cells[Nar[38]][N+2]=DataModule1->SqlSpecification->FieldByName("Rsp2max")->AsString;
+             ResultForm->ResultGrid->Cells[Nar[38]][N+3]=DataModule1->SqlSpecification->FieldByName("Rsp2min")->AsString;
+         }
+
+  k=k+1;
+  }
+ //************************************************************************************************************************************************
+   if(DataModule1->SqlSpecification->FieldByName("Rsp3")->AsString=="True"){
+  Nar[39]=k;
+  ResultForm->ResultGrid->Cells[k][0]="Spur#3";
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+             ResultForm->ResultGrid->Cells[Nar[39]][N+2]=DataModule1->SqlSpecification->FieldByName("Rsp3max")->AsString;
+             ResultForm->ResultGrid->Cells[Nar[39]][N+3]=DataModule1->SqlSpecification->FieldByName("Rsp3min")->AsString;
+         }
+
+  k=k+1;
+  }
+
+
+  //**********************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("Status")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]=" Статус";
+  Nar[23]=k;
+  k=k+1;
+  }
+
+
+  //**********************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[0][N+1]="Нормы";
+  ResultForm->ResultGrid->Cells[0][N+2]="МАКС";
+  ResultForm->ResultGrid->Cells[0][N+3]="МИН";
+  ResultForm->ResultGrid->RowCount=N+4;
+  }
+
+  if(DataModule1->SqlSpecification->FieldByName("Stat")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[1][N+5]="Статистика";
+  ResultForm->ResultGrid->Cells[0][N+6]="Всего";
+  ResultForm->ResultGrid->Cells[0][N+7]="Годных";
+  ResultForm->ResultGrid->Cells[0][N+8]="Бракованных";
+   ResultForm->ResultGrid->Cells[0][N+9]="Выход годных %";
+  ResultForm->ResultGrid->Cells[0][N+10]="Макс";
+  ResultForm->ResultGrid->Cells[0][N+11]="Мин";
+  ResultForm->ResultGrid->Cells[0][N+12]="Среднее";
+  ResultForm->ResultGrid->Cells[0][N+13]="Девиация";
+  ResultForm->ResultGrid->RowCount=N+14;
+  }
+ //*******************************************************************
+ DataModule1->SQLPostProcessData->First();
+ //*********************************************************
+  int g=0;
+ int counter,counterFt,counterR,counterQ,counterL,counterTmax,counterTmin,counterTo,counterS,counterM,counterFmax,counterFmin,counterFptp,counterRmax,counterRmin,counterRptp,counterRb,counterRc_Rb;
+ double MinFt,MinR,MinQ,MinL,MinTmax,MinTmin,MinTo,MinS,MinM,MinFmax,MinFmin,MinFptp,MinRmax,MinRmin,MinRptp,MinRb,MinRc_Rb;
+ double MaxFt,MaxR,MaxQ,MaxL,MaxTmax,MaxTmin,MaxTo,MaxS,MaxM,MaxFmax,MaxFmin,MaxFptp,MaxRmax,MaxRmin,MaxRptp,MaxRb,MaxRc_Rb;
+ double SumFt,SumR,SumQ,SumL,SumTmax,SumTmin,SumTo,SumS,SumM,SumFmax,SumFmin,SumFptp,SumRmax,SumRmin,SumRptp,SumRb,SumRc_Rb;
+ double DFt,DR,DQ,DL,DTmax,DTmin,DTo,DS,DM,DFmax,DFmin,DFptp,DRmax,DRmin,DRptp,DRb,DRc_Rb;
+ double counterRsp1,MaxRsp1,MinRsp1,SumRsp1,DRsp1;
+ double counterRsp2,MaxRsp2,MinRsp2,SumRsp2,DRsp2;
+ double counterRsp3,MaxRsp3,MinRsp3,SumRsp3,DRsp3;
+ double CounterRR1,MaxRR1,MinRR1,SumRR1,DRR1;
+ double CounterRR2,MaxRR2,MinRR2,SumRR2,DRR2;
+ double CounterRR3,MaxRR3,MinRR3,SumRR3,DRR3;
+ double CounterRR4,MaxRR4,MinRR4,SumRR4,DRR4;
+ double CounterRR5,MaxRR5,MinRR5,SumRR5,DRR5;
+ double B5,B4,B3,B1,B0;
+
+ double CounterFT,MaxFT,MinFT,SumFT,DRFT;
+ double CounterFT1,MaxFT1,MinFT1,SumFT1,DRFT1;
+  double CounterFT2,MaxFT2,MinFT2,SumFT2,DRFT2;
+ double CounterFT3,MaxFT3,MinFT3,SumFT3,DRFT3;
+ double CounterFT4,MaxFT4,MinFT4,SumFT4,DRFT4;
+CounterFT=0;MaxFT=0;MinFT=0;SumFT=0;DRFT=0;
+CounterFT1=0;MaxFT1=0;MinFT1=0;SumFT1=0;DRFT1=0;
+CounterFT2=0;MaxFT2=0;MinFT2=0;SumFT2=0;DRFT2=0;
+CounterFT3=0;MaxFT3=0;MinFT3=0;SumFT3=0;DRFT3=0;
+CounterFT4=0;MaxFT4=0;MinFT4=0;SumFT4=0;DRFT4=0;
+double Fs,FL,FT,FT1,FT2,FT3,FT4;
+ double MaxRsr1,MinRsr1,SumRsr1,DRsr1;
+ double MaxRsr2,MinRsr2,SumRsr2,DRsr2;
+ double Fnom;
+ int counterRsr1=0;
+ int counterRsr2=0;
+ int counterC1_2C0=0;
+ double MaxC1_2C0=0;
+ double MinC1_2C0=0;
+ double SumC1_2C0=0;
+MaxRsr1=0;MinRsr1=0;SumRsr1=0; DRsr1=0;
+MaxRsr1=0;MinRsr1=0;SumRsr1=0; DRsr1=0;
+CounterRR1=0;MaxRR1=0;MinRR1=0;SumRR1=0;DRR1=0;
+CounterRR2=0;MaxRR2=0;MinRR2=0;SumRR2=0;DRR2=0;
+CounterRR3=0;MaxRR3=0;MinRR3=0;SumRR3=0;DRR3=0;
+CounterRR4=0;MaxRR4=0;MinRR4=0;SumRR4=0;DRR4=0;
+CounterRR5=0;MaxRR5=0;MinRR5=0;SumRR5=0;DRR5=0;
+ counter=0;
+counterTmax=0; SumTmax=0;MaxTmax=0;MinTmax=0;
+counterTmin=0; SumTmin=0;MaxTmin=0;MinTmin=0;
+counterRc_Rb=0; SumRc_Rb=0;MaxRc_Rb=0;MinRc_Rb=0;
+counterTo=0; SumTo=0;MaxTo=0;MinTo=0;
+counterRsp1=0;counterRsp2=0;counterRsp3=0;
+ //**************************************************
+  WorkProgress->MaxValue=N-1;
+ WorkProgress->Position=0;
+ResultForm->ResultGrid->ColCount=k;
+DataModule1->SQLPostProcessData->First();
+ for (int i=0;i<N;i++){
+ g=0;
+ DataModule1->SQLCrystalData->Filtered=false;
+ DataModule1->SQLCrystalData->Filter="strCrystalID='"+DataModule1->SQLPostProcessData->FieldByName("strCrystalID")->AsString+"'";
+ DataModule1->SQLCrystalData->Filtered=true;
+ DataModule1->SQLSetupData->Filtered=false;
+ DataModule1->SQLSetupData->Filter="strCrystalID='"+DataModule1->SQLPostProcessData->FieldByName("strCrystalID")->AsString+"'";
+ DataModule1->SQLSetupData->Filtered=true;
+ DataModule1->NumberCurrent->Filtered=false;
+   DataModule1->NumberCurrent->Filter="Position='"+DataModule1->SQLPostProcessData->FieldByName("strCrystalID")->AsString+"'";
+   DataModule1->NumberCurrent->Filtered=true;
+     if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                      DataModule1->SQLPSIData->Active=false;
+                       DataModule1->SQLPSIData->SQL->Clear();
+                       DataModule1->SQLPSIData->SQL->Add("Select * from psidata where Measure_ID='"+Measure_ID+"' and N='"+DataModule1->NumberCurrent->FieldByName("SNumber")->AsString+"'");
+                      DataModule1->SQLPSIData->Active=true;
+                      DataModule1->SQLPSIData->Append();
+       }
+
+Nt=DataModule1->SQLCrystalData->RecordCount;
+DataModule1->SQLPSIData->FieldByName("intervalgf")->AsString=DataModule1->SqlSpecification->FieldByName("Profile")->AsString;
+//Тип установки*******************************************************************************
+if (MachineType=="Saunders"){
+ DataModule1->SQLPSIData->FieldByName("MachineType")->AsString="W2200";
+ }
+ else {
+   DataModule1->SQLPSIData->FieldByName("MachineType")->AsString="CNA-300";
+ }
+ DataModule1->SQLPSIData->FieldByName("Machine_ID")->AsString=Machine_ID;
+ DataModule1->SQLPSIData->FieldByName("Machine_Serial")->AsString=Machine_Serial;
+ DataModule1->SQLPSIData->FieldByName("Machine_Call_Date")->AsString=Machine_Call_Date;
+ DataModule1->SQLPSIData->FieldByName("M_Type")->AsString=M_Type;
+ DataModule1->SQLPSIData->FieldByName("PoverKa")->AsBoolean=Poverka;
+  DataModule1->SQLPSIData->FieldByName("Version")->AsString=ver->Text;
+//Порядковый номер************************************************************************
+       if(DataModule1->SqlSpecification->FieldByName("Number")->AsString=="True"){
+             ResultForm->ResultGrid->Cells[Nar[0]][i+1]=i+1;
+        }
+//Позиция*********************************************************************************
+           if(DataModule1->SqlSpecification->FieldByName("position")->AsString=="True"){
+           ResultForm->ResultGrid->Cells[Nar[1]][i+1]=DataModule1->SQLPostProcessData->FieldByName("strCrystalID")->AsString;
+            if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                DataModule1->SQLPSIData->FieldByName("Position")->AsString=ResultForm->ResultGrid->Cells[Nar[1]][i+1];
+               }
+
+           }
+//********************************************************************************************************************************
+
+ ap::real_1d_array X,Y,Y1,X1,Kp,mono1;             //инициализация переменых
+ap::real_1d_array W;
+ double A,B;   //температурные пределы
+double Precision=0.01;  //точность
+int M;
+int TempCount;
+int TempCountM;
+if (DataModule1->SqlSpecification->FieldByName("TCH_Approx_IST")->AsString=="True"){
+ TempCount=DataModule1->SQLCrystalData->RecordCount;
+ X.setbounds(0,TempCount);
+  X1.setbounds(0,TempCount);
+Y.setbounds(0,TempCount);
+Y1.setbounds(0,TempCount);
+W.setbounds(0,TempCount);
+Kp.setbounds(0,TempCount);
+mono1.setbounds(0,TempCount);
+DataModule1->SQLCrystalData->First();
+ DataModule1->ProfileData1->Active=false;
+ DataModule1->ProfileData1->SQL->Clear();
+ AnsiString sqlprofile="Select * from profiledata where Name='"+DataModule1->SqlSpecification->FieldByName("Profile")->AsString+"' Order by N";
+ DataModule1->ProfileData1->SQL->Add(sqlprofile);
+  DataModule1->ProfileData1->Active=true;
+ DataModule1->ProfileData1->First();
+
+M=DataModule1->SqlSpecification->FieldByName("Polinom")->AsFloat;//порядок полинома
+DataModule1->SQLCrystalData->First();
+if (DataModule1->SqlSpecification->FieldByName("TCH_Interval_Type")->AsString=="По интервалу замера"){
+    A=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+    DataModule1->SQLCrystalData->Last();
+    B=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+    DataModule1->SQLCrystalData->First();
+  }
+else if (DataModule1->SqlSpecification->FieldByName("TCH_Interval_Type")->AsString=="По интервалу обработки"){
+    A=DataModule1->ProfileData1->FieldByName("Temperature")->AsFloat;
+   DataModule1->ProfileData1->Last();
+    B=DataModule1->ProfileData1->FieldByName("Temperature")->AsFloat;
+    DataModule1->ProfileData1->First();
+  }
+else if (DataModule1->SqlSpecification->FieldByName("TCH_Interval_Type")->AsString=="По особому интервалу"){
+    A=DataModule1->SqlSpecification->FieldByName("IT_Temp_A")->AsFloat;
+     B=DataModule1->SqlSpecification->FieldByName("IT_Temp_B")->AsFloat;
+  }
+      DataModule1->SQLSetupData->First();
+      int l=0;
+      int l1=0;
+      for( int j=0;j<TempCount;j++){
+                   if (DataModule1->SqlSpecification->FieldByName("TCH_Interval_Type")->AsString=="По интервалу замера"){
+
+                                                       if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                         if (Measure_Type=="Saunders (FR+FL)"){
+                                                                     if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat>-10000 & DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){
+                                                                        Y(l)=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat;
+                                                                          X(l)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W(l)=1;
+                                                                         l++;
+                                                                         }
+                                                             }
+                                                          if (Measure_Type=="Saunders(FR)"){
+                                                                   if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat>-10000 & DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){
+                                                                        Y(l)=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat;
+                                                                          X(l)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W(l)=1;
+                                                                         l++;
+                                                                         }
+                                                             }
+                                                            if (Measure_Type=="Saunders(FL)"){
+                                                                   if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat>-10000 & DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                        Y(l)=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat;
+                                                                          X(l)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W(l)=1;
+                                                                         l++;
+                                                                         }
+                                                             }
+
+
+
+                                                        }
+                                                        else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                            if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat>-10000 & DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){
+                                                                Y(l)=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat;
+                                                                  X(l)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W(l)=1;
+                                                                         l++;
+                                                                  }
+
+                                                        }
+                                                        else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                             if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat>-10000 & DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                Y(l)=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat;
+                                                                  X(l)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W(l)=1;
+                                                                         l++;
+                                                                  }
+
+                                                        }
+                                                         else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                               if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat>-10000 & DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                Y(l)=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat;
+                                                                  X(l)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W(l)=1;
+                                                                 l++;
+                                                                 }
+                                                        }
+                                                         if (Measure_Type=="Saunders(FR)"){
+                                                         if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat>-10000 & DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){
+                                                                        Y1(l1)=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat;
+
+                                                                          X1(l1)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W(l1)=1;
+                                                                         l1++;
+                                                                         }
+
+                                                             }
+                                                           if (Measure_Type=="Saunders(FL)"){
+                                                         if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat>-10000 & DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                        Y1(l1)=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat;
+
+                                                                          X1(l1)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W(l1)=1;
+                                                                         l1++;
+                                                                         }
+
+                                                             }
+                                                          if (Measure_Type=="Saunders (FR+FL)"){
+                                                                   if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat>-10000 & DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){
+                                                                        Y1(l1)=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat;
+                                                                          X1(l1)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W(l1)=1;
+                                                                         l1++;
+                                                                        }
+                                                             }
+
+                   }
+
+
+                    if (DataModule1->SqlSpecification->FieldByName("TCH_Interval_Type")->AsString=="По интервалу обработки"){
+                                            DataModule1->ProfileData1->First();
+                                               for (int y=0;y<DataModule1->ProfileData1->RecordCount;y++){
+                                                  if (DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat==DataModule1->ProfileData1->FieldByName("Temperature")->AsFloat){
+                                                       if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                         if (Measure_Type=="Saunders (FR+FL)"){
+                                                                     if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat>-10000 & DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){
+                                                                        Y(l)=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat;
+                                                                          X(l)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W(l)=1;
+                                                                         l++;
+                                                                         }
+                                                             }
+                                                          if (Measure_Type=="Saunders(FR)"){
+                                                                   if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat>-10000 & DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){
+                                                                        Y(l)=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat;
+                                                                          X(l)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W(l)=1;
+                                                                         l++;
+                                                                         }
+                                                             }
+
+
+                                                          if (Measure_Type=="Saunders(FL)"){
+                                                                   if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat>-10000 & DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                        Y(l)=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat;
+                                                                          X(l)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W(l)=1;
+                                                                         l++;
+                                                                         }
+                                                             }
+
+                                                        }
+                                                        else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                            if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat>-10000 & DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){
+                                                                Y(l)=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat;
+                                                                  X(l)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W(l)=1;
+                                                                         l++;
+                                                                  }
+
+                                                        }
+                                                        else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                             if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat>-10000 & DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                Y(l)=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat;
+                                                                  X(l)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W(l)=1;
+                                                                         l++;
+                                                                  }
+
+                                                        }
+                                                         else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                               if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat>-10000 & DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                Y(l)=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat;
+                                                                  X(l)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W(l)=1;
+                                                                 l++;
+                                                                 }
+                                                        }
+                                                         if (Measure_Type=="Saunders(FR)"){
+                                                         if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat>-10000 & DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){
+                                                                        Y1(l1)=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat;
+
+                                                                          X1(l1)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W(l1)=1;
+                                                                         l1++;
+                                                                         }
+
+                                                             }
+                                                            if (Measure_Type=="Saunders(FL)"){
+                                                         if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat>-10000 & DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                        Y1(l1)=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat;
+
+                                                                          X1(l1)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W(l1)=1;
+                                                                         l1++;
+                                                                         }
+
+                                                             }
+                                                          if (Measure_Type=="Saunders (FR+FL)"){
+                                                                   if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat>-10000 & DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){
+                                                                        Y1(l1)=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat;
+                                                                          X1(l1)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W(l1)=1;
+                                                                         l1++;
+                                                                        }
+                                                             }
+                                        break;
+                                      }
+                                 DataModule1->ProfileData1->Next();
+                                                                                                 
+                           }
+
+
+                   }
+
+
+                    if (DataModule1->SqlSpecification->FieldByName("TCH_Interval_Type")->AsString=="По особому интервалу"){
+                                             if (DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat>=DataModule1->SqlSpecification->FieldByName("IT_Temp_A")->AsFloat & DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat<=DataModule1->SqlSpecification->FieldByName("IT_Temp_B")->AsFloat){
+                                                       if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                         if (Measure_Type=="Saunders (FR+FL)"){
+                                                                     if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat>-10000 & DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){
+                                                                        Y(l)=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat;
+                                                                          X(l)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W(l)=1;
+                                                                         l++;
+                                                                         }
+                                                             }
+                                                          if (Measure_Type=="Saunders(FR)"){
+                                                                   if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat>-10000 & DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){
+                                                                        Y(l)=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat;
+                                                                          X(l)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W(l)=1;
+                                                                         l++;
+                                                                         }
+                                                             }
+
+
+                                                         if (Measure_Type=="Saunders(FL)"){
+                                                                   if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat>-10000 & DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                        Y(l)=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat;
+                                                                          X(l)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W(l)=1;
+                                                                         l++;
+                                                                         }
+                                                             }
+
+                                                        }
+
+                                                        else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                            if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat>-10000 & DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){
+                                                                Y(l)=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat;
+                                                                  X(l)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W(l)=1;
+                                                                         l++;
+                                                                  }
+
+                                                        }
+                                                        else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                             if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat>-10000 & DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                Y(l)=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat;
+                                                                  X(l)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W(l)=1;
+                                                                         l++;
+                                                                  }
+
+                                                        }
+                                                         else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                               if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat>-10000 & DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                Y(l)=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat;
+                                                                  X(l)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W(l)=1;
+                                                                 l++;
+                                                                 }
+                                                        }
+
+                                      }
+
+
+
+
+
+
+                                       if (DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat>=DataModule1->SqlSpecification->FieldByName("TmBegin")->AsFloat & DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat<=DataModule1->SqlSpecification->FieldByName("TmEnd")->AsFloat){
+
+                                                         if (Measure_Type=="Saunders(FR)"){
+                                                         if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat>-10000 & DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){
+                                                                        Y1(l1)=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat;
+
+                                                                          X1(l1)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W(l1)=1;
+                                                                         l1++;
+                                                                         }
+
+                                                             }
+                                                            if (Measure_Type=="Saunders(FL)"){
+                                                         if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat>-10000 & DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                        Y1(l1)=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat;
+
+                                                                          X1(l1)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W(l1)=1;
+                                                                         l1++;
+                                                                         }
+
+                                                             }
+
+
+                                                          if (Measure_Type=="Saunders (FR+FL)"){
+                                                                   if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat>-10000 & DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){
+                                                                        Y1(l1)=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat;
+                                                                          X1(l1)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W(l1)=1;
+                                                                         l1++;
+                                                                        }
+                                                             }
+                                      }
+
+
+
+                   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+           DataModule1->SQLSetupData->Next();
+           DataModule1->SQLCrystalData->Next();
+          }//for
+
+
+ TempCount=l;
+ TempCountM=l1;
+ if (TempCount>M){
+buildchebyshevleastsquares(X,Y,W,A,B,TempCount,M,Kp);//апроксимация
+if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+           DataModule1->SQLPSIData->FieldByName("A0")->AsString=Kp(0);
+           DataModule1->SQLPSIData->FieldByName("A1")->AsString=Kp(1);
+           DataModule1->SQLPSIData->FieldByName("A2")->AsString=Kp(2);
+           DataModule1->SQLPSIData->FieldByName("A3")->AsString=Kp(3);
+           DataModule1->SQLPSIData->FieldByName("A4")->AsString=Kp(4);
+           }
+  }
+
+ }
+ //*******************************************************************Графики******************************************************************************************************************
+ if (DataModule1->SqlSpecification->FieldByName("PrintGraph")->AsString=="True"){
+
+
+           double C=(fabs(A)+fabs(B))/0.1;
+           double Xo,Yo;
+           ap::real_1d_array X2,Y2,Kp2,W2;
+           X2.setbounds(0,TempCount);
+           Y2.setbounds(0,TempCount);
+           W2.setbounds(0,TempCount);
+           Kp2.setbounds(0,TempCount);
+           GpForm->Series1->Visible=false;
+           GpForm->Series1->Clear();
+           GpForm->Series2->Visible=false;
+           GpForm->Series2->Clear();
+
+
+           double Fn;
+                                 DataModule1->SQLSetupData->First();
+                                 DataModule1->SQLCrystalData->First();
+                                for( int j=0;j<TempCount;j++){
+
+                                                if(DataModule1->SqlSpecification->FieldByName("Tnastr")->AsFloat==DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat){
+
+
+
+                                                                       if (DataModule1->SqlSpecification->FieldByName("GraphF")->AsString=="FL"){
+                                                                        Fn=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat;
+                                                                        }
+                                                                  if (DataModule1->SqlSpecification->FieldByName("GraphF")->AsString=="FL0"){
+                                                                        Fn=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat;
+                                                                        }
+                                                                  if (DataModule1->SqlSpecification->FieldByName("GraphF")->AsString=="FS"){
+                                                                        Fn=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat;
+                                                                        }
+
+
+
+                                                            break;
+                                                           }  //if
+
+                                           DataModule1->SQLSetupData->Next();
+                                           DataModule1->SQLCrystalData->Next();
+                                }  //for
+
+
+
+             DataModule1->SQLSetupData->First();
+              DataModule1->SQLCrystalData->First();
+              int count_er=0;
+                                for (int j=0;j<TempCount;j++){
+                                                 if (DataModule1->SqlSpecification->FieldByName("GraphF")->AsString=="Fs"){
+                                                            if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat>-10000 & DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){
+                                                                Y2(count_er)=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat-Fn;
+                                                                  X2(count_er)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W2(count_er)=1;
+                                                                         Xo=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         Yo=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat-Fn;
+                                                                         count_er++;
+                                                                  }
+
+                                                        }
+                                                       if (DataModule1->SqlSpecification->FieldByName("GraphF")->AsString=="FL"){
+                                                             if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat>-10000 & DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                Y2(count_er)=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat-Fn;
+                                                                  X2(count_er)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W2(count_er)=1;
+                                                                     Xo=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         Yo=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat-Fn;
+                                                                         count_er++;
+                                                                  }
+
+                                                        }
+                                                       if (DataModule1->SqlSpecification->FieldByName("GraphF")->AsString=="FL0"){
+                                                               if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat>-10000 & DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                Y2(count_er)=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat-Fn;
+                                                                  X2(count_er)=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         W2(count_er)=1;
+                                                                          Xo=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                                         Yo=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat-Fn;
+                                                                 count_er++;
+                                                                 }
+                                                        }
+
+                                                            // count_er++;
+                                                          GpForm->Series2->AddXY(Xo,Yo,"",clTeeColor);
+
+
+                       DataModule1->SQLSetupData->Next();
+                          DataModule1->SQLCrystalData->Next();
+                        }
+
+
+//температурные пределы
+if (A==0){
+A=0.01;
+}
+int l3=0;
+ if (DataModule1->SqlSpecification->FieldByName("TCH_Approx_IST")->AsString=="True"){
+                              if (count_er>M){
+                                buildchebyshevleastsquares(X2,Y2,W2,A,B,count_er,M,Kp2);//апроксимация
+                                        while (Xo<=B){
+                                                                      Xo=A+l3*0.1;
+                                                                       Yo=calculatechebyshevleastsquares(M,Kp2,Xo);
+                                                                    GpForm->Series1->AddXY(Xo,Yo,"",clTeeColor);
+                                                                           l3++;
+                                                    }
+                                   }
+
+                             }
+ else {
+      double a0,a1,a2,a3;
+             Xo=A+l3*0.1;
+
+             a0= DataModule1->SQLPostProcessData->FieldByName("fA0")->AsFloat;
+             a1= DataModule1->SQLPostProcessData->FieldByName("fA1")->AsFloat;
+             a2= DataModule1->SQLPostProcessData->FieldByName("fA2")->AsFloat;
+             a3= DataModule1->SQLPostProcessData->FieldByName("fA3")->AsFloat;
+
+             Yo=Xo*Xo*Xo*a3+Xo*Xo*a2+a1*Xo+a0;
+             GpForm->Series1->AddXY(Xo,Yo,"",clTeeColor);
+              l3++;
+
+ }
+
+                     GpForm->Series2->Visible=true;
+                     GpForm->Series1->Visible=true;
+                       if (DataModule1->SqlSpecification->FieldByName("GraphOnlyAprox")->AsString=="True"){
+                       GpForm->Series2->Visible=false;
+                       }
+                          if (DataModule1->SqlSpecification->FieldByName("GraphOnluMeasure")->AsString=="True"){
+                          GpForm->Series1->Visible=false;
+                          }
+                     GpForm->Chart1->LeftAxis->Title->Caption="F, ppm";
+                     GpForm->Chart1->Title->Clear();
+                     GpForm->Chart1->Title->Text->Add(DataModule1->NumberCurrent->FieldByName("SNumber")->AsString+"                 "+DataModule1->SqlSpecification->FieldByName("Name")->AsString);
+
+                     if (DataModule1->SqlSpecification->FieldByName("GraphP")->AsString=="False"){
+
+                        GpForm->Chart1->PrintPortrait();
+
+                     }
+
+                      if (DataModule1->SqlSpecification->FieldByName("GraphP")->AsString=="True"){
+                        GpForm->Chart1->SaveToBitmapFile(DataModule1->Options->FieldByName("GraphDir")->AsString+"\\"+DataModule1->NumberCurrent->FieldByName("SNumber")->AsString+".bmp");
+                     }
+
+
+
+     }
+//******************************************************************************************************************************************************************************
+//Верхний экстремум************************************************************************
+//Определение*****************************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("Tmax")->AsString=="True"){
+   double Tmax,Tmin;
+   double x,y,z;
+        if (DataModule1->SqlSpecification->FieldByName("TCH_Approx_IST")->AsString=="False"){
+                               SEdit1->AsFloat=DataModule1->SQLPostProcessData->FieldByName("fTP1")->AsFloat;
+                               DataModule1->SQLPostProcessData->FieldByName("fTP1")->AsString;
+           }
+         else {
+
+           if (TempCount>=M+1){
+           Tmax=10000;
+
+          TurnOverNew(X,Y,A,B,Precision,Tmax,Tmin,TempCount,W,M);
+          }
+          SEdit1->AsFloat=Tmax;
+         }
+
+        if (SEdit1->AsFloat<160 &  SEdit1->AsFloat>-60){
+              ResultForm->ResultGrid->Cells[Nar[11]][i+1]= SEdit1->Text;
+              z=StrToFloat(ResultForm->ResultGrid->Cells[Nar[11]][i+1]);
+         }
+        else {
+           ResultForm->ResultGrid->Cells[Nar[11]][i+1]="НЕТ";
+           z=0;
+        }
+
+
+
+
+
+          if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                           if (ResultForm->ResultGrid->Cells[Nar[11]][i+1]!="НЕТ"){
+                                DataModule1->SQLPSIData->FieldByName("Tmax")->AsString=SEdit1->AsString;
+                           }
+                           else {
+                             DataModule1->SQLPSIData->FieldByName("Tmax")->AsString="100000";
+                           }
+
+               }
+        if (MinTmax==0){
+                       MinTmax=z;
+                       }
+        if (z<300&z!=0){
+        SumTmax=SumTmax+z;
+                   }
+        if (z>MaxTmax){
+                      if (z<300){
+                         MaxTmax=z;
+                       }
+         }
+         if (z<MinTmax){
+                     if (z!=0){
+                        MinTmax=z;
+                     }
+         }
+//Разбраковка**********************************************************************************************************
+        if(DataModule1->SqlSpecification->FieldByName("CbTmax")->AsString=="False"){
+                 if(DataModule1->SqlSpecification->FieldByName("Tmaxmax")->AsString!="no"){
+                    x=DataModule1->SqlSpecification->FieldByName("Tmaxmax")->AsFloat;
+                            if(z>x){
+                                    //ResultForm->ResultGrid->Cells[Nar[11]][i+1]=ResultForm->ResultGrid->Cells[Nar[11]][i+1]+"+";
+                                    g=1;
+                                    counterTmax=counterTmax+1;
+                                    }
+                  }
+
+                 if(DataModule1->SqlSpecification->FieldByName("Tmaxmin")->AsString!="no"){
+                    y=DataModule1->SqlSpecification->FieldByName("Tmaxmin")->AsFloat;
+                            if(z<y){
+                                    //ResultForm->ResultGrid->Cells[Nar[11]][i+1]=ResultForm->ResultGrid->Cells[Nar[11]][i+1]+"-";
+                                    g=1;
+                                    counterTmax=counterTmax+1;
+                                   }
+                  }
+         }
+   }
+//*******************************************************************************************
+//экстремум нижний*************************************************************************
+//Определение*****************************************************************************
+ if(DataModule1->SqlSpecification->FieldByName("Tmin")->AsString=="True"){
+    double Tmax,Tmin;
+        if (DataModule1->SqlSpecification->FieldByName("TCH_Approx_IST")->AsString=="False"){
+                               SEdit1->AsFloat=DataModule1->SQLPostProcessData->FieldByName("fTP2")->AsFloat;
+           }
+         else {
+
+          if (TempCount>=M+1){
+          Tmin=1000;
+           TurnOverNew(X,Y,A,B,Precision,Tmax,Tmin,TempCount,W,M);
+          }
+          SEdit1->AsFloat=Tmin;
+         }
+
+
+               double x,y,z;
+                if (SEdit1->AsFloat<160 &  SEdit1->AsFloat>-60){
+                      ResultForm->ResultGrid->Cells[Nar[12]][i+1]= SEdit1->Text;
+                      z=StrToFloat(ResultForm->ResultGrid->Cells[Nar[12]][i+1]);
+                  }
+              else {
+                   ResultForm->ResultGrid->Cells[Nar[12]][i+1]="НЕТ";
+                   z=0;
+                }
+
+               if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                       if (ResultForm->ResultGrid->Cells[Nar[12]][i+1]!="НЕТ"){
+
+                                    DataModule1->SQLPSIData->FieldByName("Tmin")->AsString=SEdit1->AsString;
+                          }
+                          else {
+
+                                   SEdit1->AsFloat=1000;
+                                   DataModule1->SQLPSIData->FieldByName("Tmin")->AsString=SEdit1->AsString;
+                               
+
+                          }
+
+               }
+
+
+                if (MinTmin==0){
+                               MinTmin=z;
+                               }
+                if (z<300&z!=0){
+                               SumTmax=SumTmin+z;
+                               }
+               if (z>MaxTmin){
+                            if(z<300){
+                                     MaxTmin=z;
+                            }
+                 }
+               if (z<MinTmin){
+                              if (z!=0){
+                                       MinTmin=z;
+                                       }
+                     }
+               if(DataModule1->SqlSpecification->FieldByName("CbTmin")->AsString=="False"){
+
+                              if(DataModule1->SqlSpecification->FieldByName("Tminmax")->AsString!="no"){
+                                        x=DataModule1->SqlSpecification->FieldByName("Tminmax")->AsFloat;
+                                        if(z>x){
+                                               //ResultForm->ResultGrid->Cells[Nar[12]][i+1]=ResultForm->ResultGrid->Cells[Nar[12]][i+1]+"+";
+                                               g=1;
+                                               counterTmin=counterTmin+1;
+                                        }
+                                }
+
+                              if(DataModule1->SqlSpecification->FieldByName("Tminmin")->AsString!="no"){
+                                        y=DataModule1->SqlSpecification->FieldByName("Tminmin")->AsFloat;
+                                                 if(z<y){
+                                                         //ResultForm->ResultGrid->Cells[Nar[12]][i+1]=ResultForm->ResultGrid->Cells[Nar[12]][i+1]+"-";
+                                                         g=1;
+                                                         counterTmin=counterTmin+1;
+                                                  }
+                              }
+
+                 }
+     }
+ //***************************************************************************
+ //Перегиб*********************************************************************************
+
+  if(DataModule1->SqlSpecification->FieldByName("TurnOver")->AsString=="True"){
+  double IT;
+  double MonoMax=0;
+  AnsiString D5s,D4s,D3s,D1r,D1s,ITs;
+  int d5,d4,d3,d1,d0,it,it1;
+     if (DataModule1->SqlSpecification->FieldByName("TCH_Approx_IST")->AsString=="False"){
+                               IT= DataModule1->SQLPostProcessData->FieldByName("fIT1")->AsFloat;
+                               SEdit1->AsFloat=DataModule1->SQLPostProcessData->FieldByName("fIT1")->AsFloat;
+           }
+         else {
+           ap::real_1d_array Y_IT,XG,YG;
+           YG.setbounds(0,TempCount);
+           XG.setbounds(0,TempCount);
+           Y_IT.setbounds(0,TempCount);
+           ap::real_1d_array Kp1,Kp3,Kp4;
+             Kp1.setbounds(0,M);
+              Kp4.setbounds(0,M);
+              Kp3.setbounds(0,M);
+
+             if (TempCount>=M+1){
+                int g=0;
+             for (int j1=0; j1<TempCount;j1++){
+                 if (Y(j1)<1E8 & Y(j1)>-1E8){
+                  XG(g)=X(j1);
+                  YG(g)=Y(j1);
+                  g++;
+                 }
+
+
+             }
+             if (g>M){
+             buildpolynomialleastsquaresNew(XG,YG,g,M,Kp1);
+              if (M==3){
+             SEdit1->AsFloat=(-2*Kp1(2))/(6*Kp1(3));
+                 }
+             else if(M==5){
+
+               double f1,f2,kk,kk1;
+               for (int i=A; i<B; i++){
+
+               f1=20*Kp1(5)*i*i*i+12*Kp1(4)*i*i+6*Kp1(3)*i+2*Kp1(2);
+               f2=20*Kp1(5)*pow((i+1),3)+12*Kp1(4)*pow(i+1,2)+6*Kp1(3)*(i+1)+2*Kp1(2);
+                     if (f1>=0 & f2<=0){
+                         for (int j=0;j<100;j++){
+                          kk=i+j*0.01;
+                          kk1=i+(j+1)*0.01;
+                          f1=20*Kp1(5)*kk*kk*kk+12*Kp1(4)*kk*kk+6*Kp1(3)*kk+2*Kp1(2);
+                          f2=20*Kp1(5)*pow(kk1,3)+12*Kp1(4)*pow(kk1,2)+6*Kp1(3)*kk1+2*Kp1(2);
+                          if (f1>=0 & f2<=0){
+                            IT=i+j*0.01;
+                          break;
+                          }
+                         }
+                     }
+                     else if (f1<=0 & f2>=0){
+                          for (int j=0;j<100;j++){
+                          kk=i+j*0.01;
+                          kk1=i+(j+1)*0.01;
+                          f1=20*Kp1(5)*kk*kk*kk+12*Kp1(4)*kk*kk+6*Kp1(3)*kk+2*Kp1(2);
+                          f2=20*Kp1(5)*pow(kk1,3)+12*Kp1(4)*pow(kk1,2)+6*Kp1(3)*kk1+2*Kp1(2);
+                          if (f1<=0 & f2>=0){
+                            IT=i+j*0.01;
+                          break;
+                          }
+                         }
+                     }
+
+                }
+
+               }
+             else {
+             IT=0;
+
+             }
+
+             }
+             else {
+             IT=0;
+             }
+             }
+             else {
+              IT=0;
+             }
+         SEdit1->Text=IT;
+
+             if (DataModule1->SqlSpecification->FieldByName("AltAppprox")->AsString=="True" & IT>0){
+             buildchebyshevleastsquares(X,Y,W,A,B,TempCount,M,Kp);
+             double F_IT=calculatechebyshevleastsquares(M,Kp,IT);
+              for (int i=0;i<TempCount;i++){
+                 Y_IT(i)=Y(i)-F_IT;
+
+              }
+              buildpolynomialleastsquaresNew(X,Y_IT,TempCount,M,Kp3);
+              buildchebyshevleastsquares(X,Y_IT,W,A,B,TempCount,M,Kp4);
+                     B5=Kp3(5);
+                    d5=SimpleRoundTo(B5*10E10,0);
+                     char * temp;
+                     temp= ToBin(d5);
+                      D5s=temp;
+                     B4=5*B5*IT+Kp3(4);
+                     d4=SimpleRoundTo(B4*10E7,0);
+                      temp= ToBin(d4);
+                      D4s=temp;
+                     B3= (6*B4*pow(IT,2)-10*B5*pow(IT,3)-Kp3(2))/(3*IT);
+                     d3=SimpleRoundTo(B3*10E5,0);
+                      temp= ToBin(d3);
+                      D3s=temp;
+
+                     B1=4*B4*pow(IT,3)-5*B5*pow(IT,4)-3*B3*pow(IT,2)+Kp3(1);
+                     d1=SimpleRoundTo(B1*1000,0);
+                     if (d1<50 & d1>-620){
+                     int d1_1=d1;
+                         for (int i=0;i<8;i++){
+                         d1_1=d1_1+50*i;
+                               if (d1_1>-100 & d1_1<50){
+                                temp=ToBin(i);
+                                D1r=temp;
+                                temp=ToBin(d1_1);
+                                D1s=temp;
+                                break;
+                               }
+
+                         }
+
+                     }
+                     else{
+                     D1s="00000000" ;
+                      D1r="000";
+                     }
+                     B0=B1*IT+Kp3(0)+B3*pow(IT,3)+B5*pow(IT,5)-B4*pow(IT,4);
+                     int Tnastr1=DataModule1->SqlSpecification->FieldByName("Tnastr")->AsFloat;
+                       it1=(IT-Tnastr1)/0.07;
+                        temp=ToBin(it1);
+                        ITs=temp;
+                     it=Tnastr1+0.07*it1;
+              double ff2,ff3;
+            for (int i=A;i<B;i++){
+              ff2=calculatechebyshevleastsquares(M,Kp4,i);
+              double X_S=i-it;
+              double d51=d5*10E-12;
+              double d41=d4*10E-9;
+              double d31=d3*10E-7;
+              double d11=d1*10E-4;
+              ff3=d51*pow(X_S,5)+d41*pow(X_S,4)+d31*pow(X_S,3)+d11*X_S+B0;
+                double monotemp;
+                monotemp=fabs(ff3-ff2);
+                if (monotemp>MonoMax){
+                 MonoMax=monotemp;
+                }
+
+            }
+
+             }
+
+
+
+         }
+
+   ResultForm->ResultGrid->Cells[Nar[13]][i+1]= SEdit1->Text;
+  double x,y,z;
+
+   z=StrToFloat(ResultForm->ResultGrid->Cells[Nar[13]][i+1]);
+                  if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                 if (DataModule1->SqlSpecification->FieldByName("AltAppprox")->AsString=="True"){
+                                  DataModule1->SQLPSIData->FieldByName("TurnOver")->AsFloat=IT;
+                                  DataModule1->SQLPSIData->FieldByName("B0")->AsFloat=B0;
+                                  DataModule1->SQLPSIData->FieldByName("B1")->AsFloat=B1;
+                                  DataModule1->SQLPSIData->FieldByName("B3")->AsFloat=B3;
+                                  DataModule1->SQLPSIData->FieldByName("B4")->AsFloat=B4;
+                                  DataModule1->SQLPSIData->FieldByName("B5")->AsFloat=B5;
+                                  DataModule1->SQLPSIData->FieldByName("dfB")->AsFloat=MonoMax;
+                                  DataModule1->SQLPSIData->FieldByName("D5")->AsString=D5s;
+                                  DataModule1->SQLPSIData->FieldByName("D4")->AsString=D4s;
+                                  DataModule1->SQLPSIData->FieldByName("D3")->AsString=D3s;
+                                  DataModule1->SQLPSIData->FieldByName("D1s")->AsString=D1s;
+                                  DataModule1->SQLPSIData->FieldByName("D1r")->AsString=D1r;
+                                  DataModule1->SQLPSIData->FieldByName("Dit")->AsString=ITs;
+                                 }
+                           if (DataModule1->SQLPostProcessData->FieldByName("strQCStatusCurveFitData")->AsString!="Fail No Curvefit"){
+                                     if (DataModule1->SQLPostProcessData->FieldByName("fIT1")->AsFloat<300 & DataModule1->SQLPostProcessData->FieldByName("fIT1")->AsFloat>-60){
+                                   DataModule1->SQLPSIData->FieldByName("TurnOver")->AsFloat=DataModule1->SQLPostProcessData->FieldByName("fIT1")->AsFloat;
+
+                            }
+                           }
+                      }
+               if (MinTo==0){
+                       MinTo=z;
+                       }
+        if (z<300&z!=0){
+        SumTo=SumTo+z;
+                   }
+        if (z>MaxTo){
+                      if (z<300){
+                         MaxTo=z;
+                       }
+         }
+         if (z<MinTo){
+                     if (z!=0){
+                        MinTo=z;
+                     }
+         }
+
+
+             if(DataModule1->SqlSpecification->FieldByName("Tomax")->AsString!="no"){
+                x=DataModule1->SqlSpecification->FieldByName("Tomax")->AsFloat;
+                          if(z>x){
+                                 //ResultForm->ResultGrid->Cells[Nar[13]][i+1]=ResultForm->ResultGrid->Cells[Nar[13]][i+1]+"+";
+                                  g=1;
+                                  counterTo=counterTo+1;
+                                  }
+               }
+               if(DataModule1->SqlSpecification->FieldByName("Tomin")->AsString!="no"){
+                         y=DataModule1->SqlSpecification->FieldByName("Tomin")->AsFloat;
+                         if(z<y){
+                                 //ResultForm->ResultGrid->Cells[Nar[13]][i+1]=ResultForm->ResultGrid->Cells[Nar[13]][i+1]+"-";
+                                 g=1;
+                                 counterTo=counterTo+1;
+                         }
+               }
+
+
+    }
+ //****************************************************************************************************************
+ //максимальное сопротивление******************************************
+ if(DataModule1->SqlSpecification->FieldByName("Rmx")->AsString=="True"){
+ double Rmax=0;
+     if (DataModule1->SqlSpecification->FieldByName("TCH_Interval_Type")->AsString=="По интервалу замера"){
+                                        SEdit1->AsFloat=DataModule1->SQLPostProcessData->FieldByName("fRmax")->AsFloat;
+                                  }
+
+       else {
+                                             DataModule1->ProfileData1->Active=true;
+                                            DataModule1->ProfileData1->First();
+                                            DataModule1->SQLCrystalData->First();
+                                            for (int j=0; j<DataModule1->SQLCrystalData->RecordCount; j++){
+                                                  DataModule1->ProfileData1->First();
+                                               for (int y=0;y<DataModule1->ProfileData1->RecordCount;y++){
+                                                  if (DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat==DataModule1->ProfileData1->FieldByName("Temperature")->AsFloat){
+                                                           if (DataModule1->SQLCrystalData->FieldByName("fRr")->AsFloat>Rmax){
+                                                               Rmax=DataModule1->SQLCrystalData->FieldByName("fRr")->AsFloat;
+
+                                                           }
+
+
+                                                  break;
+                                               }
+                                              DataModule1->ProfileData1->Next();
+                                              }
+                                             DataModule1->SQLCrystalData->Next();
+                                            }
+                         SEdit1->AsFloat=Rmax;
+                }
+
+        ResultForm->ResultGrid->Cells[Nar[14]][i+1]= SEdit1->Text;
+                   if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                     if (DataModule1->SQLPostProcessData->FieldByName("fRmax")->AsFloat>-10000 & DataModule1->SQLPostProcessData->FieldByName("fRmax")->AsFloat<10000 ){
+                            DataModule1->SQLPSIData->FieldByName("Rmax")->AsString=ResultForm->ResultGrid->Cells[Nar[14]][i+1];
+                          }
+                      else {
+                        DataModule1->SQLPSIData->FieldByName("Rmax")->AsString="0";
+                      }
+                   }
+         double x,y,z;
+                   if(DataModule1->SqlSpecification->FieldByName("Rmaxmax")->AsString!="no"){
+                             x=DataModule1->SqlSpecification->FieldByName("Rmaxmax")->AsFloat;
+                                        if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                  ResultForm->ResultGrid->Cells[Nar[14]][N+2]=x;
+                                        }
+                    }
+                   if(DataModule1->SqlSpecification->FieldByName("Rmaxmin")->AsString!="no"){
+                               y=DataModule1->SqlSpecification->FieldByName("Rmaxmin")->AsFloat;
+                                        if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                  ResultForm->ResultGrid->Cells[Nar[14]][N+3]=y;
+                                        }
+                     }
+   z=StrToFloat(ResultForm->ResultGrid->Cells[Nar[14]][i+1]);
+                  if(DataModule1->SqlSpecification->FieldByName("Rmaxmax")->AsString!="no"){
+                                 if(z>x){
+                                        //ResultForm->AdvStringGrid1->Cells[Nar[14]][i+1]=ResultForm->ResultGrid->Cells[Nar[14]][i+1]+"+";
+                                           g=1;
+                                     }
+                  }
+                 if(DataModule1->SqlSpecification->FieldByName("Rmaxmin")->AsString!="no"){
+                                  if(z<y){
+                                            //ResultForm->ResultGrid->Cells[Nar[14]][i+1]=ResultForm->ResultGrid->Cells[Nar[14]][i+1]+"-";
+                                            g=1;
+                                    }
+                   }
+   }
+
+//******************************************************************************************************************************
+//Минимальное сопротивление**************************************************************************************************
+if(DataModule1->SqlSpecification->FieldByName("Rmn")->AsString=="True"){
+      double Rmin=10000;
+     if (DataModule1->SqlSpecification->FieldByName("TCH_Interval_Type")->AsString=="По интервалу замера"){
+                                        SEdit1->AsFloat=DataModule1->SQLPostProcessData->FieldByName("fRmin")->AsFloat;
+                                  }
+
+       else {
+                                             DataModule1->ProfileData1->Active=true;
+                                            DataModule1->ProfileData1->First();
+                                            DataModule1->SQLCrystalData->First();
+                                            for (int j=0; j<DataModule1->SQLCrystalData->RecordCount; j++){
+                                            DataModule1->ProfileData1->First();
+                                               for (int y=0;y<DataModule1->ProfileData1->RecordCount;y++){
+                                                  if (DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat==DataModule1->ProfileData1->FieldByName("Temperature")->AsFloat){
+                                                           if (DataModule1->SQLCrystalData->FieldByName("fRr")->AsFloat<Rmin){
+                                                               Rmin=DataModule1->SQLCrystalData->FieldByName("fRr")->AsFloat;
+
+                                                           }
+
+
+                                                  break;
+                                               }
+                                              DataModule1->ProfileData1->Next();
+                                              }
+                                             DataModule1->SQLCrystalData->Next();
+                                            }
+                         SEdit1->AsFloat=Rmin;
+                }
+
+
+
+   ResultForm->ResultGrid->Cells[Nar[15]][i+1]= SEdit1->Text;
+
+                   if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                     if (DataModule1->SQLPostProcessData->FieldByName("fRmin")->AsFloat>-10000 & DataModule1->SQLPostProcessData->FieldByName("fRmin")->AsFloat<10000 ){
+                            DataModule1->SQLPSIData->FieldByName("Rmin")->AsString=ResultForm->ResultGrid->Cells[Nar[15]][i+1];
+                          }
+                      else {
+                        DataModule1->SQLPSIData->FieldByName("Rmin")->AsString="0";
+                      }
+                   }
+
+
+
+
+
+   }
+ //**********************************************Rmax/Rmin*********************************************************************************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("RR")->AsString=="True"){
+        double m1,m2;
+        m1=0;
+        m2=10000;
+      if (DataModule1->SqlSpecification->FieldByName("TCH_Interval_Type")->AsString=="По интервалу замера"){
+                   m1=DataModule1->SQLPostProcessData->FieldByName("fRmax")->AsFloat;
+                  m2=DataModule1->SQLPostProcessData->FieldByName("fRmin")->AsFloat;
+        }
+        else {
+
+                                     DataModule1->ProfileData1->Active=true;
+                                            DataModule1->ProfileData1->First();
+                                            DataModule1->SQLCrystalData->First();
+                                            for (int j=0; j<DataModule1->SQLCrystalData->RecordCount; j++){
+                                               for (int y=0;y<DataModule1->ProfileData1->RecordCount;y++){
+                                                  if (DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat==DataModule1->ProfileData1->FieldByName("Temperature")->AsFloat){
+                                                           if (DataModule1->SQLCrystalData->FieldByName("fRr")->AsFloat<m2){
+                                                               m2=DataModule1->SQLCrystalData->FieldByName("fRr")->AsFloat;
+
+                                                           }
+                                                          if (DataModule1->SQLCrystalData->FieldByName("fRr")->AsFloat>m1){
+                                                               m1=DataModule1->SQLCrystalData->FieldByName("fRr")->AsFloat;
+
+                                                           }
+
+
+                                                  break;
+                                               }
+                                              DataModule1->ProfileData1->Next();
+                                              }
+                                             DataModule1->SQLCrystalData->Next();
+                                            }
+
+        }
+        SEdit1->AsFloat=m1/m2;
+        ResultForm->ResultGrid->Cells[Nar[16]][i+1]=SEdit1->Text;
+                if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                if (DataModule1->SQLPostProcessData->FieldByName("fRmin")->AsFloat>-10000 & DataModule1->SQLPostProcessData->FieldByName("fRmin")->AsFloat<10000){
+                            DataModule1->SQLPSIData->FieldByName("R1R2")->AsString=ResultForm->ResultGrid->Cells[Nar[16]][i+1];
+                      }
+                 else {
+                   DataModule1->SQLPSIData->FieldByName("R1R2")->AsString="0";
+                 }
+                 }
+       double x,y,z;
+                if(DataModule1->SqlSpecification->FieldByName("RRmax")->AsString!="no"){
+                            x=DataModule1->SqlSpecification->FieldByName("RRmax")->AsFloat;
+                                        if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                    ResultForm->ResultGrid->Cells[Nar[16]][N+2]=x;
+                                         }
+                  }
+                if(DataModule1->SqlSpecification->FieldByName("RRmin")->AsString!="no"){
+                           y=DataModule1->SqlSpecification->FieldByName("RRmin")->AsFloat;
+                                        if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                    ResultForm->ResultGrid->Cells[Nar[16]][N+3]=y;
+                                           }
+                 }
+       z=StrToFloat(ResultForm->ResultGrid->Cells[Nar[16]][i+1]);
+
+               if(DataModule1->SqlSpecification->FieldByName("RRmax")->AsString!="no"){
+                           if(z>x){
+                                  // ResultForm->ResultGrid->Cells[Nar[14]][i+1]=ResultForm->ResultGrid->Cells[Nar[14]][i+1]+"+";
+                                   g=1;
+                              }
+                }
+              if(DataModule1->SqlSpecification->FieldByName("RRmin")->AsString!="no"){
+                         if(z<y){
+                                 // ResultForm->ResultGrid->Cells[Nar[14]][i+1]=ResultForm->ResultGrid->Cells[Nar[14]][i+1]+"-";
+                                  g=1;
+                          }
+              }
+  }
+
+ //****************************************************************************************************************************
+ AnsiString F1;
+F1="Select * from psidatatemp where psidatatemp.msk='"+NumberMForm->edtMSK->Text+"'";
+DataModule1->SQLPSIDataT->Active=false;
+DataModule1->SQLPSIDataT->SQL->Clear();
+DataModule1->SQLPSIDataT->SQL->Add(F1);
+DataModule1->SQLPSIDataT->Active=true;
+
+Status2="Good";
+//Номер**********************************************************************
+ if(DataModule1->SqlSpecification->FieldByName("Snumber")->AsString=="True"){
+
+    ResultForm->ResultGrid->Cells[Nar[2]][i+1]=DataModule1->NumberCurrent->FieldByName("SNumber")->AsString;
+            if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                DataModule1->SQLPSIData->FieldByName("N")->AsString=ResultForm->ResultGrid->Cells[Nar[2]][i+1];
+
+               }
+  }
+
+ //ТЧХ и точность настройки******************************************************************************
+
+                        double FFd;
+                        DataModule1->SQLSetupData->First();
+                        DataModule1->SQLCrystalData->First();
+                                             for(int j=0;j<Nt;j++){   //for1{
+
+                                                    if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                       DataModule1->SQLPSIDataT->Append();   //if 9 {
+                                                     if (DataModule1->SqlSpecification->FieldByName("TCH_Interval_Type")->AsString=="По интервалу обработки"){           //if 5 {
+                                                        if(DataModule1->SQLSetupData->FieldByName("fSetTemperature")->AsFloat>=A & DataModule1->SQLSetupData->FieldByName("fSetTemperature")->AsFloat<=B){ //if 4 {
+                                                              //DataModule1->SQLPSIDataT->Append();
+                                                              DataModule1->SQLPSIDataT->FieldByName("MSK")->AsString=NumberMForm->edtMSK->Text;
+                                                              DataModule1->SQLPSIDataT->FieldByName("MSK-M")->AsString=NumberMForm->edtM->Text;
+                                                              DataModule1->SQLPSIDataT->FieldByName("Measure_ID")->AsString=Measure_ID;
+                                                              DataModule1->SQLPSIDataT->FieldByName("File")->AsString=NumberMForm->edtFile->Text;
+                                                              DataModule1->SQLPSIDataT->FieldByName("N")->AsString=ResultForm->ResultGrid->Cells[Nar[2]][i+1];
+                                                              if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsString=="1E30"){//if1{
+
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("F")->AsString=0;
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("R")->AsString=0;
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("C0")->AsString=0;
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("Cq")->AsString=0;
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("L")->AsString=0;
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("Status")->AsString="Fail";
+                                                                                     Status2="BAD";
+                                                                                     }  //if1}
+                                                              else {   //else1 {
+                                                                     DataModule1->SQLPSIDataT->FieldByName("F")->AsString=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsString;
+                                                                     DataModule1->SQLPSIDataT->FieldByName("R")->AsString=DataModule1->SQLCrystalData->FieldByName("fRr")->AsString;
+                                                                     DataModule1->SQLPSIDataT->FieldByName("C0")->AsString=DataModule1->SQLCrystalData->FieldByName("fC0")->AsString;
+                                                                     DataModule1->SQLPSIDataT->FieldByName("Cq")->AsString=DataModule1->SQLCrystalData->FieldByName("fC1")->AsString;
+                                                                     DataModule1->SQLPSIDataT->FieldByName("L")->AsString=DataModule1->SQLCrystalData->FieldByName("fL")->AsString;
+                                                                     DataModule1->SQLPSIDataT->FieldByName("Mono")->AsString=DataModule1->SQLCrystalData->FieldByName("fErrorPPM")->AsString;
+                                                                     DataModule1->SQLPSIDataT->FieldByName("pos")->AsString=ResultForm->ResultGrid->Cells[Nar[1]][i+1];
+                                                                     DataModule1->SQLPSIDataT->FieldByName("Temp")->AsString=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsString;
+                                                                     DataModule1->SQLPSIDataT->FieldByName("Status")->AsString="Pass";
+                                                              }    //else1 }
+                                                                    if (DataModule1->SQLSetupData->FieldByName("strQCStatus2")->AsString==" Dead"){   //if2 {
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("FL")->AsString=0;
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("Rb")->AsString=0;
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("Q")->AsString=0;
+                                                                                     if (Measure_Type=="Saunders (FR+FL)" || DataModule1->SqlSpecification->FieldByName("Q")->AsString=="True"){ //if3 {
+                                                                                    DataModule1->SQLPSIDataT->FieldByName("Status")->AsString="Fail";
+                                                                                    Status2="BAD";
+                                                                                    }    //if3 }
+                                                                           }   //if2}
+
+                                                                        else {   //else 2 {
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("FL")->AsString=DataModule1->SQLSetupData->FieldByName("fValue1")->AsString;
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("Rb")->AsString=DataModule1->SQLSetupData->FieldByName("fValue3")->AsString;
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("Q")->AsString=DataModule1->SQLSetupData->FieldByName("fValue2")->AsString;
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("SpurR")->AsString=DataModule1->SQLSetupData->FieldByName("fValue4")->AsString;
+                                                                                      double Sp;
+                                                                                          if (DataModule1->SQLSetupData->FieldByName("fValue4")->AsFloat>1E30){
+                                                                                            Sp=0;
+                                                                                          }
+                                                                                          else {
+                                                                                           Sp=20*log10(DataModule1->SQLPSIDataT->FieldByName("R")->AsFloat/DataModule1->SQLPSIDataT->FieldByName("SpurR")->AsFloat);
+                                                                                              }
+                                                                                      DataModule1->SQLPSIDataT->FieldByName("Spur")->AsString=FloatToStr(Sp);
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("pos")->AsString=ResultForm->ResultGrid->Cells[Nar[1]][i+1];
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("Temp")->AsString=DataModule1->SQLSetupData->FieldByName("fSetTemperature")->AsString;
+
+                                                                              }    //else 2 }
+
+                                                              //DataModule1->SQLPSIDataT->Post();
+                                                                      }     //if 4}
+                                                                      }     //if 5 }
+                                                             else {    //else 3 {
+
+                                                              DataModule1->SQLPSIDataT->FieldByName("MSK")->AsString=NumberMForm->edtMSK->Text;
+                                                              DataModule1->SQLPSIDataT->FieldByName("MSK-M")->AsString=NumberMForm->edtM->Text;
+                                                              DataModule1->SQLPSIDataT->FieldByName("Measure_ID")->AsString=Measure_ID;
+                                                              DataModule1->SQLPSIDataT->FieldByName("File")->AsString=NumberMForm->edtFile->Text;
+                                                              DataModule1->SQLPSIDataT->FieldByName("N")->AsString=ResultForm->ResultGrid->Cells[Nar[2]][i+1];
+                                                              if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsString=="1E30"){    // if6{
+
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("F")->AsString=0;
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("R")->AsString=0;
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("C0")->AsString=0;
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("Cq")->AsString=0;
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("L")->AsString=0;
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("Status")->AsString="Fail";
+                                                                                     Status2="BAD";
+                                                                                     }   //if 6}
+                                                              else {  //else4{
+                                                                     DataModule1->SQLPSIDataT->FieldByName("F")->AsString=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsString;
+                                                                     DataModule1->SQLPSIDataT->FieldByName("R")->AsString=DataModule1->SQLCrystalData->FieldByName("fRr")->AsString;
+                                                                     DataModule1->SQLPSIDataT->FieldByName("C0")->AsString=DataModule1->SQLCrystalData->FieldByName("fC0")->AsString;
+                                                                     DataModule1->SQLPSIDataT->FieldByName("Cq")->AsString=DataModule1->SQLCrystalData->FieldByName("fC1")->AsString;
+                                                                     DataModule1->SQLPSIDataT->FieldByName("L")->AsString=DataModule1->SQLCrystalData->FieldByName("fL")->AsString;
+                                                                     DataModule1->SQLPSIDataT->FieldByName("Mono")->AsString=DataModule1->SQLCrystalData->FieldByName("fErrorPPM")->AsString;
+                                                                     DataModule1->SQLPSIDataT->FieldByName("pos")->AsString=ResultForm->ResultGrid->Cells[Nar[1]][i+1];
+                                                                     DataModule1->SQLPSIDataT->FieldByName("Temp")->AsString=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsString;
+                                                                     DataModule1->SQLPSIDataT->FieldByName("Status")->AsString="Pass";
+                                                              }    //else 4}
+                                                                    if (DataModule1->SQLSetupData->FieldByName("strQCStatus2")->AsString==" Dead"){      //if7{
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("FL")->AsString=0;
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("Rb")->AsString=0;
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("Q")->AsString=0;
+                                                                                     if (Measure_Type=="Saunders (FR+FL)" || DataModule1->SqlSpecification->FieldByName("Q")->AsString=="True"){  //if8{
+                                                                                    DataModule1->SQLPSIDataT->FieldByName("Status")->AsString="Fail";
+                                                                                    Status2="BAD";
+                                                                                    }
+                                                                                    DataModule1->SQLPSIDataT->FieldByName("SpurR")->AsString=DataModule1->SQLSetupData->FieldByName("fValue8")->AsString;
+                                                                                      double Sp;
+                                                                                          if (DataModule1->SQLSetupData->FieldByName("fValue4")->AsString>="1E30"){
+                                                                                            Sp=0;
+                                                                                          }
+                                                                                          else {
+                                                                                           Sp=20*log10(DataModule1->SQLPSIDataT->FieldByName("R")->AsFloat/DataModule1->SQLPSIDataT->FieldByName("SpurR")->AsFloat);
+                                                                                              }
+                                                                                      DataModule1->SQLPSIDataT->FieldByName("Spur")->AsString=FloatToStr(Sp);
+                                                                                      //if8}
+                                                                           }  //if7}
+
+                                                                        else {    //else 5{
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("FL")->AsString=DataModule1->SQLSetupData->FieldByName("fValue1")->AsString;
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("Rb")->AsString=DataModule1->SQLSetupData->FieldByName("fValue3")->AsString;
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("Q")->AsString=DataModule1->SQLSetupData->FieldByName("fValue2")->AsString;
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("SpurR")->AsString=DataModule1->SQLSetupData->FieldByName("fValue4")->AsString;
+                                                                                      double Sp;
+                                                                                          if (DataModule1->SQLSetupData->FieldByName("fValue4")->AsString>="1E30"){
+                                                                                            Sp=0;
+                                                                                          }
+                                                                                          else {
+                                                                                           if (DataModule1->SQLPSIDataT->FieldByName("R")->AsFloat>0 & DataModule1->SQLPSIDataT->FieldByName("SpurR")->AsFloat>0){
+                                                                                                Sp=20*log10(DataModule1->SQLPSIDataT->FieldByName("R")->AsFloat/DataModule1->SQLPSIDataT->FieldByName("SpurR")->AsFloat);
+                                                                                                }
+                                                                                                else {
+                                                                                                 Sp=0;
+                                                                                                }
+                                                                                              }
+                                                                                      DataModule1->SQLPSIDataT->FieldByName("Spur")->AsString=FloatToStr(Sp);
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("pos")->AsString=ResultForm->ResultGrid->Cells[Nar[1]][i+1];
+                                                                                     DataModule1->SQLPSIDataT->FieldByName("Temp")->AsString=DataModule1->SQLSetupData->FieldByName("fSetTemperature")->AsString;
+
+                                                                              }   //else5}
+
+
+
+                                                             }    //else4}
+                                                     }    //if9}
+
+
+                                                   DataModule1->SQLPSIData->FieldByName("Status2")->AsString=Status2;
+                                                 DataModule1->NumberCurrent->Filtered=false;
+                                                 double   Totn;
+
+                                                  if (DataModule1->SqlSpecification->FieldByName("Tint")->AsString=="False"){ //30{
+                                                       Totn=DataModule1->SqlSpecification->FieldByName("Tnastr")->AsFloat;
+                                                       if(DataModule1->SqlSpecification->FieldByName("Tnastr")->AsFloat==DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat){ //29{
+                                                                    if (Measure_Type=="Saunders (FR+FL)" | Measure_Type=="Saunders(FL)"){  //if 10{
+                                                                       SEdit1->AsFloat=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat;
+
+                                                                        } //if10}
+                                                                      if (Measure_Type=="Saunders(FR)"){  //if11{
+                                                                       SEdit1->AsFloat=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat;
+
+                                                                        }   //if11}
+
+                                                                   if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){   //if 12{
+                                                                               if (Measure_Type=="Saunders (FR+FL)" || Measure_Type=="Saunders(FL)"){  //if 13{
+                                                                                  if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){  //if 14{
+                                                                                      DataModule1->SQLPSIData->FieldByName("Fn")->AsString=DataModule1->SQLSetupData->FieldByName("fValue1")->AsString;
+                                                                                      DataModule1->SQLPSIDataT->FieldByName("Fn")->AsString=DataModule1->SQLSetupData->FieldByName("fValue1")->AsString;
+                                                                                      Fnom=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat;
+                                                                                    } // 14}
+                                                                               }  // 13}
+                                                                               if (Measure_Type=="Saunders(FR)"){  // 15{
+
+                                                                                       if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){ //16{
+                                                                                                        DataModule1->SQLPSIData->FieldByName("Fn")->AsString=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsString;
+                                                                                                        DataModule1->SQLPSIDataT->FieldByName("Fn")->AsString=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsString;
+                                                                                                        Fnom=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat;
+                                                                                          }   //16}
+
+                                                                                      }   //15}
+
+
+
+                                                                        }    //12}
+                                                                        else if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){     //17{
+                                                                               if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){   //18{
+                                                                                                        DataModule1->SQLPSIData->FieldByName("Fn")->AsString=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsString;
+                                                                                                        DataModule1->SQLPSIDataT->FieldByName("Fn")->AsString=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsString;
+                                                                                                        Fnom=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat;
+                                                                                          }    //18}
+
+                                                                        }     //17}
+                                                                         else if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){   //19{
+                                                                               if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){   //20{
+                                                                                      DataModule1->SQLPSIData->FieldByName("Fn")->AsString=DataModule1->SQLSetupData->FieldByName("fValue1")->AsString;
+                                                                                      DataModule1->SQLPSIDataT->FieldByName("Fn")->AsString=DataModule1->SQLSetupData->FieldByName("fValue1")->AsString;
+                                                                                      Fnom=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat;
+                                                                                    }      //20}
+
+                                                                        }    //19}
+                                                                         else if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){  //21{
+                                                                               if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){    //22{
+                                                                                      DataModule1->SQLPSIData->FieldByName("Fn")->AsString=DataModule1->SQLSetupData->FieldByName("fValue1")->AsString;
+                                                                                      DataModule1->SQLPSIDataT->FieldByName("Fn")->AsString=DataModule1->SQLSetupData->FieldByName("fValue1")->AsString;
+                                                                                      Fnom=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat;
+                                                                                    }    //22}
+
+                                                                        }    //21}
+                                                                         FFd=SEdit1->AsFloat;
+                                                                     if (DataModule1->SqlSpecification->FieldByName("Ftgk_Measure")->AsString!="True"){   //23{
+                                                                       ResultForm->ResultGrid->Cells[Nar[3]][i+1]=SEdit1->Text;
+                                                                       }   //23}
+                                                                       else {         //24{
+                                                                            double Fk=SEdit1->AsFloat;
+                                                                            double Ftgk;
+                                                                            double Qavg;
+                                                                            double Favg;
+                                                                            double K,Cn,qR1,qC0,qCq,qNominal,qQ;
+                                                                            qR1=DataModule1->SQLPSIDataT->FieldByName("R")->AsFloat;
+                                                                            qC0=DataModule1->SQLPSIDataT->FieldByName("C0")->AsFloat;
+                                                                            qCq=DataModule1->SQLPSIDataT->FieldByName("Cq")->AsFloat;
+                                                                            qQ=DataModule1->SQLPSIDataT->FieldByName("Q")->AsFloat;
+                                                                            qNominal=StrToFloat(DataModule1->SqlSpecification->FieldByName("Nominal")->AsString);
+                                                                            double qNominal1=qNominal*1000000;
+                                                                            Qavg=DataModule1->SqlSpecification->FieldByName("Qavg")->AsFloat;
+                                                                            Favg=DataModule1->SqlSpecification->FieldByName("Favg")->AsFloat;
+                                                                            K=DataModule1->SqlSpecification->FieldByName("K")->AsFloat;
+                                                                            Cn=DataModule1->SqlSpecification->FieldByName("Loadvalue")->AsFloat*pow(10,-12);
+                                                                            if (Cn==0){
+                                                                            Ftgk=Fk-(Favg+(Qavg/DataModule1->SQLSetupData->FieldByName("fValue2")->AsFloat)*K);
+                                                                            }
+                                                                            else {
+                                                                            double ffgk=Fk*qNominal+qNominal1;
+                                                                            double gghh=(qCq/(2*(qC0+Cn)))*ffgk;
+                                                                            double gghh1=gghh/qNominal;
+                                                                            Ftgk=Fk+gghh1-(Favg+(Qavg/DataModule1->SQLSetupData->FieldByName("fValue2")->AsFloat)*K);
+                                                                             
+                                                                            }
+
+                                                                            SEdit1->AsFloat=Ftgk;
+                                                                            ResultForm->ResultGrid->Cells[Nar[3]][i+1]=SEdit1->Text;
+                                                                            if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){  //25{
+                                                                                              if (FFd<100000){       //26{
+                                                                                                           DataModule1->SQLPSIData->FieldByName("Ftgk")->AsString=Ftgk*DataModule1->SqlSpecification->FieldByName("Nominal")->AsFloat;
+
+                                                                                                }       //26}
+
+                                                                                     }     //25}
+
+
+                                                                       }   //24}
+                                                                                 SEdit1->AsFloat=FFd;
+                                                                                 if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){ //27{
+                                                                                              if (FFd<100000){           //28{
+                                                                                                          DataModule1->SQLPSIData->FieldByName("F")->AsString=FloatToStr(SEdit1->AsFloat);
+
+                                                                                                }       //28}
+
+                                                                                     }    //27}
+                                                                       
+                                                                 }  //29}
+                                                    } // 30}
+                                                    else {  //31{
+                                                          if(DataModule1->SqlSpecification->FieldByName("Tnastr")->AsFloat==DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat){ //29{
+                                                                    if (Measure_Type=="Saunders (FR+FL)" | Measure_Type=="Saunders(FL)"){  //if 10{
+                                                                       SEdit1->AsFloat=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat;
+
+                                                                        } //if10}
+                                                                      if (Measure_Type=="Saunders(FR)"){  //if11{
+                                                                       SEdit1->AsFloat=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat;
+
+                                                                        }   //if11}
+                                                                          FFd=SEdit1->AsFloat;
+                                                                     if (DataModule1->SqlSpecification->FieldByName("Ftgk_Measure")->AsString=="False"){   //23{
+                                                                       ResultForm->ResultGrid->Cells[Nar[3]][i+1]=SEdit1->Text;
+                                                                       }   //23}
+                                                                       else {         //24{
+                                                                            double Fk=SEdit1->AsFloat;
+                                                                            double Ftgk;
+                                                                            double Qavg;
+                                                                            double Favg;
+                                                                            double K;
+                                                                            Qavg=DataModule1->SqlSpecification->FieldByName("Qavg")->AsFloat;
+                                                                            Favg=DataModule1->SqlSpecification->FieldByName("Favg")->AsFloat;
+                                                                            K=DataModule1->SqlSpecification->FieldByName("K")->AsFloat;
+                                                                            Ftgk=Fk-(Favg+(Qavg/DataModule1->SQLSetupData->FieldByName("fValue2")->AsFloat)*K);
+                                                                            SEdit1->AsFloat=Ftgk;
+                                                                            ResultForm->ResultGrid->Cells[Nar[3]][i+1]=SEdit1->Text;
+                                                                            if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){  //25{
+                                                                                              if (FFd<100000){       //26{
+                                                                                                           DataModule1->SQLPSIData->FieldByName("Ftgk")->AsString=Ftgk*DataModule1->SqlSpecification->FieldByName("Nominal")->AsFloat;
+
+                                                                                                }       //26}
+
+                                                                                     }     //25}
+
+
+                                                                       }   //24}
+                                                                                 SEdit1->AsFloat=FFd;
+                                                                                 if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){ //27{
+                                                                                              if (FFd<100000){           //28{
+                                                                                                          DataModule1->SQLPSIData->FieldByName("F")->AsString=FloatToStr(SEdit1->AsFloat);
+
+                                                                                                }       //28}
+
+                                                                                     }    //27}
+                                                                   }
+                                                        Totn=DataModule1->SqlSpecification->FieldByName("TintValue")->AsFloat;
+                                                        if(Totn==DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat){ //29{
+                                                                  
+
+                                                                   if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){   //if 12{
+                                                                               if (Measure_Type=="Saunders (FR+FL)" || Measure_Type=="Saunders(FL)"){  //if 13{
+                                                                                  if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){  //if 14{
+                                                                                      DataModule1->SQLPSIData->FieldByName("Fn")->AsString=DataModule1->SQLSetupData->FieldByName("fValue1")->AsString;
+                                                                                      DataModule1->SQLPSIDataT->FieldByName("Fn")->AsString=DataModule1->SQLSetupData->FieldByName("fValue1")->AsString;
+                                                                                      Fnom=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat;
+                                                                                    } // 14}
+                                                                               }  // 13}
+                                                                               if (Measure_Type=="Saunders(FR)"){  // 15{
+
+                                                                                       if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){ //16{
+                                                                                                        DataModule1->SQLPSIData->FieldByName("Fn")->AsString=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsString;
+                                                                                                        DataModule1->SQLPSIDataT->FieldByName("Fn")->AsString=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsString;
+                                                                                                        Fnom=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat;
+                                                                                          }   //16}
+
+                                                                                      }   //15}
+
+
+
+                                                                        }    //12}
+                                                                        else if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){     //17{
+                                                                               if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){   //18{
+                                                                                                        DataModule1->SQLPSIData->FieldByName("Fn")->AsString=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsString;
+                                                                                                        DataModule1->SQLPSIDataT->FieldByName("Fn")->AsString=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsString;
+                                                                                                        Fnom=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat;
+                                                                                          }    //18}
+
+                                                                        }     //17}
+                                                                         else if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){   //19{
+                                                                               if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){   //20{
+                                                                                      DataModule1->SQLPSIData->FieldByName("Fn")->AsString=DataModule1->SQLSetupData->FieldByName("fValue1")->AsString;
+                                                                                      DataModule1->SQLPSIDataT->FieldByName("Fn")->AsString=DataModule1->SQLSetupData->FieldByName("fValue1")->AsString;
+                                                                                      Fnom=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat;
+                                                                                    }      //20}
+
+                                                                        }    //19}
+                                                                         else if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){  //21{
+                                                                               if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){    //22{
+                                                                                      DataModule1->SQLPSIData->FieldByName("Fn")->AsString=DataModule1->SQLSetupData->FieldByName("fValue1")->AsString;
+                                                                                      DataModule1->SQLPSIDataT->FieldByName("Fn")->AsString=DataModule1->SQLSetupData->FieldByName("fValue1")->AsString;
+                                                                                      Fnom=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat;
+                                                                                    }    //22}
+
+                                                                        }    //21}
+
+                                                                       
+                                                                 }  //29}
+                                                    }       //31}
+
+                                               DataModule1->SQLPSIDataT->Post();
+                                               DataModule1->SQLSetupData->Next();
+                                               DataModule1->SQLCrystalData->Next();
+                                           }    //for 1 }
+     if(DataModule1->SqlSpecification->FieldByName("Ft")->AsString=="True"){
+    double x,y,z;
+    if(DataModule1->SqlSpecification->FieldByName("Fmax")->AsString!="no"){
+               x=DataModule1->SqlSpecification->FieldByName("Fmax")->AsFloat;
+    if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[Nar[3]][N+2]=x;
+   }
+   }
+
+    if(DataModule1->SqlSpecification->FieldByName("Fmax")->AsString!="no"){
+   y=DataModule1->SqlSpecification->FieldByName("Fmin")->AsFloat;
+    if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[Nar[3]][N+3]=y;
+  }
+   }
+    AnsiString HH;
+  HH=ResultForm->ResultGrid->Cells[Nar[3]][i+1];
+  if (HH!=""){
+  z=StrToFloat(ResultForm->ResultGrid->Cells[Nar[3]][i+1]); }
+  else {z=0;}
+
+      if(DataModule1->SqlSpecification->FieldByName("Fmax")->AsString!="no"){
+            if(z>x){
+                  ResultForm->ResultGrid->Cells[Nar[3]][i+1]=ResultForm->ResultGrid->Cells[Nar[3]][i+1]+"+";
+                    g=1;
+
+                    }
+               if (DataModule1->SqlSpecification->FieldByName("DopuskF")->AsFloat>0 & DataModule1->SqlSpecification->FieldByName("DopuskF_P")->AsFloat==0){
+                                     if(z>DataModule1->SqlSpecification->FieldByName("Fmax")->AsFloat-DataModule1->SqlSpecification->FieldByName("DopuskF")->AsFloat){
+                                                            if (g!=1){
+                                                                     g=2;
+                                                                        }
+
+                                                                    }
+
+                                                              }
+                                                              else {
+                                                  if(z>DataModule1->SqlSpecification->FieldByName("Fmax")->AsFloat-(DataModule1->SqlSpecification->FieldByName("Fmax")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskF_P")->AsFloat/100)){
+                                                             if (g!=1){
+                                                                    g=2;
+                                                                      }
+
+                                                            }
+
+                                        }
+
+      }
+
+
+
+       if(DataModule1->SqlSpecification->FieldByName("Fmin")->AsString!="no"){
+            if(z<y){
+                   ResultForm->ResultGrid->Cells[Nar[3]][i+1]=ResultForm->ResultGrid->Cells[Nar[3]][i+1]+"-";
+                    g=1;}
+                if (DataModule1->SqlSpecification->FieldByName("DopuskF")->AsFloat>0 & DataModule1->SqlSpecification->FieldByName("DopuskF_P")->AsFloat==0){
+                                     if(z<DataModule1->SqlSpecification->FieldByName("Fmin")->AsFloat+DataModule1->SqlSpecification->FieldByName("DopuskF")->AsFloat){
+                                                            if (g!=1){
+                                                                     g=2;
+                                                                        }
+
+                                                                    }
+
+                                                              }
+                                                              else {
+                                                  if(z<DataModule1->SqlSpecification->FieldByName("Fmin")->AsFloat+(DataModule1->SqlSpecification->FieldByName("Fmin")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskF_P")->AsFloat/100)){
+                                                             if (g!=1){
+                                                                    g=2;
+                                                                      }
+
+                                                            }
+
+                                        }
+
+
+
+
+        }
+  }
+
+
+
+ //***********************Чатоста на температуре FT*******************************************************************************************************
+  //if main
+  if (DataModule1->SqlSpecification->FieldByName("FTx")->AsString=="True" ||  DataModule1->SqlSpecification->FieldByName("Ft1")->AsString=="True" || DataModule1->SqlSpecification->FieldByName("Ft2")->AsString=="True" || DataModule1->SqlSpecification->FieldByName("Ft3")->AsString=="True" || DataModule1->SqlSpecification->FieldByName("Ft4")->AsString=="True"){
+
+                                 int kl1=0;
+                                 int kl2=0;
+                                 int kl3=0;
+                                 int kl4=0;
+                                 int kl5=0;
+                                              DataModule1->SQLSetupData->First();
+                                              DataModule1->SQLCrystalData->First();
+                                for (int j=0;j<Nt;j++){
+                                      if (DataModule1->SqlSpecification->FieldByName("FTx")->AsString=="True"){
+                                            if (DataModule1->SqlSpecification->FieldByName("FTxt")->AsString==DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat){
+                                              kl1++;
+                                              if (kl1>1){
+                                                             Fs=(DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat+Fs)/2;
+                                                             FL=(DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat+FL)/2;
+
+
+                                              }
+                                              else {
+                                                             Fs=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat;
+                                                             FL=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat;
+                                                     }
+                                                       if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                            if (Measure_Type=="Saunders(FR)" || Measure_Type=="Saunders (FR+FL)"){
+                                                               FT=Fs-Fnom;
+                                                               }
+                                                            else if (Measure_Type=="Saunders(FL)"){
+                                                              FT=FL-Fnom;
+                                                              }
+                                                           }
+                                                         else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                                                     FT=Fs-Fnom;
+
+                                                                         }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                                                         FT=FL-Fnom;
+
+                                                                                  }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                                                         FT=FL-Fnom;
+
+                                                        }
+
+                                                            ResultForm->ResultGrid->Cells[Nar[33]][i+1]=FloatToStrF(FT,ffFixed,5,2);
+                                                              if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                          if (FT<1000 & FT>-1000){
+                                                                                             DataModule1->SQLPSIData->FieldByName("FT")->AsString=FT;
+                                                                                             }
+                                                                                             else {
+                                                                                                   DataModule1->SQLPSIData->FieldByName("FT")->AsString=0;
+
+                                                                                                   }
+                                                                           }
+                                                                if(DataModule1->SqlSpecification->FieldByName("FTmax")->AsString!="no"){
+                                                                             if(FT>DataModule1->SqlSpecification->FieldByName("FTmax")->AsFloat){
+                                                                                     g=1;
+                                                                                     CounterFT++;
+                                                                                     }
+                                                                }
+                                          if(DataModule1->SqlSpecification->FieldByName("FTmin")->AsString!="no"){
+                                                                             if(FT<DataModule1->SqlSpecification->FieldByName("FTmin")->AsFloat){
+                                                                                     g=1;
+                                                                                     CounterFT++;
+                                                                                     }
+                                                                }
+                                                              if(FT>MaxFT){
+                                                                   MaxFT=FT;
+                                                                   }
+                                                              if(FT<MinFT){
+                                                                    MinFT=FT;
+                                                                    }
+                                                              SumFT=SumFT+FT;
+
+
+
+                                                }//IF
+                                                }
+  //-----------------------------------------------------------------------------FT1-----------------------------------------------------
+                             if (DataModule1->SqlSpecification->FieldByName("Ft1")->AsString=="True"){
+                                               if (DataModule1->SqlSpecification->FieldByName("Ft1t")->AsString==DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat){
+                                               kl2++;
+                                                 if (kl2>1){
+                                                            Fs=(DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat+Fs)/2;
+                                                             FL=(DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat+FL)/2;
+
+
+
+                                              }
+                                              else {
+                                                            Fs=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat;
+                                                             FL=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat;
+                                                     }
+                                                          if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                            if (Measure_Type=="Saunders(FR)" || Measure_Type=="Saunders (FR+FL)"){
+                                                               FT1=Fs-Fnom;
+                                                               }
+                                                            else if (Measure_Type=="Saunders(FL)"){
+                                                              FT1=FL-Fnom;
+                                                              }
+                                                           }
+                                                         else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                                                     FT1=Fs-Fnom;
+
+                                                                         }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                                                         FT1=FL-Fnom;
+
+                                                                                  }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                                                         FT1=FL-Fnom;
+
+                                                        }
+                                                            ResultForm->ResultGrid->Cells[Nar[34]][i+1]=FloatToStrF(FT1,ffFixed,5,2);
+                                                              if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                          if (FT1<1000 & FT1>-1000){
+                                                                                             DataModule1->SQLPSIData->FieldByName("Ft1")->AsString=FT1;
+                                                                                             }
+                                                                                             else {
+                                                                                                   DataModule1->SQLPSIData->FieldByName("Ft1")->AsString=0;
+
+                                                                                                   }
+                                                                           }
+                                                                if(DataModule1->SqlSpecification->FieldByName("Ft1max")->AsString!="no"){
+                                                                             if(FT1>DataModule1->SqlSpecification->FieldByName("Ft1max")->AsFloat){
+                                                                                     g=1;
+                                                                                     CounterFT1++;
+                                                                                     }
+                                                                }
+                                          if(DataModule1->SqlSpecification->FieldByName("Ft1min")->AsString!="no"){
+                                                                             if(FT1<DataModule1->SqlSpecification->FieldByName("Ft1min")->AsFloat){
+                                                                                     g=1;
+                                                                                     CounterFT1++;
+                                                                                     }
+                                                                }
+                                                              if(FT1>MaxFT1){
+                                                                   MaxFT1=FT1;
+                                                                   }
+                                                              if(FT1<MinFT1){
+                                                                    MinFT1=FT1;
+                                                                    }
+                                                              SumFT1=SumFT1+FT1;
+
+                                           } //IF
+                                           }
+
+                 //---------------------------------------------------Ft2--------------------------------------------------------------------------------
+                          if (DataModule1->SqlSpecification->FieldByName("Ft2")->AsString=="True"){
+                             if (DataModule1->SqlSpecification->FieldByName("Ft2t")->AsString==DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat){
+                             kl3++;
+                                                            if (kl3>1){
+                                                             Fs=(DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat+Fs)/2;
+                                                             FL=(DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat+FL)/2;
+
+
+                                              }
+                                              else {
+                                                              Fs=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat;
+                                                             FL=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat;
+                                                     }
+                                                          if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                            if (Measure_Type=="Saunders(FR)" || Measure_Type=="Saunders (FR+FL)"){
+                                                               FT2=Fs-Fnom;
+                                                               }
+                                                            else if (Measure_Type=="Saunders(FL)"){
+                                                              FT2=FL-Fnom;
+                                                              }
+                                                           }
+                                                         else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                                                     FT2=Fs-Fnom;
+
+                                                                         }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                                                         FT2=FL-Fnom;
+
+                                                                                  }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                                                         FT2=FL-Fnom;
+
+                                                        }
+                                                            ResultForm->ResultGrid->Cells[Nar[35]][i+1]=FloatToStrF(FT2,ffFixed,5,2);
+                                                              if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                          if (FT2<1000 & FT2>-1000){
+                                                                                             DataModule1->SQLPSIData->FieldByName("Ft2")->AsString=FT2;
+                                                                                             }
+                                                                                             else {
+                                                                                                   DataModule1->SQLPSIData->FieldByName("Ft2")->AsString=0;
+
+                                                                                                   }
+                                                                           }
+                                                                if(DataModule1->SqlSpecification->FieldByName("Ft2max")->AsString!="no"){
+                                                                             if(FT2>DataModule1->SqlSpecification->FieldByName("Ft2max")->AsFloat){
+                                                                                     g=1;
+                                                                                     CounterFT2++;
+                                                                                     }
+                                                                }
+                                          if(DataModule1->SqlSpecification->FieldByName("Ft2min")->AsString!="no"){
+                                                                             if(FT2<DataModule1->SqlSpecification->FieldByName("Ft2min")->AsFloat){
+                                                                                     g=1;
+                                                                                     CounterFT2++;
+                                                                                     }
+                                                                }
+                                                              if(FT2>MaxFT2){
+                                                                   MaxFT2=FT2;
+                                                                   }
+                                                              if(FT2<MinFT2){
+                                                                    MinFT2=FT2;
+                                                                    }
+                                                              SumFT2=SumFT2+FT2;
+
+                                           } //IF
+                                           }
+          //-----------------------------------------------------------------------------------Ft3---------------------------------------------------------
+              if (DataModule1->SqlSpecification->FieldByName("Ft3")->AsString=="True"){
+                             if (DataModule1->SqlSpecification->FieldByName("Ft3t")->AsString==DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat){
+                             kl4++;
+                                                             if (kl4>1){
+                                                             Fs=(DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat+Fs)/2;
+                                                             FL=(DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat+FL)/2;
+
+
+                                              }
+                                              else {
+                                                              Fs=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat;
+                                                             FL=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat;
+                                                     }
+                                                         if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                            if (Measure_Type=="Saunders(FR)" || Measure_Type=="Saunders (FR+FL)"){
+                                                               FT3=Fs-Fnom;
+                                                               }
+                                                            else if (Measure_Type=="Saunders(FL)"){
+                                                              FT3=FL-Fnom;
+                                                              }
+                                                           }
+                                                         else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                                                     FT3=Fs-Fnom;
+
+                                                                         }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                                                         FT3=FL-Fnom;
+
+                                                                                  }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                                                         FT3=FL-Fnom;
+
+                                                        }
+                                                            ResultForm->ResultGrid->Cells[Nar[36]][i+1]=FloatToStrF(FT3,ffFixed,5,2);
+                                                              if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                          if (FT3<1000 & FT3>-1000){
+                                                                                             DataModule1->SQLPSIData->FieldByName("Ft3")->AsString=FT3;
+                                                                                             }
+                                                                                             else {
+                                                                                                   DataModule1->SQLPSIData->FieldByName("Ft3")->AsString=0;
+
+                                                                                                   }
+                                                                           }
+                                                                if(DataModule1->SqlSpecification->FieldByName("Ft3max")->AsString!="no"){
+                                                                             if(FT3>DataModule1->SqlSpecification->FieldByName("Ft3max")->AsFloat){
+                                                                                     g=1;
+                                                                                     CounterFT3++;
+                                                                                     }
+                                                                }
+                                          if(DataModule1->SqlSpecification->FieldByName("Ft3min")->AsString!="no"){
+                                                                             if(FT3<DataModule1->SqlSpecification->FieldByName("Ft3min")->AsFloat){
+                                                                                     g=1;
+                                                                                     CounterFT3++;
+                                                                                     }
+                                                                }
+                                                              if(FT3>MaxFT3){
+                                                                   MaxFT3=FT3;
+                                                                   }
+                                                              if(FT3<MinFT3){
+                                                                    MinFT3=FT3;
+                                                                    }
+                                                              SumFT3=SumFT3+FT3;
+
+                                           } //IF
+                                           }
+
+          //---------------------------------------------------------------------------Ft4----------------------------------------------------------------
+          if (DataModule1->SqlSpecification->FieldByName("Ft4")->AsString=="True"){
+                             if (DataModule1->SqlSpecification->FieldByName("Ft4t")->AsString==DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat){
+                             kl5++;
+                                                            if (kl5>1){
+                                                              Fs=(DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat+Fs)/2;
+                                                             FL=(DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat+FL)/2;
+
+
+                                              }
+                                              else {
+                                                              Fs=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat;
+                                                             FL=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat;
+                                                     }
+                                                         if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                            if (Measure_Type=="Saunders(FR)" || Measure_Type=="Saunders (FR+FL)"){
+                                                               FT4=Fs-Fnom;
+                                                               }
+                                                            else if (Measure_Type=="Saunders(FL)"){
+                                                              FT4=FL-Fnom;
+                                                              }
+                                                           }
+                                                         else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                                                     FT4=Fs-Fnom;
+
+                                                                         }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                                                         FT4=FL-Fnom;
+
+                                                                                  }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                                                         FT4=FL-Fnom;
+
+                                                        }
+                                                            ResultForm->ResultGrid->Cells[Nar[37]][i+1]=FloatToStrF(FT4,ffFixed,5,2);
+                                                              if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                          if (FT4<1000 & FT4>-1000){
+                                                                                             DataModule1->SQLPSIData->FieldByName("Ft4")->AsString=FT4;
+                                                                                             }
+                                                                                             else {
+                                                                                                   DataModule1->SQLPSIData->FieldByName("Ft4")->AsString=0;
+
+                                                                                                   }
+                                                                           }
+                                                                if(DataModule1->SqlSpecification->FieldByName("Ft4max")->AsString!="no"){
+                                                                             if(FT4>DataModule1->SqlSpecification->FieldByName("Ft4max")->AsFloat){
+                                                                                     g=1;
+                                                                                     CounterFT4++;
+                                                                                     }
+                                                                }
+                                          if(DataModule1->SqlSpecification->FieldByName("Ft4min")->AsString!="no"){
+                                                                             if(FT4<DataModule1->SqlSpecification->FieldByName("Ft4min")->AsFloat){
+                                                                                     g=1;
+                                                                                     CounterFT4++;
+                                                                                     }
+                                                                }
+                                                              if(FT4>MaxFT4){
+                                                                   MaxFT4=FT4;
+                                                                   }
+                                                              if(FT4<MinFT4){
+                                                                    MinFT4=FT4;
+                                                                    }
+                                                              SumFT4=SumFT4+FT4;
+
+                                           } //IF
+                                           }
+
+             DataModule1->SQLSetupData->Next();
+             DataModule1->SQLCrystalData->Next();
+           }           //for
+ }
+ //Максимальная частота***************************************************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("Fmx")->AsString=="True"){
+
+
+                      double FFmax,FF=0;
+     if (DataModule1->SqlSpecification->FieldByName("TCH_Interval_Type")->AsString=="По интервалу замера"){
+
+                    if(DataModule1->SQLPostProcessData->FieldByName("fFMax")->AsFloat>-10000 & DataModule1->SQLPostProcessData->FieldByName("fFMax")->AsFloat<10000){
+                             SEdit1->AsFloat=DataModule1->SQLPostProcessData->FieldByName("fFMax")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                             Fm1=fabs(SEdit1->AsFloat);
+                              }
+                      else {
+
+                         SEdit1->Text="NONE";
+                         DataModule1->SQLPSIData->FieldByName("Fmax")->AsString="0";
+                         g=1;
+                      }
+
+                  }
+
+       else {
+
+                                             DataModule1->ProfileData1->Active=true;
+                                            DataModule1->ProfileData1->First();
+                                            DataModule1->SQLCrystalData->First();
+                                            DataModule1->SQLSetupData->First();
+                                             for (int j=0; j<DataModule1->SQLCrystalData->RecordCount; j++){
+
+                                                  if (DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat==DataModule1->ProfileData1->FieldByName("Temperature")->AsFloat){
+                                                            if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                                     if (Measure_Type=="Saunders(FL)"){
+                                                                                  if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                                      FFmax=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                    }
+                                                                               }
+                                                                               if (Measure_Type=="Saunders(FR)" || Measure_Type=="Saunders (FR+FL)"){
+
+                                                                                       if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){
+                                                                                           FFmax=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                          }
+
+                                                                                      }
+
+
+
+                                                                        }
+                                                                        else if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                                               if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){
+                                                                                              FFmax=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                          }
+
+                                                                        }
+                                                                         else if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                                               if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                                      FFmax=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                    }
+
+                                                                        }
+                                                                         else if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                                               if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                                      FFmax=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                    }
+
+                                                                        }
+
+
+                                                  break;
+                                               }
+                                             DataModule1->SQLCrystalData->Next();
+                                             DataModule1->SQLSetupData->Next();
+                                            }
+                                            for (int j=0; j<DataModule1->SQLCrystalData->RecordCount; j++){
+                                               for (int y=0;y<DataModule1->ProfileData1->RecordCount;y++){
+                                                  if (DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat==DataModule1->ProfileData1->FieldByName("Temperature")->AsFloat){
+                                                            if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                                     if (Measure_Type=="Saunders(FL)"){
+                                                                                  if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                                      FF=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                    }
+                                                                               }
+                                                                               if (Measure_Type=="Saunders(FR)" || Measure_Type=="Saunders (FR+FL)"){
+
+                                                                                       if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){
+                                                                                           FF=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                          }
+
+                                                                                      }
+
+
+
+                                                                        }
+                                                                        else if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                                               if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){
+                                                                                              FF=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                          }
+
+                                                                        }
+                                                                         else if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                                               if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                                      FF=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                    }
+
+                                                                        }
+                                                                         else if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                                               if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                                      FF=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                    }
+
+                                                                        }
+                                                           if (FF>FFmax){
+                                                               FFmax=FF;
+
+                                                           }
+
+
+                                                  break;
+                                               }
+                                              DataModule1->ProfileData1->Next();
+                                              }
+                                             DataModule1->SQLCrystalData->Next();
+                                             DataModule1->SQLSetupData->Next();
+                                            }
+                         SEdit1->AsFloat=FFmax;
+                }
+                            if (SEdit1->Text!="NONE"){
+                                        Fm1=fabs(SEdit1->AsFloat);
+                             }
+                             else {
+                              Fm1=0;
+                             }
+                             ResultForm->ResultGrid->Cells[Nar[17]][i+1]= SEdit1->Text;
+                             if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True" & SEdit1->Text!="NONE"){
+                             DataModule1->SQLPSIData->FieldByName("Fmax")->AsString=ResultForm->ResultGrid->Cells[Nar[17]][i+1];
+                             }
+                              double x,y,z;
+                    if(DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsString!="no"){
+                             x=DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsFloat;
+                                           if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                                     ResultForm->ResultGrid->Cells[Nar[17]][N+2]=x;
+                                            }
+                     }
+                    if(DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsString!="no"){
+                              y=DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsFloat;
+                                            if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                                      ResultForm->ResultGrid->Cells[Nar[17]][N+3]=y;
+                                              }
+                     }
+                 if (SEdit1->Text!="NONE"){
+                 z=StrToFloat(ResultForm->ResultGrid->Cells[Nar[17]][i+1]);
+
+                   if(DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsString!="no"){
+                                          if(z>x){
+                                                      //ResultForm->ResultGrid->Cells[Nar[17]][i+1]=ResultForm->ResultGrid->Cells[Nar[17]][i+1]+"+";
+                                                      g=1;
+                                               }
+                     }
+                  if(DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsString!="no"){
+                                         if(z<y){
+                                                   //ResultForm->ResultGrid->Cells[Nar[17]][i+1]=ResultForm->ResultGrid->Cells[Nar[17]][i+1]+"-";
+                                                   g=1;
+                                                }
+                  }
+                  }
+
+
+
+    }
+ //Rmax-Rmin***********************************************************************************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("Rmax-Rmin")->AsString=="True"){
+
+      double m1,m2;
+      m1=0;
+      m2=10000;
+      if (DataModule1->SqlSpecification->FieldByName("TCH_Interval_Type")->AsString=="По интервалу замера"){
+                  SEdit1->AsFloat=DataModule1->SQLPostProcessData->FieldByName("fRDelta")->AsFloat;
+        }
+        else {
+
+                                     DataModule1->ProfileData1->Active=true;
+                                            DataModule1->ProfileData1->First();
+                                            DataModule1->SQLCrystalData->First();
+                                            for (int j=0; j<DataModule1->SQLCrystalData->RecordCount; j++){
+                                               for (int y=0;y<DataModule1->ProfileData1->RecordCount;y++){
+                                               //double TTT=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                               //double  nnn=DataModule1->SQLCrystalData->FieldByName("fRr")->AsString;
+                                                  if (DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat==DataModule1->ProfileData1->FieldByName("Temperature")->AsFloat){
+                                                           if (DataModule1->SQLCrystalData->FieldByName("fRr")->AsFloat<m2){
+                                                               m2=DataModule1->SQLCrystalData->FieldByName("fRr")->AsFloat;
+
+                                                           }
+                                                          if (DataModule1->SQLCrystalData->FieldByName("fRr")->AsFloat>m1){
+                                                               m1=DataModule1->SQLCrystalData->FieldByName("fRr")->AsFloat;
+
+                                                           }
+
+
+                                                  break;
+                                               }
+                                              DataModule1->ProfileData1->Next();
+                                              }
+                                             DataModule1->SQLCrystalData->Next();
+                                            }
+                                            SEdit1->AsFloat=m1-m2;
+
+        }
+
+   ResultForm->ResultGrid->Cells[Nar[26]][i+1]= SEdit1->Text;
+
+
+                if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                if (DataModule1->SQLPostProcessData->FieldByName("fRDelta")->AsFloat>-10000 & DataModule1->SQLPostProcessData->FieldByName("fRDelta")->AsFloat<10000){
+                            DataModule1->SQLPSIData->FieldByName("RR1")->AsString=ResultForm->ResultGrid->Cells[Nar[26]][i+1];
+                      }
+                 else {
+                   DataModule1->SQLPSIData->FieldByName("RR1")->AsString="0";
+                 }
+                }
+       double x,y,z;
+                if(DataModule1->SqlSpecification->FieldByName("RR1max")->AsString!="no"){
+                            x=DataModule1->SqlSpecification->FieldByName("RR1max")->AsFloat;
+                                        if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                    ResultForm->ResultGrid->Cells[Nar[26]][N+2]=x;
+                                         }
+                  }
+                if(DataModule1->SqlSpecification->FieldByName("RR1min")->AsString!="no"){
+                           y=DataModule1->SqlSpecification->FieldByName("RR1min")->AsFloat;
+                                        if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                    ResultForm->ResultGrid->Cells[Nar[26]][N+3]=y;
+                                           }
+                 }
+       z=StrToFloat(ResultForm->ResultGrid->Cells[Nar[26]][i+1]);
+
+               if(DataModule1->SqlSpecification->FieldByName("RR1max")->AsString!="no"){
+                           if(z>x){
+                                   ResultForm->ResultGrid->Cells[Nar[26]][i+1]=ResultForm->ResultGrid->Cells[Nar[26]][i+1]+"+";
+                                   CounterRR1++;
+                                   g=1;
+                              }
+                }
+              if(DataModule1->SqlSpecification->FieldByName("RR1min")->AsString!="no"){
+                         if(z<y){
+                                  ResultForm->ResultGrid->Cells[Nar[26]][i+1]=ResultForm->ResultGrid->Cells[Nar[26]][i+1]+"-";
+                                  CounterRR1++;
+                                  g=1;
+                          }
+              }
+
+                 z=DataModule1->SQLPostProcessData->FieldByName("fRDelta")->AsFloat;
+                  if (MinRR1==0){
+                       MinRR1=z;
+                       }
+        if (z<3000000&z!=0){
+        SumRR1=SumRR1+z;
+                   }
+        if (z>MaxRR1){
+                      if (z<300000){
+                         MaxRR1=z;
+                       }
+         }
+         if (z<MinRR1){
+                     if (z!=0){
+                        MinRR1=z;
+                     }
+         }
+
+
+
+  }
+
+
+  //Минимальная частота*************************************************************************************************************************
+
+ if(DataModule1->SqlSpecification->FieldByName("Fmn")->AsString=="True"){
+            
+                      double FFmin,FF=0;
+     if (DataModule1->SqlSpecification->FieldByName("TCH_Interval_Type")->AsString=="По интервалу замера"){
+
+                    if (DataModule1->SQLPostProcessData->FieldByName("fFMin")->AsFloat>-10000 & DataModule1->SQLPostProcessData->FieldByName("fFMin")->AsFloat<10000){
+                              SEdit1->AsFloat=DataModule1->SQLPostProcessData->FieldByName("fFMin")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                             Fm2=fabs(SEdit1->AsFloat);
+                              }
+                      else {
+
+                         SEdit1->Text="NONE";
+                         DataModule1->SQLPSIData->FieldByName("Fmin")->AsString="0";
+                         g=1;
+                      }
+
+                  }
+
+       else {
+
+                                             DataModule1->ProfileData1->Active=true;
+                                            DataModule1->ProfileData1->First();
+                                            DataModule1->SQLCrystalData->First();
+                                            DataModule1->SQLSetupData->First();
+                                              for (int j=0; j<DataModule1->SQLCrystalData->RecordCount; j++){
+
+                                                  if (DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat==DataModule1->ProfileData1->FieldByName("Temperature")->AsFloat){
+                                                            if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                                     if (Measure_Type=="Saunders(FL)"){
+                                                                                  if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                                      FFmin=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                    }
+                                                                               }
+                                                                              if (Measure_Type=="Saunders(FR)" || Measure_Type=="Saunders (FR+FL)"){
+
+                                                                                       if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){
+                                                                                           FFmin=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                          }
+
+                                                                                      }
+
+
+
+                                                                        }
+                                                                        else if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                                               if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){
+                                                                                              FFmin=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                          }
+
+                                                                        }
+                                                                         else if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                                               if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                                      FFmin=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                    }
+
+                                                                        }
+                                                                         else if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                                               if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                                      FFmin=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                    }
+
+                                                                        }
+
+
+                                                  break;
+                                               }
+                                             DataModule1->SQLCrystalData->Next();
+                                             DataModule1->SQLSetupData->Next();
+                                            }
+                                            for (int j=0; j<DataModule1->SQLCrystalData->RecordCount; j++){
+                                               for (int y=0;y<DataModule1->ProfileData1->RecordCount;y++){
+                                                  if (DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat==DataModule1->ProfileData1->FieldByName("Temperature")->AsFloat){
+                                                            if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                                     if (Measure_Type=="Saunders(FL)"){
+                                                                                  if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                                      FF=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                    }
+                                                                               }
+                                                                               if (Measure_Type=="Saunders(FR)" || Measure_Type=="Saunders (FR+FL)"){
+
+                                                                                       if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){
+                                                                                           FF=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                          }
+
+                                                                                      }
+
+
+
+                                                                        }
+                                                                        else if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                                               if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){
+                                                                                              FF=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                          }
+
+                                                                        }
+                                                                         else if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                                               if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                                      FF=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                    }
+
+                                                                        }
+                                                                         else if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                                               if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                                      FF=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                    }
+
+                                                                        }
+                                                           if (FF<FFmin){
+                                                               FFmin=FF;
+
+                                                           }
+
+
+                                                  break;
+                                               }
+                                              DataModule1->ProfileData1->Next();
+                                              }
+                                             DataModule1->SQLCrystalData->Next();
+                                             DataModule1->SQLSetupData->Next();
+                                            }
+                         SEdit1->AsFloat=FFmin;
+                }
+
+
+
+                      ResultForm->ResultGrid->Cells[Nar[18]][i+1]= SEdit1->Text;
+                      if (SEdit1->Text!="NONE"){
+                       Fm2=fabs(SEdit1->AsFloat);
+                      }
+                       else {
+                        Fm2=0;
+                       }
+                      if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True" & SEdit1->Text!="NONE"){
+                         DataModule1->SQLPSIData->FieldByName("Fmin")->AsString=ResultForm->ResultGrid->Cells[Nar[18]][i+1];
+                      }
+                      double x,y,z;
+            if(DataModule1->SqlSpecification->FieldByName("Fminmax")->AsString!="no"){
+                           x=DataModule1->SqlSpecification->FieldByName("Fminmax")->AsFloat;
+                                              if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                                      ResultForm->ResultGrid->Cells[Nar[18]][N+2]=x;
+                                               }
+            }
+          if(DataModule1->SqlSpecification->FieldByName("Fminmin")->AsString!="no"){
+                           y=DataModule1->SqlSpecification->FieldByName("Fminmin")->AsFloat;
+                                              if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                                      ResultForm->ResultGrid->Cells[Nar[18]][N+3]=y;
+                                              }
+         }
+         if (SEdit1->Text!="NONE"){
+         z=StrToFloat(ResultForm->ResultGrid->Cells[Nar[18]][i+1]);
+
+        if(DataModule1->SqlSpecification->FieldByName("Fminmax")->AsString!="no"){
+             if(z>x){
+                      //ResultForm->ResultGrid->Cells[Nar[18]][i+1]=ResultForm->AdvStringGrid1->Cells[Nar[18]][i+1]+"+";
+                      g=1;
+              }
+        }
+        if(DataModule1->SqlSpecification->FieldByName("Fminmin")->AsString!="no"){
+                 if(z<y){
+                          //   ResultForm->ResultGrid->Cells[Nar[18]][i+1]=ResultForm->AdvStringGrid1->Cells[Nar[18]][i+1]+"-";
+                               g=1;
+                        }
+
+               }
+         }
+
+   }
+
+//*************************Fmaxm*******************************************************************************
+if(DataModule1->SqlSpecification->FieldByName("Fmn")->AsString=="True" & DataModule1->SqlSpecification->FieldByName("Fmx")->AsString=="True"){
+if (Fm1>-100000 & Fm1<1000000 & Fm2>-100000 & Fm2<1000000){
+if (Fm1>=Fm2){
+
+  DataModule1->SQLPSIData->FieldByName("Fmaxm")->AsString=Fm1;
+}
+else{
+  DataModule1->SQLPSIData->FieldByName("Fmaxm")->AsString=Fm2;
+}
+ }
+ else {
+    DataModule1->SQLPSIData->FieldByName("Fmaxm")->AsString="0";
+ }
+
+}
+//Fptp*************************************************************************************************************
+if(DataModule1->SqlSpecification->FieldByName("Fptp")->AsString=="True" || DataModule1->SqlSpecification->FieldByName("Fptp_2")->AsString=="True"){
+        double Fptp,FF,FFmax,FFmin;
+           if (DataModule1->SqlSpecification->FieldByName("TCH_Interval_Type")->AsString=="По интервалу замера"){
+
+                    if (DataModule1->SQLPostProcessData->FieldByName("fFDelta")->AsFloat>-10000 & DataModule1->SQLPostProcessData->FieldByName("fFDelta")->AsFloat<10000){
+                              Fptp=DataModule1->SQLPostProcessData->FieldByName("fFDelta")->AsFloat;
+
+                              }
+                      else {
+
+                         SEdit1->Text="NONE";
+                         DataModule1->SQLPSIData->FieldByName("Fptp")->AsString="0";
+                         DataModule1->SQLPSIData->FieldByName("Fptp_2")->AsString="0";
+                         g=1;
+                      }
+
+                  }
+
+       else {
+
+                                             DataModule1->ProfileData1->Active=true;
+                                            DataModule1->ProfileData1->First();
+                                            DataModule1->SQLCrystalData->First();
+                                            DataModule1->SQLSetupData->First();
+                                              for (int j=0; j<DataModule1->SQLCrystalData->RecordCount; j++){
+
+                                                  if (DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat==DataModule1->ProfileData1->FieldByName("Temperature")->AsFloat){
+                                                            if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                                     if (Measure_Type=="Saunders(FL)"){
+                                                                                  if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                                      FF=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                    }
+                                                                               }
+                                                                               if (Measure_Type=="Saunders(FR)" || Measure_Type=="Saunders (FR+FL)"){
+
+                                                                                       if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){
+                                                                                           FF=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                          }
+
+                                                                                      }
+
+
+
+                                                                        }
+                                                                        else if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                                               if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){
+                                                                                              FF=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                          }
+
+                                                                        }
+                                                                         else if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                                               if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                                      FF=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                    }
+
+                                                                        }
+                                                                         else if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                                               if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                                      FF=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                    }
+
+                                                                        }
+                                                                      FFmax=FF;
+                                                                      FFmin=FF;
+
+                                                  break;
+                                               }
+                                             DataModule1->SQLCrystalData->Next();
+                                             DataModule1->SQLSetupData->Next();
+                                            }
+                                            DataModule1->SQLCrystalData->First();
+                                            DataModule1->SQLSetupData->First();
+                                            for (int j=0; j<DataModule1->SQLCrystalData->RecordCount; j++){
+                                            DataModule1->ProfileData1->First();
+                                               for (int y=0;y<DataModule1->ProfileData1->RecordCount;y++){
+                                                  if (DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat==DataModule1->ProfileData1->FieldByName("Temperature")->AsFloat){
+                                                            if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                                     if (Measure_Type=="Saunders(FL)"){
+                                                                                  if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                                      FF=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                    }
+                                                                               }
+                                                                               if (Measure_Type=="Saunders(FR)" || Measure_Type=="Saunders (FR+FL)"){
+
+                                                                                       if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){
+                                                                                           FF=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                          }
+
+                                                                                      }
+
+
+
+                                                                        }
+                                                                        else if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                                               if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){
+                                                                                              FF=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                          }
+
+                                                                        }
+                                                                         else if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                                               if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                                      FF=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                    }
+
+                                                                        }
+                                                                         else if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                                               if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){
+                                                                                      FF=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                    }
+
+                                                                        }
+                                                           if (FF<FFmin){
+                                                               FFmin=FF;
+
+                                                           }
+                                                           if (FF>FFmax){
+                                                            FFmax=FF;
+
+                                                           }
+
+
+                                                  break;
+                                               }
+                                              DataModule1->ProfileData1->Next();
+                                              }
+                                             DataModule1->SQLCrystalData->Next();
+                                             DataModule1->SQLSetupData->Next();
+                                            }
+                         Fptp=FFmax-FFmin;
+                }
+
+
+
+//***********************************************************************************************************************************
+         if(DataModule1->SqlSpecification->FieldByName("Fptp")->AsString=="True"){
+                 SEdit1->AsFloat=Fptp;
+                 ResultForm->ResultGrid->Cells[Nar[19]][i+1]= SEdit1->Text;
+                                  if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                 if (DataModule1->SQLPostProcessData->FieldByName("fFDelta")->AsFloat>-10000 & DataModule1->SQLPostProcessData->FieldByName("fFDelta")->AsFloat<10000){
+                                                                  DataModule1->SQLPSIData->FieldByName("Fptp")->AsString=ResultForm->ResultGrid->Cells[Nar[19]][i+1];
+                                                  }
+                                                 else {
+                                                                 DataModule1->SQLPSIData->FieldByName("Fptp")->AsString="0";
+                                                         }
+                                        }
+     double x,y,z;
+                    if(DataModule1->SqlSpecification->FieldByName("Fptpmax")->AsString!="no"){
+                           x=DataModule1->SqlSpecification->FieldByName("Fptpmax")->AsFloat;
+                                          if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                      ResultForm->ResultGrid->Cells[Nar[19]][N+2]=x;
+                                            }
+                     }
+                    if(DataModule1->SqlSpecification->FieldByName("Fptpmin")->AsString!="no"){
+                                    y=DataModule1->SqlSpecification->FieldByName("Fptpmin")->AsFloat;
+                                           if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                       ResultForm->ResultGrid->Cells[Nar[19]][N+3]=y;
+                                             }
+                       }
+   z=StrToFloat(ResultForm->ResultGrid->Cells[Nar[19]][i+1]);
+
+                    if(DataModule1->SqlSpecification->FieldByName("Fptpmax")->AsString!="no"){
+                                           if(z>x){
+                                                         ResultForm->ResultGrid->Cells[Nar[19]][i+1]=ResultForm->ResultGrid->Cells[Nar[19]][i+1]+"+";
+                                                         counterFptp++;
+                                                         g=1;
+                                                    }
+                     }
+                    if(DataModule1->SqlSpecification->FieldByName("Fptpmin")->AsString!="no"){
+                                              if(z<y){
+                                                        ResultForm->ResultGrid->Cells[Nar[19]][i+1]=ResultForm->ResultGrid->Cells[Nar[19]][i+1]+"-";
+                                                        counterFptp++;
+                                                          g=1;
+                                                       }
+                      }
+
+             }
+ //*************************************Fptp/2***********************************************************************************************************************************
+       if(DataModule1->SqlSpecification->FieldByName("Fptp_2")->AsString=="True"){
+                        SEdit1->AsFloat=Fptp/2;
+                         ResultForm->ResultGrid->Cells[Nar[19]][i+1]= SEdit1->Text;
+                     if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                        if (DataModule1->SQLPostProcessData->FieldByName("fFDelta")->AsFloat>-10000 & DataModule1->SQLPostProcessData->FieldByName("fFDelta")->AsFloat<10000){
+                            DataModule1->SQLPSIData->FieldByName("Fptp_2")->AsString=ResultForm->ResultGrid->Cells[Nar[19]][i+1];
+                            }
+                         else {
+                           DataModule1->SQLPSIData->FieldByName("Fptp_2")->AsString="0";
+                         }
+                     }
+     double x,y,z;
+                    if(DataModule1->SqlSpecification->FieldByName("Fptp_2max")->AsString!="no"){
+                           x=DataModule1->SqlSpecification->FieldByName("Fptp_2max")->AsFloat;
+                                          if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                      ResultForm->ResultGrid->Cells[Nar[19]][N+2]=x;
+                                            }
+                     }
+                    if(DataModule1->SqlSpecification->FieldByName("Fptp_2min")->AsString!="no"){
+                                    y=DataModule1->SqlSpecification->FieldByName("Fptp_2min")->AsFloat;
+                                           if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                       ResultForm->ResultGrid->Cells[Nar[19]][N+3]=y;
+                                             }
+                       }
+   z=StrToFloat(ResultForm->ResultGrid->Cells[Nar[19]][i+1]);
+
+                    if(DataModule1->SqlSpecification->FieldByName("Fptp_2max")->AsString!="no"){
+                                           if(z>x){
+                                                         ResultForm->ResultGrid->Cells[Nar[19]][i+1]=ResultForm->ResultGrid->Cells[Nar[19]][i+1]+"+";
+                                                         counterFptp++;
+                                                         g=1;
+                                                    }
+                     }
+                    if(DataModule1->SqlSpecification->FieldByName("Fptp_2min")->AsString!="no"){
+                                              if(z<y){
+                                                        ResultForm->ResultGrid->Cells[Nar[19]][i+1]=ResultForm->ResultGrid->Cells[Nar[19]][i+1]+"-";
+                                                        counterFptp++;
+                                                          g=1;
+                                                       }
+                      }
+
+
+
+
+
+
+     }
+
+
+   }
+
+  //******************************************************************************************************************************************************
+  if (DataModule1->SqlSpecification->FieldByName("TCHTable")->AsString=="True"){   //1
+  bool variant_1,variant_2,variant_3,st=true;
+  //double Fn=DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+  AnsiString Variantt;
+   DataModule1->SQLCrystalData->First();
+   DataModule1->SQLSetupData->First();
+
+//Загрузка таблицы спецификаций
+DataModule1->spc_variant->Active=false;
+DataModule1->spc_variant->SQL->Clear();
+DataModule1->spc_variant->SQL->Add("Select * from Spc_Variant where SPC_ID='"+DataModule1->SqlSpecification->FieldByName("ID")->AsString+"' order by Name");
+DataModule1->spc_variant->Active=true;
+        if (DataModule1->spc_variant->RecordCount>0){       //2
+                DataModule1->spc_variant->First();
+                        for (int u=0;u<DataModule1->spc_variant->RecordCount;u++){     //3
+                                st=true;
+                                DataModule1->spc_variant_data->Active=false;
+                                DataModule1->spc_variant_data->SQL->Clear();
+                                DataModule1->spc_variant_data->SQL->Add("Select * from spc_variant_data where spc_variant_id='"+DataModule1->spc_variant->FieldByName("ID")->AsString+"'");
+                                DataModule1->spc_variant_data->Active=true;
+
+
+
+                                    if (DataModule1->spc_variant_data->RecordCount>0){            //4
+                                          DataModule1->spc_variant_data->First();
+                                         for (int uu=0;uu<DataModule1->spc_variant_data->RecordCount; uu++){         //5
+
+                                              bool stl=true;
+                                              DataModule1->SQLCrystalData->First();
+                                              DataModule1->SQLSetupData->First();
+                                              double FTtable;
+                                                   for (int j=0;j<DataModule1->SQLCrystalData->RecordCount;j++){      //6
+
+                                            if (DataModule1->spc_variant_data->FieldByName("Parametr_T")->AsString==DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsString){     //7
+
+                                           if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){    //8
+                                                                     if (Measure_Type=="Saunders(FL)"){   //9
+                                                                                  if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){   //10
+                                                                                      FTtable=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                    }   //]10
+                                                                               }   //]9
+                                                                               if (Measure_Type=="Saunders(FR)" || Measure_Type=="Saunders (FR+FL)"){   //9
+
+                                                                                       if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){ //10
+                                                                                           FTtable=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                          } //]10
+
+                                                                                      }  //]9
+
+
+
+                                                                        } //]8
+                                                                        else if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){ //8
+                                                                               if (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat<100000){  //9
+                                                                                              FTtable=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                          } //]9
+
+                                                                        }//]8
+                                                                         else if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){ //8
+                                                                               if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){   //9
+                                                                                      FTtable=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                    }//]9
+
+                                                                        }  //]8
+                                                                         else if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){ //8
+                                                                               if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){   //9
+                                                                                      FTtable=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat-DataModule1->SQLPSIData->FieldByName("Fn")->AsFloat;
+                                                                                    }//]9
+
+                                                                        } //]8
+                                                           if (FTtable>DataModule1->spc_variant_data->FieldByName("Parametr_max")->AsFloat){ //8
+                                                              st=false;
+                                                              stl=false;
+
+                                                          }  //]8
+                                                          if  (FTtable<DataModule1->spc_variant_data->FieldByName("Parametr_min")->AsFloat){ //8
+
+                                                           st=false;
+                                                           stl=false;
+                                                          }   //]8
+                                               } //]7
+
+
+                                                DataModule1->SQLCrystalData->Next();
+                                              DataModule1->SQLSetupData->Next();
+                                            } //]6
+                                            DataModule1->UpdatePsiDatatemp->SQL->Clear();
+                                            AnsiString sqld="Update psidatatemp set ";
+                                            switch (u) {  //6
+                                                 case 0 : sqld=sqld+"variant_1=";
+                                                          break;
+
+                                                 case 1 : sqld=sqld+"variant_2=";
+                                                          break;
+
+                                                 case 2 : sqld=sqld+"variant_3=";
+                                                          break;
+                                                 default : sqld=sqld+"variant_1=";
+                                            }  //]6
+                                             if (stl) { //6
+                                                sqld=sqld+"'1' where Measure_ID='"+Measure_ID+"' and N='"+DataModule1->NumberCurrent->FieldByName("SNumber")->AsString+"' and Temp='"+DataModule1->spc_variant_data->FieldByName("Parametr_T")->AsString+"'";
+
+                                             }   //]6
+                                             else {  //6
+                                               sqld=sqld+"'0' where Measure_ID='"+Measure_ID+"' and N='"+DataModule1->NumberCurrent->FieldByName("SNumber")->AsString+"' and Temp='"+DataModule1->spc_variant_data->FieldByName("Parametr_T")->AsString+"'";
+                                             }  // ]6
+                                           DataModule1->UpdatePsiDatatemp->SQL->Add(sqld);
+                                           DataModule1->UpdatePsiDatatemp->Execute();
+                                          DataModule1->spc_variant_data->Next();
+                                         } //]5
+                                    } //]4
+                                 if (st==true){ //4
+                                      Variantt=Variantt+DataModule1->spc_variant->FieldByName("Name")->AsString;
+                                      switch (u) { //5
+                                             case 0:
+                                                   variant_1=true;
+                                                  DataModule1->SQLPSIData->FieldByName("variant_1")->AsString="True";
+                                                  break;
+                                             case 1:
+                                                    variant_2=true;
+                                                    DataModule1->SQLPSIData->FieldByName("variant_2")->AsString="True";
+                                                    break;
+                                             case 2:
+                                                  variant_3=true;
+                                                 DataModule1->SQLPSIData->FieldByName("variant_3")->AsString="True";
+                                                 break;
+                                             default:
+                                                  DataModule1->SQLPSIData->FieldByName("variant_1")->AsString="True";
+                                                  DataModule1->SQLPSIData->FieldByName("variant_2")->AsString="True";
+                                                  DataModule1->SQLPSIData->FieldByName("variant_3")->AsString="True";
+
+                                        }   //]5
+
+                                 } //]4
+                                 else {  //4
+                                  switch (u) {   //5
+                                          case 0 :
+                                                 variant_1=false;
+                                                 DataModule1->SQLPSIData->FieldByName("variant_1")->AsString="False";
+                                                 break;
+                                          case 1:
+                                                 variant_2=false;
+                                                 DataModule1->SQLPSIData->FieldByName("variant_2")->AsString="False";
+                                                 break;
+                                          case 2:
+                                                variant_3=false;
+                                                 DataModule1->SQLPSIData->FieldByName("variant_3")->AsString="False";
+                                                 break;
+                                          default:
+
+                                                 DataModule1->SQLPSIData->FieldByName("variant_1")->AsString="False";
+                                                 DataModule1->SQLPSIData->FieldByName("variant_2")->AsString="False";
+                                                 DataModule1->SQLPSIData->FieldByName("variant_3")->AsString="False";
+                                       } //]5
+
+                                 } //]4
+                          DataModule1->spc_variant->Next();
+                        } //]3
+                      DataModule1->SQLPSIData->FieldByName("variant")->AsString=Variantt;
+        } //]2
+     }//]1
+ //Коэффициенты аппроксимации/ дата /время /мск /номинал************************************************************************
+
+   ESBDateTimeEdit1->Hour=st.wHour;
+   ESBDateTimeEdit1->Minute=st.wMinute;
+   ESBDateTimeEdit1->Second=st.wSecond;
+   //*************************************************************************
+
+if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+             if (DataModule1->SqlSpecification->FieldByName("TCH_Approx_IST")->AsString=="False"){
+             DataModule1->SQLPSIData->FieldByName("A0")->AsString=DataModule1->SQLPostProcessData->FieldByName("fA0")->AsString;
+             DataModule1->SQLPSIData->FieldByName("A1")->AsString=DataModule1->SQLPostProcessData->FieldByName("fA1")->AsString;
+             DataModule1->SQLPSIData->FieldByName("A2")->AsString=DataModule1->SQLPostProcessData->FieldByName("fA2")->AsString;
+             DataModule1->SQLPSIData->FieldByName("A3")->AsString=DataModule1->SQLPostProcessData->FieldByName("fA3")->AsString;
+             DataModule1->SQLPSIData->FieldByName("A4")->AsString=DataModule1->SQLPostProcessData->FieldByName("fA4")->AsString;
+             }
+             DataModule1->SQLPSIData->FieldByName("Date")->AsString=stD+"."+stMn+"."+stY;
+             DataModule1->SQLPSIData->FieldByName("Time")->AsString=stH+"."+stM+"."+stS;
+             DataModule1->SQLPSIData->FieldByName("Measure_ID")->AsString=Measure_ID;
+             DataModule1->SQLPSIData->FieldByName("intervalgf")->AsString=intervalGF;
+              if (ModifForm->chkCn){
+             DataModule1->SQLPSIData->FieldByName("Cn")->AsString=ModifForm->edtCn->Text;
+
+              }
+              else {
+              DataModule1->SQLPSIData->FieldByName("Cn")->AsString=DataModule1->SqlSpecification->FieldByName("LoadValue")->AsString;;
+              }
+              if (ModifForm->chkPmi->Checked){
+              DataModule1->SQLPSIData->FieldByName("PMI")->AsString="True";
+              }
+              else {
+              DataModule1->SQLPSIData->FieldByName("PMI")->AsString="False";
+              }
+             DataModule1->SQLPSIData->FieldByName("nominal")->AsString=DataModule1->SqlSpecification->FieldByName("Nominal")->AsString;
+             DataModule1->SQLPSIData->FieldByName("MSK")->AsString=NumberMForm->edtMSK->Text;
+            DataModule1->SQLPSIData->FieldByName("MSK-M")->AsString=NumberMForm->edtM->Text;
+
+            DataModule1->SQLPSIData->FieldByName("type")->AsBoolean=NumberMForm->iiBox->Checked;
+
+              DataModule1->SQLPSIData->FieldByName("Lot_Date")->AsString=NumberMForm->edtKonvert->Text;
+              DataModule1->SQLPSIData->FieldByName("Factory")->AsString=NumberMForm->edtFactory->Text;
+             DataModule1->SQLPSIData->FieldByName("File")->AsString=NumberMForm->edtFile->Text;
+             DataModule1->SQLPSIData->FieldByName("Spc")->AsString=DataModule1->SqlSpecification->FieldByName("Name")->AsString;
+             DataModule1->SQLPSIData->FieldByName("DateR")->AsDateTime=ESBDateTimeEdit1->AsDateTime;
+             DataModule1->SQLPSIData->FieldByName("Operator")->AsString=DataModule1->Dostup->FieldByName("Name")->AsString;
+   }
+
+//Наклон*****************************************************************************************************
+     if(DataModule1->SqlSpecification->FieldByName("S")->AsString=="True"){
+             double a0,a1,a2,a3,S,T;
+             T=DataModule1->SqlSpecification->FieldByName("Tnakl")->AsFloat;
+             if (DataModule1->SqlSpecification->FieldByName("TCH_Approx_IST")->AsString=="False"){
+             a0= DataModule1->SQLPostProcessData->FieldByName("fA0")->AsFloat;
+             a1= DataModule1->SQLPostProcessData->FieldByName("fA1")->AsFloat;
+             a2= DataModule1->SQLPostProcessData->FieldByName("fA2")->AsFloat;
+             a3= DataModule1->SQLPostProcessData->FieldByName("fA3")->AsFloat;
+
+             S=3*T*T*a3+2*T*a2+a1;
+
+             }
+             else {
+                 double sl1,sl2;
+                      if (TempCount>=M+1){
+                       sl1=calculatechebyshevleastsquares(M,Kp,T-0.5);
+                       sl2=calculatechebyshevleastsquares(M,Kp,T+0.5);
+                       }
+                       else {
+                        sl2=0;
+                        sl1=0;
+                       }
+                       S=sl2-sl1;
+             }
+             SEdit1->AsFloat=S;
+             ResultForm->ResultGrid->Cells[Nar[21]][i+1]= SEdit1->Text;
+
+
+         if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                DataModule1->SQLPSIData->FieldByName("Slope")->AsString=ResultForm->ResultGrid->Cells[Nar[21]][i+1];
+             }
+               double x,y,z;
+          if(DataModule1->SqlSpecification->FieldByName("Smax")->AsString!="no"){
+              x=DataModule1->SqlSpecification->FieldByName("Smax")->AsFloat;
+                         if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                  ResultForm->ResultGrid->Cells[Nar[21]][N+2]=x;
+                            }
+          }
+         if(DataModule1->SqlSpecification->FieldByName("Smin")->AsString!="no"){
+                            y=DataModule1->SqlSpecification->FieldByName("Smin")->AsFloat;
+                                   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                             ResultForm->ResultGrid->Cells[Nar[21]][N+2]=x;
+                                    }
+         }
+          z=StrToFloat(ResultForm->ResultGrid->Cells[Nar[21]][i+1]);
+
+         if(DataModule1->SqlSpecification->FieldByName("Smax")->AsString!="no"){
+                     if(z>x){
+                            ResultForm->ResultGrid->Cells[Nar[21]][i+1]=ResultForm->ResultGrid->Cells[Nar[21]][i+1]+"+";
+                             g=1;
+                            }
+                             if (DataModule1->SqlSpecification->FieldByName("DopuskSlope")->AsFloat>0){
+                                                                                     if(z>DataModule1->SqlSpecification->FieldByName("Smax")->AsFloat-DataModule1->SqlSpecification->FieldByName("DopuskSlope")->AsFloat){
+                                                                                           if (g!=1){
+                                                                                             g=2;
+                                                                                           }
+
+                                                                                     }
+
+                                                                                    }
+                                                               
+
+
+         }
+         if(DataModule1->SqlSpecification->FieldByName("Smin")->AsString!="no"){
+                     if(z<y){
+                             ResultForm->ResultGrid->Cells[Nar[21]][i+1]=ResultForm->ResultGrid->Cells[Nar[21]][i+1]+"-";
+                             g=1;
+                            }
+                      if (DataModule1->SqlSpecification->FieldByName("DopuskSlope")->AsFloat>0){
+                                                                                     if(z<DataModule1->SqlSpecification->FieldByName("Smin")->AsFloat+DataModule1->SqlSpecification->FieldByName("DopuskSlope")->AsFloat){
+                                                                                           if (g!=1){
+                                                                                             g=2;
+                                                                                           }
+
+                                                                                     }
+
+                                                                                    }
+         }
+   }
+
+
+
+//************************************************************************************************
+
+
+
+
+//Сопротивление*****************************************************************************************
+
+                      DataModule1->SQLCrystalData->First();
+                      double z;
+                          for(int j=0;j<Nt;j++){
+
+                                    if(DataModule1->SqlSpecification->FieldByName("Tpar")->AsFloat==DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat){
+
+                                             R=DataModule1->SQLCrystalData->FieldByName("fRr")->AsFloat;
+                                                 if(DataModule1->SqlSpecification->FieldByName("R")->AsString=="True"){
+                                                         SEdit1->AsFloat=R;
+                                                          ResultForm->ResultGrid->Cells[Nar[4]][i+1]=SEdit1->Text;
+                                                                  if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                    if (DataModule1->SQLSetupData->FieldByName("strQCStatus2")->AsString!=" Dead" & R>0 & R<10000){
+                                                                                            DataModule1->SQLPSIData->FieldByName("R")->AsString=R;
+                                                                                            if (DataModule1->SqlSpecification->FieldByName("Ftgk_Measure")->AsString=="True"){
+                                                                                             DataModule1->SQLPSIData->FieldByName("Rtgk")->AsString=R;
+                                                                                             z=R;
+                                                                                            }
+                                                                                      }
+                                                                                      else {
+                                                                                              ResultForm->ResultGrid->Cells[Nar[4]][i+1]=0;
+                                                                                              DataModule1->SQLPSIData->FieldByName("R")->AsString="0";
+                                                                                              z=0;
+                                                                                              }
+
+                                                                   }
+                                                              }
+                                                          break;
+                                        }
+                                  DataModule1->SQLCrystalData->Next();
+                          }
+              if(DataModule1->SqlSpecification->FieldByName("R")->AsString=="True"){
+                      double x,y;
+
+                    if(DataModule1->SqlSpecification->FieldByName("Rmax")->AsString!="no"){
+                                         x=DataModule1->SqlSpecification->FieldByName("Rmax")->AsFloat;
+                                                          if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                                   ResultForm->ResultGrid->Cells[Nar[4]][N+2]=x;
+                                                             }
+                                         if(z>x){
+                                               ResultForm->ResultGrid->Cells[Nar[4]][i+1]=ResultForm->ResultGrid->Cells[Nar[4]][i+1]+"+";
+                                               g=1;
+                                              }
+                                          if (DataModule1->SqlSpecification->FieldByName("DopuskR")->AsFloat>0){
+                                                                                     if(z>DataModule1->SqlSpecification->FieldByName("Rmax")->AsFloat-(DataModule1->SqlSpecification->FieldByName("Rmax")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskR")->AsFloat/100)){
+                                                                                           if (g!=1){
+                                                                                             g=2;
+                                                                                           }
+
+                                                                                     }
+
+                                                                                    }
+
+
+
+                     }
+                  if(DataModule1->SqlSpecification->FieldByName("Rmin")->AsString!="no"){
+                                       y=DataModule1->SqlSpecification->FieldByName("Rmin")->AsFloat;
+                                                        if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                                     ResultForm->ResultGrid->Cells[Nar[4]][N+3]=y;
+                                                           }
+                                                   if(z<y){
+                                                 ResultForm->ResultGrid->Cells[Nar[4]][i+1]=ResultForm->ResultGrid->Cells[Nar[4]][i+1]+"-";
+                                                  g=1;
+                                               }
+                                               if (DataModule1->SqlSpecification->FieldByName("DopuskR")->AsFloat>0){
+                                                                                     if(z<DataModule1->SqlSpecification->FieldByName("Rmin")->AsFloat+(DataModule1->SqlSpecification->FieldByName("Rmin")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskR")->AsFloat/100)){
+                                                                                           if (g!=1){
+                                                                                             g=2;
+                                                                                           }
+
+                                                                                     }
+
+                                                                                    }
+
+
+                      }
+                   }
+
+
+//C0******************************************************************************************************************
+if(DataModule1->SqlSpecification->FieldByName("C0")->AsString=="True"){
+              DataModule1->SQLCrystalData->First();
+                    for(int j=0;j<Nt;j++){
+                                  if(DataModule1->SqlSpecification->FieldByName("Tc0")->AsFloat==DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat){
+                                                     SEdit1->AsFloat=DataModule1->SQLCrystalData->FieldByName("fC0")->AsFloat*1E+12;
+                                                     ResultForm->ResultGrid->Cells[Nar[5]][i+1]=SEdit1->Text;
+                                                                      if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                        if (DataModule1->SQLSetupData->FieldByName("strQCStatus2")->AsString!=" Dead" & DataModule1->SQLCrystalData->FieldByName("fC0")->AsFloat*1E+12>0 & DataModule1->SQLCrystalData->FieldByName("fC0")->AsFloat*1E+12<10000){
+                                                                                                     if (DataModule1->SqlSpecification->FieldByName("Name")->AsString=="PK200-Periodica-25C"){
+                                                                                                        DataModule1->SQLPSIData->FieldByName("C0")->AsString=FloatToStr(SEdit1->AsFloat-1.5);
+                                                                                                         ResultForm->ResultGrid->Cells[Nar[5]][i+1]=FloatToStr(SEdit1->AsFloat-1.5);
+                                                                                                     }
+                                                                                                     else {
+                                                                                                          DataModule1->SQLPSIData->FieldByName("C0")->AsString=ResultForm->ResultGrid->Cells[Nar[5]][i+1];
+                                                                                                        }
+                                                                                          }
+                                                                                          else {
+
+                                                                                               DataModule1->SQLPSIData->FieldByName("C0")->AsString=0;
+                                                                                          }
+                                                                       }
+                                                     break;
+                                     }
+                                DataModule1->SQLCrystalData->Next();
+                         }
+         double x,y,z;
+
+                      if(DataModule1->SqlSpecification->FieldByName("C0max")->AsString!="no"){
+                                   x=DataModule1->SqlSpecification->FieldByName("C0max")->AsFloat;
+                                               if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                              ResultForm->ResultGrid->Cells[Nar[5]][N+2]=x;
+                                                  }
+                         }
+                     if(DataModule1->SqlSpecification->FieldByName("C0min")->AsString!="no"){
+                                   y=DataModule1->SqlSpecification->FieldByName("C0min")->AsFloat;
+                                               if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                              ResultForm->ResultGrid->Cells[Nar[5]][N+3]=y;
+                                                 }
+                      }
+         z=SEdit1->AsFloat;
+                   if(DataModule1->SqlSpecification->FieldByName("C0max")->AsString!="no"){
+                                         if(z>x){
+                                                  ResultForm->ResultGrid->Cells[Nar[5]][i+1]=ResultForm->ResultGrid->Cells[Nar[5]][i+1]+"+";
+                                                  g=1;
+                                                  }
+                                             if(z>DataModule1->SqlSpecification->FieldByName("C0max")->AsFloat-(DataModule1->SqlSpecification->FieldByName("C0max")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskC0")->AsFloat/100)){
+                                                                                           if (g!=1){
+                                                                                             g=2;
+                                                                                           }
+
+                                                                                     }
+                     }
+                   if(DataModule1->SqlSpecification->FieldByName("C0min")->AsString!="no"){
+                                          if(z<y){
+                                                   ResultForm->ResultGrid->Cells[Nar[5]][i+1]=ResultForm->ResultGrid->Cells[Nar[5]][i+1]+"-";
+                                                    g=1;
+                                                  }
+                                                   if (DataModule1->SqlSpecification->FieldByName("DopuskC0")->AsFloat>0){
+                                                            if(z<DataModule1->SqlSpecification->FieldByName("C0min")->AsFloat+(DataModule1->SqlSpecification->FieldByName("C0min")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskC0")->AsFloat/100)){
+                                                                                           if (g!=1){
+                                                                                             g=2;
+                                                                                           }
+
+                                                                                     }
+                      }
+
+
+
+
+                                                                                    }
+
+
+
+         }
+
+//Cq*****************************************************************************************************************
+if(DataModule1->SqlSpecification->FieldByName("Cq")->AsString=="True"){
+                  DataModule1->SQLCrystalData->First();
+                                     for(int j=0;j<Nt;j++){
+                                                    if(DataModule1->SqlSpecification->FieldByName("Tcq")->AsFloat==DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat){
+                                                                    SEdit1->AsFloat=DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat*1E+15;
+                                                                    ResultForm->ResultGrid->Cells[Nar[6]][i+1]=SEdit1->Text;
+                                                                                if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                            if (DataModule1->SQLSetupData->FieldByName("strQCStatus2")->AsString!=" Dead"){
+                                                                                                        if (DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat!=0 & DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat!=1E+30){
+                                                                                                                     DataModule1->SQLPSIData->FieldByName("Cq")->AsFloat=SEdit1->AsFloat;
+                                                                                                          }
+                                                                                                          else{
+                                                                                                              DataModule1->SQLPSIData->FieldByName("Cq")->AsFloat=1;
+                                                                                                             }
+                                                                                            }
+                                                                                   }
+                                                                     break;
+                                                    }
+                                               DataModule1->SQLCrystalData->Next();
+                                      }
+          double x,y,z;
+
+                                 if(DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString!="no"){
+                                                  x=DataModule1->SqlSpecification->FieldByName("Cqmax")->AsFloat;
+                                                             if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                                                ResultForm->ResultGrid->Cells[Nar[6]][N+2]=x;
+                                                                }
+                                  }
+                               if(DataModule1->SqlSpecification->FieldByName("Cqmin")->AsString!="no"){
+                                                  y=DataModule1->SqlSpecification->FieldByName("Cqmin")->AsFloat;
+                                                               if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                                               ResultForm->ResultGrid->Cells[Nar[6]][N+3]=y;
+                                                                 }
+                                }
+                  z=SEdit1->AsFloat;
+                              if(DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString!="no"){
+                                                        if(z>x){
+                                                                 ResultForm->ResultGrid->Cells[Nar[6]][i+1]=ResultForm->ResultGrid->Cells[Nar[6]][i+1]+"+";
+                                                                 g=1;
+                                                                 }
+                              }
+                             if(DataModule1->SqlSpecification->FieldByName("Cqmin")->AsString!="no"){
+                                                        if(z<y){
+                                                                ResultForm->ResultGrid->Cells[Nar[6]][i+1]=ResultForm->ResultGrid->Cells[Nar[6]][i+1]+"-";
+                                                                g=1;
+                                                                }
+                              }
+    }
+//********************************************************************************************************************************************************
+//******************************************************C0_C1*********************************************************************************************
+if(DataModule1->SqlSpecification->FieldByName("C0_C1")->AsString=="True"){
+                  DataModule1->SQLCrystalData->First();
+                                     for(int j=0;j<Nt;j++){
+                                                    if(DataModule1->SqlSpecification->FieldByName("C0_C1_T")->AsFloat==DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat){
+                                                                    SEdit1->AsFloat=DataModule1->SQLCrystalData->FieldByName("fC0")->AsFloat/DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat;
+                                                                    ResultForm->ResultGrid->Cells[Nar[22]][i+1]=SEdit1->Text;
+                                                                                if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                            if (DataModule1->SQLSetupData->FieldByName("strQCStatus2")->AsString!=" Dead"){
+                                                                                                        if (DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat!=0 & DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat!=1E+30){
+                                                                                                                     if (DataModule1->SQLCrystalData->FieldByName("fC0")->AsFloat!=0 & DataModule1->SQLCrystalData->FieldByName("fC0")->AsFloat!=1E+30){
+                                                                                                                     DataModule1->SQLPSIData->FieldByName("C0_C1")->AsFloat=DataModule1->SQLCrystalData->FieldByName("fC0")->AsFloat/DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat;
+                                                                                                                     }
+                                                                                                          }
+                                                                                                          else{
+                                                                                                              DataModule1->SQLPSIData->FieldByName("C0_C1")->AsFloat=1;
+                                                                                                             }
+                                                                                            }
+                                                                                   }
+                                                                     break;
+                                                    }
+                                               DataModule1->SQLCrystalData->Next();
+                                      }
+          double x,y,z;
+
+                                 if(DataModule1->SqlSpecification->FieldByName("C0_C1max")->AsString!="no"){
+                                                  x=DataModule1->SqlSpecification->FieldByName("C0_C1")->AsFloat;
+                                                             if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                                                ResultForm->ResultGrid->Cells[Nar[22]][N+2]=x;
+                                                                }
+                                  }
+                               if(DataModule1->SqlSpecification->FieldByName("C0_C1min")->AsString!="no"){
+                                                  y=DataModule1->SqlSpecification->FieldByName("C0_C1min")->AsFloat;
+                                                               if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                                               ResultForm->ResultGrid->Cells[Nar[22]][N+3]=y;
+                                                                 }
+                                }
+                  z=DataModule1->SQLCrystalData->FieldByName("fC0")->AsFloat/DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat;
+                              if(DataModule1->SqlSpecification->FieldByName("C0_C1max")->AsString!="no"){
+                                                        if(z>x){
+                                                                 ResultForm->ResultGrid->Cells[Nar[22]][i+1]=ResultForm->ResultGrid->Cells[Nar[22]][i+1]+"+";
+                                                                 g=1;
+                                                                 }
+                              }
+                             if(DataModule1->SqlSpecification->FieldByName("C0_C1min")->AsString!="no"){
+                                                        if(z<y){
+                                                                ResultForm->ResultGrid->Cells[Nar[22]][i+1]=ResultForm->ResultGrid->Cells[Nar[22]][i+1]+"-";
+                                                                g=1;
+                                                                }
+                              }
+    }
+
+
+
+
+
+
+
+ //********************************************************************************************************************************************************
+//******************************************************Перестройка*********************************************************************************************
+if(DataModule1->SqlSpecification->FieldByName("C1_2C0")->AsString=="True"){
+                  DataModule1->SQLCrystalData->First();
+                  double C1_2C0,C0,C1;
+                                     for(int j=0;j<Nt;j++){
+                                                    if(DataModule1->SqlSpecification->FieldByName("C1_2C0T")->AsFloat==DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat){
+                                                                    C0=DataModule1->SQLCrystalData->FieldByName("fC0")->AsFloat;
+                                                                     C1=DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat;
+                                                                    C1_2C0=(C1/(2*C0))*1E+6;
+                                                                    SEdit1->AsFloat=C1_2C0;
+                                                                    ResultForm->ResultGrid->Cells[Nar[25]][i+1]=SEdit1->Text;
+                                                                                if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                            if (DataModule1->SQLSetupData->FieldByName("strQCStatus2")->AsString!=" Dead"){
+                                                                                                        if (DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat!=0 & DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat!=1E+30){
+                                                                                                                     if (DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat!=0 & DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat!=1E+30){
+                                                                                                                     C0=DataModule1->SQLCrystalData->FieldByName("fC0")->AsFloat;
+                                                                                                                     C1=DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat;
+                                                                                                                     DataModule1->SQLPSIData->FieldByName("C1_2C0")->AsFloat=C1_2C0;
+                                                                                                                     }
+                                                                                                          }
+                                                                                                          else{
+                                                                                                              DataModule1->SQLPSIData->FieldByName("C1_2C0")->AsFloat=1;
+                                                                                                             }
+                                                                                            }
+                                                                                   }
+                                                                     break;
+                                                    }
+                                               DataModule1->SQLCrystalData->Next();
+
+                                      }
+                 double x,y,z;
+                 z=(C0/(2*C1))*10E+6;
+                  if (MinC1_2C0==0){
+                       MinC1_2C0=z;
+                       }
+        if (z<3000000&z!=0){
+        SumC1_2C0=SumC1_2C0+z;
+                   }
+        if (z>MaxC1_2C0){
+                      if (z<300000){
+                         MaxC1_2C0=z;
+                       }
+         }
+         if (z<MinC1_2C0){
+                     if (z!=0){
+                        MinC1_2C0=z;
+                     }
+         }
+
+
+
+                                 if(DataModule1->SqlSpecification->FieldByName("C1_2C0max")->AsString!="no"){
+                                                  x=DataModule1->SqlSpecification->FieldByName("C1_2C0max")->AsFloat;
+                                                             if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                                                ResultForm->ResultGrid->Cells[Nar[25]][N+2]=x;
+                                                                }
+                                  }
+                               if(DataModule1->SqlSpecification->FieldByName("C1_2C0min")->AsString!="no"){
+                                                  y=DataModule1->SqlSpecification->FieldByName("C1_2C0min")->AsFloat;
+                                                               if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                                               ResultForm->ResultGrid->Cells[Nar[25]][N+3]=y;
+                                                                 }
+                                }
+
+                              if(DataModule1->SqlSpecification->FieldByName("C1_2C0max")->AsString!="no"){
+                                                        if(z>x){
+                                                                 ResultForm->ResultGrid->Cells[Nar[25]][i+1]=ResultForm->ResultGrid->Cells[Nar[25]][i+1]+"+";
+                                                                 counterC1_2C0++;
+                                                                 g=1;
+                                                                 }
+                              }
+                             if(DataModule1->SqlSpecification->FieldByName("C1_2C0min")->AsString!="no"){
+                                                        if(z<y){
+                                                                ResultForm->ResultGrid->Cells[Nar[25]][i+1]=ResultForm->ResultGrid->Cells[Nar[25]][i+1]+"-";
+                                                                counterC1_2C0++;
+                                                                g=1;
+                                                                }
+                              }
+    }
+
+
+
+
+
+
+
+//Q*****************************************************************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("Q")->AsString=="True"){
+                DataModule1->SQLSetupData->First();
+                             for(int j=0;j<Nt;j++){
+                                             if(DataModule1->SqlSpecification->FieldByName("Tq")->AsFloat==DataModule1->SQLSetupData->FieldByName("fSetTemperature")->AsFloat){
+                                                           SEdit1->AsFloat=DataModule1->SQLSetupData->FieldByName("fValue2")->AsFloat;
+                                                           ResultForm->ResultGrid->Cells[Nar[7]][i+1]=SEdit1->Text;
+                                                                        if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                     if (DataModule1->SQLSetupData->FieldByName("strQCStatus2")->AsString!=" Dead"){
+                                                                                              if (DataModule1->SQLSetupData->FieldByName("fValue2")->AsFloat!=1E+30){
+                                                                                                   DataModule1->SQLPSIData->FieldByName("Q")->AsString=ResultForm->ResultGrid->Cells[Nar[7]][i+1];
+                                                                                                   }
+                                                                                                else{
+                                                                                                              DataModule1->SQLPSIData->FieldByName("Q")->AsFloat=1;
+                                                                                                             }
+                                                                                       }
+                                                                            }
+                                                           break;
+                                               }
+                                DataModule1->SQLSetupData->Next();
+                            }
+      double x,y,z;
+
+                           if(DataModule1->SqlSpecification->FieldByName("Qmax")->AsString!="no"){
+                                         x=DataModule1->SqlSpecification->FieldByName("Qmax")->AsFloat;
+                                                      if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                                ResultForm->ResultGrid->Cells[Nar[7]][N+2]=x; }
+                                                       }
+                           if(DataModule1->SqlSpecification->FieldByName("Qmin")->AsString!="no"){
+                                        y=DataModule1->SqlSpecification->FieldByName("Qmin")->AsFloat;
+                                                     if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                                 ResultForm->ResultGrid->Cells[Nar[7]][N+3]=y;
+                                                       }
+                           }
+     AnsiString HJ;
+     HJ=ResultForm->ResultGrid->Cells[Nar[7]][i+1];
+                          if (HJ!=""){
+                                      z=DataModule1->SQLSetupData->FieldByName("fValue2")->AsFloat;
+                                   }
+                          else {z=0;}
+                         if(DataModule1->SqlSpecification->FieldByName("Qmax")->AsString!="no"){
+                                             if(z>x){
+                                                     ResultForm->ResultGrid->Cells[Nar[7]][i+1]=ResultForm->ResultGrid->Cells[Nar[7]][i+1]+"+";
+                                                     g=1;
+                                                     }
+                          }
+                        if(DataModule1->SqlSpecification->FieldByName("Qmin")->AsString!="no"){
+                                             if(z<y){
+                                                       ResultForm->ResultGrid->Cells[Nar[7]][i+1]=ResultForm->ResultGrid->Cells[Nar[7]][i+1]+"-";
+                                                       g=1;
+                                                     }
+                          }
+  }
+
+//Rb*********************************************************************************************************
+if(DataModule1->SqlSpecification->FieldByName("Rb")->AsString=="True"){
+       DataModule1->SQLSetupData->First();
+                                  for(int j=0;j<Nt;j++){
+                                                      if(DataModule1->SqlSpecification->FieldByName("RbT")->AsFloat==DataModule1->SQLSetupData->FieldByName("fSetTemperature")->AsFloat){
+                                                                  SEdit1->AsFloat=DataModule1->SQLSetupData->FieldByName("fValue3")->AsFloat;
+                                                                  ResultForm->ResultGrid->Cells[Nar[8]][i+1]=SEdit1->Text;
+                                                                              if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                        if (DataModule1->SQLSetupData->FieldByName("strQCStatus2")->AsString!=" Dead"){
+                                                                                                    DataModule1->SQLPSIData->FieldByName("Rbmax")->AsString=ResultForm->ResultGrid->Cells[Nar[19]][i+1];
+                                                                                         }
+                                                                               }
+                                                           break;
+                                                      }
+                                        DataModule1->SQLSetupData->Next();
+                                     }
+           double x,y,z;
+
+                                 if(DataModule1->SqlSpecification->FieldByName("Rbmax")->AsString!="no"){
+                                                  x=DataModule1->SqlSpecification->FieldByName("Rbmax")->AsFloat;
+                                                             if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                                          ResultForm->ResultGrid->Cells[Nar[8]][N+2]=x;
+                                                               }
+                                    }
+                                 if(DataModule1->SqlSpecification->FieldByName("Rbmin")->AsString!="no"){
+                                                  y=DataModule1->SqlSpecification->FieldByName("Rbmin")->AsFloat;
+                                                             if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                                          ResultForm->ResultGrid->Cells[Nar[8]][N+3]=y;
+                                                               }
+                                  }
+           AnsiString HY;
+           HY=ResultForm->ResultGrid->Cells[Nar[8]][i+1];
+                                if (HY!=""){
+                                            z=StrToFloat(ResultForm->ResultGrid->Cells[Nar[8]][i+1]);}
+                                 else {z=0;}
+                              if(DataModule1->SqlSpecification->FieldByName("Rbmax")->AsString!="no"){
+                                              if(z>x){
+                                                      ResultForm->ResultGrid->Cells[Nar[8]][i+1]=ResultForm->ResultGrid->Cells[Nar[8]][i+1]+"+";
+                                                      g=1;
+                                                      }
+                               }
+                             if(DataModule1->SqlSpecification->FieldByName("Rbmin")->AsString!="no"){
+                                               if(z<y){
+                                                       ResultForm->ResultGrid->Cells[Nar[8]][i+1]=ResultForm->ResultGrid->Cells[Nar[8]][i+1]+"-";
+                                                       g=1;
+                                                       }
+                              }
+  }
+
+//L****************************************************************************************************************************
+if(DataModule1->SqlSpecification->FieldByName("L")->AsString=="True"){
+             DataModule1->SQLCrystalData->First();
+                         for(int j=0;j<Nt;j++){
+                                      if(DataModule1->SqlSpecification->FieldByName("Lt")->AsFloat==DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat){
+                                                 SEdit1->AsFloat=DataModule1->SQLCrystalData->FieldByName("fL")->AsFloat*1E+3;
+                                                 ResultForm->ResultGrid->Cells[Nar[9]][i+1]=SEdit1->Text;
+                                                           if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                         if (DataModule1->SQLSetupData->FieldByName("strQCStatus2")->AsString!=" Dead"){
+                                                                                     DataModule1->SQLPSIData->FieldByName("L")->AsString=ResultForm->ResultGrid->Cells[Nar[9]][i+1];
+                                                                          }
+                                                             }
+                                                  break;
+                                         }
+                                    DataModule1->SQLCrystalData->Next();
+                          }
+               double x,y,z;
+
+                        if(DataModule1->SqlSpecification->FieldByName("Lmax")->AsString!="no"){
+                                       x=DataModule1->SqlSpecification->FieldByName("Lmax")->AsFloat;
+                                                   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                              ResultForm->ResultGrid->Cells[Nar[9]][N+2]=x;
+                                                      }
+                            }
+                        if(DataModule1->SqlSpecification->FieldByName("Lmin")->AsString!="no"){
+                                        y=DataModule1->SqlSpecification->FieldByName("Lmin")->AsFloat;
+                                                    if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                               ResultForm->ResultGrid->Cells[Nar[9]][N+3]=y;
+                                                       }
+                         }
+
+                       z=StrToFloat(ResultForm->ResultGrid->Cells[Nar[9]][i+1]);
+                                  if(DataModule1->SqlSpecification->FieldByName("Lmax")->AsString!="no"){
+                                                     if(z>x){
+                                                             ResultForm->ResultGrid->Cells[Nar[9]][i+1]=ResultForm->ResultGrid->Cells[Nar[9]][i+1]+"+";
+                                                             g=1;
+                                                             }
+                                   }
+                                if(DataModule1->SqlSpecification->FieldByName("Lmin")->AsString!="no"){
+                                                       if(z<y){
+                                                                ResultForm->ResultGrid->Cells[Nar[9]][i+1]=ResultForm->ResultGrid->Cells[Nar[9]][i+1]+"-";
+                                                                g=1;
+                                                                }
+                                }
+  }
+
+//RC_RB********************************************************************************************
+
+ if(DataModule1->SqlSpecification->FieldByName("Rc_Rb")->AsString=="True"){
+            DataModule1->SQLSetupData->First();
+            double x1,x2,x3,Y1,Y2;
+            Y1=0;Y2=0;
+            x1=StrToFloat(DataModule1->SqlSpecification->FieldByName("TbBegin")->AsString);
+            x2=StrToFloat(DataModule1->SqlSpecification->FieldByName("TbEnd")->AsString);
+          for(int j=0;j<Nt;j++){
+                  x3=DataModule1->SQLSetupData->FieldByName("fSetTemperature")->AsFloat;
+                       if(x3>=x1&x3<=x2){
+                                   if (DataModule1->SQLSetupData->FieldByName("fValue4")->AsFloat!=0){
+                                   if (DataModule1->SqlSpecification->FieldByName("INVERT_Rc_RB")->AsString=="True"){
+                                        Y1=DataModule1->SQLSetupData->FieldByName("fValue4")->AsFloat;
+                                   }
+                                   else {
+                                        Y1=1/DataModule1->SQLSetupData->FieldByName("fValue4")->AsFloat;
+                                       }
+                                   }
+                                   else { Y1==0;}
+                                     if (DataModule1->SqlSpecification->FieldByName("INVERT_Rc_RB")->AsString=="True"){
+                                         if (Y1<Y2&Y2>0){
+                                                Y2=Y1;
+                                           }
+                                           else if (Y2==0)  {
+                                            Y2=Y1  ;
+                                           }
+                                     }
+                                     else {
+                                      if (Y1>Y2){
+                                                Y2=Y1;
+                                       }
+                                      } 
+                        }
+                  DataModule1->SQLSetupData->Next();
+                  SEdit1->AsFloat=Y2;
+                  ResultForm->ResultGrid->Cells[Nar[10]][i+1]=SEdit1->Text;
+         if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                if (DataModule1->SQLSetupData->FieldByName("strQCStatus2")->AsString!=" Dead"){
+                DataModule1->SQLPSIData->FieldByName("RcRb")->AsString=ResultForm->ResultGrid->Cells[Nar[10]][i+1];
+                }
+           }
+           }
+ double x,y,z;
+               z=Y2;
+                if (MinRc_Rb==0){
+                               MinRc_Rb=z;
+                               }
+                SumRc_Rb=SumRc_Rb+z;
+               if (z>MaxRc_Rb){
+                              MaxRc_Rb=z;
+                 }
+               if (z<MinRc_Rb){
+                              if (z!=0){
+                                       MinRc_Rb=z;
+                                       }
+                   }
+
+
+             if(DataModule1->SqlSpecification->FieldByName("CbRc_Rb")->AsString=="False"){
+                          if(DataModule1->SqlSpecification->FieldByName("Rc_Rbmax")->AsString!="no"){
+
+                                  x=DataModule1->SqlSpecification->FieldByName("Rc_Rbmax")->AsFloat;
+                                  if (DataModule1->SqlSpecification->FieldByName("INVERT_Rc_RB")->AsString=="True"){
+                                    if(z<x){
+                                          ResultForm->ResultGrid->Cells[Nar[10]][i+1]=ResultForm->ResultGrid->Cells[Nar[10]][i+1]+"-";
+                                          g=1;
+                                          counterRc_Rb++;
+                                 }
+
+                                  }
+                                  else {
+                                  if(z>x){
+                                          ResultForm->ResultGrid->Cells[Nar[10]][i+1]=ResultForm->ResultGrid->Cells[Nar[10]][i+1]+"+";
+                                          g=1;
+                                          counterRc_Rb++;
+                                 }
+
+                                }
+
+                           }
+              }
+
+
+
+
+             if(DataModule1->SqlSpecification->FieldByName("CbRc_Rb")->AsString=="True"){
+                         if(DataModule1->SqlSpecification->FieldByName("Rc_Rbmax")->AsString!="no"){
+                                x=DataModule1->SqlSpecification->FieldByName("Rc_Rbmax")->AsFloat;
+                                if (DataModule1->SqlSpecification->FieldByName("INVERT_Rc_RB")->AsString=="True"){
+                                      if(z<x){
+                                             g=1;
+                                             counterRc_Rb++;
+
+                                       }
+
+
+                                }
+                                else {
+                                      if(z>x){
+                                             g=1;
+                                             counterRc_Rb++;
+
+                                       }
+                                    }   
+                          }
+                 }
+ }
+
+
+//Монотонность***********************************************************************************************
+
+
+
+if(DataModule1->SqlSpecification->FieldByName("M")->AsString=="True"){
+  double Y2;
+  double MonoT,Mono;
+
+                               DataModule1->SQLCrystalData->First();
+                    double x1,x2,x3,Y1s,Yf1,Yf2;
+                  Y1s=0;Y2=0;
+                  x1=StrToFloat(DataModule1->SqlSpecification->FieldByName("TmBegin")->AsString);
+                  x2=StrToFloat(DataModule1->SqlSpecification->FieldByName("TmEnd")->AsString);
+                             for(int j=0;j<Nt;j++){
+                                          x3=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat;
+                                                    if(x3>=x1&x3<=x2){
+                                                                Y1s=fabs(DataModule1->SQLCrystalData->FieldByName("fErrorPPM")->AsFloat);
+                                                                Yf1=fabsl(Y1s);
+                                                                Yf2=fabsl(Y2);
+                                                                          if (Yf1>Yf2){
+                                                                                      Y2=Y1s;
+                                                                            }
+                                                        }
+                                        DataModule1->SQLCrystalData->Next();
+                                     }
+                                     Mono=Y2;
+                    SEdit1->AsFloat=Y2;
+
+        if (DataModule1->SqlSpecification->FieldByName("TCH_Approx_IST")->AsString=="True" & DataModule1->SqlSpecification->FieldByName("Mono_Approx_Type")->AsString=="False"){
+
+         if (TempCount>=M+1){
+          MonotonP(X1,Y1,A,B,Mono,TempCountM,W,M,mono1,MonoT);
+          }
+          SEdit1->AsFloat=Mono;
+          Y2=Mono;
+         }
+
+
+                   ResultForm->ResultGrid->Cells[Nar[20]][i+1]=SEdit1->Text;
+                             if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                           if (Y2<100 || Y2>-100){
+                                                                      DataModule1->SQLPSIData->FieldByName("Mono")->AsFloat=Y2;
+                                                                      }
+                                                                      DataModule1->SQLPSIData->FieldByName("MonoT")->AsFloat=MonoT;
+                              }
+                   double x,y,z;
+                             if(DataModule1->SqlSpecification->FieldByName("Mmax")->AsString!="no"){
+                                               x=DataModule1->SqlSpecification->FieldByName("Mmax")->AsFloat;
+                                                         if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                                       ResultForm->ResultGrid->Cells[Nar[20]][N+2]=x;
+                                                           }
+                             }
+                  z=Y2;
+                             if(DataModule1->SqlSpecification->FieldByName("Mmax")->AsString!="no"){
+                                                 if(z>x){
+                                                          ResultForm->ResultGrid->Cells[Nar[20]][i+1]=ResultForm->ResultGrid->Cells[Nar[20]][i+1]+"+";
+                                                          g=1;
+                                                   }
+                               }
+   }
+//****************************************Spur#1********************************************************************************************************
+ if(DataModule1->SqlSpecification->FieldByName("Rsp1")->AsString=="True"){
+            DataModule1->SQLSetupData->First();
+            double x1,x2,x3,Y1,Y2;
+            Y1=0;Y2=0;
+            x1=StrToFloat(DataModule1->SqlSpecification->FieldByName("Rsp1tBegin")->AsString);
+
+          for(int j=0;j<Nt;j++){
+                  x3=DataModule1->SQLSetupData->FieldByName("fSetTemperature")->AsFloat;
+                       if(x3==x1){
+                               if (DataModule1->SQLSetupData->FieldByName("fValue5")->AsFloat>=0){
+                                         Y1=20*log10(DataModule1->SQLSetupData->FieldByName("fValue5")->AsFloat);
+                                   }
+                                   else { Y1==0;}
+                                      if (Y1>Y2){
+                                                Y2=Y1;
+                                       }
+                        }
+                  DataModule1->SQLSetupData->Next();
+                  SEdit1->AsFloat=Y2;
+                  ResultForm->ResultGrid->Cells[Nar[24]][i+1]=SEdit1->Text;
+         if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                if (DataModule1->SQLSetupData->FieldByName("fValue5")->AsFloat>=0){
+                DataModule1->SQLPSIData->FieldByName("Spur")->AsString=ResultForm->ResultGrid->Cells[Nar[24]][i+1];
+                DataModule1->SQLPSIData->FieldByName("Rsp1")->AsString=ResultForm->ResultGrid->Cells[Nar[24]][i+1];
+                DataModule1->SQLPSIData->FieldByName("FSpur1")->AsString=DataModule1->SQLSetupData->FieldByName("fValue6")->AsString;
+                }
+           }
+           }
+ double x,y,z;
+               z=Y2;
+                if (MinRsp1==0){
+                               MinRsp1=z;
+                               }
+                SumRsp1=SumRsp1+z;
+               if (z>MaxRsp1){
+                              MaxRsp1=z;
+                 }
+               if (z<MinRsp1){
+                              if (z!=0){
+                                       MinRsp1=z;
+                                       }
+                   }
+
+
+
+                          if(DataModule1->SqlSpecification->FieldByName("Rsp1max")->AsString!="no"){
+                                  x=DataModule1->SqlSpecification->FieldByName("Rsp1max")->AsFloat;
+                                  if(z>x){
+                                          ResultForm->ResultGrid->Cells[Nar[24]][i+1]=ResultForm->ResultGrid->Cells[Nar[24]][i+1]+"+";
+                                          g=1;
+                                          counterRsp1++;
+                                 }
+                           }
+                            if(DataModule1->SqlSpecification->FieldByName("Rsp1min")->AsString!="no"){
+                                  y=DataModule1->SqlSpecification->FieldByName("Rsp1min")->AsFloat;
+                                  if(z<y){
+                                          ResultForm->ResultGrid->Cells[Nar[24]][i+1]=ResultForm->ResultGrid->Cells[Nar[24]][i+1]+"-";
+                                          g=1;
+                                          counterRsp1++;
+                                 }
+                           }
+
+
+
+
+
+ }
+//**********************************************************************************************************************************************************
+ //****************************************Spur#2********************************************************************************************************
+ if(DataModule1->SqlSpecification->FieldByName("Rsp2")->AsString=="True"){
+            DataModule1->SQLSetupData->First();
+            double x1,x2,x3,Y1,Y2;
+            Y1=0;Y2=0;
+            x1=StrToFloat(DataModule1->SqlSpecification->FieldByName("Rsp2tBegin")->AsString);
+
+          for(int j=0;j<Nt;j++){
+                  x3=DataModule1->SQLSetupData->FieldByName("fSetTemperature")->AsFloat;
+                       if(x3==x1){
+                               if (DataModule1->SQLSetupData->FieldByName("fValue8")->AsFloat>0 & DataModule1->SQLSetupData->FieldByName("fValue8")->AsFloat<1E30){
+                                         Y1=20*log10(DataModule1->SQLSetupData->FieldByName("fValue11")->AsFloat);
+                                   }
+                                   else { Y1==0;}
+                                      if (Y1>Y2){
+                                                Y2=Y1;
+                                       }
+                        }
+                  DataModule1->SQLSetupData->Next();
+                  SEdit1->AsFloat=Y2;
+                  ResultForm->ResultGrid->Cells[Nar[38]][i+1]=SEdit1->Text;
+         if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                if (DataModule1->SQLSetupData->FieldByName("fValue8")->AsFloat>0 & DataModule1->SQLSetupData->FieldByName("fValue8")->AsFloat<1E30){
+                DataModule1->SQLPSIData->FieldByName("Rsp2")->AsString=ResultForm->ResultGrid->Cells[Nar[38]][i+1];
+                DataModule1->SQLPSIData->FieldByName("FSpur2")->AsString=DataModule1->SQLSetupData->FieldByName("fValue8")->AsString;
+                }
+           }
+           }
+ double x,y,z;
+               z=Y2;
+                if (MinRsp2==0){
+                               MinRsp2=z;
+                               }
+                SumRsp2=SumRsp2+z;
+               if (z>MaxRsp2){
+                              MaxRsp2=z;
+                 }
+               if (z<MinRsp2){
+                              if (z!=0){
+                                       MinRsp2=z;
+                                       }
+                   }
+
+
+
+                          if(DataModule1->SqlSpecification->FieldByName("Rsp2max")->AsString!="no"){
+                                  x=DataModule1->SqlSpecification->FieldByName("Rsp2max")->AsFloat;
+                                  if(z>x){
+                                          ResultForm->ResultGrid->Cells[Nar[38]][i+1]=ResultForm->ResultGrid->Cells[Nar[38]][i+1]+"+";
+                                          g=1;
+                                          counterRsp2++;
+                                 }
+                           }
+                            if(DataModule1->SqlSpecification->FieldByName("Rsp2min")->AsString!="no"){
+                                  y=DataModule1->SqlSpecification->FieldByName("Rsp2min")->AsFloat;
+                                  if(z<y){
+                                          ResultForm->ResultGrid->Cells[Nar[38]][i+1]=ResultForm->ResultGrid->Cells[Nar[38]][i+1]+"-";
+                                          g=1;
+                                          counterRsp2++;
+                                 }
+                           }
+
+
+
+
+
+ }
+
+ //****************************************Spur#3********************************************************************************************************
+ if(DataModule1->SqlSpecification->FieldByName("Rsp3")->AsString=="True"){
+            DataModule1->SQLSetupData->First();
+            double x1,x2,x3,Y1,Y2;
+            Y1=0;Y2=0;
+            x1=StrToFloat(DataModule1->SqlSpecification->FieldByName("Rsp3tBegin")->AsString);
+
+          for(int j=0;j<Nt;j++){
+                  x3=DataModule1->SQLSetupData->FieldByName("fSetTemperature")->AsFloat;
+                       if(x3==x1){
+                               if (DataModule1->SQLSetupData->FieldByName("fValue12")->AsFloat>0 & DataModule1->SQLSetupData->FieldByName("fValue12")->AsFloat<1E30){
+                                         Y1=20*log10(DataModule1->SQLSetupData->FieldByName("fValue15")->AsFloat);
+                                   }
+                                   else { Y1==0;}
+                                      if (Y1>Y2){
+                                                Y2=Y1;
+                                       }
+                        }
+                  DataModule1->SQLSetupData->Next();
+                  SEdit1->AsFloat=Y2;
+                  ResultForm->ResultGrid->Cells[Nar[39]][i+1]=SEdit1->Text;
+         if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                if (DataModule1->SQLSetupData->FieldByName("fValue12")->AsFloat>0 & DataModule1->SQLSetupData->FieldByName("fValue12")->AsFloat<1E30){
+                DataModule1->SQLPSIData->FieldByName("Rsp3")->AsString=ResultForm->ResultGrid->Cells[Nar[39]][i+1];
+                DataModule1->SQLPSIData->FieldByName("FSpur3")->AsString=DataModule1->SQLSetupData->FieldByName("fValue12")->AsString;
+                }
+           }
+           }
+ double x,y,z;
+               z=Y2;
+                if (MinRsp3==0){
+                               MinRsp3=z;
+                               }
+                SumRsp3=SumRsp3+z;
+               if (z>MaxRsp3){
+                              MaxRsp3=z;
+                 }
+               if (z<MinRsp3){
+                              if (z!=0){
+                                       MinRsp3=z;
+                                       }
+                   }
+
+
+
+                          if(DataModule1->SqlSpecification->FieldByName("Rsp3max")->AsString!="no"){
+                                  x=DataModule1->SqlSpecification->FieldByName("Rsp3max")->AsFloat;
+                                  if(z>x){
+                                          ResultForm->ResultGrid->Cells[Nar[39]][i+1]=ResultForm->ResultGrid->Cells[Nar[39]][i+1]+"+";
+                                          g=1;
+                                          counterRsp3++;
+                                 }
+                           }
+                            if(DataModule1->SqlSpecification->FieldByName("Rsp3min")->AsString!="no"){
+                                  y=DataModule1->SqlSpecification->FieldByName("Rsp3min")->AsFloat;
+                                  if(z<y){
+                                          ResultForm->ResultGrid->Cells[Nar[39]][i+1]=ResultForm->ResultGrid->Cells[Nar[39]][i+1]+"-";
+                                          g=1;
+                                          counterRsp3++;
+                                 }
+                           }
+
+
+
+
+
+ }
+
+
+//****************************************Радиус Сферы********************************************************************************************************
+ if(DataModule1->SqlSpecification->FieldByName("Rsphere")->AsString=="True"){
+            DataModule1->SQLSetupData->First();
+            double RsrT,RealT,x3,Rsr1,Rsr2,Fsr1,Fsr2;
+            Rsr1=0;Rsr2=0;
+            RsrT=StrToFloat(DataModule1->SqlSpecification->FieldByName("RsphereT")->AsString);
+
+          for(int j=0;j<Nt;j++){
+                  RealT=DataModule1->SQLSetupData->FieldByName("fSetTemperature")->AsFloat;
+                       if(RsrT==RealT){
+                           Fsr1=DataModule1->SQLSetupData->FieldByName("fValue6")->AsFloat/1000;
+                           Fsr2=DataModule1->SQLSetupData->FieldByName("fValue7")->AsFloat/1000;
+
+                           break;
+                        }
+                  DataModule1->SQLSetupData->Next();
+
+
+               }
+                  if (Fsr1>0 & Fsr1<100000){
+                             Rsr1=DataModule1->SqlSpecification->FieldByName("RsphereK1")->AsFloat/(Fsr1*Fsr1);
+                              Rsr1=Rsr1*1000;
+                           }
+                           if (Fsr2>0 & Fsr2<100000){
+                              if (abs(Fsr1-Fsr2)<3){
+
+                             Rsr2=DataModule1->SqlSpecification->FieldByName("RsphereK1")->AsFloat/(Fsr2*Fsr2);
+                              }
+                              else {
+                             Rsr2=DataModule1->SqlSpecification->FieldByName("RsphereK2")->AsFloat/(Fsr2*Fsr2);
+                             }
+                             Rsr2=Rsr2*1000;
+                           }
+                   SEdit1->AsFloat=Rsr1;
+                  ResultForm->ResultGrid->Cells[Nar[31]][i+1]=SEdit1->Text;
+                  SEdit1->AsFloat=Rsr2;
+                  ResultForm->ResultGrid->Cells[Nar[32]][i+1]=SEdit1->Text;         
+             if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                if (DataModule1->SQLSetupData->FieldByName("strQCStatus6")->AsString!=" Dead" & DataModule1->SQLSetupData->FieldByName("strQCStatus7")->AsString!=" Dead"){
+               if (Fsr1>0 & Fsr1<100000){
+                DataModule1->SQLPSIData->FieldByName("FSpur1")->AsString=Fsr1;
+                }
+                if (Fsr2>0 & Fsr2<100000){
+                DataModule1->SQLPSIData->FieldByName("FSpur2")->AsString=Fsr2;
+                }
+                if (Rsr1==0 &Rsr2!=0){
+                 DataModule1->SQLPSIData->FieldByName("RSphere1")->AsString=Rsr2;
+                }
+                else {
+                  DataModule1->SQLPSIData->FieldByName("RSphere1")->AsString=Rsr1;
+                }
+                if (Rsr2==0 & Rsr1!=0){
+                DataModule1->SQLPSIData->FieldByName("RSphere2")->AsString=Rsr1;
+                }
+                else {
+                DataModule1->SQLPSIData->FieldByName("RSphere2")->AsString=Rsr2;
+                }
+                }
+
+
+           }
+
+ double x,y,z;
+               z=Rsr1;
+                if (MinRsr1==0){
+                               MinRsr1=z;
+                               }
+                SumRsr1=SumRsr1+z;
+               if (z>MaxRsr1){
+                              MaxRsr1=z;
+                 }
+               if (z<MinRsr1){
+                              if (z!=0){
+                                       MinRsr1=z;
+                                       }
+                   }
+
+               z=Rsr2;
+                if (MinRsr2==0){
+                               MinRsr2=z;
+                               }
+                SumRsr2=SumRsr2+z;
+               if (z>MaxRsr2){
+                              MaxRsr2=z;
+                 }
+               if (z<MinRsr2){
+                              if (z!=0){
+                                       MinRsr2=z;
+                                       }
+                   }
+
+
+                          if(DataModule1->SqlSpecification->FieldByName("RsphereMax")->AsString!="no"){
+                                  x=DataModule1->SqlSpecification->FieldByName("RsphereMax")->AsFloat;
+                                  if(Rsr1>x){
+                                          ResultForm->ResultGrid->Cells[Nar[31]][i+1]=ResultForm->ResultGrid->Cells[Nar[31]][i+1]+"+";
+                                          g=1;
+                                          counterRsr1++;
+                                 }
+                           }
+                            if(DataModule1->SqlSpecification->FieldByName("RsphereMin")->AsString!="no"){
+                                  y=DataModule1->SqlSpecification->FieldByName("RsphereMin")->AsFloat;
+                                  if(Rsr1<y){
+                                          ResultForm->ResultGrid->Cells[Nar[31]][i+1]=ResultForm->ResultGrid->Cells[Nar[31]][i+1]+"-";
+                                          g=1;
+                                          counterRsr1++;
+                                 }
+                           }
+
+                             if(DataModule1->SqlSpecification->FieldByName("RsphereMax")->AsString!="no"){
+                                  x=DataModule1->SqlSpecification->FieldByName("RsphereMax")->AsFloat;
+                                  if(Rsr2>x){
+                                          ResultForm->ResultGrid->Cells[Nar[32]][i+1]=ResultForm->ResultGrid->Cells[Nar[32]][i+1]+"+";
+                                          g=1;
+                                          counterRsr2++;
+                                 }
+                           }
+                            if(DataModule1->SqlSpecification->FieldByName("RsphereMin")->AsString!="no"){
+                                  y=DataModule1->SqlSpecification->FieldByName("RsphereMin")->AsFloat;
+                                  if(Rsr2<y){
+                                          ResultForm->ResultGrid->Cells[Nar[32]][i+1]=ResultForm->ResultGrid->Cells[Nar[32]][i+1]+"-";
+                                          g=1;
+                                          counterRsr2++;
+                                 }
+                           }
+
+
+
+   }
+
+
+ //***************************Rmax/R25******************************************************************************************
+ if(DataModule1->SqlSpecification->FieldByName("RR2")->AsString=="True"){
+ DataModule1->SQLCrystalData->First();
+
+                          for(int j=0;j<Nt;j++){
+                                    if(DataModule1->SqlSpecification->FieldByName("Tpar")->AsFloat==DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat){
+                                             R=DataModule1->SQLCrystalData->FieldByName("fRr")->AsFloat;
+                                              break;
+                                           }
+                                  DataModule1->SQLCrystalData->Next();
+                             }
+
+      double Rmax=0,RR2;
+      if (DataModule1->SqlSpecification->FieldByName("TCH_Interval_Type")->AsString=="По интервалу замера"){
+
+                        if (R!=0){
+                                 RR2=DataModule1->SQLPostProcessData->FieldByName("fRMax")->AsFloat/R;
+
+                                 }
+                                 else {
+                                         RR2=10000;
+                                         }
+
+                           }
+        else {
+
+                                     DataModule1->ProfileData1->Active=true;
+                                            DataModule1->ProfileData1->First();
+                                            DataModule1->SQLCrystalData->First();
+                                            for (int j=0; j<DataModule1->SQLCrystalData->RecordCount; j++){
+                                               DataModule1->ProfileData1->First();
+                                               for (int y=0;y<DataModule1->ProfileData1->RecordCount;y++){
+                                                  if (DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat==DataModule1->ProfileData1->FieldByName("Temperature")->AsFloat){
+
+                                                          if (DataModule1->SQLCrystalData->FieldByName("fRr")->AsFloat>Rmax){
+                                                               Rmax=DataModule1->SQLCrystalData->FieldByName("fRr")->AsFloat;
+
+                                                           }
+
+
+                                                  break;
+                                               }
+                                              DataModule1->ProfileData1->Next();
+                                              }
+                                             DataModule1->SQLCrystalData->Next();
+                                            }
+                                            RR2=Rmax/R;
+
+        }
+        SEdit1->AsFloat=RR2;
+   ResultForm->ResultGrid->Cells[Nar[27]][i+1]= SEdit1->Text;
+
+
+                if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                if (RR2>-10000 & RR2<10000){
+                            DataModule1->SQLPSIData->FieldByName("RR2")->AsString=RR2;
+                      }
+                 else {
+                   DataModule1->SQLPSIData->FieldByName("RR2")->AsString="0";
+                 }
+                }
+       double x,y;
+                if(DataModule1->SqlSpecification->FieldByName("RR2max")->AsString!="no"){
+                            x=DataModule1->SqlSpecification->FieldByName("RR2max")->AsFloat;
+                                        if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                    ResultForm->ResultGrid->Cells[Nar[27]][N+2]=x;
+                                         }
+                                       if(RR2>x){
+                                            ResultForm->ResultGrid->Cells[Nar[27]][i+1]=ResultForm->ResultGrid->Cells[Nar[27]][i+1]+"+";
+                                            CounterRR2++;
+                                            g=1;
+                                       }
+                  }
+                if(DataModule1->SqlSpecification->FieldByName("RR2min")->AsString!="no"){
+                           y=DataModule1->SqlSpecification->FieldByName("RR2min")->AsFloat;
+                                        if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                    ResultForm->ResultGrid->Cells[Nar[27]][N+3]=y;
+                                           }
+                                            if(RR2<y){
+                                  ResultForm->ResultGrid->Cells[Nar[27]][i+1]=ResultForm->ResultGrid->Cells[Nar[27]][i+1]+"-";
+                                  CounterRR2++;
+                                  g=1;
+                          }
+                 }
+
+                  if (MinRR2==0){
+                       MinRR2=RR2;
+                       }
+        if (RR2<3000000&RR2!=0){
+        SumRR2=SumRR2+RR2;
+                   }
+        if (RR2>MaxRR2){
+                      if (RR2<300000){
+                         MaxRR2=RR2;
+                       }
+         }
+         if (RR2<MinRR2){
+                     if (RR2!=0){
+                        MinRR2=RR2;
+                     }
+         }
+
+
+
+  }
+
+//***************************R25/Rmin******************************************************************************************
+ if(DataModule1->SqlSpecification->FieldByName("RR3")->AsString=="True"){
+  double RR3;
+  DataModule1->SQLCrystalData->First();
+                          for(int j=0;j<Nt;j++){
+                                    if(DataModule1->SqlSpecification->FieldByName("Tpar")->AsFloat==DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat){
+                                             R=DataModule1->SQLCrystalData->FieldByName("fRr")->AsFloat;
+                                              break;
+                                           }
+                                  DataModule1->SQLCrystalData->Next();
+                             }
+
+      double Rmin=10000;
+      if (DataModule1->SqlSpecification->FieldByName("TCH_Interval_Type")->AsString=="По интервалу замера"){
+
+
+                                 if (DataModule1->SQLPostProcessData->FieldByName("fRMin")->AsFloat!=0){
+                                               RR3=R/DataModule1->SQLPostProcessData->FieldByName("fRMin")->AsFloat;
+                                            }
+
+
+                                 else {
+                                         RR3=10000;
+                                         }
+
+                           }
+        else {
+
+                                     DataModule1->ProfileData1->Active=true;
+                                            DataModule1->ProfileData1->First();
+                                            DataModule1->SQLCrystalData->First();
+                                            for (int j=0; j<DataModule1->SQLCrystalData->RecordCount; j++){
+                                            DataModule1->ProfileData1->First();
+                                               for (int y=0;y<DataModule1->ProfileData1->RecordCount;y++){
+
+                                                  if (DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat==DataModule1->ProfileData1->FieldByName("Temperature")->AsFloat){
+
+                                                          if (DataModule1->SQLCrystalData->FieldByName("fRr")->AsFloat<Rmin){
+                                                               Rmin=DataModule1->SQLCrystalData->FieldByName("fRr")->AsFloat;
+
+                                                           }
+
+
+                                                  break;
+                                               }
+                                              DataModule1->ProfileData1->Next();
+                                              }
+                                             DataModule1->SQLCrystalData->Next();
+                                            }
+                                            if (Rmin=10000){
+                                            RR3=0;
+                                            }
+                                            else {
+                                            RR3=R/Rmin;
+                                            }
+
+        }
+  DataModule1->SQLCrystalData->First();
+                          for(int j=0;j<Nt;j++){
+                                    if(DataModule1->SqlSpecification->FieldByName("Tpar")->AsFloat==DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat){
+                                             R=DataModule1->SQLCrystalData->FieldByName("fRr")->AsFloat;
+                                              break;
+                                           }
+                                  DataModule1->SQLCrystalData->Next();
+                             }
+   if (DataModule1->SQLPostProcessData->FieldByName("fRMin")->AsFloat!=0){
+   RR3=R/DataModule1->SQLPostProcessData->FieldByName("fRMin")->AsFloat;
+
+   }
+   else {
+    RR3=10000;
+   }
+   SEdit1->AsFloat=RR3;
+   ResultForm->ResultGrid->Cells[Nar[28]][i+1]= SEdit1->Text;
+
+
+                if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                if (RR3>-10000 & RR3<10000){
+                            DataModule1->SQLPSIData->FieldByName("RR3")->AsString=RR3;
+                      }
+                 else {
+                   DataModule1->SQLPSIData->FieldByName("RR3")->AsString="0";
+                 }
+                }
+       double x,y;
+                if(DataModule1->SqlSpecification->FieldByName("RR3max")->AsString!="no"){
+                            x=DataModule1->SqlSpecification->FieldByName("RR3max")->AsFloat;
+                                        if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                    ResultForm->ResultGrid->Cells[Nar[28]][N+2]=x;
+                                         }
+                                       if(RR3>x){
+                                            ResultForm->ResultGrid->Cells[Nar[28]][i+1]=ResultForm->ResultGrid->Cells[Nar[28]][i+1]+"+";
+                                            CounterRR3++;
+                                            g=1;
+                                       }
+                  }
+                if(DataModule1->SqlSpecification->FieldByName("RR3min")->AsString!="no"){
+                           y=DataModule1->SqlSpecification->FieldByName("RR3min")->AsFloat;
+                                        if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                                                    ResultForm->ResultGrid->Cells[Nar[28]][N+3]=y;
+                                           }
+                                            if(RR3<y){
+                                  ResultForm->ResultGrid->Cells[Nar[28]][i+1]=ResultForm->ResultGrid->Cells[Nar[28]][i+1]+"-";
+                                  CounterRR3++;
+                                  g=1;
+                          }
+                 }
+
+                  if (MinRR3==0){
+                       MinRR3=RR3;
+                       }
+        if (RR3<3000000&RR3!=0){
+        SumRR3=SumRR3+RR3;
+                   }
+        if (RR3>MaxRR3){
+                      if (RR3<300000){
+                         MaxRR3=RR3;
+                       }
+         }
+         if (RR3<MinRR3){
+                     if (RR3!=0){
+                        MinRR3=RR3;
+                     }
+         }
+
+
+
+  }
+
+//Статус**********************************************************************************************************
+ if(DataModule1->SqlSpecification->FieldByName("Status")->AsString=="True"){
+                     if(g==1){
+                                    ResultForm->ResultGrid->Cells[Nar[23]][i+1]="Брак";
+
+                            }
+                       else if (g==2){
+
+                               ResultForm->ResultGrid->Cells[Nar[23]][i+1]="Усл.Годен";
+                               counter=counter+1;
+                       }
+                       else {
+                                 ResultForm->ResultGrid->Cells[Nar[23]][i+1]="Годен";
+                            }
+                        if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                  DataModule1->SQLPSIData->FieldByName("Status")->AsString=ResultForm->ResultGrid->Cells[Nar[23]][i+1];
+                           }
+                         DataModule1->SQLPSIDataT->Active=true;
+                       DataModule1->SQLPSIDataT->First();
+                  for (int i1=0;i1<DataModule1->SQLPSIDataT->RecordCount; i1++){
+                         DataModule1->SQLPSIDataT->Edit();
+                         DataModule1->SQLPSIDataT->FieldByName("Status1")->AsString=ResultForm->ResultGrid->Cells[Nar[23]][i+1];
+                         DataModule1->SQLPSIDataT->Post();
+                         DataModule1->SQLPSIDataT->Next();
+                       }
+   }
+   DataModule1->SQLPostProcessData->Next();
+                     if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                     DataModule1->SQLPSIData->Post();
+                           }
+
+
+
+
+
+
+ WorkProgress->Position=i;
+ }
+
+//Модуль Статистики***************************************************************************************
+
+
+ if(DataModule1->SqlSpecification->FieldByName("Stat")->AsString=="True"){
+           ResultForm->ResultGrid->Cells[Nar[23]][N+6]=N;
+           ResultForm->ResultGrid->Cells[Nar[23]][N+7]=N-counter;
+           double hh;
+           hh=N-counter;
+           hh=hh/N;
+           hh=hh*100;
+           SEdit1->AsFloat=hh;
+           ResultForm->ResultGrid->Cells[Nar[22]][N+8]=counter;
+           ResultForm->ResultGrid->Cells[Nar[22]][N+9]=SEdit1->AsString;
+
+                                   if(DataModule1->SqlSpecification->FieldByName("Tmax")->AsString=="True"){
+                                            SEdit1->AsFloat=SumTmax/N;
+                                            ResultForm->ResultGrid->Cells[Nar[11]][N+12]=SEdit1->AsString;
+                                            ResultForm->ResultGrid->Cells[Nar[11]][N+11]=MinTmax;
+                                            ResultForm->ResultGrid->Cells[Nar[11]][N+10]=MaxTmax;
+                                            ResultForm->ResultGrid->Cells[Nar[11]][N+9]=((N-counterTmax)/N)*100;
+                                            ResultForm->ResultGrid->Cells[Nar[11]][N+8]=counterTmax;
+                                            ResultForm->ResultGrid->Cells[Nar[11]][N+7]=N-counterTmax;
+                                            ResultForm->ResultGrid->Cells[Nar[11]][N+6]=N;
+                                     }
+
+                                  if(DataModule1->SqlSpecification->FieldByName("Tmin")->AsString=="True"){
+                                            ResultForm->ResultGrid->Cells[Nar[12]][N+6]=N;
+                                            ResultForm->ResultGrid->Cells[Nar[12]][N+7]=N-counterTmin;
+                                            ResultForm->ResultGrid->Cells[Nar[12]][N+8]=counterTmin;
+                                            ResultForm->ResultGrid->Cells[Nar[12]][N+9]=((N-counterTmin)/N)*100;
+                                            ResultForm->ResultGrid->Cells[Nar[12]][N+10]=MaxTmin;
+                                            ResultForm->ResultGrid->Cells[Nar[12]][N+11]=MinTmin;
+                                            SEdit1->AsFloat=SumTmin/N;
+                                            ResultForm->ResultGrid->Cells[Nar[12]][N+12]=SEdit1->AsString;
+                                      }
+                                  if(DataModule1->SqlSpecification->FieldByName("Rc_Rb")->AsString=="True"){
+                                            ResultForm->ResultGrid->Cells[Nar[10]][N+6]=N;
+                                            ResultForm->ResultGrid->Cells[Nar[10]][N+7]=N-counterRc_Rb;
+                                            ResultForm->ResultGrid->Cells[Nar[10]][N+8]=counterRc_Rb;
+                                            ResultForm->ResultGrid->Cells[Nar[10]][N+9]=((N-counterRc_Rb)/N)*100;
+                                            ResultForm->ResultGrid->Cells[Nar[10]][N+10]=MaxRc_Rb;
+                                            ResultForm->ResultGrid->Cells[Nar[10]][N+11]=MinRc_Rb;
+                                            SEdit1->AsFloat=SumRc_Rb/N;
+                                           ResultForm->ResultGrid->Cells[Nar[10]][N+12]=SEdit1->AsString;
+                                       }
+                                     if(DataModule1->SqlSpecification->FieldByName("Rsp1")->AsString=="True"){
+                                            ResultForm->ResultGrid->Cells[Nar[24]][N+6]=N;
+                                            ResultForm->ResultGrid->Cells[Nar[24]][N+7]=N-counterRsp1;
+                                            ResultForm->ResultGrid->Cells[Nar[24]][N+8]=counterRsp1;
+                                            ResultForm->ResultGrid->Cells[Nar[24]][N+9]=((N-counterRsp1)/N)*100;
+                                            ResultForm->ResultGrid->Cells[Nar[24]][N+10]=MaxRsp1;
+                                            ResultForm->ResultGrid->Cells[Nar[24]][N+11]=MinRsp1;
+                                            SEdit1->AsFloat=SumRsp1/N;
+                                           ResultForm->ResultGrid->Cells[Nar[24]][N+12]=SEdit1->AsString;
+                                       }
+                                       if(DataModule1->SqlSpecification->FieldByName("C1_2C0")->AsString=="True"){
+                                            ResultForm->ResultGrid->Cells[Nar[25]][N+6]=N;
+                                            ResultForm->ResultGrid->Cells[Nar[25]][N+7]=N-counterC1_2C0;
+                                            ResultForm->ResultGrid->Cells[Nar[25]][N+8]=counterC1_2C0;
+                                            ResultForm->ResultGrid->Cells[Nar[25]][N+9]=((N-counterC1_2C0)/N)*100;
+                                            ResultForm->ResultGrid->Cells[Nar[25]][N+10]=MaxC1_2C0;
+                                            ResultForm->ResultGrid->Cells[Nar[25]][N+11]=MinC1_2C0;
+                                            SEdit1->AsFloat=SumC1_2C0/N;
+                                           ResultForm->ResultGrid->Cells[Nar[25]][N+12]=SEdit1->AsString;
+                                       }
+                                         if(DataModule1->SqlSpecification->FieldByName("Rmax-Rmin")->AsString=="True"){
+                                            ResultForm->ResultGrid->Cells[Nar[26]][N+6]=N;
+                                            ResultForm->ResultGrid->Cells[Nar[26]][N+7]=N-CounterRR1;
+                                            ResultForm->ResultGrid->Cells[Nar[26]][N+8]=CounterRR1;
+                                            ResultForm->ResultGrid->Cells[Nar[26]][N+9]=((N-CounterRR1)/N)*100;
+                                            ResultForm->ResultGrid->Cells[Nar[26]][N+10]=MaxRR1;
+                                            ResultForm->ResultGrid->Cells[Nar[26]][N+11]=MinRR1;
+                                            SEdit1->AsFloat=SumRR1/N;
+                                           ResultForm->ResultGrid->Cells[Nar[26]][N+12]=SEdit1->AsString;
+                                       }
+                                       if(DataModule1->SqlSpecification->FieldByName("RR2")->AsString=="True"){
+                                            ResultForm->ResultGrid->Cells[Nar[27]][N+6]=N;
+                                            ResultForm->ResultGrid->Cells[Nar[27]][N+7]=N-CounterRR2;
+                                            ResultForm->ResultGrid->Cells[Nar[27]][N+8]=CounterRR2;
+                                            ResultForm->ResultGrid->Cells[Nar[27]][N+9]=((N-CounterRR2)/N)*100;
+                                            ResultForm->ResultGrid->Cells[Nar[27]][N+10]=MaxRR2;
+                                            ResultForm->ResultGrid->Cells[Nar[27]][N+11]=MinRR2;
+                                            SEdit1->AsFloat=SumRR2/N;
+                                           ResultForm->ResultGrid->Cells[Nar[27]][N+12]=SEdit1->AsString;
+                                       }
+                                        if(DataModule1->SqlSpecification->FieldByName("RR3")->AsString=="True"){
+                                            ResultForm->ResultGrid->Cells[Nar[28]][N+6]=N;
+                                            ResultForm->ResultGrid->Cells[Nar[28]][N+7]=N-CounterRR3;
+                                            ResultForm->ResultGrid->Cells[Nar[28]][N+8]=CounterRR3;
+                                            ResultForm->ResultGrid->Cells[Nar[28]][N+9]=((N-CounterRR3)/N)*100;
+                                            ResultForm->ResultGrid->Cells[Nar[28]][N+10]=MaxRR3;
+                                            ResultForm->ResultGrid->Cells[Nar[28]][N+11]=MinRR3;
+                                            SEdit1->AsFloat=SumRR3/N;
+                                           ResultForm->ResultGrid->Cells[Nar[28]][N+12]=SEdit1->AsString;
+                                       }
+                                        if(DataModule1->SqlSpecification->FieldByName("RR4")->AsString=="True"){
+                                            ResultForm->ResultGrid->Cells[Nar[29]][N+6]=N;
+                                            ResultForm->ResultGrid->Cells[Nar[29]][N+7]=N-CounterRR4;
+                                            ResultForm->ResultGrid->Cells[Nar[29]][N+8]=CounterRR4;
+                                            ResultForm->ResultGrid->Cells[Nar[29]][N+9]=((N-CounterRR4)/N)*100;
+                                            ResultForm->ResultGrid->Cells[Nar[29]][N+10]=MaxRR4;
+                                            ResultForm->ResultGrid->Cells[Nar[29]][N+11]=MinRR4;
+                                            SEdit1->AsFloat=SumRR4/N;
+                                           ResultForm->ResultGrid->Cells[Nar[29]][N+12]=SEdit1->AsString;
+                                       }
+                                        if(DataModule1->SqlSpecification->FieldByName("RR5")->AsString=="True"){
+                                            ResultForm->ResultGrid->Cells[Nar[30]][N+6]=N;
+                                            ResultForm->ResultGrid->Cells[Nar[30]][N+7]=N-CounterRR5;
+                                            ResultForm->ResultGrid->Cells[Nar[30]][N+8]=CounterRR2;
+                                            ResultForm->ResultGrid->Cells[Nar[30]][N+9]=((N-CounterRR2)/N)*100;
+                                            ResultForm->ResultGrid->Cells[Nar[30]][N+10]=MaxRR2;
+                                            ResultForm->ResultGrid->Cells[Nar[30]][N+11]=MinRR2;
+                                            SEdit1->AsFloat=SumRR2/N;
+                                           ResultForm->ResultGrid->Cells[Nar[30]][N+12]=SEdit1->AsString;
+                                       }
+
+     }
+          DataModule1->SQLPSI->Active=false;
+          DataModule1->SQLPSI->SQL->Clear();
+          AnsiString F2;
+  F2="Select * from psi where Measure_ID='"+Measure_ID+"'";
+          DataModule1->SQLPSI->SQL->Add(F2);
+          DataModule1->SQLPSI->Active=true;
+  DataModule1->SQLPSI->Edit();
+  DataModule1->SQLPSI->FieldByName("Bad")->AsString=counter;
+  DataModule1->SQLPSI->FieldByName("Good")->AsString=N-counter;
+  DataModule1->SQLPSI->FieldByName("Bad")->AsString=counter;
+  DataModule1->SQLPSI->FieldByName("Status")->AsString= "Готов";
+  DataModule1->SQLPSI->FieldByName("File1")->AsString=NumberMForm->edtFile->Text;
+  DataModule1->SQLPSI->FieldByName("Position")->AsString=DataModule1->SqlConfiguration->FieldByName("strStartCrystalID")->AsString+"..."+DataModule1->SqlConfiguration->FieldByName("strStopCrystalID")->AsString;
+  DataModule1->SQLPSI->FieldByName("Spc1")->AsString=DataModule1->SqlSpecification->FieldByName("Name")->AsString;
+  DataModule1->SQLPSI->FieldByName("DateEnd")->AsString=stD+"."+stMn+"."+stY;
+  DataModule1->SQLPSI->FieldByName("TimeEnd")->AsString=stH+":"+stM+":"+stS;
+  DataModule1->SQLPSI->FieldByName("Operator")->AsString=DataModule1->Dostup->FieldByName("Name")->AsString;
+  DataModule1->SQLPSI->Post();
+  DataModule1->SQLSetupData->Filtered=false;
+  DataModule1->SQLCrystalData->Filtered=false;
+  ResultForm->edtMSK->Text=NumberMForm->edtMSK->Text;
+  ResultForm->edtFile->Text=NumberMForm->edtFile->Text;
+  ResultForm->Measure_ID->Text=Measure_ID;
+  ResultForm->edtSpc->Text=DataModule1->SqlSpecification->FieldByName("Name")->AsString;
+  ledFinish->Active=true;
+  //************************************************************************************************************************************************
+    if (DataModule1->SqlSpecification->FieldByName("Stat")->AsString=="True"){
+         float Max;
+         float Min;
+         int NN;
+         float AVG;
+         float STDEV;
+         int countBad;
+         int countA;
+         float AVG_A;
+         float Max_A;
+         float Min_A;
+         float STDEV_A;
+        DataModule1->SQLPSIData->Active=false;
+        DataModule1->SQLPSIData->SQL->Clear();
+        DataModule1->SQLPSIData->SQL->Add("Select * from psidata where Measure_ID='"+Measure_ID+"' order by ID");
+        DataModule1->SQLPSIData->Active=true;
+          AnsiString Commandx="Update psidatatemp set Fn='"+DataModule1->SQLPSIData->FieldByName("Fn")->AsString+"' where Measure_ID='"+Measure_ID+"'";
+         DataModule2->Comand->SQL->Clear();
+         DataModule2->Comand->SQL->Add(Commandx);
+         DataModule2->Comand->Execute();
+
+
+        DataModule2->Statistika->Active=false;
+        DataModule2->Statistika->SQL->Clear();
+        DataModule2->Statistika->SQL->Add("Select * from psi_statistika where Measure_ID='"+Measure_ID+"'");
+        DataModule2->Statistika->Active=true;
+
+        DataModule2->Parameters->Active=true;
+
+                DataModule2->Parameters->First();
+                for (int i=0; i<DataModule2->Parameters->RecordCount; i++){
+                        if (DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_Spc_Field")->AsString)->AsString=="True"){
+                             DataModule1->SQLPSIData->First();
+                             countBad=0;
+                             countA=0;
+                              Max=DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat;
+                             Min=DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat;
+                             NN=DataModule1->SQLPSIData->RecordCount;
+                             double Sum=0;
+                                for (int j=0; j<DataModule1->SQLPSIData->RecordCount; j++){
+                                                if (Max<DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat){
+                                                if (DataModule1->SQLPSIData->FieldByName("Status2")->AsString=="Good"){
+                                                   Max=DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat;
+                                                  }
+                                                }
+                                                if (Min>DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat){
+                                                   if (DataModule1->SQLPSIData->FieldByName("Status2")->AsString=="Good" & DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsString!=""){
+                                                        Min=DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat;
+                                                    }
+                                                }
+                                                if (DataModule1->SQLPSIData->FieldByName("Status2")->AsString=="Good" & DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsString!=""){
+                                               Sum=Sum+DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat;
+                                                  }
+                                                        if (DataModule1->SQLPSIData->FieldByName("Status2")->AsString=="Good"){
+                                                                     if (DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_max")->AsString)->AsString!="no"){
+                                                       if(DataModule2->Parameters->FieldByName("DopuskField")->AsString!="no" || DataModule2->Parameters->FieldByName("DopuskField2")->AsString!="no" ){
+                                                       double Zap=0;
+                                                       if (DataModule2->Parameters->FieldByName("DopuskField2")->AsString!="no"){
+                                                        if(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("DopuskField2")->AsString)->AsString!=0){
+                                                           Zap=DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("DopuskField2")->AsString)->AsFloat;
+                                                           if (DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat>StrToFloat(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_max")->AsString)->AsString)-Zap){
+                                                           countBad++;
+                                                         }
+                                                        }
+                                                       }
+                                                       if (DataModule2->Parameters->FieldByName("DopuskField")->AsString!="no"){
+                                                        if(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("DopuskField")->AsString)->AsFloat!=0){
+                                                          Zap=DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("DopuskField")->AsString)->AsFloat;
+                                                          if (DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat>StrToFloat(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_max")->AsString)->AsString)-(Zap*StrToFloat(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_max")->AsString)->AsString)/100)){
+                                                           countBad++;
+                                                         }
+                                                        }
+                                                        }
+                                                        }
+                                                        else {
+                                                           if (DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat>StrToFloat(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_max")->AsString)->AsString)){
+                                                           countBad++;
+                                                         }
+                                                         }
+
+
+
+                                                }
+                                                if (DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_Min")->AsString)->AsString!="no"){
+                                                        if(DataModule2->Parameters->FieldByName("DopuskField")->AsString!="no" || DataModule2->Parameters->FieldByName("DopuskField2")->AsString!="no" ){
+                                                       double Zap=0;
+                                                       if (DataModule2->Parameters->FieldByName("DopuskField2")->AsString!="no"){
+                                                        if(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("DopuskField2")->AsString)->AsFloat!=0 ){
+                                                           Zap=DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("DopuskField2")->AsString)->AsFloat;
+                                                           if (DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat>StrToFloat(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_min")->AsString)->AsString)-Zap){
+                                                           countBad++;
+                                                         }
+                                                        }
+                                                        }
+                                                         if (DataModule2->Parameters->FieldByName("DopuskField")->AsString!="no"){
+                                                        if(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("DopuskField")->AsString)->AsFloat!=0){
+                                                          Zap=DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("DopuskField")->AsString)->AsFloat;
+                                                          if (DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat<StrToFloat(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_min")->AsString)->AsString)+((Zap/100)*StrToFloat(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_min")->AsString)->AsString))){
+                                                           countBad++;
+                                                         }
+                                                        }
+                                                        }
+                                                        }
+                                                        else {
+                                                           if (DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat>StrToFloat(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_min")->AsString)->AsString)){
+                                                           countBad++;
+                                                         }
+
+                                                        }
+
+                                                }
+
+                                          }
+                                        DataModule1->SQLPSIData->Next();
+                                }
+                              AVG=Sum/NN;
+                              DataModule1->SQLPSIData->First();
+                              double SumKV=0;
+                             for (int j=0; j<DataModule1->SQLPSIData->RecordCount; j++){
+                                 if (DataModule1->SQLPSIData->FieldByName("Status2")->AsString=="Good" & DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsString!=""){
+                                SumKV=SumKV+pow((DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat-AVG),2);
+                                }
+                               DataModule1->SQLPSIData->Next();
+                             }
+                             STDEV=sqrt(SumKV/NN);
+
+                          DataModule1->SQLPSIData->First();
+                          Max_A=Min;
+                          Min_A=Max;
+                          AVG_A=0;
+                          double Sum_a=0;
+                                  for (int j=0; j<DataModule1->SQLPSIData->RecordCount; j++){
+                                     if (DataModule1->SQLPSIData->FieldByName("Status2")->AsString=="Good"){
+                                           if (fabs(DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat)<=fabs(AVG)+3*fabs(STDEV)){
+                                                   if (Max_A<DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat){
+                                                    Max_A=DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat;
+                                                   }
+                                                   if (Min_A>DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat & DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsString!="Null"){
+                                                    Min_A=DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat;
+                                                   }
+                                                   if (DataModule1->SQLPSIData->FieldByName("Status2")->AsString=="Good" & DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsString!=""){
+                                                         Sum_a=Sum_a+DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat;
+                                                      }
+
+                                           }
+                                           else {
+                                           if (DataModule1->SqlSpecification->FieldByName("Anomal")->AsString=="True" & DataModule1->SQLPSIData->FieldByName("Status")->AsString!="Брак"){
+                                              countA++;
+                                             DataModule1->SQLPSIData->Edit();
+                                             DataModule1->SQLPSIData->FieldByName("Status")->AsString="Аномал.";
+                                             DataModule1->SQLPSIData->Post();
+                                             ResultForm->ResultGrid->Cells[Nar[23]][j+1]="Аномал.";
+                                             AnsiString Command="Update psidatatemp set Status1='Аномал.' where Measure_ID='"+Measure_ID+"' and N='"+DataModule1->SQLPSIData->FieldByName("N")->AsString+"'";
+                                             DataModule2->Comand->SQL->Clear();
+                                             DataModule2->Comand->SQL->Add(Command);
+                                             DataModule2->Comand->Execute();
+                                                }
+                                                else if (DataModule1->SqlSpecification->FieldByName("AnomalR")->AsString=="True" & DataModule1->SQLPSIData->FieldByName("Status")->AsString!="Брак"){
+                                                         if (DataModule2->Parameters->FieldByName("ID")->AsString=="2" || DataModule2->Parameters->FieldByName("ID")->AsString=="12" || DataModule2->Parameters->FieldByName("ID")->AsString=="13" ){
+                                                                 DataModule1->SQLPSIData->Edit();
+                                                                 countA++;
+                                                                  DataModule1->SQLPSIData->FieldByName("Status")->AsString="Аномал.";
+                                                                 DataModule1->SQLPSIData->Post();
+                                                                  ResultForm->ResultGrid->Cells[Nar[23]][j+1]="Аномал.";
+                                                                          AnsiString Command="Update psidatatemp set Status1='Аномал.' where Measure_ID='"+Measure_ID+"' and N='"+DataModule1->SQLPSIData->FieldByName("N")->AsString+"'";
+                                                                           DataModule2->Comand->SQL->Clear();
+                                                                           DataModule2->Comand->SQL->Add(Command);
+                                                                   DataModule2->Comand->Execute();
+
+                                                         }
+                                                }
+                                             }
+                                          }
+                                          else {
+                                              DataModule1->SQLPSIData->Edit();
+                                             DataModule1->SQLPSIData->FieldByName("Status")->AsString="Незамер.";
+                                             DataModule1->SQLPSIData->Post();
+                                             ResultForm->ResultGrid->Cells[Nar[23]][j+1]="Незамер.";
+                                              AnsiString Command="Update psidatatemp set Status1='Незамер.' where Measure_ID='"+Measure_ID+"' and N='"+DataModule1->SQLPSIData->FieldByName("N")->AsString+"'";
+                                             DataModule2->Comand->SQL->Clear();
+                                             DataModule2->Comand->SQL->Add(Command);
+                                             DataModule2->Comand->Execute();
+                                          }
+
+                                     DataModule1->SQLPSIData->Next();
+                                  }
+                            if (countA==0){
+                            AVG_A=AVG;
+                            }
+                            else {
+                           AVG_A=Sum_a/(NN-countA);
+                           }
+                           DataModule1->SQLPSIData->First();
+                              double SumKV_A=0;
+                             for (int j=0; j<DataModule1->SQLPSIData->RecordCount; j++){
+                              if (DataModule1->SQLPSIData->FieldByName("Status2")->AsString=="Good" & fabs(DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat)<=AVG+3*STDEV & DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsString!=""){
+                                SumKV_A=SumKV_A+pow((DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat-AVG_A),2);
+                                }
+                               DataModule1->SQLPSIData->Next();
+                             }
+                             STDEV_A=sqrt(SumKV_A/NN);
+
+                             double CPK=0;
+                              AnsiString VGT=DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_max")->AsString)->AsString;
+                               AnsiString NGT=DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_min")->AsString)->AsString;
+                               double VGD,NGD;
+                               if (VGT!="no"){
+                                VGD=StrToFloat(VGT);
+
+                               }
+                               else {
+                                VGD=0;
+                               }
+                               if (NGT!="no"){
+                                NGD=StrToFloat(NGT);
+
+                               }
+                               else {
+                                NGD=0;
+                               }
+                               double dG=fabs(VGD-NGD)/2;
+
+                               if (AVG_A==0){
+                                AVG_A=AVG;
+                               }
+                               if (STDEV_A==0){
+
+                                STDEV_A=STDEV;
+                               }
+
+                               if (STDEV_A!=0 & dG!=0){
+                                double dGx=fabs(((VGD+NGD)/2)-AVG_A);
+                                double k=dGx/dG;
+                                double Cp=dG/(3*STDEV_A);
+                                CPK=fabs(Cp*(1-k));
+                               }
+                               else {
+                                CPK=0;
+                               }
+                            DataModule2->Statistika->Append();
+                            DataModule2->Statistika->FieldByName("Measure_ID")->AsString=Measure_ID;
+                            DataModule2->Statistika->FieldByName("Parametr_ID")->AsString=DataModule2->Parameters->FieldByName("ID")->AsString;
+                            DataModule2->Statistika->FieldByName("MSK_ID")->AsString=DataModule1->SQLPSIData->FieldByName("Msk")->AsString;
+
+                           DataModule2->Statistika->FieldByName("Max")->AsFloat=Max;
+                           DataModule2->Statistika->FieldByName("Min")->AsFloat=Min;
+                            DataModule2->Statistika->FieldByName("AVG")->AsFloat=AVG;
+                            DataModule2->Statistika->FieldByName("STDEV")->AsFloat=STDEV;
+                            DataModule2->Statistika->FieldByName("Max_A")->AsFloat=Max_A;
+                           DataModule2->Statistika->FieldByName("Min_A")->AsFloat=Min_A;
+                            DataModule2->Statistika->FieldByName("AVG_A")->AsFloat=AVG_A;
+                            DataModule2->Statistika->FieldByName("STDEV_A")->AsFloat=STDEV_A;
+                            DataModule2->Statistika->FieldByName("Alln")->AsFloat=NN;
+                            DataModule2->Statistika->FieldByName("Badn")->AsFloat=countBad;
+                            DataModule2->Statistika->FieldByName("Goodn")->AsFloat=NN-countBad;
+                            DataModule2->Statistika->FieldByName("Anomal")->AsFloat=countA;
+                            DataModule2->Statistika->FieldByName("CPK")->AsFloat=CPK;
+                            DataModule2->Statistika->Post();
+                            }
+                            DataModule2->Parameters->Next();
+                         }
+                         DataModule1->SQLPSIData->First();
+                         int anomal=0;
+                         int bad=0;
+                         int good=0;
+                         int nezamer=0;
+                         int all=0;
+                         for (int j=0;j<DataModule1->SQLPSIData->RecordCount; j++){
+                            all++;
+                            if (DataModule1->SQLPSIData->FieldByName("Status")->AsString=="Годен"){
+                             good++;
+                            }
+                            else if (DataModule1->SQLPSIData->FieldByName("Status")->AsString=="Брак"){
+                               bad++;
+                            }
+                            else if (DataModule1->SQLPSIData->FieldByName("Status")->AsString=="Аномал."){
+
+                               anomal++;
+                            }
+                            else if (DataModule1->SQLPSIData->FieldByName("Status")->AsString=="Незамер."){
+                             nezamer++;
+                            }
+
+                           DataModule1->SQLPSIData->Next();
+                         }
+                           int BADALL=bad+anomal+nezamer;
+
+                          AnsiString Command="Update psi set atall='"+FloatToStr(all)+"',Good='"+FloatToStr(good)+"', Bad='"+FloatToStr(BADALL)+"',Nezamer='"+FloatToStr(nezamer)+"', Anomal='"+FloatToStr(anomal)+"' where Measure_ID='"+Measure_ID+"'";
+                          DataModule2->Comand->SQL->Clear();
+                         DataModule2->Comand->SQL->Add(Command);
+                         DataModule2->Comand->Execute();
+            DataModule1->SQLPSIData->Active=false;
+            DataModule2->Statistika->Active=false;
+            ResultForm->btnJournal->Enabled=true;
+   }
+  ResultForm->Show();
+ }
+//****************************************************************************************************************************
+//***************************************************************TRANSAT******************************************************
+//****************************************************************************************************************************
+//****************************************************************************************************************************
+ else if (MachineType=="Transat") {
+
+          int l,N,Nt,k;
+
+          AnsiString l1;
+          AnsiString S,S1,S2;
+          DataModule1->Transat_Temp->First();
+                    for(int i=0; i<MainForm->RzCheckList1->Count;i++){
+                        if(MainForm->RzCheckList1->ItemState[i]!=0){
+                                              l=i+1;
+                                             break;
+                                               }
+               }
+
+          //ResultForm->ResultGrid->RowCount=N;
+          SYSTEMTIME st;
+          GetLocalTime(&st);
+          AnsiString stD,stMn,stY,stH,stM,stS;
+          stD=st.wDay;
+          stMn=st.wMonth;
+          stY=st.wYear;
+          stH=st.wHour;
+          stM=st.wMinute;
+          stS=st.wSecond;
+          k=0;
+          DataModule1->Config->First();
+                          for (int i=0;i<DataModule1->Config->RecordCount;i++){
+                                             if (DataModule1->Config->FieldByName("SetupN")->AsFloat==l){
+                                                                break;
+                                                      }
+                                        DataModule1->Config->Next();
+                                   }
+          N=DataModule1->Config->FieldByName("Number")->AsFloat;
+           if (DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="Saunders (FR+FL)"){
+         Measure_Type="EqReact";
+
+     }
+     else if (DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="Saunders(FR)"){
+               Measure_Type="Series";
+     }
+     else if (DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="Saunders(FL)"){
+          Measure_Type="Physical";
+     }
+     else {
+        Measure_Type=DataModule1->SqlSpecification->FieldByName("LoadType")->AsString;
+     }
+
+//***************Задание столбца вывода и печать заголовков************
+//*******************************************************************
+if(DataModule1->SqlSpecification->FieldByName("Number")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="#";
+
+  Nar[0]=k;
+  k=k+1;
+  }
+//*******************************************************************
+ if(DataModule1->SqlSpecification->FieldByName("position")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Позиция";
+  Nar[1]=k;
+  k=k+1;
+
+  }
+//******************************************************************
+ if(DataModule1->SqlSpecification->FieldByName("Snumber")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Номер";
+
+  Nar[2]=k;
+  k=k+1;
+  }
+
+  //*****************************************************************
+   if(DataModule1->SqlSpecification->FieldByName("Ft")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Точность настройки,PPM";
+  Nar[3]=k;
+            if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Fmax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[3]][N+2]=DataModule1->SqlSpecification->FieldByName("Fmax")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("Fmin")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[3]][N+3]=DataModule1->SqlSpecification->FieldByName("Fmin")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+  //****************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("R")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Сопротивление,Ом";
+  Nar[4]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Rmax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[4]][N+2]=DataModule1->SqlSpecification->FieldByName("Rmax")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("Rmin")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[4]][N+3]=DataModule1->SqlSpecification->FieldByName("Rmin")->AsString;
+                                 }
+                    }
+
+  k=k+1;
+  }
+ //******************************************************************
+   if(DataModule1->SqlSpecification->FieldByName("C0")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Статическая емкость,пФ";
+  Nar[5]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("C0max")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[5]][N+2]=DataModule1->SqlSpecification->FieldByName("C0max")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("C0min")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[5]][N+3]=DataModule1->SqlSpecification->FieldByName("C0min")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+ //******************************************************************
+   if(DataModule1->SqlSpecification->FieldByName("Cq")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Динамическая емкость,фФ";
+  Nar[6]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[6]][N+2]=DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("Cqmin")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[6]][N+3]=DataModule1->SqlSpecification->FieldByName("Cqmin")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+  //****************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("Q")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Добротность,x1000";
+  Nar[7]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Qmax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[7]][N+2]=DataModule1->SqlSpecification->FieldByName("Qmax")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("Qmin")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[7]][N+3]=DataModule1->SqlSpecification->FieldByName("Qmin")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+  //*******************************************************************
+   if(DataModule1->SqlSpecification->FieldByName("Rb")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Rb,Ohm";
+  Nar[8]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Rbmax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[8]][N+2]=DataModule1->SqlSpecification->FieldByName("Rbmax")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("Rbmin")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[8]][N+3]=DataModule1->SqlSpecification->FieldByName("Rbmin")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+  //*******************************************************************
+   if(DataModule1->SqlSpecification->FieldByName("Rc_Rb")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="RC/RB";
+  Nar[10]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Rc_Rbmax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[10]][N+2]=DataModule1->SqlSpecification->FieldByName("Rc_Rbmax")->AsString;
+                                }
+
+                    }
+  k=k+1;
+  }
+  //******************************************************************
+ if(DataModule1->SqlSpecification->FieldByName("L")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="L,mH";
+  Nar[9]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Lmax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[12]][N+2]=DataModule1->SqlSpecification->FieldByName("Lmax")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("Lmin")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[12]][N+3]=DataModule1->SqlSpecification->FieldByName("Lmin")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+  //****************************************************************
+    if(DataModule1->SqlSpecification->FieldByName("Tmax")->AsString=="True"){
+       ResultForm->ResultGrid->Cells[k][0]="Tmax,C";
+       Nar[11]=k;
+         if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                               if(DataModule1->SqlSpecification->FieldByName("Tmaxmax")->AsString!="no"){
+                                           ResultForm->ResultGrid->Cells[Nar[11]][N+2]=DataModule1->SqlSpecification->FieldByName("Tmaxmax")->AsFloat;
+                                 }
+                                 if(DataModule1->SqlSpecification->FieldByName("Tmaxmin")->AsString!="no"){
+                                           ResultForm->ResultGrid->Cells[Nar[11]][N+3]=DataModule1->SqlSpecification->FieldByName("Tmaxmin")->AsFloat;
+                                 }
+          }
+      k=k+1;
+     }
+  //****************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("Tmin")->AsString=="True"){
+              ResultForm->ResultGrid->Cells[k][0]="Tmin,C";
+              Nar[12]=k;
+              if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Tminmax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[12]][N+2]=DataModule1->SqlSpecification->FieldByName("Tminmax")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("Tminmin")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[12]][N+3]=DataModule1->SqlSpecification->FieldByName("Tminmin")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+  //*****************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("TurnOver")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="IT,C";
+  Nar[13]=k;
+              if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                       if(DataModule1->SqlSpecification->FieldByName("Tomax")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[13]][N+2]=DataModule1->SqlSpecification->FieldByName("Tomax")->AsString;
+                         }
+                       if(DataModule1->SqlSpecification->FieldByName("Tomin")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[13]][N+3]=DataModule1->SqlSpecification->FieldByName("Tomin")->AsString;
+                         }
+
+                    }
+
+  k=k+1;
+  }
+//******************************************************************
+if(DataModule1->SqlSpecification->FieldByName("Rmx")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Rmax,Ом";
+  Nar[14]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Rmaxmax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[14]][N+2]=DataModule1->SqlSpecification->FieldByName("Rmaxmax")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("Rmaxmin")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[14]][N+3]=DataModule1->SqlSpecification->FieldByName("Rmaxmin")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+//******************************************************************
+if(DataModule1->SqlSpecification->FieldByName("Rmn")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Rmin,Ом";
+  Nar[15]=k;
+    k=k+1;
+  }
+//******************************************************************
+ if(DataModule1->SqlSpecification->FieldByName("RR")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Rmax/Rmin";
+  Nar[16]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("RRmax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[16]][N+2]=DataModule1->SqlSpecification->FieldByName("RRmax")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("RRmin")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[16]][N+3]=DataModule1->SqlSpecification->FieldByName("RRmin")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+  //***********************************************************
+ if(DataModule1->SqlSpecification->FieldByName("Fmx")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Fmax,ppm";
+  Nar[17]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[17]][N+2]=DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[17]][N+3]=DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+  //*************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("Fmn")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Fmin,ppm";
+  Nar[18]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Fminmax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[18]][N+2]=DataModule1->SqlSpecification->FieldByName("Fminmax")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("Fminmin")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[18]][N+3]=DataModule1->SqlSpecification->FieldByName("Fminmin")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+  //**************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("Fptp")->AsString=="True" || DataModule1->SqlSpecification->FieldByName("Fptp_2")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Fptp,ppm";
+  Nar[19]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                          if(DataModule1->SqlSpecification->FieldByName("Fptp")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Fptpmax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[19]][N+2]=DataModule1->SqlSpecification->FieldByName("Fptpmax")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("Fptpmin")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[19]][N+3]=DataModule1->SqlSpecification->FieldByName("Fptpmin")->AsString;
+                                 }
+                           }
+                           if(DataModule1->SqlSpecification->FieldByName("Fptp_2")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Fptp_2max")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[19]][N+2]=DataModule1->SqlSpecification->FieldByName("Fptp_2max")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("Fptp_2min")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[19]][N+3]=DataModule1->SqlSpecification->FieldByName("Fptp_2min")->AsString;
+                                 }
+                           }
+
+
+
+                    }
+  k=k+1;
+  }
+  //*************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("M")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Монотонность,ppm";
+  Nar[20]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Mmax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[20]][N+2]=DataModule1->SqlSpecification->FieldByName("Mmax")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("Mmin")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[20]][N+3]=DataModule1->SqlSpecification->FieldByName("Mmin")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+ //**************************************************************
+if(DataModule1->SqlSpecification->FieldByName("S")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Наклон,ppm";
+  Nar[21]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Smax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[21]][N+2]=DataModule1->SqlSpecification->FieldByName("Smax")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("Smin")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[21]][N+3]=DataModule1->SqlSpecification->FieldByName("Smin")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+  //************************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("F")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="F,Mhz";
+  Nar[23]=k;
+  k=k+1;
+  }
+  //**********************************************************************
+   //*****************************************************************************************************************************
+   if(DataModule1->SqlSpecification->FieldByName("FTx")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]=" F(T="+DataModule1->SqlSpecification->FieldByName("Ftxt")->AsString+")";
+  Nar[24]=k;
+  k=k+1;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                       if(DataModule1->SqlSpecification->FieldByName("FTmax")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[24]][N+2]=DataModule1->SqlSpecification->FieldByName("FTmax")->AsString;
+                         }
+                       if(DataModule1->SqlSpecification->FieldByName("FTmin")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[24]][N+3]=DataModule1->SqlSpecification->FieldByName("FTmin")->AsString;
+                         }
+
+                    }
+
+
+
+  }
+//-------------------------------------------------------------------------------------------------------------------------------
+ if(DataModule1->SqlSpecification->FieldByName("Rmax-Rmin")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Rmax-Rmin";
+  Nar[25]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("RR1max")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[25]][N+2]=DataModule1->SqlSpecification->FieldByName("RR1max")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("RR1min")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[25]][N+3]=DataModule1->SqlSpecification->FieldByName("RR1min")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+ //-------------------------------------------------------------------------------------------------------------------------------------------
+ if(DataModule1->SqlSpecification->FieldByName("C0_C1")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="C0/C1";
+  Nar[26]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("C0_C1max")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[26]][N+2]=DataModule1->SqlSpecification->FieldByName("C0_C1max")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("C0_C1min")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[26]][N+3]=DataModule1->SqlSpecification->FieldByName("C0_C1min")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+
+  //-------------------------------------------------------------------------------------------------------------------------------------------
+ if(DataModule1->SqlSpecification->FieldByName("C1_2C0")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Перестройка";
+  Nar[33]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("C1_2C0max")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[33]][N+2]=DataModule1->SqlSpecification->FieldByName("C1_2C0max")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("C1_2C0min")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[33]][N+3]=DataModule1->SqlSpecification->FieldByName("C1_2C0min")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+ //---------------------------------------------------------------------------------------------------------
+ if(DataModule1->SqlSpecification->FieldByName("RR2")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Rmax/R25";
+  Nar[27]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("RR2max")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[27]][N+2]=DataModule1->SqlSpecification->FieldByName("RR2max")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("RR2min")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[27]][N+3]=DataModule1->SqlSpecification->FieldByName("RR2min")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+    //*****************************************************************************************************************************
+   if(DataModule1->SqlSpecification->FieldByName("Ft1")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]=" F(T="+DataModule1->SqlSpecification->FieldByName("Ft1t")->AsString+")";
+  Nar[28]=k;
+  k=k+1;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                       if(DataModule1->SqlSpecification->FieldByName("Ft1max")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[28]][N+2]=DataModule1->SqlSpecification->FieldByName("Ft1max")->AsString;
+                         }
+                       if(DataModule1->SqlSpecification->FieldByName("Ft1min")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[28]][N+3]=DataModule1->SqlSpecification->FieldByName("Ft1min")->AsString;
+                         }
+
+                    }
+
+
+
+  }
+
+    //*****************************************************************************************************************************
+   if(DataModule1->SqlSpecification->FieldByName("Ft2")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]=" F(T="+DataModule1->SqlSpecification->FieldByName("Ft2t")->AsString+")";
+  Nar[29]=k;
+  k=k+1;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                       if(DataModule1->SqlSpecification->FieldByName("Ft2max")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[29]][N+2]=DataModule1->SqlSpecification->FieldByName("Ft2max")->AsString;
+                         }
+                       if(DataModule1->SqlSpecification->FieldByName("Ft2min")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[29]][N+3]=DataModule1->SqlSpecification->FieldByName("Ft2min")->AsString;
+                         }
+
+                    }
+
+
+
+  }
+   if(DataModule1->SqlSpecification->FieldByName("Ft3")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]=" F(T="+DataModule1->SqlSpecification->FieldByName("Ft3t")->AsString+")";
+  Nar[30]=k;
+  k=k+1;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                       if(DataModule1->SqlSpecification->FieldByName("Ft3max")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[30]][N+2]=DataModule1->SqlSpecification->FieldByName("Ft3max")->AsString;
+                         }
+                       if(DataModule1->SqlSpecification->FieldByName("Ft3min")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[30]][N+3]=DataModule1->SqlSpecification->FieldByName("Ft3min")->AsString;
+                         }
+
+                    }
+
+
+
+  }
+    if(DataModule1->SqlSpecification->FieldByName("Ft4")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]=" F(T="+DataModule1->SqlSpecification->FieldByName("Ft4t")->AsString+")";
+  Nar[31]=k;
+  k=k+1;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                       if(DataModule1->SqlSpecification->FieldByName("Ft4max")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[31]][N+2]=DataModule1->SqlSpecification->FieldByName("Ft4max")->AsString;
+                         }
+                       if(DataModule1->SqlSpecification->FieldByName("Ft4min")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[31]][N+3]=DataModule1->SqlSpecification->FieldByName("Ft4min")->AsString;
+                         }
+
+       }             }
+ //----------------------------------------------------------------------------------------------------------------------------
+
+      if(DataModule1->SqlSpecification->FieldByName("RR3")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]=" R25/Rmin ";
+  Nar[32]=k;
+  k=k+1;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                       if(DataModule1->SqlSpecification->FieldByName("RR3max")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[32]][N+2]=DataModule1->SqlSpecification->FieldByName("RR3max")->AsString;
+                         }
+                       if(DataModule1->SqlSpecification->FieldByName("RR3min")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[32]][N+3]=DataModule1->SqlSpecification->FieldByName("RR3min")->AsString;
+                         }
+
+                    }
+
+     }
+
+//********************************************************************************************************************************************
+
+      if(DataModule1->SqlSpecification->FieldByName("RR4")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]=" Rmax-R25/R25";
+  Nar[33]=k;
+  k=k+1;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                       if(DataModule1->SqlSpecification->FieldByName("RR4max")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[33]][N+2]=DataModule1->SqlSpecification->FieldByName("RR4max")->AsString;
+                         }
+                       if(DataModule1->SqlSpecification->FieldByName("RR4min")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[33]][N+3]=DataModule1->SqlSpecification->FieldByName("RR4min")->AsString;
+                         }
+
+                    }
+
+     }
+
+//*******************************************************************************************************************************************
+       if(DataModule1->SqlSpecification->FieldByName("RR5")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]=" Rmin-R25/R25";
+  Nar[34]=k;
+  k=k+1;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                       if(DataModule1->SqlSpecification->FieldByName("RR5max")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[34]][N+2]=DataModule1->SqlSpecification->FieldByName("RR5max")->AsString;
+                         }
+                       if(DataModule1->SqlSpecification->FieldByName("RR5min")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[34]][N+3]=DataModule1->SqlSpecification->FieldByName("RR5min")->AsString;
+                         }
+
+                    }
+
+     }
+
+
+
+//---------------------------------------------------------------------------------------------------------------------------------
+  if(DataModule1->SqlSpecification->FieldByName("Status")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]=" Статус";
+  Nar[22]=k;
+  k=k+1;
+  }
+
+  //********************************************************************** вывод на печать заголовков норм***********************
+  if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[0][N+1]="Нормы";
+  ResultForm->ResultGrid->Cells[0][N+2]="МАКС";
+  ResultForm->ResultGrid->Cells[0][N+3]="МИН";
+  ResultForm->ResultGrid->RowCount=N+4;
+  }
+
+  if(DataModule1->SqlSpecification->FieldByName("Stat")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[1][N+5]="Статистика";
+  ResultForm->ResultGrid->Cells[0][N+6]="Всего";
+  ResultForm->ResultGrid->Cells[0][N+7]="Годных";
+  ResultForm->ResultGrid->Cells[0][N+8]="Бракованных";
+   ResultForm->ResultGrid->Cells[0][N+9]="Выход годных %";
+  ResultForm->ResultGrid->Cells[0][N+10]="Макс";
+  ResultForm->ResultGrid->Cells[0][N+11]="Мин";
+  ResultForm->ResultGrid->Cells[0][N+12]="Среднее";
+  ResultForm->ResultGrid->Cells[0][N+13]="Девиация";
+  ResultForm->ResultGrid->RowCount=N+14;
+  }
+//*********************************************************************************************************************************************************
+//********************************************************************************************************************************************************
+//*******************************************************************************************************************************************************
+//************ИНИЦИАЛИЗАЦИЯ ПЕРЕМЕННЫХ********************************************************************************************************************
+//ОКРУГЛЕНИЕ
+   int round;
+//****************************************************************************************************************************************************
+     int status=0;
+int counter,counterFt,counterRR1,counterR,counterC0,counterCq,counterL,counterQ,counterTmax,counterTmin,counterTo,counterS,counterM,counterFmax,counterFmin,counterFptp,counterRmax,counterRmin,counterRR,counterFT;
+double MinFt,MaxRR1,MinRR1,MaxC0,MinR,MinQ,MinL,MinTmax,MinTmin,MinCq,MinTo,MinS,MinM,MinFmax,MinFmin,MinFptp,MinRmax,MinRmin,MinRR,MinFT;
+double MaxFt,MaxR,MinC0,MaxQ,MaxL,MaxTmax,MaxTmin,MaxTo,MaxCq,MaxS,MaxM,MaxFmax,MaxFmin,MaxFptp,MaxRmax,MaxRmin,MaxRR,MaxFT;
+double SumFt,SumR,SumQ,SumC0,SumL,SumRR1,SumTmax,SumTmin,SumTo,SumS,SumCq,SumM,SumFmax,SumFmin,SumFptp,SumRmax,SumRmin,SumRR,SumFT;
+double MaxFt1,MinFt1,SumFt1,counterFt1,MaxFt2,MinFt2,SumFt2,counterFt2,MaxFt3,MinFt3,SumFt3,counterFt3,MaxFt4,MinFt4,SumFt4,counterFt4;
+double MaxRR4,MinRR4,CountRR4,SumRR4;
+MaxRR4=0;MinRR4=0;CountRR4=0;SumRR4=0;
+double MaxRR5,MinRR5,CountRR5,SumRR5;
+MaxRR5=0;MinRR5=0;CountRR5=0;SumRR5=0;
+double MaxC1_2C0=0;
+double MinC1_2C0=0;
+double SumC1_2C0=0;
+int counterC1_2C0=0;
+counter=0;
+counterFt=0;
+counterR=0;
+counterQ=0;
+SumFt=0;
+MaxFt=0;
+MinFt=0;
+MaxFt1=MaxFt2=MaxFt3=MaxFt4=0;
+MinFt1=MinFt2=MinFt3=MinFt4=0;
+SumFt1=SumFt2=SumFt3=SumFt4=0;
+counterFt1=counterFt2=counterFt3=counterFt4=0;
+MaxR=0;
+MinR=0;
+SumR=0;
+MaxQ=0;
+MinQ=0;
+SumQ=0;
+counterL=0;
+MaxL=0;
+MinL=0;
+SumL=0;
+counterC0=0;
+MaxC0=0;
+MinC0=0;
+SumC0=0;
+counterCq=0;
+MaxCq=0;
+MinCq=0;
+SumCq=0;
+counterS=0;
+MaxS=0;
+MinS=0;
+SumS=0;
+MaxTmax=0;
+MaxTmin=0;
+MinTmax=0;
+MinTmin=0;
+SumTmax=0;
+SumTmin=0;
+counterTmax=0;
+counterTmin=0;
+counterM=0;
+MaxM=0;
+MinM=0;
+SumM=0;
+counterFmax=0;
+counterFmin=0;
+counterFptp=0;
+MaxFmax=0;
+MaxFmin=0;
+MaxFptp=0;
+MinFmax=0;
+MinFmin=0;
+MinFptp=0;
+SumFmax=0;
+SumFmin=0;
+SumFptp=0;
+counterTo=0;
+counterRR=0;
+counterRmax=0;
+counterRmin=0;
+MaxRmax=0;
+MaxRR=0;
+MaxRmin=0;
+MinRmax=0;
+MinRmin=0;
+MinRR=0;
+SumRR=0;
+SumRmax=0;
+SumRmin=0;
+MaxTo=0;
+MinTo=0;
+SumTo=0;
+counterFT=0;
+MaxFT=0;
+MinFT=0;
+SumFT=0;
+MaxRR1=0;
+MinRR1=0;
+counterRR1=0;
+SumRR1=0;
+double counterC0_C1=0;
+double MaxC0_C1=0;
+double MinC0_C1=0;
+double SumC0_C1=0;
+double MaxRR2=0;
+double MinRR2=0;
+double SumRR2=0;
+double counterRR2=0;
+double MaxRR3=0;
+double MinRR3=0;
+double SumRR3=0;
+double counterRR3=0;
+
+
+//*******************************************************************************************************************************************************
+//********************ПОДКЛЮЧЕНИЕ ТАБЛИЦ БД***********************************************************************************************************************************
+
+     WorkProgress->MaxValue=N-1;
+     WorkProgress->Position=0;
+     ResultForm->ResultGrid->ColCount=k;
+     DataModule1->Transat_Temp_Q->Active=true;
+      DataModule1->Transat_Temp_Q->Filtered=false;
+      DataModule1->Transat_Temp_Q->Filter="SETUPNUM='"+IntToStr(l)+"'";
+      DataModule1->Transat_Temp_Q->Filtered=true;
+      DataModule1->Transat_Temp_Q->First();
+
+      DataModule1->NumberCurrent->Active=true;
+      DataModule1->NumberCurrent->First();
+       if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                        DataModule1->SQLPSIData->Active=false;
+                                        DataModule1->SQLPSIData->SQL->Clear();
+                                        DataModule1->SQLPSIData->SQL->Add("Select * from psidata where Measure_ID='"+Measure_ID+"'");
+                                         DataModule1->SQLPSIData->Active=true;
+
+                          }
+    for (int i=0;i<N;i++){
+       status=0;
+                        if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+ 
+                                         DataModule1->SQLPSIData->Append();
+                          }
+    
+//***********************************************************************************************************************************************************
+//*****************************************************************************************************************************************************************************
+//********************************************************************************************************************************************************************
+//*****************************************ОБРАБОТКА*********************************************************************************************************
+//Порядковый номер****************************************************************************************************************************************
+       if(DataModule1->SqlSpecification->FieldByName("Number")->AsString=="True"){
+                          ResultForm->ResultGrid->Cells[Nar[0]][i+1]=i+1;
+        }
+//Позиция************************************************************************************************************************************************
+        if(DataModule1->SqlSpecification->FieldByName("position")->AsString=="True"){
+                       ResultForm->ResultGrid->Cells[Nar[1]][i+1]=DataModule1->NumberCurrent->FieldByName("Position")->AsString;
+                                if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                             DataModule1->SQLPSIData->FieldByName("Position")->AsString=ResultForm->ResultGrid->Cells[Nar[1]][i+1];
+                                }
+           }
+
+//***********МСК      Файл       Спецификация******************************************************************************************************************************************
+   ResultForm->edtMSK->Text=NumberMForm->edtMSK->Text;
+   ResultForm->edtFile->Text=NumberMForm->edtFile->Text;
+   ResultForm->edtSpc->Text=DataModule1->SqlSpecification->FieldByName("Name")->AsString;
+          if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                             DataModule1->SQLPSIData->FieldByName("Msk")->AsString=NumberMForm->edtMSK->Text;
+                                             DataModule1->SQLPSIData->FieldByName("Measure_ID")->AsString=Measure_ID;
+                                             //Тип установки*******************************************************************************
+                                              if (MachineType=="Saunders"){
+                                                        DataModule1->SQLPSIData->FieldByName("MachineType")->AsString="W2200";
+                                                                 }
+                                                        else {
+                                                        DataModule1->SQLPSIData->FieldByName("MachineType")->AsString="CNA-300";
+                                                        }
+                                                DataModule1->SQLPSIData->FieldByName("Machine_ID")->AsString=Machine_ID;
+                                                DataModule1->SQLPSIData->FieldByName("Machine_Serial")->AsString=Machine_Serial;
+                                                DataModule1->SQLPSIData->FieldByName("Machine_Call_Date")->AsString=Machine_Call_Date;
+                                                DataModule1->SQLPSIData->FieldByName("M_Type")->AsString=M_Type;
+                                                DataModule1->SQLPSIData->FieldByName("PoverKa")->AsBoolean=Poverka;
+                                                DataModule1->SQLPSIData->FieldByName("Version")->AsString=ver->Text;
+                                             DataModule1->SQLPSIData->FieldByName("MSK-M")->AsString=NumberMForm->edtM->Text;
+                                             DataModule1->SQLPSIData->FieldByName("File")->AsString=NumberMForm->edtFile->Text;
+                                             DataModule1->SQLPSIData->FieldByName("Factory")->AsString=NumberMForm->edtFactory->Text;
+                                             DataModule1->SQLPSIData->FieldByName("Lot_Date")->AsString=NumberMForm->edtKonvert->Text;
+                                             DataModule1->SQLPSIData->FieldByName("type")->AsBoolean=NumberMForm->iiBox->Checked;
+                                             DataModule1->SQLPSIData->FieldByName("Spc")->AsString=DataModule1->SqlSpecification->FieldByName("Name")->AsString;
+                                             DataModule1->SQLPSIData->FieldByName("Nominal")->AsString=DataModule1->SqlSpecification->FieldByName("Nominal")->AsString;
+
+                                             DataModule1->SQLPSIData->FieldByName("intervalgf")->AsString=intervalGF;
+                                              DataModule1->SQLPSIData->FieldByName("Date")->AsString=stD+"."+stMn+"."+stY;
+                                              DataModule1->SQLPSIData->FieldByName("Time")->AsString=stH+"."+stM+"."+stS;
+                                              DataModule1->SQLPSIData->FieldByName("DateR")->AsDateTime=ESBDateTimeEdit1->AsDateTime;
+                                              DataModule1->SQLPSIData->FieldByName("Operator")->AsString=DataModule1->Dostup->FieldByName("Name")->AsString;
+                                              if (ModifForm->chkCn){
+                                                      DataModule1->SQLPSIData->FieldByName("Cn")->AsString=ModifForm->edtCn->Text;
+
+                                                                   }
+                                                         else {
+                                                                        DataModule1->SQLPSIData->FieldByName("Cn")->AsString=DataModule1->SqlSpecification->FieldByName("LoadValue")->AsString;;
+                                                                }
+                                                if (ModifForm->chkPmi->Checked){
+                                                         DataModule1->SQLPSIData->FieldByName("PMI")->AsString="True";
+                                                         }
+                                                         else {
+                                                                 DataModule1->SQLPSIData->FieldByName("PMI")->AsString="False";
+                                                                 }
+
+
+                                }
+
+
+
+
+
+//*****************************************************************************************************************************************************
+//*******************************************************************************************************************************************************
+//Параметры*****************************************************************************************************************************
+              double R,C0,Cq,Lq,Fs,FL,F0L,F,Slope,TMax,TMin,Mono,Fmax,Fmin,Fptp,FT,C0_C1,C0_C1max,C0_C1min,RR2max,RR2min;
+              double Q;
+              double Rt;
+              double Rmax;
+              double Rmin;
+              double RR;
+              double C1_2C0;
+              int RingID;
+              int RingPos;
+              double Nominal=DataModule1->SqlSpecification->FieldByName("Nominal")->AsFloat;
+               AnsiString S;
+               S=DataModule1->NumberCurrent->FieldByName("Position")->AsString;
+                   if (S.SubString(1,1)=="L"){
+                              RingID=0;
+                              }
+                   if (S.SubString(1,1)=="U"){
+                              RingID=1;
+                              }
+                    RingPos=S.SubString(2,S.Length()).ToInt();
+              DataModule1->Transat_Temp_Q->Filtered=false;
+              DataModule1->Transat_Temp_Q->Filter="SETUPNUM='"+IntToStr(l)+"' and RINGID='"+IntToStr(RingID)+"' and RINGPOS='"+IntToStr(RingPos)+"'";
+              DataModule1->Transat_Temp_Q->Filtered=true;
+              DataModule1->Transat_Temp_Q->First();
+              AnsiString F1;
+              F1="Select * from psidatatemp where Measure_ID='"+Measure_ID+"'";
+              DataModule1->SQLPSIDataT->Active=false;
+              DataModule1->SQLPSIDataT->SQL->Clear();
+              DataModule1->SQLPSIDataT->SQL->Add(F1);
+              DataModule1->SQLPSIDataT->Active=true;
+//*******************************Порядковый номер******************************************************************************************************
+                                                          if(DataModule1->SqlSpecification->FieldByName("Snumber")->AsString=="True"){
+                                                                     ResultForm->ResultGrid->Cells[Nar[2]][i+1]=DataModule1->NumberCurrent->FieldByName("SNumber")->AsString;
+                                                                      if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                             DataModule1->SQLPSIData->FieldByName("N")->AsString=DataModule1->NumberCurrent->FieldByName("SNumber")->AsString;
+                                                                           }
+
+
+
+
+                                                                    }
+    Status2="Good";
+ ///-------------------------------------------------------------------------------------------------------------------
+ap::real_1d_array XZ,YZ,KpZ;             //инициализация переменых
+ap::real_1d_array WZ;
+int TempCountZ=DataModule1->Transat_Temp_Q->RecordCount;
+XZ.setbounds(0,TempCountZ);
+YZ.setbounds(0,TempCountZ);
+WZ.setbounds(0,TempCountZ);
+KpZ.setbounds(0,TempCountZ);
+double MonoZ;
+double X1Z,Y1Z;
+double Az,Bz;   //температурные пределы
+int Mz=DataModule1->SqlSpecification->FieldByName("Polinom")->AsFloat;;//порядок полинома
+DataModule1->Transat_Temp_Q->First();
+Az=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+      for( int u=0;u<TempCountZ;u++){
+           XZ(u)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+           WZ(u)=1;                                 if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                         if (Measure_Type=="Series"){
+                                                                        YZ(u)=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                             }
+                                                          if (Measure_Type=="EqReact"){
+                                                                        YZ(u)=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                             }
+                                                          if (Measure_Type=="Physical"){
+                                                                        YZ(u)=((DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                             }
+                                                        }
+                                                     else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                          YZ(u)=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+
+                                                     }
+                                                     else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                           YZ(u)=((DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+
+                                                     }
+                                                     else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                         YZ(u)=((DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+
+                                                     }
+
+           DataModule1->Transat_Temp_Q->Next();
+          }//for
+
+DataModule1->Transat_Temp_Q->Last();
+Bz=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+DataModule1->Transat_Temp_Q->First();
+//----------------------------------------------------------------------------------------------------------------------------
+                           for (int j=0;j<DataModule1->Transat_Temp_Q->RecordCount;j++){
+
+//------------------------------------------------------------------------------TEMP----------------------------------------------------------------------------
+             DataModule1->SQLPSIDataT->Append();
+
+  int ll=0;
+ DataModule1->SQLPSIDataT->FieldByName("Msk")->AsString=NumberMForm->edtMSK->Text;
+ DataModule1->SQLPSIDataT->FieldByName("MSK-M")->AsString=NumberMForm->edtM->Text;
+ DataModule1->SQLPSIDataT->FieldByName("Measure_ID")->AsString=Measure_ID;
+ DataModule1->SQLPSIDataT->FieldByName("N")->AsString=DataModule1->NumberCurrent->FieldByName("SNumber")->AsString;
+ DataModule1->SQLPSIDataT->FieldByName("File")->AsString=NumberMForm->edtFile->Text;
+  DataModule1->SQLPSIDataT->FieldByName("pos")->AsString=ResultForm->ResultGrid->Cells[Nar[1]][i+1];
+  DataModule1->SQLPSIDataT->FieldByName("Temp")->AsString=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsString;
+ double rhmax,rhmin,qhmax,qhmin,c0hmax,c0hmin,lhmax,lhmin,fhmax,fhmin,c1hmax,c1hmin;
+ //***************************************
+  if(DataModule1->SqlSpecification->FieldByName("Rmax")->AsString!="no"){
+     rhmax=StrToFloat(DataModule1->SqlSpecification->FieldByName("Rmax")->AsString)*10;
+   }
+   else {
+       rhmax=5000;
+
+     }
+   if(DataModule1->SqlSpecification->FieldByName("Rmin")->AsString!="no"){
+     rhmin=StrToFloat(DataModule1->SqlSpecification->FieldByName("Rmin")->AsString)/10;
+   }
+   else {
+       rhmin=0;
+     }
+ if (DataModule1->Transat_Temp_Q->FieldByName("R_OHMS")->AsFloat<rhmax & DataModule1->Transat_Temp_Q->FieldByName("R_OHMS")->AsFloat>rhmin){
+ DataModule1->SQLPSIDataT->FieldByName("R")->AsString=DataModule1->Transat_Temp_Q->FieldByName("R_OHMS")->AsFloat;
+
+
+
+  }
+ else {
+  DataModule1->SQLPSIDataT->FieldByName("R")->AsString=DataModule1->Transat_Temp_Q->FieldByName("R_OHMS")->AsFloat;
+  ll=1;
+ }
+ //******************************************
+  if(DataModule1->SqlSpecification->FieldByName("Qmax")->AsString!="no"){
+     qhmax=StrToFloat(DataModule1->SqlSpecification->FieldByName("Qmax")->AsString)*10;
+   }
+   else {
+       qhmax=50000000;
+     }
+   if(DataModule1->SqlSpecification->FieldByName("Qmin")->AsString!="no"){
+     qhmin=StrToFloat(DataModule1->SqlSpecification->FieldByName("Qmin")->AsString)/10;
+   }
+   else {
+       qhmin=0;
+     }
+
+ if (DataModule1->Transat_Temp_Q->FieldByName("Q_K")->AsFloat<qhmax & DataModule1->Transat_Temp_Q->FieldByName("Q_K")->AsFloat>qhmin){
+ DataModule1->SQLPSIDataT->FieldByName("Q")->AsString=DataModule1->Transat_Temp_Q->FieldByName("Q_K")->AsFloat;
+  }
+  else {
+  DataModule1->SQLPSIDataT->FieldByName("Q")->AsString=DataModule1->Transat_Temp_Q->FieldByName("Q_K")->AsFloat;
+  ll=1;
+ }
+
+//*******************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("C0max")->AsString!="no"){
+     c0hmax=StrToFloat(DataModule1->SqlSpecification->FieldByName("C0max")->AsString)*10;
+   }
+   else {
+       c0hmax=5000;
+     }
+   if(DataModule1->SqlSpecification->FieldByName("C0min")->AsString!="no"){
+     c0hmin=StrToFloat(DataModule1->SqlSpecification->FieldByName("C0min")->AsString)/10;
+   }
+   else {
+       c0hmin=0;
+     }
+
+ if (DataModule1->Transat_Temp_Q->FieldByName("C0_PF")->AsFloat<c0hmax & DataModule1->Transat_Temp_Q->FieldByName("C0_PF")->AsFloat>c0hmin){
+  DataModule1->SQLPSIDataT->FieldByName("C0")->AsString=DataModule1->Transat_Temp_Q->FieldByName("C0_PF")->AsFloat;
+  }
+  else {
+   DataModule1->SQLPSIDataT->FieldByName("C0")->AsString=DataModule1->Transat_Temp_Q->FieldByName("C0_PF")->AsFloat;
+  ll=1;
+ }
+//**************************************************************************
+if(DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString!="no"){
+     c1hmax=StrToFloat(DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString)*10;
+   }
+   else {
+       c1hmax=5000;
+     }
+   if(DataModule1->SqlSpecification->FieldByName("Cqmin")->AsString!="no"){
+     c1hmin=StrToFloat(DataModule1->SqlSpecification->FieldByName("Cqmin")->AsString)/10;
+   }
+   else {
+       c1hmin=0;
+     }
+
+ if (DataModule1->Transat_Temp_Q->FieldByName("C1_FF")->AsFloat<c1hmax & DataModule1->Transat_Temp_Q->FieldByName("C1_FF")->AsFloat>c1hmin){
+      DataModule1->SQLPSIDataT->FieldByName("Cq")->AsString=DataModule1->Transat_Temp_Q->FieldByName("C1_FF")->AsFloat;
+  }
+  else {
+     DataModule1->SQLPSIDataT->FieldByName("Cq")->AsString=DataModule1->Transat_Temp_Q->FieldByName("C1_FF")->AsFloat;
+  ll=1;
+ }
+//*******************************************************************************************
+ if(DataModule1->SqlSpecification->FieldByName("Lmax")->AsString!="no"){
+     lhmax=StrToFloat(DataModule1->SqlSpecification->FieldByName("Lmax")->AsString)*10;
+   }
+   else {
+       lhmax=100000;
+     }
+   if(DataModule1->SqlSpecification->FieldByName("Lmin")->AsString!="no"){
+     lhmin=StrToFloat(DataModule1->SqlSpecification->FieldByName("Lmin")->AsString)/10;
+   }
+   else {
+       lhmin=0;
+     }
+
+ if (DataModule1->Transat_Temp_Q->FieldByName("L1_MH")->AsFloat<lhmax & DataModule1->Transat_Temp_Q->FieldByName("L1_MH")->AsFloat>lhmin){
+      DataModule1->SQLPSIDataT->FieldByName("L")->AsString=DataModule1->Transat_Temp_Q->FieldByName("L1_MH")->AsFloat;
+  }
+  else {
+     DataModule1->SQLPSIDataT->FieldByName("L")->AsString=DataModule1->Transat_Temp_Q->FieldByName("L1_MH")->AsFloat;
+  ll=1;
+ }
+//***************************************************************************************************************
+//*******************************************************************************
+ Fs=DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat;
+ FL=DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat;
+ F0L=DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat;
+ double ffs,ffl;
+ //************************************************************************************************************
+
+ if (Measure_Type=="Series"){
+                  ffs=((Fs-Nominal)/Nominal)*1E6;
+                 ffl=0;
+                 }
+ if (Measure_Type=="EqReact"){
+                  ffs=((Fs-Nominal)/Nominal)*1E6;
+                  ffl=((FL-Nominal)/Nominal)*1E6;
+      }
+   if (Measure_Type=="Physical"){
+                  ffs=((FL-Nominal)/Nominal)*1E6;
+                  ffl=((F0L-Nominal)/Nominal)*1E6;
+         }
+       fhmax=5000;
+       fhmin=-5000;
+
+ if (ffs>fhmin & ffs<fhmax){
+      DataModule1->SQLPSIDataT->FieldByName("F")->AsString=ffs;
+      DataModule1->SQLPSIDataT->FieldByName("FL")->AsString=ffl;
+  }
+  else {
+     DataModule1->SQLPSIDataT->FieldByName("F")->AsString=ffs;
+      DataModule1->SQLPSIDataT->FieldByName("FL")->AsString=ffl;
+  ll=1;
+ }
+
+ if (TempCountZ>=Mz+1){
+    X1Z=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+  if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+    if (Measure_Type=="Series"){
+                Y1Z=ffs;
+           }
+     if (Measure_Type=="EqReact"){
+                Y1Z=ffs;
+                 }
+    if (Measure_Type=="Physical"){
+                 Y1Z=ffl;
+               }
+     
+   }
+   else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+
+            Y1Z=((Fs-Nominal)/Nominal)*1E6;
+   }
+   else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+
+            Y1Z=((FL-Nominal)/Nominal)*1E6;
+   }
+   else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+
+            Y1Z=((F0L-Nominal)/Nominal)*1E6;
+   }
+
+    MonotonP1(XZ,YZ,Az,Bz,MonoZ,TempCountZ,WZ,Mz,X1Z,Y1Z);
+    DataModule1->SQLPSIDataT->FieldByName("Mono")->AsString=FloatToStrF(MonoZ,ffFixed,5,3);
+
+ }
+
+
+ if (ll==1){
+   DataModule1->SQLPSIDataT->FieldByName("Status")->AsString="Fail";
+   Status2="BAD";
+ }
+ else {
+   DataModule1->SQLPSIDataT->FieldByName("Status")->AsString="Pass";
+
+ }
+
+
+ DataModule1->SQLPSIDataT->Post();
+
+ if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+     DataModule1->SQLPSIData->FieldByName("Status2")->AsString=Status2;
+
+ }
+//---------------------------------------------------------------------------------R--------------------------------------------------------------------------------------------------------
+
+                                                         if (DataModule1->SqlSpecification->FieldByName("Tpar")->AsString==DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsString){
+                                                                           R=DataModule1->Transat_Temp_Q->FieldByName("R_OHMS")->AsFloat;
+                                                                           ResultForm->ResultGrid->Cells[Nar[4]][i+1]=FloatToStrF(R,ffFixed,4,1);
+                                                                           if(DataModule1->SqlSpecification->FieldByName("R")->AsString=="True"){
+                                                                                     if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                                DataModule1->SQLPSIData->FieldByName("R")->AsString=R;
+                                                                                                if (DataModule1->SqlSpecification->FieldByName("Ftgk_Measure")->AsString=="True"){
+
+                                                                                                 DataModule1->SQLPSIData->FieldByName("Rtgk")->AsString=R;
+                                                                                                }
+                                                                                          }
+                                                                              }
+
+                                                                             if(DataModule1->SqlSpecification->FieldByName("Rmax")->AsString!="no"){
+                                                                             if(R>DataModule1->SqlSpecification->FieldByName("Rmax")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterR=counterR+1;
+                                                                                     }
+                                                                               if (DataModule1->SqlSpecification->FieldByName("DopuskR")->AsFloat>0){
+                                                                                     if(R>DataModule1->SqlSpecification->FieldByName("Rmax")->AsFloat-(DataModule1->SqlSpecification->FieldByName("Rmax")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskR")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterR=counterR+1;
+                                                                                     }
+
+                                                                                    }
+
+                                                                                }
+                                                              if(DataModule1->SqlSpecification->FieldByName("Rmin")->AsString!="no"){
+                                                                             if(R<DataModule1->SqlSpecification->FieldByName("Rmin")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterR=counterR+1;
+                                                                                     }
+                                                                   if (DataModule1->SqlSpecification->FieldByName("DopuskR")->AsFloat>0){
+                                                                                     if(R<DataModule1->SqlSpecification->FieldByName("Rmin")->AsFloat+(DataModule1->SqlSpecification->FieldByName("Rmin")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskR")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterR=counterR+1;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+
+                                                              if(R>MaxR){
+                                                                   MaxR=R;
+                                                                   }
+                                                              if(R<MinR){
+                                                                    MinR=R;
+                                                                    }
+                                                              SumR=SumR+R;
+
+                                                          }
+
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------Q-------------------------------------------------------------------------------------------------------------
+                                        if(DataModule1->SqlSpecification->FieldByName("Q")->AsString=="True"){
+                                                          if (DataModule1->SqlSpecification->FieldByName("Tq")->AsString==DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsString){
+                                                                          Q=DataModule1->Transat_Temp_Q->FieldByName("Q_K")->AsFloat;
+                                                                           ResultForm->ResultGrid->Cells[Nar[7]][i+1]=FloatToStrF(Q,ffFixed,4,0);
+                                                                          if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                      DataModule1->SQLPSIData->FieldByName("Q")->AsString=Q;
+                                                                                 }
+
+                                                               if(DataModule1->SqlSpecification->FieldByName("Qmax")->AsString!="no"){
+                                                                             if(Q>DataModule1->SqlSpecification->FieldByName("Qmax")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterQ=counterQ+1;
+                                                                                     }
+                                                                                if (DataModule1->SqlSpecification->FieldByName("DopuskQ")->AsFloat>0){
+                                                                                     if(Q>DataModule1->SqlSpecification->FieldByName("Qmax")->AsFloat-(DataModule1->SqlSpecification->FieldByName("Qmax")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskQ")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterQ=counterQ+1;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                                                              if(DataModule1->SqlSpecification->FieldByName("Qmin")->AsString!="no"){
+                                                                             if(Q<DataModule1->SqlSpecification->FieldByName("Qmin")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterQ=counterQ+1;
+                                                                                     }
+                                                                               if (DataModule1->SqlSpecification->FieldByName("DopuskQ")->AsFloat>0){
+                                                                                     if(Q<DataModule1->SqlSpecification->FieldByName("Qmin")->AsFloat+(DataModule1->SqlSpecification->FieldByName("Qmin")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskQ")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterQ=counterQ+1;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                                                              if(Q>MaxQ){
+                                                                   MaxQ=Q;
+                                                                   }
+                                                              if(Q<MinQ){
+                                                                    MinQ=Q;
+                                                                    }
+                                                              SumQ=SumQ+Q;
+
+                                                            }
+
+                                          }
+
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------L-----------------------------------------------------------------------------------------------------------
+                                          if(DataModule1->SqlSpecification->FieldByName("L")->AsString=="True"){
+                                                       if (DataModule1->SqlSpecification->FieldByName("Lt")->AsString==DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsString){
+                                                                     Lq=DataModule1->Transat_Temp_Q->FieldByName("L1_MH")->AsFloat;
+                                                                     ResultForm->ResultGrid->Cells[Nar[9]][i+1]=FloatToStrF(Lq,ffFixed,5,3);
+                                                                          if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                      DataModule1->SQLPSIData->FieldByName("L")->AsString=Lq;
+                                                                                 }
+                                                                  if(DataModule1->SqlSpecification->FieldByName("Lmax")->AsString!="no"){
+                                                                             if(Lq>DataModule1->SqlSpecification->FieldByName("Lmax")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterL=counterL+1;
+                                                                                     }
+
+                                                                }
+                                                              if(DataModule1->SqlSpecification->FieldByName("Lmin")->AsString!="no"){
+                                                                             if(Lq<DataModule1->SqlSpecification->FieldByName("Lmin")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterL=counterL+1;
+                                                                                     }
+                                                                }
+                                                              if(Lq>MaxL){
+                                                                   MaxL=Lq;
+                                                                   }
+                                                              if(Lq<MinL){
+                                                                    MinL=Lq;
+                                                                    }
+                                                              SumL=SumL+Lq;
+
+                                                                }
+                                             }
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------C0---------------------------------------------------------------------------------------------------------
+                                          if(DataModule1->SqlSpecification->FieldByName("C0")->AsString=="True"){
+                                                         if (DataModule1->SqlSpecification->FieldByName("Tc0")->AsString==DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsString){
+                                                                         C0=DataModule1->Transat_Temp_Q->FieldByName("C0_PF")->AsFloat;
+                                                                         ResultForm->ResultGrid->Cells[Nar[5]][i+1]=FloatToStrF(C0,ffFixed,5,3);
+                                                                                  if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                             DataModule1->SQLPSIData->FieldByName("C0")->AsString=C0;
+                                                                                    }
+                                                                 if(DataModule1->SqlSpecification->FieldByName("C0max")->AsString!="no"){
+                                                                             if(C0>DataModule1->SqlSpecification->FieldByName("C0max")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterC0=counterC0+1;
+                                                                                     }
+                                                                              if (DataModule1->SqlSpecification->FieldByName("DopuskC0")->AsFloat>0){
+                                                                                     if(C0>DataModule1->SqlSpecification->FieldByName("C0max")->AsFloat-(DataModule1->SqlSpecification->FieldByName("C0max")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskC0")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterC0=counterC0+1;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                                                              if(DataModule1->SqlSpecification->FieldByName("C0min")->AsString!="no"){
+                                                                             if(C0<DataModule1->SqlSpecification->FieldByName("C0min")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterC0=counterC0+1;
+                                                                                     }
+                                                                             if (DataModule1->SqlSpecification->FieldByName("DopuskC0")->AsFloat>0){
+                                                                                     if(C0<DataModule1->SqlSpecification->FieldByName("C0min")->AsFloat+(DataModule1->SqlSpecification->FieldByName("C0min")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskC0")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterC0=counterC0+1;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                                                              if(C0>MaxC0){
+                                                                   MaxC0=C0;
+                                                                   }
+                                                              if(C0<MinC0){
+                                                                    MinC0=C0;
+                                                                    }
+                                                              SumC0=SumC0+C0;
+                                                           }
+                                            }
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------Cq-----------------------------------------------------------------------------------------------------------------
+                                            if(DataModule1->SqlSpecification->FieldByName("Cq")->AsString=="True"){
+                                                                 if (DataModule1->SqlSpecification->FieldByName("Tcq")->AsString==DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsString){
+                                                                           // Cq=DataModule1->Transat_Temp_Q->FieldByName("C1_FF")->AsFloat;
+                                                                           double kkk=DataModule1->Transat_Temp_Q->FieldByName("C1_FF")->AsFloat;
+                                                                           Cq=StrToFloat(FloatToStrF(kkk,ffFixed,5,2));
+
+                                                                           // ResultForm->ResultGrid->Cells[Nar[6]][i+1]=FloatToStrF(Cq,ffFixed,5,3);
+                                                                           ResultForm->ResultGrid->Cells[Nar[6]][i+1]=Cq;
+                                                                          if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                      DataModule1->SQLPSIData->FieldByName("Cq")->AsString=Cq;
+                                                                                 }
+                                                                                 if(DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString!="no"){
+                                                                             if(Cq>DataModule1->SqlSpecification->FieldByName("Cqmax")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterCq=counterCq+1;
+                                                                                     }
+                                                                                if (DataModule1->SqlSpecification->FieldByName("DopuskCq")->AsFloat>0){
+                                                                                     if(Cq>DataModule1->SqlSpecification->FieldByName("Cqmax")->AsFloat-(DataModule1->SqlSpecification->FieldByName("Cqmax")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskCq")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterCq=counterCq+1;
+                                                                                     }
+
+                                                                                    }
+                                                                              }
+                                                              if(DataModule1->SqlSpecification->FieldByName("Cqmin")->AsString!="no"){
+                                                                             if(Cq<DataModule1->SqlSpecification->FieldByName("Cqmin")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterCq=counterCq+1;
+                                                                                     }
+                                                                              if (DataModule1->SqlSpecification->FieldByName("DopuskCq")->AsFloat>0){
+                                                                                     if(Cq<DataModule1->SqlSpecification->FieldByName("Cqmin")->AsFloat+(DataModule1->SqlSpecification->FieldByName("Cqmin")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskCq")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterCq=counterCq+1;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                                                              if(Cq>MaxCq){
+                                                                   MaxCq=Cq;
+                                                                   }
+                                                              if(Cq<MinCq){
+                                                                    MinCq=Cq;
+                                                                    }
+                                                              SumCq=SumCq+Cq;
+                                                                  }
+                                              }
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------C0_C1------------------------------------------------------------------------
+     if(DataModule1->SqlSpecification->FieldByName("C0_C1")->AsString=="True"){
+                                                                 if (DataModule1->SqlSpecification->FieldByName("C0_C1_T")->AsString==DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsString){
+                                                                            C0_C1=(DataModule1->Transat_Temp_Q->FieldByName("C0_PF")->AsFloat/DataModule1->Transat_Temp_Q->FieldByName("C1_FF")->AsFloat)*1000;
+                                                                            ResultForm->ResultGrid->Cells[Nar[26]][i+1]=FloatToStrF(C0_C1,ffFixed,5,1);
+                                                                          if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                    if (C0_C1>0 & C0_C1<100000){
+                                                                                      DataModule1->SQLPSIData->FieldByName("C0_C1")->AsString=C0_C1;
+                                                                                      }
+                                                                                     else {
+
+                                                                                      DataModule1->SQLPSIData->FieldByName("C0_C1")->AsString=0;
+                                                                                     }
+                                                                                 }
+                                                                                 if(DataModule1->SqlSpecification->FieldByName("C0_C1max")->AsString!="no"){
+                                                                             if(C0_C1>DataModule1->SqlSpecification->FieldByName("C0_C1max")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterC0_C1=counterC0_C1+1;
+                                                                                     }
+
+                                                                }
+                                                              if(DataModule1->SqlSpecification->FieldByName("C0_C1min")->AsString!="no"){
+                                                                             if(C0_C1<DataModule1->SqlSpecification->FieldByName("C0_C1min")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterC0_C1=counterC0_C1+1;
+                                                                                     }
+                                                                }
+                                                              if(C0_C1>MaxC0_C1){
+                                                                   MaxC0_C1=C0_C1;
+                                                                   }
+                                                              if(C0_C1<MinC0_C1){
+                                                                    MinC0_C1=C0_C1;
+                                                                    }
+                                                              SumC0_C1=SumC0_C1+C0_C1;
+                                                                  }
+                                              }
+
+
+ //--------------------------------------------------------------------------Перестройка------------------------------------------------------------------------
+     if(DataModule1->SqlSpecification->FieldByName("C1_2C0")->AsString=="True"){
+                                                                 if (DataModule1->SqlSpecification->FieldByName("C1_2C0T")->AsString==DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsString){
+
+                                                                            C1_2C0=(DataModule1->Transat_Temp_Q->FieldByName("C1_FF")->AsFloat/(2*DataModule1->Transat_Temp_Q->FieldByName("C0_PF")->AsFloat))*1000;
+                                                                            ResultForm->ResultGrid->Cells[Nar[33]][i+1]=FloatToStrF(C1_2C0,ffFixed,6,2);
+                                                                          if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                    if (C1_2C0>0){
+                                                                                      DataModule1->SQLPSIData->FieldByName("C1_2C0")->AsString=C1_2C0;
+                                                                                      }
+                                                                                     else {
+
+                                                                                      DataModule1->SQLPSIData->FieldByName("C1_2C0")->AsString=0;
+                                                                                     }
+                                                                                 }
+                                                                                 if(DataModule1->SqlSpecification->FieldByName("C1_2C0max")->AsString!="no"){
+                                                                             if(C1_2C0>DataModule1->SqlSpecification->FieldByName("C1_2C0max")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterC1_2C0++;
+                                                                                     }
+                                                                }
+                                                              if(DataModule1->SqlSpecification->FieldByName("C1_2C0min")->AsString!="no"){
+                                                                             if(C1_2C0<DataModule1->SqlSpecification->FieldByName("C1_2C0min")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterC1_2C0++;
+                                                                                     }
+                                                                }
+                                                              if(C1_2C0>MaxC1_2C0){
+                                                                   MaxC1_2C0=C1_2C0;
+                                                                   }
+                                                              if(C1_2C0<MinC1_2C0){
+                                                                    MinC1_2C0=C1_2C0;
+                                                                    }
+                                                              SumC1_2C0=SumC1_2C0+C1_2C0;
+                                                                  }
+                                              }
+
+
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//******************************************************Частота и точность настройки*********************************************************************
+                                                 double Totn;
+                                                   if (DataModule1->SqlSpecification->FieldByName("Tint")->AsString=="False"){
+                                                       Totn=DataModule1->SqlSpecification->FieldByName("Tnastr")->AsFloat;
+
+                                                   }
+                                                   else {
+
+                                                      Totn=DataModule1->SqlSpecification->FieldByName("TintValue")->AsFloat;
+                                                   }
+                                                   if (Totn==DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsString){
+                                                             Fs=DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat;
+                                                             FL=DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat;
+                                                             F0L=DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat;
+                                                              if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                                                             if (Measure_Type=="Series"){
+                                                                                                         if (DataModule1->Transat_Temp_Q->FieldByName("R_OHMS")->AsFloat!=0){
+                                                                                                                  DataModule1->SQLPSIData->FieldByName("Fn")->AsString=((Fs-Nominal)/Nominal)*1E6;
+                                                                                                           }
+                                                                                                 }
+                                                                                               if (Measure_Type=="EqReact"){
+                                                                                                          if (DataModule1->Transat_Temp_Q->FieldByName("R_OHMS")->AsFloat!=0){
+                                                                                                                   DataModule1->SQLPSIData->FieldByName("Fn")->AsString=((FL-Nominal)/Nominal)*1E6;
+                                                                                                           }
+                                                                                                      }
+                                                                                                if (Measure_Type=="Physical"){
+                                                                                                           if (DataModule1->Transat_Temp_Q->FieldByName("R_OHMS")->AsFloat!=0){
+                                                                                                                   DataModule1->SQLPSIData->FieldByName("Fn")->AsString=((F0L-Nominal)/Nominal)*1E6;
+                                                                                                                   }
+                                                                                                       }
+
+
+
+                                                                                   }
+                                                                                   else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+
+                                                                                           if (DataModule1->Transat_Temp_Q->FieldByName("R_OHMS")->AsFloat!=0){
+                                                                                                                  DataModule1->SQLPSIData->FieldByName("Fn")->AsString=((Fs-Nominal)/Nominal)*1E6;
+                                                                                                           }
+
+
+                                                                                   }
+                                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+
+                                                                                          if (DataModule1->Transat_Temp_Q->FieldByName("R_OHMS")->AsFloat!=0){
+                                                                                                                   DataModule1->SQLPSIData->FieldByName("Fn")->AsString=((FL-Nominal)/Nominal)*1E6;
+                                                                                                           }
+
+
+                                                                                   }
+                                                                                   else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+
+                                                                                           if (DataModule1->Transat_Temp_Q->FieldByName("R_OHMS")->AsFloat!=0){
+                                                                                                                   DataModule1->SQLPSIData->FieldByName("Fn")->AsString=((F0L-Nominal)/Nominal)*1E6;
+                                                                                                                   }
+
+
+                                                                                   }
+
+                                                   }
+
+                                                 if (DataModule1->SqlSpecification->FieldByName("Tnastr")->AsString==DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsString){
+                                                             Fs=DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat;
+                                                             double Ftgk;
+                                                             FL=DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat;
+                                                             F0L=DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat;
+                                                                                 if (DataModule1->Transat_Temp_Q->FieldByName("R_OHMS")->AsFloat!=0){
+                                                                                                   if (Measure_Type=="Series"){
+                                                                                                                  F=((Fs-Nominal)/Nominal)*1E6;
+                                                                                                    }
+                                                                                                   if (Measure_Type=="EqReact"){
+                                                                                                                   F=((FL-Nominal)/Nominal)*1E6;
+                                                                                                      }
+                                                                                                  if (DataModule1->SqlSpecification->FieldByName("TypeF")->AsString=="True"){
+                                                                                                   if (Measure_Type=="Physical"){
+                                                                                                                   F=((FL-Nominal)/Nominal)*1E6;
+                                                                                                       }
+                                                                                                   }
+                                                                                                   else {
+                                                                                                     if (Measure_Type=="Physical"){
+                                                                                                                   F=((F0L-Nominal)/Nominal)*1E6;
+                                                                                                       }
+
+                                                                                                   }
+                                                                                      }
+                                                                                   else {
+                                                                                               F=0;
+
+                                                                                       }
+
+                                                                                  if (DataModule1->SqlSpecification->FieldByName("Ftgk_Measure")->AsString=="False"){
+                                                                                        if(DataModule1->SqlSpecification->FieldByName("Ft")->AsString=="True"){
+                                                                                                    ResultForm->ResultGrid->Cells[Nar[3]][i+1]=FloatToStrF(F,ffFixed,5,3);
+                                                                                         }
+                                                                       }
+                                                                       else {
+                                                                            double Fk=F;
+
+                                                                            double Qavg;
+                                                                            double Favg,qCq;
+                                                                            double K,Cn,qNominal;
+                                                                            qNominal=DataModule1->SqlSpecification->FieldByName("Nominal")->AsFloat;
+                                                                            Cn=DataModule1->SqlSpecification->FieldByName("Loadvalue")->AsFloat;
+                                                                            Qavg=DataModule1->SqlSpecification->FieldByName("Qavg")->AsFloat;
+                                                                            Favg=DataModule1->SqlSpecification->FieldByName("Favg")->AsFloat;
+                                                                            K=DataModule1->SqlSpecification->FieldByName("K")->AsFloat;
+                                                                            qCq=Cq*pow(10,-15);
+
+                                                                            if (Q==0){
+                                                                             Q=DataModule1->Transat_Temp_Q->FieldByName("Q_K")->AsFloat;
+                                                                            }
+                                                                            if (Q==0){
+                                                                             Q=1;
+                                                                            }
+                                                                            if (Cn>0){
+                                                                            double FtgkL=(qCq/(2*(C0+Cn)*pow(10,-12))*Nominal*1000000);
+                                                                              Ftgk=Fk+((qCq/(2*(C0+Cn)*pow(10,-12))*qNominal*1000000)/qNominal)-(Favg+(Qavg/Q)*K);
+                                                                            }
+                                                                            else {
+                                                                             Ftgk=Fk-(Favg+(Qavg/Q)*K);
+                                                                             }
+                                                                             if(DataModule1->SqlSpecification->FieldByName("Ft")->AsString=="True"){
+                                                                                         ResultForm->ResultGrid->Cells[Nar[3]][i+1]=FloatToStrF(Ftgk,ffFixed,5,3);
+                                                                             }
+                                                                            if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+
+                                                                                   DataModule1->SQLPSIData->FieldByName("Ftgk")->AsString=Ftgk*DataModule1->SqlSpecification->FieldByName("Nominal")->AsFloat;
+
+                                                                                     }
+
+                                                                       }
+
+                                                                                  if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                                       DataModule1->SQLPSIData->FieldByName("F")->AsString=F;
+                                                                                       }
+
+                                                             if (DataModule1->SqlSpecification->FieldByName("Ftgk_Measure")->AsString=="True"){
+                                                                 F=Ftgk;
+
+                                                             }
+
+                                                         if(DataModule1->SqlSpecification->FieldByName("Ft")->AsString=="True" & DataModule1->SqlSpecification->FieldByName("Ftgk")->AsString=="False"){
+                                                           if(DataModule1->SqlSpecification->FieldByName("Fmax")->AsString!="no"){
+                                                                             if(F>DataModule1->SqlSpecification->FieldByName("Fmax")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterFt=counterFt+1;
+                                                                                     }
+                                                                     if (DataModule1->SqlSpecification->FieldByName("DopuskF")->AsFloat>0 & DataModule1->SqlSpecification->FieldByName("DopuskF_P")->AsFloat==0){
+                                                                                     if(F>DataModule1->SqlSpecification->FieldByName("Fmax")->AsFloat-DataModule1->SqlSpecification->FieldByName("DopuskF")->AsFloat){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterFt=counterFt+1;
+                                                                                     }
+
+                                                                                    }
+                                                                       else {
+                                                                             if(F>DataModule1->SqlSpecification->FieldByName("Fmax")->AsFloat-(DataModule1->SqlSpecification->FieldByName("Fmax")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskF_P")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterFt=counterFt+1;
+                                                                                     }
+
+                                                                            }
+
+
+                                                                }
+                                                              if(DataModule1->SqlSpecification->FieldByName("Fmin")->AsString!="no"){
+                                                                             if(F<DataModule1->SqlSpecification->FieldByName("Fmin")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterFt=counterFt+1;
+                                                                                     }
+                                                                              if (DataModule1->SqlSpecification->FieldByName("DopuskF")->AsFloat>0 & DataModule1->SqlSpecification->FieldByName("DopuskF_P")->AsFloat==0){
+                                                                                     if(F<DataModule1->SqlSpecification->FieldByName("Fmin")->AsFloat+DataModule1->SqlSpecification->FieldByName("DopuskF")->AsFloat){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterFt=counterFt+1;
+                                                                                     }
+
+                                                                                    }
+                                                                                    else {
+                                                                                     if(F<DataModule1->SqlSpecification->FieldByName("Fmin")->AsFloat+(DataModule1->SqlSpecification->FieldByName("Fmin")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskF_P")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterFt=counterFt+1;
+                                                                                     }
+                                                                                    }
+                                                                }
+
+
+
+                                                              if(F>MaxFt){
+                                                                   MaxFt=F;
+                                                                   }
+                                                              if(F<MinFt){
+                                                                    MinFt=F;
+                                                                    }
+                                                              SumFt=SumFt+F;
+                                                          }
+
+                                                       }//if
+
+
+                                                      if(DataModule1->SqlSpecification->FieldByName("F")->AsString=="True"){
+                                                                        if (DataModule1->SqlSpecification->FieldByName("Tnastr")->AsString==DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsString){
+                                                                                         if (Measure_Type=="Series"){
+                                                                                                             ResultForm->ResultGrid->Cells[Nar[23]][i+1]=FloatToStr(Fs);
+                                                                                           }
+                                                                                      if (Measure_Type=="EqReact"){
+                                                                                                            ResultForm->ResultGrid->Cells[Nar[23]][i+1]=FloatToStr(FL);
+                                                                                          }
+                                                                                      if (Measure_Type=="Physical"){
+                                                                                                          ResultForm->ResultGrid->Cells[Nar[23]][i+1]=FloatToStr(F0L);
+                                                                                             }
+
+
+                                                                            }//if
+
+                                                                  }//if
+
+
+
+
+
+
+
+
+                 DataModule1->Transat_Temp_Q->Next();
+
+     }
+
+//*********************************************Параметры в интервале температур**************************************************************************
+
+ap::real_1d_array X,X1,Y,Y1,X2,Y2,Kp,mono1;             //инициализация переменых
+ap::real_1d_array W,W2;
+int TempCount=DataModule1->Transat_Temp_Q->RecordCount;
+int TempCountM=0;
+X.setbounds(0,TempCount);
+X1.setbounds(0,TempCount);
+Y.setbounds(0,TempCount);
+Y1.setbounds(0,TempCount);
+W.setbounds(0,TempCount);
+X2.setbounds(0,TempCount);
+Y2.setbounds(0,TempCount);
+W2.setbounds(0,TempCount);
+Kp.setbounds(0,TempCount);
+
+mono1.setbounds(0,TempCount);
+double A,B,Am,Bm,TCH_A,TCH_B;   //температурные пределы
+double Precision=0.05;  //точность
+int M=DataModule1->SqlSpecification->FieldByName("Polinom")->AsFloat;//порядок полинома
+DataModule1->Transat_Temp_Q->First();
+    Am=DataModule1->SqlSpecification->FieldByName("TmBegin")->AsFloat;
+      Bm=DataModule1->SqlSpecification->FieldByName("TmEnd")->AsFloat;
+ if (DataModule1->SqlSpecification->FieldByName("TCH_Interval_Type")->AsString=="По особому интервалу"){
+    A=DataModule1->SqlSpecification->FieldByName("IT_Temp_A")->AsFloat;
+     B=DataModule1->SqlSpecification->FieldByName("IT_Temp_B")->AsFloat;
+      TCH_A=DataModule1->SqlSpecification->FieldByName("TCH_Temp_A")->AsFloat;
+      TCH_B= DataModule1->SqlSpecification->FieldByName("TCH_Temp_B")->AsFloat;
+  }
+  else {
+     A=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+    DataModule1->Transat_Temp_Q->Last();
+    B=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+    DataModule1->Transat_Temp_Q->First();
+  }
+
+  int l=0;
+  int l1=0;
+  int l_1=0;
+  double LocalPoint=-10000;
+  double TempFreq,TempFreq1;
+
+      for( int j=0;j<TempCount;j++){
+                                    if (DataModule1->Transat_Temp_Q->FieldByName("R_OHMS")->AsFloat>0 & DataModule1->Transat_Temp_Q->FieldByName("R_OHMS")->AsFloat<100000){
+                                        if (DataModule1->SqlSpecification->FieldByName("TCH_Interval_Type")->AsString=="По особому интервалу"){
+
+
+
+                                                    if (DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat>=A & DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat<=B){
+
+
+                                                          if(LocalPoint!= DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat){
+
+
+
+                                                                   if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                         if (Measure_Type=="Series"){
+                                                                        Y(l)=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                        TempFreq=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                        X(l)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W(l)=1;
+                                                                          l++;
+                                                             }
+                                                          if (Measure_Type=="EqReact"){
+                                                                        Y(l)=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                        TempFreq=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                         X(l)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W(l)=1;
+                                                                          l++;
+                                                             }
+                                                          if (Measure_Type=="Physical"){
+                                                                        Y(l)=((DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                        TempFreq=((DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                         X(l)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W(l)=1;
+                                                                          l++;
+                                                             }
+                                                        }
+                                                        else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                                Y(l)=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                TempFreq=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                 X(l)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W(l)=1;
+                                                                          l++;
+
+                                                        }
+                                                        else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                                Y(l)=((DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                TempFreq= ((DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                 X(l)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W(l)=1;
+                                                                          l++;
+
+                                                        }
+                                                         else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                                Y(l)=((DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                TempFreq=((DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                 X(l)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W(l)=1;
+                                                                          l++;
+
+                                                        }
+                                                  }
+                                                  else {
+                                                          double tempfr;
+                                                          if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                          if (Measure_Type=="Series"){
+                                                                         tempfr=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                         Y(l)=(tempfr+TempFreq)/2;
+                                                                        TempFreq=(tempfr+TempFreq)/2;
+                                                                        X(l)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W(l)=1;
+
+                                                             }
+                                                          if (Measure_Type=="EqReact"){
+                                                                        tempfr=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                        Y(l)=(tempfr+TempFreq)/2;
+                                                                        TempFreq=(tempfr+TempFreq)/2;
+                                                                         X(l)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W(l)=1;
+
+                                                             }
+                                                          if (Measure_Type=="Physical"){
+                                                                         tempfr= ((DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                          Y(l)=(tempfr+TempFreq)/2;
+                                                                        TempFreq=(tempfr+TempFreq)/2;
+
+                                                                         X(l)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W(l)=1;
+
+                                                             }
+                                                        }
+                                                        else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                                 tempfr=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                          Y(l)=(tempfr+TempFreq)/2;
+                                                                        TempFreq=(tempfr+TempFreq)/2;
+
+                                                                 X(l)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W(l)=1;
+
+
+                                                        }
+                                                        else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                                tempfr=((DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                          Y(l)=(tempfr+TempFreq)/2;
+                                                                        TempFreq=(tempfr+TempFreq)/2;
+
+                                                                 X(l)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W(l)=1;
+
+
+                                                        }
+                                                         else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                                   tempfr=((DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                          Y(l)=(tempfr+TempFreq)/2;
+                                                                        TempFreq=(tempfr+TempFreq)/2;
+
+                                                                 X(l)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W(l)=1;
+
+
+                                                        }
+
+                                                  }
+
+
+
+
+                                                    }
+
+
+
+
+                                                if (DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat>=TCH_A & DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat<=TCH_B){
+
+
+                                                          if(LocalPoint!= DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat){
+
+
+
+                                                                   if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                         if (Measure_Type=="Series"){
+                                                                        Y2(l_1)=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                        TempFreq1=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                        X2(l_1)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W2(l_1)=1;
+                                                                          l_1++;
+                                                             }
+                                                          if (Measure_Type=="EqReact"){
+                                                                        Y2(l_1)=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                        TempFreq1=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                         X2(l_1)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W2(l_1)=1;
+                                                                          l_1++;
+                                                             }
+                                                          if (Measure_Type=="Physical"){
+                                                                        Y2(l_1)=((DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                        TempFreq1=((DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                         X2(l_1)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W2(l_1)=1;
+                                                                          l_1++;
+                                                             }
+                                                        }
+                                                        else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                                Y2(l_1)=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                TempFreq1=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                 X2(l_1)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W2(l_1)=1;
+                                                                          l_1++;
+
+                                                        }
+                                                        else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                                Y2(l_1)=((DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                TempFreq1= ((DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                 X2(l_1)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W2(l_1)=1;
+                                                                          l_1++;
+
+                                                        }
+                                                         else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                                Y2(l_1)=((DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                TempFreq1=((DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                 X2(l_1)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W2(l_1)=1;
+                                                                          l_1++;
+
+                                                        }
+                                                  }
+                                                  else {
+                                                          double tempfr;
+                                                          if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                          if (Measure_Type=="Series"){
+                                                                         tempfr=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                         Y2(l_1)=(tempfr+TempFreq)/2;
+                                                                        TempFreq1=(tempfr+TempFreq)/2;
+                                                                        X2(l_1)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W2(l_1)=1;
+
+                                                             }
+                                                          if (Measure_Type=="EqReact"){
+                                                                        tempfr=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                        Y2(l_1)=(tempfr+TempFreq)/2;
+                                                                        TempFreq1=(tempfr+TempFreq)/2;
+                                                                         X2(l_1)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W2(l_1)=1;
+
+                                                             }
+                                                          if (Measure_Type=="Physical"){
+                                                                         tempfr= ((DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                          Y2(l_1)=(tempfr+TempFreq)/2;
+                                                                        TempFreq1=(tempfr+TempFreq)/2;
+
+                                                                         X2(l_1)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W2(l_1)=1;
+
+                                                             }
+                                                        }
+                                                        else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                                 tempfr=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                          Y2(l_1)=(tempfr+TempFreq)/2;
+                                                                        TempFreq1=(tempfr+TempFreq)/2;
+
+                                                                 X2(l_1)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W2(l_1)=1;
+
+
+                                                        }
+                                                        else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                                tempfr=((DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                          Y2(l_1)=(tempfr+TempFreq)/2;
+                                                                        TempFreq1=(tempfr+TempFreq)/2;
+
+                                                                 X2(l_1)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W2(l_1)=1;
+
+
+                                                        }
+                                                         else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                                   tempfr=((DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                          Y2(l_1)=(tempfr+TempFreq)/2;
+                                                                        TempFreq1=(tempfr+TempFreq)/2;
+
+                                                                 X2(l_1)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W2(l_1)=1;
+
+
+                                                        }
+
+                                                  }
+
+
+
+
+                                                    }
+
+
+
+                                             LocalPoint= DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+
+
+                                        }
+                                        else {
+
+
+
+                                              if(LocalPoint!= DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat){
+
+                                                              LocalPoint= DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+
+                                                                  if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                         if (Measure_Type=="Series"){
+                                                                         TempFreq= ((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                        Y(l)=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                         X(l)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W(l)=1;
+                                                                          l++;
+                                                             }
+                                                          if (Measure_Type=="EqReact"){
+                                                                         TempFreq=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                        Y(l)=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                         X(l)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W(l)=1;
+                                                                          l++;
+                                                             }
+                                                          if (Measure_Type=="Physical"){
+                                                                        TempFreq=((DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                        Y(l)=((DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                         X(l)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W(l)=1;
+                                                                          l++;
+                                                             }
+                                                        }
+                                                        else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                                 TempFreq=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                Y(l)=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                 X(l)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W(l)=1;
+                                                                          l++;
+
+                                                        }
+                                                        else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                                 TempFreq=((DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                Y(l)=((DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                 X(l)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W(l)=1;
+                                                                          l++;
+
+                                                        }
+                                                         else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                                TempFreq=((DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                Y(l)=((DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                 X(l)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W(l)=1;
+                                                                          l++;
+
+                                                        }
+
+                                                        }
+                                                        else {
+                                                           double tempfr;
+                                                        if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                         if (Measure_Type=="Series"){
+                                                                       tempfr=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                          Y(l)=(tempfr+TempFreq)/2;
+                                                                        TempFreq=(tempfr+TempFreq)/2;
+
+                                                                         X(l)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+
+
+                                                             }
+                                                          if (Measure_Type=="EqReact"){
+                                                                        tempfr=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                          Y(l)=(tempfr+TempFreq)/2;
+                                                                        TempFreq=(tempfr+TempFreq)/2;
+
+                                                                         X(l)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+
+
+                                                             }
+                                                          if (Measure_Type=="Physical"){
+                                                                        tempfr=((DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                          Y(l)=(tempfr+TempFreq)/2;
+                                                                        TempFreq=(tempfr+TempFreq)/2;
+
+                                                                         X(l)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+
+
+                                                             }
+                                                        }
+                                                        else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                                 tempfr=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                          Y(l)=(tempfr+TempFreq)/2;
+                                                                        TempFreq=(tempfr+TempFreq)/2;
+
+                                                                 X(l)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+
+
+
+                                                        }
+                                                        else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                                 tempfr=((DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                          Y(l)=(tempfr+TempFreq)/2;
+                                                                        TempFreq=(tempfr+TempFreq)/2;
+
+                                                                 X(l)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+
+
+
+                                                        }
+                                                         else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                                tempfr=((DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                          Y(l)=(tempfr+TempFreq)/2;
+                                                                        TempFreq=(tempfr+TempFreq)/2;
+                                                      
+                                                                 X(l)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+
+
+
+                                                        }
+
+
+
+
+
+                                                        }
+                                                     X2=X;
+                                                     Y2=Y;
+                                                     W2=W;
+                                                     l_1=l;
+
+                                                   }
+                                                    if (DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat>=Am & DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat<=Bm){
+                                                         if (Measure_Type=="Series"){
+                                                                        Y1(l1)=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                         X1(l1)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W(l1)=1;
+                                                                          l1++;
+                                                             }
+                                                          if (Measure_Type=="EqReact"){
+                                                                        Y1(l1)=((DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                          X1(l1)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W(l1)=1;
+                                                                          l1++;
+                                                             }
+                                                          if (Measure_Type=="Physical"){
+                                                                        Y1(l1)=((DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat-Nominal)/Nominal)*1E6;
+                                                                          X1(l1)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                          W(l1)=1;
+                                                                          l1++;
+                                                             }
+                                                         }
+                              }
+
+           DataModule1->Transat_Temp_Q->Next();
+          }//for
+
+ TempCount=l;
+ TempCountM=l1;
+ if (TempCount>0){
+ if (A==0){
+ A=0.01;
+ }
+buildchebyshevleastsquares(X,Y,W,A,B,TempCount,M,Kp);//апроксимация
+if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+           DataModule1->SQLPSIData->FieldByName("A0")->AsString=Kp(0);
+           DataModule1->SQLPSIData->FieldByName("A1")->AsString=Kp(1);
+           DataModule1->SQLPSIData->FieldByName("A2")->AsString=Kp(2);
+           DataModule1->SQLPSIData->FieldByName("A3")->AsString=Kp(3);
+           DataModule1->SQLPSIData->FieldByName("A4")->AsString=Kp(4);
+           }
+  }
+
+//------------------------------------------------------------Slope--------------------------------------------------------------------------
+        if (DataModule1->SqlSpecification->FieldByName("S")->AsString=="True"){
+                       double Tnakl;
+                       Tnakl=DataModule1->SqlSpecification->FieldByName("Tnakl")->AsFloat;
+                       double sl1,sl2;
+                       if (TempCount>0){
+                       sl1=calculatechebyshevleastsquares(M,Kp,Tnakl-0.5);
+                       sl2=calculatechebyshevleastsquares(M,Kp,Tnakl+0.5);
+                       }
+                       else {
+                        sl2=0;
+                        sl1=0;
+                       }
+                       Slope=sl2-sl1;
+                       ResultForm->ResultGrid->Cells[Nar[21]][i+1]=FloatToStrF(Slope,ffFixed,5,2);
+
+                          if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                         if (Slope>-1000 & Slope<1000){
+                                             DataModule1->SQLPSIData->FieldByName("Slope")->AsFloat=Slope;
+                                             }
+                           }
+                         if(DataModule1->SqlSpecification->FieldByName("Smax")->AsString!="no"){
+                                           if(Slope>DataModule1->SqlSpecification->FieldByName("Smax")->AsFloat){
+                                                            status=1;
+                                                       counterS=counterS+1;
+                                                             }
+                                              if (DataModule1->SqlSpecification->FieldByName("DopuskSlope")->AsFloat>0){
+                                                                                     if(Slope>DataModule1->SqlSpecification->FieldByName("Smax")->AsFloat-DataModule1->SqlSpecification->FieldByName("DopuskSlope")->AsFloat){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterS=counterS+1;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                         if(DataModule1->SqlSpecification->FieldByName("Smin")->AsString!="no"){
+                                                if(Slope<DataModule1->SqlSpecification->FieldByName("Smin")->AsFloat){
+                                                             status=1;
+                                                      counterS=counterS+1;
+                                                  }
+                                           if (DataModule1->SqlSpecification->FieldByName("DopuskSlope")->AsFloat>0){
+                                                                                     if(Slope<DataModule1->SqlSpecification->FieldByName("Smin")->AsFloat+DataModule1->SqlSpecification->FieldByName("DopuskSlope")->AsFloat){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterS=counterS+1;
+                                                                                     }
+
+                                                                                    }
+                           }
+                                                             if(Slope>MaxS){
+                                                                   MaxS=Slope;
+                                                                   }
+                                                              if(Slope<MinS){
+                                                                    MinS=Slope;
+                                                                    }
+                                                              SumS=SumS+Slope;
+
+
+
+           }
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//***************************************************экстремумы******************************************************************************************************
+if (DataModule1->SqlSpecification->FieldByName("Tmax")->AsString=="True" ||  DataModule1->SqlSpecification->FieldByName("Tmin")->AsString=="True"){
+         if (TempCount>0){
+           TMax=-300;
+           TMin=-300;
+           TurnOverNew(X,Y,A,B,Precision,TMax,TMin,TempCount,W,M);
+           }
+           else {
+            TMax=0;
+            TMin=0;
+
+           }
+//-------------------------------------------------------------------Tmax--------------------------------------------------------------------------------------------
+       if (DataModule1->SqlSpecification->FieldByName("Tmax")->AsString=="True"){
+                      if (TMax<250 & TMax>-60){
+              ResultForm->ResultGrid->Cells[Nar[11]][i+1]=FloatToStrF(TMax,ffFixed,5,1);
+                          if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                             DataModule1->SQLPSIData->FieldByName("Tmax")->AsFloat=TMax;
+                           }
+                        }
+                        else {
+                              ResultForm->ResultGrid->Cells[Nar[11]][i+1]="НЕТ";
+                              }
+                              if(DataModule1->SqlSpecification->FieldByName("Tmaxmax")->AsString!="no"){
+                                                                             if(TMax>DataModule1->SqlSpecification->FieldByName("Tmaxmax")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterTmax=counterTmax+1;
+                                                                                     }
+                                                                                if (DataModule1->SqlSpecification->FieldByName("DopuskT")->AsFloat>0){
+                                                                                     if(TMax>DataModule1->SqlSpecification->FieldByName("Tmaxmax")->AsFloat-DataModule1->SqlSpecification->FieldByName("DopuskT")->AsFloat){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterS=counterS+1;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                                                              if(DataModule1->SqlSpecification->FieldByName("Tmaxmin")->AsString!="no"){
+                                                                             if(TMax<DataModule1->SqlSpecification->FieldByName("Tmaxmin")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterTmax=counterTmax+1;
+                                                                                     }
+                                                                                 if (DataModule1->SqlSpecification->FieldByName("DopuskT")->AsFloat>0){
+                                                                                     if(TMax<DataModule1->SqlSpecification->FieldByName("Tmaxmin")->AsFloat+DataModule1->SqlSpecification->FieldByName("DopuskT")->AsFloat){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterS=counterS+1;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                                                              if(TMax>MaxTmax){
+                                                                   MaxTmax=TMax;
+                                                                   }
+                                                              if(TMax<MinTmax){
+                                                                    MinTmax=TMax;
+                                                                    }
+                                                              SumTmax=SumTmax+TMax;
+
+
+
+           }
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------Tmin----------------------------------------------------------------------------------------------
+
+         if (DataModule1->SqlSpecification->FieldByName("Tmin")->AsString=="True"){
+                  if (TMin<250 & TMin>-60){
+                  ResultForm->ResultGrid->Cells[Nar[12]][i+1]=FloatToStrF(TMin,ffFixed,5,1);
+                            if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                             DataModule1->SQLPSIData->FieldByName("Tmin")->AsFloat=TMin;
+                           }
+                    }
+                    else {
+                              ResultForm->ResultGrid->Cells[Nar[12]][i+1]="НЕТ";
+                              }
+                                                            if(DataModule1->SqlSpecification->FieldByName("Tminmax")->AsString!="no"){
+                                                                             if(TMin>DataModule1->SqlSpecification->FieldByName("Tminmax")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterTmin=counterTmin+1;
+                                                                                     }
+                                                                                  if (DataModule1->SqlSpecification->FieldByName("DopuskT")->AsFloat>0){
+                                                                                     if(TMin>DataModule1->SqlSpecification->FieldByName("Tminmax")->AsFloat-DataModule1->SqlSpecification->FieldByName("DopuskT")->AsFloat){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterS=counterS+1;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                                                              if(DataModule1->SqlSpecification->FieldByName("Tminmin")->AsString!="no"){
+                                                                             if(TMin<DataModule1->SqlSpecification->FieldByName("Tminmin")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterTmin=counterTmin+1;
+                                                                                     }
+                                                                                       if (DataModule1->SqlSpecification->FieldByName("DopuskT")->AsFloat>0){
+                                                                                     if(TMin<DataModule1->SqlSpecification->FieldByName("Tminmin")->AsFloat+DataModule1->SqlSpecification->FieldByName("DopuskT")->AsFloat){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterS=counterS+1;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                                                              if(TMin>MaxTmin){
+                                                                   MaxTmin=TMin;
+                                                                   }
+                                                              if(TMin<MinTmin){
+                                                                    MinTmin=TMin;
+                                                                    }
+                                                              SumTmin=SumTmin+TMin;
+
+            }
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    }
+//*************************************************************************************************************************
+//*************************монотонность*******************************************************************************************
+   if (DataModule1->SqlSpecification->FieldByName("M")->AsString=="True"){
+
+          double MonoT;
+          if (TempCountM>0){
+          MonotonP(X1,Y1,Am,Bm,Mono,TempCountM,W,M,mono1,MonoT);
+          }
+          else {
+             Mono=0;
+             MonoT=0;
+          }
+
+          ResultForm->ResultGrid->Cells[Nar[20]][i+1]=FloatToStrF(Mono,ffFixed,8,4);
+                          if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                         if (Mono>30 || Mono<-100){
+                                         DataModule1->SQLPSIData->FieldByName("Mono")->AsFloat=0;
+                                         }
+                                         else {
+                                             DataModule1->SQLPSIData->FieldByName("Mono")->AsFloat=Mono;
+                                             }
+                                             DataModule1->SQLPSIData->FieldByName("MonoT")->AsFloat=MonoT;
+                           }
+                       if (Mono==0){
+                        Status2="BAD";
+                       }
+              if(DataModule1->SqlSpecification->FieldByName("Mmax")->AsString!="no"){
+                                  if(Mono>DataModule1->SqlSpecification->FieldByName("Mmax")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterM=counterM+1;
+                                                                                     }
+                                                                }
+                                                              if(DataModule1->SqlSpecification->FieldByName("Mmin")->AsString!="no"){
+                                                                             if(Mono<DataModule1->SqlSpecification->FieldByName("Mmin")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterM=counterM+1;
+                                                                                     }
+                                                                }
+                                                              if(Mono>MaxM){
+                                                                   MaxM=Mono;
+                                                                   }
+                                                              if(Mono<MinM){
+                                                                    MinM=Mono;
+                                                                    }
+                                                              SumM=SumM+Mono;
+
+
+
+
+    }
+
+//**********************************************************************************************************************************
+//*********************************************************Fmax/Fmin/Fptp***********************************************************
+ if (DataModule1->SqlSpecification->FieldByName("Fmx")->AsString=="True" ||  DataModule1->SqlSpecification->FieldByName("Fmn")->AsString=="True" || DataModule1->SqlSpecification->FieldByName("Fptp")->AsString=="True" || DataModule1->SqlSpecification->FieldByName("Fptp_2")->AsString=="True"){
+     DataModule1->Transat_Temp_Q->First();
+     double fq[300];
+     double Fn;
+     double Totn;
+                               if (DataModule1->SqlSpecification->FieldByName("Tint")->AsString=="True"){
+                                   Totn=DataModule1->SqlSpecification->FieldByName("TintValue")->AsFloat;
+                               }
+                               else{
+                                 Totn=DataModule1->SqlSpecification->FieldByName("Tnastr")->AsFloat;
+                               }
+                               for (int j=0;j<DataModule1->Transat_Temp_Q->RecordCount;j++){
+                                                if (DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat==Totn){
+
+                                                        if (DataModule1->Transat_Temp_Q->FieldByName("R_OHMS")->AsFloat!=0){
+                                                                  if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                                         if (Measure_Type=="Series"){
+                                                                                   Fn=DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat;
+
+                                                                          }
+                                                                         if (Measure_Type=="EqReact"){
+
+                                                                                         Fn=DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat;
+                                                                                         }
+                                                                         if (Measure_Type=="Physical"){
+                                                                                            Fn=DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat;
+                                                                                 }
+                                                                         }
+                                                                   else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                                                     Fn=DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat;
+
+                                                                         }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                                                         Fn=DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat;
+
+                                                                                  }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                                                         Fn=DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat;
+
+                                                        }
+
+                                                           }
+                                                           else {
+                                                                 Fn=1;
+                                                                 }
+                                                            break;
+                                                           }  //if
+
+                                           DataModule1->Transat_Temp_Q->Next();
+                                }  //for
+                                  Fn=((Fn-Nominal)/Nominal)*1E6;
+                                DataModule1->Transat_Temp_Q->First();
+
+                                for (int j=0;j<DataModule1->Transat_Temp_Q->RecordCount;j++){
+
+                                                    if (DataModule1->Transat_Temp_Q->FieldByName("R_OHMS")->AsFloat!=0){
+
+                                                                fq[j]=Y2(j)-Fn;
+
+                                                              } //if
+                                                        else {
+
+                                                           if (j>0){fq[j]=fq[j-1];}
+
+                                                             if(j==0){fq[j]=1;}
+
+                                                            }  //else
+
+                                               
+
+
+
+                                        DataModule1->Transat_Temp_Q->Next();
+                                } //for
+
+
+             MaxMin(fq,Fmax,Fmin,Fptp,l_1);
+
+//----------------------------------------------------------------------------------Fmax----------------------------------------------------------------------------------------
+            if (DataModule1->SqlSpecification->FieldByName("Fmx")->AsString=="True" ){
+                         ResultForm->ResultGrid->Cells[Nar[17]][i+1]=FloatToStrF(Fmax,ffFixed,6,2);
+                                      if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                   if(Fmax<1000 & Fmax>-1000){
+                                              DataModule1->SQLPSIData->FieldByName("Fmax")->AsFloat=Fmax;
+                                               }
+                                               else {
+                                                  DataModule1->SQLPSIData->FieldByName("Fmax")->AsFloat=0;
+                                                  }
+
+                                        }//if
+                                        if(DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsString!="no"){
+                                                                             if(Fmax>DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterFmax=counterFmax+1;
+                                                                                     }
+                                                                   if (DataModule1->SqlSpecification->FieldByName("DopuskFi")->AsFloat>0){
+                                                                                     if(Fmax>DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsFloat-(fabs(DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsFloat)*DataModule1->SqlSpecification->FieldByName("DopuskFi")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterFmax=counterFmax+1;
+                                                                                     }
+
+                                                                                    }
+                                                                          if (DataModule1->SqlSpecification->FieldByName("DopuskFi_Real")->AsFloat>0){
+                                                                                     if(Fmax>DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsFloat-DataModule1->SqlSpecification->FieldByName("DopuskFi_Real")->AsFloat){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterFmax=counterFmax+1;
+                                                                                     }
+
+                                                                                    }
+                                                                    }
+
+
+                                                              if(DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsString!="no"){
+                                                                             if(Fmax<DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterFmax=counterFmax+1;
+                                                                                     }
+                                                                              if (DataModule1->SqlSpecification->FieldByName("DopuskFi")->AsFloat>0){
+                                                                                     if(Fmax<DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsFloat+(fabs(DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsFloat)*DataModule1->SqlSpecification->FieldByName("DopuskFi")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterFmax++;
+                                                                                     }
+
+                                                                                    }
+                                                                               if (DataModule1->SqlSpecification->FieldByName("DopuskFi_Real")->AsFloat>0){
+                                                                                     if(Fmax>DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsFloat+DataModule1->SqlSpecification->FieldByName("DopuskFi_Real")->AsFloat){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterFmax++;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                                                              if(Fmax>MaxFmax){
+                                                                   MaxFmax=Fmax;
+                                                                   }
+                                                              if(Fmax<MinFmax){
+                                                                    MinFmax=Fmax;
+                                                                    }
+                                                              SumFmax=SumFmax+Fmax;
+
+
+
+              }//if
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------Fmin---------------------------------------------------------------------------------------------------
+             if (DataModule1->SqlSpecification->FieldByName("Fmn")->AsString=="True" ){
+                         ResultForm->ResultGrid->Cells[Nar[18]][i+1]=FloatToStrF(Fmin,ffFixed,6,2);
+                                      if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                            if(Fmin<1000 & Fmin>-1000){
+                                             DataModule1->SQLPSIData->FieldByName("Fmin")->AsFloat=Fmin;
+                                               }
+                                               else {
+                                                  DataModule1->SQLPSIData->FieldByName("Fmin")->AsFloat=0;
+                                                  }
+
+                                        }
+                        if(DataModule1->SqlSpecification->FieldByName("Fminmax")->AsString!="no"){
+                                                                             if(Fmin>DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterFmin=counterFmin+1;
+                                                                                     }
+                                                                       if (DataModule1->SqlSpecification->FieldByName("DopuskFi")->AsFloat>0){
+                                                                                     if(Fmin>DataModule1->SqlSpecification->FieldByName("Fminmax")->AsFloat-(fabs(DataModule1->SqlSpecification->FieldByName("Fminmax")->AsFloat)*DataModule1->SqlSpecification->FieldByName("DopuskFi")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterFmin++;
+                                                                                     }
+
+                                                                                    }
+                                                                           if (DataModule1->SqlSpecification->FieldByName("DopuskFi_Real")->AsFloat>0){
+                                                                                     if(Fmin>DataModule1->SqlSpecification->FieldByName("Fminmax")->AsFloat-DataModule1->SqlSpecification->FieldByName("DopuskFi_Real")->AsFloat){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterFmin++;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                          if(DataModule1->SqlSpecification->FieldByName("Fminmin")->AsString!="no"){
+                                                                             if(Fmin<DataModule1->SqlSpecification->FieldByName("Fminmin")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterFmin=counterFmin+1;
+                                                                                     }
+                                                                      if (DataModule1->SqlSpecification->FieldByName("DopuskFi")->AsFloat>0){
+                                                                                     if(Fmin<DataModule1->SqlSpecification->FieldByName("Fminmin")->AsFloat+(fabs(DataModule1->SqlSpecification->FieldByName("Fminmin")->AsFloat)*DataModule1->SqlSpecification->FieldByName("DopuskFi")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterFmin++;
+                                                                                     }
+
+                                                                                    }
+                                                                       if (DataModule1->SqlSpecification->FieldByName("DopuskFi_Real")->AsFloat>0){
+                                                                                     if(Fmin>DataModule1->SqlSpecification->FieldByName("Fminmin")->AsFloat+DataModule1->SqlSpecification->FieldByName("DopuskFi_Real")->AsFloat){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterFmin++;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                                                              if(Fmin>MaxFmin){
+                                                                   MaxFmin=Fmin;
+                                                                   }
+                                                              if(Fmin<MinFmin){
+                                                                    MinFmin=Fmin;
+                                                                    }
+                                                              SumFmin=SumFmin+Fmin;
+
+              }
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------FMM-------------------------------------------------------------------------------------------------------------
+   if (DataModule1->SqlSpecification->FieldByName("Fmn")->AsString=="True" & DataModule1->SqlSpecification->FieldByName("Fmx")->AsString=="True"){
+             double Fmaxz,Fminz;
+             if (Fmax>=0){
+                  Fmaxz=Fmax;
+                  }
+                  else {
+                  Fmaxz=-1*Fmax;
+                  }
+             if(Fmin>=0){
+                      Fminz=Fmin;
+                      }
+                      else{
+                    Fminz=-1*Fmin;
+                    }
+                if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                               if(Fmin<1000 & Fmin>-1000 & Fmax<1000 & Fmax>-1000){
+                                            if (Fmaxz>Fminz){
+                                             DataModule1->SQLPSIData->FieldByName("Fmaxm")->AsFloat=Fmax;
+                                           }
+                                           else {
+                                                DataModule1->SQLPSIData->FieldByName("Fmaxm")->AsFloat=Fmin;
+                                                }
+                                  }
+                                 else {
+                                              DataModule1->SQLPSIData->FieldByName("Fmaxm")->AsFloat=0;
+                                       }
+                   }
+
+
+      }
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------Fptp-------------------------------------------------------------------------------------------------
+              if (DataModule1->SqlSpecification->FieldByName("Fptp")->AsString=="True" ){
+                         ResultForm->ResultGrid->Cells[Nar[19]][i+1]=FloatToStrF(Fptp,ffFixed,6,2);
+                                      if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                               if(Fptp<1000 & Fptp>-1000){
+                                             DataModule1->SQLPSIData->FieldByName("Fptp")->AsFloat=Fptp;
+                                               }
+                                               else {
+                                                  DataModule1->SQLPSIData->FieldByName("Fptp")->AsFloat=0;
+                                                  }
+                                        }
+                         if(DataModule1->SqlSpecification->FieldByName("Fptpmax")->AsString!="no"){
+                                                                             if(Fptp>DataModule1->SqlSpecification->FieldByName("Fptpmax")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterFptp=counterFptp+1;
+                                                                                     }
+                                                                        if (DataModule1->SqlSpecification->FieldByName("DopuskFptp")->AsFloat>0){
+                                                                                     if(Fptp>DataModule1->SqlSpecification->FieldByName("Fptpmax")->AsFloat-(DataModule1->SqlSpecification->FieldByName("Fptpmax")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskFptp")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterFptp=counterFptp+1;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                         if(DataModule1->SqlSpecification->FieldByName("Fptpmin")->AsString!="no"){
+                                                                             if(Fptp<DataModule1->SqlSpecification->FieldByName("Fptpmin")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterFptp=counterFptp+1;
+                                                                                     }
+                                                                           if (DataModule1->SqlSpecification->FieldByName("DopuskFptp")->AsFloat>0){
+                                                                                     if(Fptp<DataModule1->SqlSpecification->FieldByName("Fptpmin")->AsFloat+(DataModule1->SqlSpecification->FieldByName("Fptpmin")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskFptp")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterFptp=counterFptp+1;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                                                              if(Fptp>MaxFptp){
+                                                                   MaxFptp=Fptp;
+                                                                   }
+                                                              if(Fptp<MinFptp){
+                                                                    MinFptp=Fptp;
+                                                                    }
+                                                              SumFptp=SumFptp+Fptp;
+
+              }
+
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  if (DataModule1->SqlSpecification->FieldByName("Fptp_2")->AsString=="True" ){
+                         ResultForm->ResultGrid->Cells[Nar[19]][i+1]=FloatToStrF(Fptp/2,ffFixed,6,2);
+                                      if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                               if(Fptp<1000 & Fptp>-1000){
+                                             DataModule1->SQLPSIData->FieldByName("Fptp_2")->AsFloat=Fptp/2;
+                                               }
+                                               else {
+                                                  DataModule1->SQLPSIData->FieldByName("Fptp_2")->AsFloat=0;
+                                                  }
+                                        }
+                         if(DataModule1->SqlSpecification->FieldByName("Fptp_2max")->AsString!="no"){
+                                                                             if(Fptp/2>DataModule1->SqlSpecification->FieldByName("Fptp_2max")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterFptp=counterFptp+1;
+                                                                                     }
+                                                                            if (DataModule1->SqlSpecification->FieldByName("DopuskFptp")->AsFloat>0){
+                                                                                     if(Fptp/2>DataModule1->SqlSpecification->FieldByName("Fptp_2max")->AsFloat-(DataModule1->SqlSpecification->FieldByName("Fptp_2max")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskFptp")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterFptp=counterFptp+1;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                         if(DataModule1->SqlSpecification->FieldByName("Fptp_2min")->AsString!="no"){
+                                                                             if(Fptp/2<DataModule1->SqlSpecification->FieldByName("Fptp_2min")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterFptp=counterFptp+1;
+                                                                                     }
+                                                                               if (DataModule1->SqlSpecification->FieldByName("DopuskFptp")->AsFloat>0){
+                                                                                     if(Fptp/2<DataModule1->SqlSpecification->FieldByName("Fptp_2min")->AsFloat+(DataModule1->SqlSpecification->FieldByName("Fptp_2min")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskFptp")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterFptp=counterFptp+1;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                                                              if(Fptp/2>MaxFptp){
+                                                                   MaxFptp=Fptp/2;
+                                                                   }
+                                                              if(Fptp/2<MinFptp){
+                                                                    MinFptp=Fptp/2;
+                                                                    }
+                                                              SumFptp=SumFptp+Fptp/2;
+
+              }
+
+
+
+
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  }
+//*********************************************************************************************************************************
+//********************************************Rmax/Rmin/RR*************************************************************************
+ if (DataModule1->SqlSpecification->FieldByName("Rmx")->AsString=="True" ||  DataModule1->SqlSpecification->FieldByName("Rmn")->AsString=="True" || DataModule1->SqlSpecification->FieldByName("RR")->AsString=="True" || DataModule1->SqlSpecification->FieldByName("Rmax-Rmin")->AsString=="True"|| DataModule1->SqlSpecification->FieldByName("RR2")->AsString=="True"|| DataModule1->SqlSpecification->FieldByName("RR3")->AsString=="True" || DataModule1->SqlSpecification->FieldByName("RR4")->AsString=="True" || DataModule1->SqlSpecification->FieldByName("RR5")->AsString=="True"){
+            double rq[100];
+            double r1;
+            DataModule1->Transat_Temp_Q->First();
+                                for (int j=0;j<DataModule1->Transat_Temp_Q->RecordCount;j++){
+
+                                                   rq[j]=DataModule1->Transat_Temp_Q->FieldByName("R_OHMS")->AsFloat;
+                                                   DataModule1->Transat_Temp_Q->Next();
+                                } //for
+
+             MaxMin(rq,Rmax,Rmin,r1,TempCount);
+//----------------------------------------------------------------------Rmax----------------------------------------------------------------------------------------------------------
+            if (DataModule1->SqlSpecification->FieldByName("Rmx")->AsString=="True" ){
+                         ResultForm->ResultGrid->Cells[Nar[14]][i+1]=FloatToStrF(Rmax,ffFixed,6,1);
+                                                                                     }
+                                      if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                             DataModule1->SQLPSIData->FieldByName("Rmax")->AsFloat=Rmax;
+                                        }
+                                        if(DataModule1->SqlSpecification->FieldByName("Rmaxmax")->AsString!="no"){
+                                                                             if(Rmax>DataModule1->SqlSpecification->FieldByName("Rmaxmax")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterRmax=counterRmax+1;
+                                                                                     }
+                                                                      if (DataModule1->SqlSpecification->FieldByName("DopuskR")->AsFloat>0){
+                                                                                     if(Rmax>DataModule1->SqlSpecification->FieldByName("Rmaxmax")->AsFloat-(DataModule1->SqlSpecification->FieldByName("Rmaxmax")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskR")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterRmax=counterRmax+1;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                                          if(DataModule1->SqlSpecification->FieldByName("Rmaxmin")->AsString!="no"){
+                                                                             if(Rmax<DataModule1->SqlSpecification->FieldByName("Rmaxmin")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterRmax=counterRmax+1;
+                                                                                     }
+                                                                       if (DataModule1->SqlSpecification->FieldByName("DopuskR")->AsFloat>0){
+                                                                                     if(Rmax<DataModule1->SqlSpecification->FieldByName("Rmaxmin")->AsFloat+(DataModule1->SqlSpecification->FieldByName("Rmaxmin")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskR")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterRmax=counterRmax+1;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                                                              if(Rmax>MaxRmax){
+                                                                   MaxRmax=Rmax;
+                                                                   }
+                                                              if(Rmax<MinRmax){
+                                                                    MinRmax=Rmax;
+                                                                    }
+                                                              SumRmax=SumRmax+Rmax;
+
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------Rmin-----------------------------------------------------------------------------------------------------
+             if (DataModule1->SqlSpecification->FieldByName("Rmn")->AsString=="True" ){
+                         ResultForm->ResultGrid->Cells[Nar[15]][i+1]=FloatToStrF(Rmin,ffFixed,6,1);
+                         }
+                                      if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                             DataModule1->SQLPSIData->FieldByName("Rmin")->AsFloat=Rmin;
+                                        }
+                      //if(DataModule1->SqlSpecification->FieldByName("Rminmax")->AsString!="no"){
+                        //                                                     if(Rmin>DataModule1->SqlSpecification->FieldByName("Rminmax")->AsFloat){
+                          //                                                           status=1;
+                            //                                                         counterRmin++;
+                              //                                                       }
+                                              //                  }
+                                  //        if(DataModule1->SqlSpecification->FieldByName("Rminmin")->AsString!="no"){
+                                    //                                         if(Rmax<DataModule1->SqlSpecification->FieldByName("Rminmin")->AsFloat){
+                                      //                                               status=1;
+                                        //                                             counterRmin++;
+                                          //                                           }
+                                            //                    }
+                                                              if(Rmin>MaxRmin){
+                                                                   MaxRmin=Rmin;
+                                                                   }
+                                                              if(Rmin<MinRmin){
+                                                                    MinRmin=Rmin;
+                                                                    }
+                                                              SumRmin=SumRmin+Rmin;
+
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------RR----------------------------------------------------------------------------------------------------
+              if (DataModule1->SqlSpecification->FieldByName("RR")->AsString=="True" ){
+                          double RR;
+
+                          if (Rmin!=0){
+                                ResultForm->ResultGrid->Cells[Nar[16]][i+1]=FloatToStrF(Rmax/Rmin,ffFixed,6,1);
+                                RR=Rmax/Rmin;
+                                }
+                                     else{
+                                        ResultForm->ResultGrid->Cells[Nar[16]][i+1]=0;
+                                        RR=0;
+                                      }
+                                      if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                           if (Rmin!=0){
+                                             DataModule1->SQLPSIData->FieldByName("R1R2")->AsFloat=RR;
+                                             }
+                                             else{
+                                                 DataModule1->SQLPSIData->FieldByName("R1R2")->AsFloat=0;
+
+                                                 }
+                                             if(RR==0){
+                                                                 Status2="BAD";
+                                                     }     
+                                        }
+                               if(DataModule1->SqlSpecification->FieldByName("RRmax")->AsString!="no"){
+                                                                             if(RR>DataModule1->SqlSpecification->FieldByName("RRmax")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterRR++;
+                                                                                     }
+                                                                    if (DataModule1->SqlSpecification->FieldByName("DopuskRR")->AsFloat>0){
+                                                                                     if(RR>DataModule1->SqlSpecification->FieldByName("RRmax")->AsFloat-(DataModule1->SqlSpecification->FieldByName("RRmax")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskRR")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterRR++;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+
+                                          if(DataModule1->SqlSpecification->FieldByName("RRmin")->AsString!="no"){
+                                                                             if(RR<DataModule1->SqlSpecification->FieldByName("RRmin")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterRR++;
+                                                                                     }
+                                                                        if (DataModule1->SqlSpecification->FieldByName("DopuskRR")->AsFloat>0){
+                                                                                     if(RR<DataModule1->SqlSpecification->FieldByName("RRmin")->AsFloat+(DataModule1->SqlSpecification->FieldByName("RRmin")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskRR")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterRR++;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                                                              if(RR>MaxRR){
+                                                                   MaxRR=RR;
+                                                                   }
+                                                              if(RR<MinRR){
+                                                                    MinRR=RR;
+                                                                    }
+                                                              SumRR=SumRR+RR;
+              }
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------Rmax-Rmin-----------------------------------------------------------------]
+          if (DataModule1->SqlSpecification->FieldByName("Rmax-Rmin")->AsString=="True" ){
+                    double RR1;
+                    RR1=Rmax-Rmin;
+                         ResultForm->ResultGrid->Cells[Nar[25]][i+1]=FloatToStrF(RR1,ffFixed,6,1);
+
+                                      if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                      if(RR1>-10000 & RR1<10000){
+                                             DataModule1->SQLPSIData->FieldByName("RR1")->AsFloat=RR1;
+                                             }
+                                        else {
+                                           DataModule1->SQLPSIData->FieldByName("RR1")->AsFloat=0;
+                                        }
+                                        }
+                                        if (RR1==0){
+                                         Status2="BAD";
+
+                                        }
+                               if(DataModule1->SqlSpecification->FieldByName("RR1max")->AsString!="no"){
+                                                                             if(RR1>DataModule1->SqlSpecification->FieldByName("RR1max")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterRR1++;
+                                                                                     }
+                                                                }
+                                          if(DataModule1->SqlSpecification->FieldByName("RR1min")->AsString!="no"){
+                                                                             if(RR1<DataModule1->SqlSpecification->FieldByName("RR1min")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterRR1++;
+                                                                                     }
+                                                                }
+                                                              if(RR1>MaxRR1){
+                                                                   MaxRR1=RR1;
+                                                                   }
+                                                              if(RR1<MinRR1){
+                                                                    MinRR1=RR1;
+                                                                    }
+                                                              SumRR1=SumRR1+RR1;
+
+
+
+
+
+
+             }
+
+//------------------------------------------------------------------------RR2----------------------------------------------------------------------------------------------------------------
+  if (DataModule1->SqlSpecification->FieldByName("RR2")->AsString=="True" ){
+                    double RR2,RR21;
+                    if (R>0){
+                    RR21=Rmax/R;
+
+                    }
+                    else {
+                    RR21=1000;
+                    }
+
+                    RR2=RR21;
+
+                         ResultForm->ResultGrid->Cells[Nar[27]][i+1]=FloatToStrF(RR2,ffFixed,6,1);
+
+                                      if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                       if (RR2>-10000 & RR2<10000){
+                                             DataModule1->SQLPSIData->FieldByName("RR2")->AsFloat=RR2;
+                                           }
+                                        else {
+                                          DataModule1->SQLPSIData->FieldByName("RR2")->AsFloat=0;
+                                        }
+                                        }
+                                        if (RR2==0){
+                                         Status2="BAD";
+                                        }
+                               if(DataModule1->SqlSpecification->FieldByName("RR2max")->AsString!="no"){
+                                                                             if(RR2>DataModule1->SqlSpecification->FieldByName("RR2max")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterRR2++;
+                                                                                     }
+                                                                }
+                                          if(DataModule1->SqlSpecification->FieldByName("RR2min")->AsString!="no"){
+                                                                             if(RR2<DataModule1->SqlSpecification->FieldByName("RR2min")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterRR2++;
+                                                                                     }
+                                                                }
+                                                              if(RR2>MaxRR2){
+                                                                   MaxRR2=RR2;
+                                                                   }
+                                                              if(RR2<MinRR2){
+                                                                    MinRR2=RR2;
+                                                                    }
+                                                              SumRR2=SumRR2+RR2;
+
+
+
+
+
+
+             }
+
+
+
+
+
+//--------------------------------------------------------------RR3---------------------------------------------------------
+ if (DataModule1->SqlSpecification->FieldByName("RR3")->AsString=="True" ){
+                    double RR3;
+
+                    if (Rmin>0){
+                     RR3=R/Rmin;
+                    }
+                     else {
+                      RR3=0;
+                     }
+                         ResultForm->ResultGrid->Cells[Nar[32]][i+1]=FloatToStrF(RR3,ffFixed,6,1);
+                                      if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                         if (RR3>-10000 & RR3<10000){
+                                             DataModule1->SQLPSIData->FieldByName("RR3")->AsFloat=RR3;
+                                             }
+                                          else {
+
+                                           DataModule1->SQLPSIData->FieldByName("RR3")->AsFloat=0;
+                                          }
+                                        }
+                                        if (RR3==0){
+
+                                         Status2="BAD";
+                                        }
+                               if(DataModule1->SqlSpecification->FieldByName("RR3max")->AsString!="no"){
+                                                                             if(RR3>DataModule1->SqlSpecification->FieldByName("RR3max")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterRR3++;
+                                                                                     }
+                                                                }
+                                          if(DataModule1->SqlSpecification->FieldByName("RR3min")->AsString!="no"){
+                                                                             if(RR3<DataModule1->SqlSpecification->FieldByName("RR3min")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterRR3++;
+                                                                                     }
+                                                                }
+                                                              if(RR3>MaxRR3){
+                                                                   MaxRR3=RR3;
+                                                                   }
+                                                              if(RR3<MinRR3){
+                                                                    MinRR3=RR3;
+                                                                    }
+                                                              SumRR3=SumRR3+RR3;
+
+
+
+
+
+
+             }
+
+
+ //******************************************************RR4*************************************************************************************
+
+ if (DataModule1->SqlSpecification->FieldByName("RR4")->AsString=="True" ){
+                    double RR4;
+
+                    if (R>0){
+                     RR4=((Rmax-R)/R)*100;
+                    }
+                     else {
+                      RR4=0;
+                     }
+                         ResultForm->ResultGrid->Cells[Nar[33]][i+1]=FloatToStrF(RR4,ffFixed,6,1);
+                                      if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                         if (RR4>-10000 & RR4<10000){
+                                             DataModule1->SQLPSIData->FieldByName("RR4")->AsFloat=RR4;
+                                             }
+                                          else {
+
+                                           DataModule1->SQLPSIData->FieldByName("RR4")->AsFloat=0;
+                                          }
+                                        }
+                                        if (RR4==0){
+                                        Status2="BAD";
+                                        }
+
+                               if(DataModule1->SqlSpecification->FieldByName("RR4max")->AsString!="no"){
+                                                                             if(RR4>DataModule1->SqlSpecification->FieldByName("RR4max")->AsFloat){
+                                                                                     status=1;
+                                                                                     CountRR4++;
+                                                                                     }
+                                                                }
+                                          if(DataModule1->SqlSpecification->FieldByName("RR4min")->AsString!="no"){
+                                                                             if(RR4<DataModule1->SqlSpecification->FieldByName("RR4min")->AsFloat){
+                                                                                     status=1;
+                                                                                     CountRR4++;
+                                                                                     }
+                                                                }
+                                                              if(RR4>MaxRR4){
+                                                                   MaxRR4=RR4;
+                                                                   }
+                                                              if(RR4<MinRR4){
+                                                                    MinRR4=RR4;
+                                                                    }
+                                                              SumRR4=SumRR4+RR4;
+
+
+
+
+
+
+             }
+
+
+
+
+//**************************************************RR5*******************************************************************************************
+  if (DataModule1->SqlSpecification->FieldByName("RR5")->AsString=="True" ){
+                    double RR5;
+
+                    if (R>0){
+                     RR5=((R-Rmin)/R)*100;
+                    }
+                     else {
+                      RR5=0;
+                     }
+                         ResultForm->ResultGrid->Cells[Nar[34]][i+1]=FloatToStrF(RR5,ffFixed,6,1);
+                                      if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                         if (RR5>-10000 & RR5<10000){
+                                             DataModule1->SQLPSIData->FieldByName("RR5")->AsFloat=RR5;
+                                             }
+                                          else {
+
+                                           DataModule1->SQLPSIData->FieldByName("RR5")->AsFloat=0;
+                                          }
+                                        }
+                                        if (RR5==0){
+
+                                            Status2="BAD";
+                                        }
+                               if(DataModule1->SqlSpecification->FieldByName("RR5max")->AsString!="no"){
+                                                                             if(RR5>DataModule1->SqlSpecification->FieldByName("RR5max")->AsFloat){
+                                                                                     status=1;
+                                                                                     CountRR5++;
+                                                                                     }
+                                                                }
+                                          if(DataModule1->SqlSpecification->FieldByName("RR5min")->AsString!="no"){
+                                                                             if(RR5<DataModule1->SqlSpecification->FieldByName("RR5min")->AsFloat){
+                                                                                     status=1;
+                                                                                     CountRR5++;
+                                                                                     }
+                                                                }
+                                                              if(RR5>MaxRR5){
+                                                                   MaxRR5=RR5;
+                                                                   }
+                                                              if(RR5<MinRR5){
+                                                                    MinRR5=RR5;
+                                                                    }
+                                                              SumRR5=SumRR5+RR5;
+
+
+
+
+
+
+             }
+
+  }
+
+
+//-----------------------------------------------------------------------------------------------------------------------
+
+//*********************************************************************************************************************************
+//********************************TurnOver*****************************************************************************************
+   if (DataModule1->SqlSpecification->FieldByName("TurnOver")->AsString=="True" ){
+              double To;
+             ap::real_1d_array Kp1;
+             Kp1.setbounds(0,M);
+             if (TempCount>0){
+             buildpolynomialleastsquaresNew(X,Y,TempCount,M,Kp1);
+
+             To=(-2*Kp1(2))/(6*Kp1(3));
+             }
+             else {
+
+                 To=0;
+             }
+             ResultForm->ResultGrid->Cells[Nar[13]][i+1]=FloatToStrF(To,ffFixed,6,2);
+                    if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                             DataModule1->SQLPSIData->FieldByName("TurnOver")->AsFloat=To;
+                                        } //if
+
+
+                       if(DataModule1->SqlSpecification->FieldByName("Tomax")->AsString!="no"){
+                                                                             if(To>DataModule1->SqlSpecification->FieldByName("Tomax")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterTo++;
+                                                                                     }
+                                                                }
+                                          if(DataModule1->SqlSpecification->FieldByName("Tomin")->AsString!="no"){
+                                                                             if(To<DataModule1->SqlSpecification->FieldByName("Tomin")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterTo++;
+                                                                                     }
+                                                                }
+                                                              if(To>MaxTo){
+                                                                   MaxTo=To;
+                                                                   }
+                                                              if(To<MinTo){
+                                                                    MinTo=To;
+                                                                    }
+                                                              SumTo=SumTo+To;
+
+
+
+
+  }//if
+
+//------------------------------------------------------------------------------------------------------------------------------------------------
+//---------------------------------Построение графиков-----------------------------------------------------------------------------
+if (DataModule1->SqlSpecification->FieldByName("PrintGraph")->AsString=="True"){
+
+           //
+           double C=(fabs(A)+fabs(B))/0.1;
+           double X,Y;
+           ap::real_1d_array X1,Y1,Kp1;
+           X1.setbounds(0,TempCount);
+           Y1.setbounds(0,TempCount);
+           Kp1.setbounds(0,TempCount);
+           int l=0;
+           GpForm->Series1->Visible=false;
+           GpForm->Series1->Clear();
+           GpForm->Series2->Visible=false;
+           GpForm->Series2->Clear();
+
+
+           double Fn;
+                                 DataModule1->Transat_Temp_Q->First();
+                                for (int j=0;j<DataModule1->Transat_Temp_Q->RecordCount;j++){
+                                                if (DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat==DataModule1->SqlSpecification->FieldByName("Tnastr")->AsFloat){
+
+                                                         if (DataModule1->Transat_Temp_Q->FieldByName("R_OHMS")->AsFloat!=0){
+                                                           if (Measure_Type=="Series"){
+                                                                        Fn=DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat;
+
+                                                             }
+                                                          if (Measure_Type=="EqReact"){
+                                                                       if (DataModule1->SqlSpecification->FieldByName("GraphF")->AsString=="FL"){
+                                                                        Fn=DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat;
+                                                                        }
+                                                                  if (DataModule1->SqlSpecification->FieldByName("GraphF")->AsString=="FL0"){
+                                                                        Fn=DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat;
+                                                                        }
+                                                                  if (DataModule1->SqlSpecification->FieldByName("GraphF")->AsString=="FS"){
+                                                                        Fn=DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat;
+                                                                        }
+                                                             }
+                                                          if (Measure_Type=="Physical"){
+
+                                                                  if (DataModule1->SqlSpecification->FieldByName("GraphF")->AsString=="FL"){
+                                                                        Fn=DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat;
+                                                                        }
+                                                                  if (DataModule1->SqlSpecification->FieldByName("GraphF")->AsString=="FL0"){
+                                                                        Fn=DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat;
+                                                                        }
+                                                                  if (DataModule1->SqlSpecification->FieldByName("GraphF")->AsString=="FS"){
+                                                                        Fn=DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat;
+                                                                        }
+
+                                                             }
+                                                             }
+                                                             else {
+                                                                  Fn=1;
+                                                                  }
+                                                            break;
+                                                           }  //if
+
+                                           DataModule1->Transat_Temp_Q->Next();
+                                }  //for
+
+
+
+              DataModule1->Transat_Temp_Q->First();
+              int count_er=0;
+                                for (int j=0;j<DataModule1->Transat_Temp_Q->RecordCount;j++){
+                                            if (DataModule1->Transat_Temp_Q->FieldByName("R_OHMS")->AsFloat!=0){
+                                                             Fs=DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat;
+                                                             FL=DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat;
+                                                             F0L=DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat;
+                                                             
+                                                             X=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                          if (Measure_Type=="Series"){
+                                                                        Y=((Fs-Fn)/Fn)*1E6;
+                                                                        Y1(count_er)=((Fs-Fn)/Fn)*1E6;
+                                                                        X1(count_er)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                             }
+                                                          if (Measure_Type=="EqReact"){
+                                                                        if (DataModule1->SqlSpecification->FieldByName("GraphF")->AsString=="FL0"){
+                                                                            Y=((F0L-Fn)/Fn)*1E6;
+                                                                            Y1(count_er)=((F0L-Fn)/Fn)*1E6;
+                                                                            X1(count_er)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                           }
+                                                                           if (DataModule1->SqlSpecification->FieldByName("GraphF")->AsString=="FL"){
+                                                                            Y=((FL-Fn)/Fn)*1E6;
+                                                                            Y1(count_er)=((FL-Fn)/Fn)*1E6;
+                                                                            X1(count_er)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                           }
+                                                                            if (DataModule1->SqlSpecification->FieldByName("GraphF")->AsString=="FS"){
+                                                                            Y=((Fs-Fn)/Fn)*1E6;
+                                                                            Y1(count_er)=((Fs-Fn)/Fn)*1E6;
+                                                                            X1(count_er)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                           }
+                                                             }
+                                                          if (Measure_Type=="Physical"){
+                                                                        if (DataModule1->SqlSpecification->FieldByName("GraphF")->AsString=="FL0"){
+                                                                            Y=((F0L-Fn)/Fn)*1E6;
+                                                                            Y1(count_er)=((F0L-Fn)/Fn)*1E6;
+                                                                            X1(count_er)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                           }
+                                                                           if (DataModule1->SqlSpecification->FieldByName("GraphF")->AsString=="FL"){
+                                                                            Y=((FL-Fn)/Fn)*1E6;
+                                                                            Y1(count_er)=((FL-Fn)/Fn)*1E6;
+                                                                            X1(count_er)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                           }
+                                                                            if (DataModule1->SqlSpecification->FieldByName("GraphF")->AsString=="FS"){
+                                                                            Y=((Fs-Fn)/Fn)*1E6;
+                                                                            Y1(count_er)=((Fs-Fn)/Fn)*1E6;
+                                                                            X1(count_er)=DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat;
+                                                                           }
+                                                             }
+
+                                                             count_er++;
+                                                          GpForm->Series2->AddXY(X,Y,"",clTeeColor);
+                                                          W(j)=1;
+                              }
+                       DataModule1->Transat_Temp_Q->Next();
+                        }
+
+
+//температурные пределы
+if (A==0){
+A=0.01;
+}
+buildchebyshevleastsquares(X1,Y1,W,A,B,count_er,M,Kp1);//апроксимация
+ while (X<=B){
+                   X=A+l*0.1;
+                   Y=calculatechebyshevleastsquares(M,Kp1,X);
+                   GpForm->Series1->AddXY(X,Y,"",clTeeColor);
+                    l++;
+           }
+
+                     GpForm->Series2->Visible=true;
+                     GpForm->Series1->Visible=true;
+                         if (DataModule1->SqlSpecification->FieldByName("GraphOnlyAprox")->AsString=="True"){
+                       GpForm->Series2->Visible=false;
+                       }
+                          if (DataModule1->SqlSpecification->FieldByName("GraphOnluMeasure")->AsString=="True"){
+                          GpForm->Series1->Visible=false;
+                          }
+                     GpForm->Chart1->LeftAxis->Title->Caption="F, ppm";
+                     GpForm->Chart1->Title->Clear();
+                     GpForm->Chart1->Title->Text->Add(DataModule1->NumberCurrent->FieldByName("SNumber")->AsString+"                 "+DataModule1->SqlSpecification->FieldByName("Name")->AsString);
+                     if (DataModule1->SqlSpecification->FieldByName("M")->AsString=="True"){
+                     GpForm->Chart1->Title->Text->Add("Монотонность="+FloatToStrF(Mono,ffFixed,5,2)+"ppm");
+                     }
+                     if (DataModule1->SqlSpecification->FieldByName("GraphP")->AsString=="False"){
+
+                        GpForm->Chart1->PrintPortrait();
+                        
+                     }
+
+                     //GpForm->Chart1->Title->Text->Add("Fmax="+FloatToStrF(Fmax,ffFixed,5,2)+" ppm          Fmin="+FloatToStrF(Fmin,ffFixed,5,2)+" ppm             Fptp="+FloatToStrF(Fptp,ffFixed,5,2)+" ppm");
+                      if (DataModule1->SqlSpecification->FieldByName("GraphP")->AsString=="True"){
+                        GpForm->Chart1->SaveToBitmapFile(DataModule1->Options->FieldByName("GraphDir")->AsString+"\\"+DataModule1->NumberCurrent->FieldByName("SNumber")->AsString+".bmp");
+                     }
+
+     }
+//------------------------------------------------------------------------------------------------------------------------------------
+
+//***********************Чатоста на температуре FT*******************************************************************************************************
+
+  if (DataModule1->SqlSpecification->FieldByName("FTx")->AsString=="True" ||  DataModule1->SqlSpecification->FieldByName("Ft1")->AsString=="True" || DataModule1->SqlSpecification->FieldByName("Ft2")->AsString=="True" || DataModule1->SqlSpecification->FieldByName("Ft3")->AsString=="True" || DataModule1->SqlSpecification->FieldByName("Ft4")->AsString=="True"){
+
+                                     double Fn;
+                                     double Ft1,Ft2,Ft3,Ft4;
+
+                                 DataModule1->Transat_Temp_Q->First();
+                                for (int j=0;j<DataModule1->Transat_Temp_Q->RecordCount;j++){
+                                                if (DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat==DataModule1->SqlSpecification->FieldByName("Tnastr")->AsFloat){
+
+                                                         if (DataModule1->Transat_Temp_Q->FieldByName("R_OHMS")->AsFloat!=0){
+                                                           if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                                         if (Measure_Type=="Series"){
+                                                                                   Fn=DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat;
+
+                                                                          }
+                                                                         if (Measure_Type=="EqReact"){
+
+                                                                                         Fn=DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat;
+                                                                                         }
+                                                                         if (Measure_Type=="Physical"){
+                                                                                            Fn=DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat;
+                                                                                 }
+                                                                         }
+                                                                   else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                                                     Fn=DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat;
+
+                                                                         }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                                                         Fn=DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat;
+
+                                                                                  }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                                                         Fn=DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat;
+
+                                                        }
+                                                             }
+                                                             else {
+                                                                  Fn=1;
+                                                                  }
+                                                            break;
+                                                           }  //if
+
+                                           DataModule1->Transat_Temp_Q->Next();
+                                }  //for
+                                 int kl1=0;
+                                 int kl2=0;
+                                 int kl3=0;
+                                 int kl4=0;
+                                 int kl5=0;
+                                              DataModule1->Transat_Temp_Q->First();
+                                for (int j=0;j<DataModule1->Transat_Temp_Q->RecordCount;j++){
+                                      if (DataModule1->SqlSpecification->FieldByName("FTx")->AsString=="True"){
+                                            if (DataModule1->SqlSpecification->FieldByName("FTxt")->AsString==DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsString){
+                                              kl1++;
+                                              if (kl1>1){
+                                                             Fs=(DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat+Fs)/2;
+                                                             FL=(DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat+FL)/2;
+                                                             F0L=(DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat+F0L)/2;
+
+
+                                              }
+                                              else {
+                                                             Fs=DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat;
+                                                             FL=DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat;
+                                                             F0L=DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat;
+                                                     }
+                                                   if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+
+                                                          if (Measure_Type=="Series"){
+                                                                        FT=((Fs-Fn)/Fn)*1E6;
+                                                             }
+                                                          if (Measure_Type=="EqReact"){
+                                                           if (DataModule1->SqlSpecification->FieldByName("TypeF")->AsString=="True"){
+                                                                   FT=((Fs-Fn)/Fn)*1E6;
+
+                                                            }
+                                                            else {
+                                                                        FT=((FL-Fn)/Fn)*1E6;
+                                                                   }
+                                                             }
+                                                          if (Measure_Type=="Physical"){
+                                                                        FT=((F0L-Fn)/Fn)*1E6;
+                                                             }
+                                                         }
+                                                          else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                                                     FT=((Fs-Fn)/Fn)*1E6;
+
+                                                                         }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                                                         FT=((FL-Fn)/Fn)*1E6;
+
+                                                                                  }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                                                         FT=((F0L-Fn)/Fn)*1E6;
+
+                                                        }
+
+                                                            ResultForm->ResultGrid->Cells[Nar[24]][i+1]=FloatToStrF(FT,ffFixed,5,2);
+                                                              if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                          if (FT<1000 & FT>-1000){
+                                                                                             DataModule1->SQLPSIData->FieldByName("FT")->AsString=FT;
+                                                                                             }
+                                                                                             else {
+                                                                                                   DataModule1->SQLPSIData->FieldByName("FT")->AsString=0;
+
+                                                                                                   }
+                                                                           }
+                                                                if(DataModule1->SqlSpecification->FieldByName("FTmax")->AsString!="no"){
+                                                                             if(FT>DataModule1->SqlSpecification->FieldByName("FTmax")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterFT++;
+                                                                                     }
+                                                                }
+                                          if(DataModule1->SqlSpecification->FieldByName("FTmin")->AsString!="no"){
+                                                                             if(FT<DataModule1->SqlSpecification->FieldByName("FTmin")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterFT++;
+                                                                                     }
+                                                                }
+                                                              if(FT>MaxFT){
+                                                                   MaxFT=FT;
+                                                                   }
+                                                              if(FT<MinFT){
+                                                                    MinFT=FT;
+                                                                    }
+                                                              SumFT=SumFT+FT;
+
+
+
+                                                }//IF
+                                                }
+  //-----------------------------------------------------------------------------FT1-----------------------------------------------------
+                             if (DataModule1->SqlSpecification->FieldByName("Ft1")->AsString=="True"){
+                                               if (DataModule1->SqlSpecification->FieldByName("Ft1t")->AsString==DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsString){
+                                               kl2++;
+                                                 if (kl2>1){
+                                                             Fs=(DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat+Fs)/2;
+                                                             FL=(DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat+FL)/2;
+                                                             F0L=(DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat+F0L)/2;
+
+
+                                              }
+                                              else {
+                                                             Fs=DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat;
+                                                             FL=DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat;
+                                                             F0L=DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat;
+                                                     }
+                                                      if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                          if (DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="Series"){
+                                                                        Ft1=((Fs-Fn)/Fn)*1E6;
+                                                             }
+                                                          if (DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="EqReact"){
+                                                                        Ft1=((FL-Fn)/Fn)*1E6;
+                                                             }
+                                                          if (DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="Physical"){
+                                                                        Ft1=((F0L-Fn)/Fn)*1E6;
+                                                             }
+                                                         }
+                                                         else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                                                      Ft1=((Fs-Fn)/Fn)*1E6;
+
+                                                                         }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                                                         Ft1=((FL-Fn)/Fn)*1E6;
+
+                                                                                  }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                                                         Ft1=((F0L-Fn)/Fn)*1E6;
+
+                                                        }
+
+                                                            ResultForm->ResultGrid->Cells[Nar[28]][i+1]=FloatToStrF(Ft1,ffFixed,5,2);
+                                                              if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                          if (Ft1<1000 & Ft1>-1000){
+                                                                                             DataModule1->SQLPSIData->FieldByName("Ft1")->AsString=Ft1;
+                                                                                             }
+                                                                                             else {
+                                                                                                   DataModule1->SQLPSIData->FieldByName("Ft1")->AsString=0;
+
+                                                                                                   }
+                                                                           }
+                                                                if(DataModule1->SqlSpecification->FieldByName("Ft1max")->AsString!="no"){
+                                                                             if(Ft1>DataModule1->SqlSpecification->FieldByName("Ft1max")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterFt1++;
+                                                                                     }
+                                                                }
+                                          if(DataModule1->SqlSpecification->FieldByName("Ft1min")->AsString!="no"){
+                                                                             if(Ft1<DataModule1->SqlSpecification->FieldByName("Ft1min")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterFt1++;
+                                                                                     }
+                                                                }
+                                                              if(Ft1>MaxFt1){
+                                                                   MaxFt1=Ft1;
+                                                                   }
+                                                              if(Ft1<MinFt1){
+                                                                    MinFt1=Ft1;
+                                                                    }
+                                                              SumFt1=SumFt1+Ft1;
+
+                                           } //IF
+                                           }
+
+                 //---------------------------------------------------Ft2--------------------------------------------------------------------------------
+                          if (DataModule1->SqlSpecification->FieldByName("Ft2")->AsString=="True"){
+                             if (DataModule1->SqlSpecification->FieldByName("Ft2t")->AsString==DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsString){
+                             kl3++;
+                                                            if (kl3>1){
+                                                             Fs=(DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat+Fs)/2;
+                                                             FL=(DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat+FL)/2;
+                                                             F0L=(DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat+F0L)/2;
+
+
+                                              }
+                                              else {
+                                                             Fs=DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat;
+                                                             FL=DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat;
+                                                             F0L=DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat;
+                                                     }
+                                                     if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                          if (Measure_Type=="Series"){
+                                                                        Ft2=((Fs-Fn)/Fn)*1E6;
+                                                             }
+                                                          if (Measure_Type=="EqReact"){
+                                                                        Ft2=((FL-Fn)/Fn)*1E6;
+                                                             }
+                                                          if (Measure_Type=="Physical"){
+                                                                        Ft2=((F0L-Fn)/Fn)*1E6;
+                                                             }
+                                                        }
+                                                         else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                                                      Ft2=((Fs-Fn)/Fn)*1E6;
+
+                                                                         }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                                                          Ft2=((FL-Fn)/Fn)*1E6;
+
+                                                                                  }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                                                        Ft2=((F0L-Fn)/Fn)*1E6;
+
+                                                        }
+                                                            ResultForm->ResultGrid->Cells[Nar[29]][i+1]=FloatToStrF(Ft2,ffFixed,5,2);
+                                                              if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                          if (Ft2<1000 & Ft2>-1000){
+                                                                                             DataModule1->SQLPSIData->FieldByName("Ft2")->AsString=Ft2;
+                                                                                             }
+                                                                                             else {
+                                                                                                   DataModule1->SQLPSIData->FieldByName("Ft2")->AsString=0;
+
+                                                                                                   }
+                                                                           }
+                                                                if(DataModule1->SqlSpecification->FieldByName("Ft2max")->AsString!="no"){
+                                                                             if(Ft2>DataModule1->SqlSpecification->FieldByName("Ft2max")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterFt2++;
+                                                                                     }
+                                                                }
+                                          if(DataModule1->SqlSpecification->FieldByName("Ft2min")->AsString!="no"){
+                                                                             if(Ft2<DataModule1->SqlSpecification->FieldByName("Ft2min")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterFt2++;
+                                                                                     }
+                                                                }
+                                                              if(Ft2>MaxFt2){
+                                                                   MaxFt2=Ft2;
+                                                                   }
+                                                              if(Ft2<MinFt2){
+                                                                    MinFt2=Ft2;
+                                                                    }
+                                                              SumFt2=SumFt2+Ft2;
+
+                                           } //IF
+                                           }
+          //-----------------------------------------------------------------------------------Ft3---------------------------------------------------------
+              if (DataModule1->SqlSpecification->FieldByName("Ft3")->AsString=="True"){
+                             if (DataModule1->SqlSpecification->FieldByName("Ft3t")->AsString==DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsString){
+                             kl4++;
+                                                             if (kl4>1){
+                                                             Fs=(DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat+Fs)/2;
+                                                             FL=(DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat+FL)/2;
+                                                             F0L=(DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat+F0L)/2;
+
+
+                                              }
+                                              else {
+                                                             Fs=DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat;
+                                                             FL=DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat;
+                                                             F0L=DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat;
+                                                     }
+                                                       if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                          if (Measure_Type=="Series"){
+                                                                        Ft3=((Fs-Fn)/Fn)*1E6;
+                                                             }
+                                                          if (Measure_Type=="EqReact"){
+                                                                        Ft3=((FL-Fn)/Fn)*1E6;
+                                                             }
+                                                          if (Measure_Type=="Physical"){
+                                                                        Ft3=((F0L-Fn)/Fn)*1E6;
+                                                             }
+                                                            }
+                                                           else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                                                       Ft3=((Fs-Fn)/Fn)*1E6;
+
+                                                                         }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                                                          Ft3=((FL-Fn)/Fn)*1E6;
+
+                                                                                  }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                                                         Ft3=((F0L-Fn)/Fn)*1E6;
+
+                                                        }
+                                                            ResultForm->ResultGrid->Cells[Nar[30]][i+1]=FloatToStrF(Ft3,ffFixed,5,2);
+                                                              if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                          if (Ft3<1000 & Ft3>-1000){
+                                                                                             DataModule1->SQLPSIData->FieldByName("Ft3")->AsString=Ft3;
+                                                                                             }
+                                                                                             else {
+                                                                                                   DataModule1->SQLPSIData->FieldByName("Ft3")->AsString=0;
+
+                                                                                                   }
+                                                                           }
+                                                                if(DataModule1->SqlSpecification->FieldByName("Ft3max")->AsString!="no"){
+                                                                             if(Ft3>DataModule1->SqlSpecification->FieldByName("Ft3max")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterFt3++;
+                                                                                     }
+                                                                }
+                                          if(DataModule1->SqlSpecification->FieldByName("Ft3min")->AsString!="no"){
+                                                                             if(Ft3<DataModule1->SqlSpecification->FieldByName("Ft3min")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterFt3++;
+                                                                                     }
+                                                                }
+                                                              if(Ft3>MaxFt3){
+                                                                   MaxFt3=Ft3;
+                                                                   }
+                                                              if(Ft3<MinFt3){
+                                                                    MinFt3=Ft3;
+                                                                    }
+                                                              SumFt3=SumFt3+Ft3;
+
+                                           } //IF
+                                           }
+
+          //---------------------------------------------------------------------------Ft4----------------------------------------------------------------
+          if (DataModule1->SqlSpecification->FieldByName("Ft4")->AsString=="True"){
+                             if (DataModule1->SqlSpecification->FieldByName("Ft4t")->AsString==DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsString){
+                             kl5++;
+                                                            if (kl5>1){
+                                                             Fs=(DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat+Fs)/2;
+                                                             FL=(DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat+FL)/2;
+                                                             F0L=(DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat+F0L)/2;
+
+
+                                              }
+                                              else {
+                                                             Fs=DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat;
+                                                             FL=DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat;
+                                                             F0L=DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat;
+                                                     }
+                                                     if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                          if (Measure_Type=="Series"){
+                                                                        Ft4=((Fs-Fn)/Fn)*1E6;
+                                                             }
+                                                          if (Measure_Type=="EqReact"){
+                                                                        Ft4=((FL-Fn)/Fn)*1E6;
+                                                             }
+                                                          if (Measure_Type=="Physical"){
+                                                                        Ft4=((F0L-Fn)/Fn)*1E6;
+                                                             }
+                                                         }
+                                                         else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                                                       Ft4=((Fs-Fn)/Fn)*1E6;
+
+                                                                         }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                                                          Ft4=((FL-Fn)/Fn)*1E6;
+
+                                                                                  }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                                                         Ft4=((F0L-Fn)/Fn)*1E6;
+
+                                                        }
+                                                            ResultForm->ResultGrid->Cells[Nar[31]][i+1]=FloatToStrF(Ft4,ffFixed,5,2);
+                                                              if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                          if (Ft4<1000 & Ft4>-1000){
+                                                                                             DataModule1->SQLPSIData->FieldByName("Ft4")->AsString=Ft4;
+                                                                                             }
+                                                                                             else {
+                                                                                                   DataModule1->SQLPSIData->FieldByName("Ft4")->AsString=0;
+
+                                                                                                   }
+                                                                           }
+                                                                if(DataModule1->SqlSpecification->FieldByName("Ft4max")->AsString!="no"){
+                                                                             if(Ft4>DataModule1->SqlSpecification->FieldByName("Ft4max")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterFt4++;
+                                                                                     }
+                                                                }
+                                          if(DataModule1->SqlSpecification->FieldByName("Ft4min")->AsString!="no"){
+                                                                             if(Ft4<DataModule1->SqlSpecification->FieldByName("Ft4min")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterFt4++;
+                                                                                     }
+                                                                }
+                                                              if(Ft4>MaxFt4){
+                                                                   MaxFt4=Ft4;
+                                                                   }
+                                                              if(Ft4<MinFt4){
+                                                                    MinFt4=Ft4;
+                                                                    }
+                                                              SumFt4=SumFt4+Ft4;
+
+                                           } //IF
+                                           }
+
+
+//------------------------------------------------------------------------------------------------------------------------------------
+                                  DataModule1->Transat_Temp_Q->Next();
+                                  }//FOR
+                 }//IF
+//-----------------------------------------------------Разбраковка Тчх по таблице-------------------------------------------------------------------------------------------------------------------------------------------------
+  
+  if (DataModule1->SqlSpecification->FieldByName("TCHTable")->AsString=="True"){
+  bool variant_1,variant_2,variant_3,st=true;
+  double Fn;
+  AnsiString Variantt;
+  // поиск номинальной частоты
+   DataModule1->Transat_Temp_Q->First();
+   for (int j=0;j<DataModule1->Transat_Temp_Q->RecordCount;j++){
+                                                if (DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsFloat==DataModule1->SqlSpecification->FieldByName("Tnastr")->AsFloat){
+
+                                                         if (DataModule1->Transat_Temp_Q->FieldByName("R_OHMS")->AsFloat!=0){
+                                                           if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                                         if (Measure_Type=="Series"){
+                                                                                   Fn=DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat;
+
+                                                                          }
+                                                                         if (Measure_Type=="EqReact"){
+
+                                                                                         Fn=DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat;
+                                                                                         }
+                                                                         if (Measure_Type=="Physical"){
+                                                                                            Fn=DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat;
+                                                                                 }
+                                                                         }
+                                                                   else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                                                     Fn=DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat;
+
+                                                                         }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                                                         Fn=DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat;
+
+                                                                                  }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                                                         Fn=DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat;
+
+                                                        }
+                                                             }
+                                                             else {
+                                                                  Fn=1;
+                                                                  }
+                                                            break;
+                                                           }  //if
+
+                                           DataModule1->Transat_Temp_Q->Next();
+                                }  //for
+
+
+
+//Загрузка таблицы спецификаций
+DataModule1->spc_variant->Active=false;
+DataModule1->spc_variant->SQL->Clear();
+DataModule1->spc_variant->SQL->Add("Select * from Spc_Variant where SPC_ID='"+DataModule1->SqlSpecification->FieldByName("ID")->AsString+"' order by Name");
+DataModule1->spc_variant->Active=true;
+        if (DataModule1->spc_variant->RecordCount>0){
+                DataModule1->spc_variant->First();
+                        for (int u=0;u<DataModule1->spc_variant->RecordCount;u++){
+                                st=true;
+                                DataModule1->spc_variant_data->Active=false;
+                                DataModule1->spc_variant_data->SQL->Clear();
+                                DataModule1->spc_variant_data->SQL->Add("Select * from spc_variant_data where spc_variant_id='"+DataModule1->spc_variant->FieldByName("ID")->AsString+"'");
+                                DataModule1->spc_variant_data->Active=true;
+
+
+
+                                    if (DataModule1->spc_variant_data->RecordCount>0){
+                                          DataModule1->spc_variant_data->First();
+                                         for (int uu=0;uu<DataModule1->spc_variant_data->RecordCount; uu++){
+
+                                              bool stl=true;
+                                              DataModule1->Transat_Temp_Q->First();
+                                              double FTtable;
+                                                   for (int j=0;j<DataModule1->Transat_Temp_Q->RecordCount;j++){
+
+                                            if (DataModule1->spc_variant_data->FieldByName("Parametr_T")->AsString==DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsString){
+
+                                                             Fs=DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat;
+                                                             FL=DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat;
+                                                             F0L=DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat;
+
+                                                   if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+
+                                                          if (Measure_Type=="Series"){
+                                                                        FTtable=((Fs-Fn)/Fn)*1E6;
+                                                             }
+                                                          if (Measure_Type=="EqReact"){
+                                                           if (DataModule1->SqlSpecification->FieldByName("TypeF")->AsString=="True"){
+                                                                   FTtable=((Fs-Fn)/Fn)*1E6;
+
+                                                            }
+                                                            else {
+                                                                        FTtable=((FL-Fn)/Fn)*1E6;
+                                                                   }
+                                                             }
+                                                          if (Measure_Type=="Physical"){
+                                                                        FTtable=((F0L-Fn)/Fn)*1E6;
+                                                             }
+                                                         }
+                                                          else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                                                     FTtable=((Fs-Fn)/Fn)*1E6;
+
+                                                                         }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                                                         FTtable=((FL-Fn)/Fn)*1E6;
+
+                                                                                  }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                                                         FTtable=((F0L-Fn)/Fn)*1E6;
+
+                                                           }
+
+                                                          if (FTtable>DataModule1->spc_variant_data->FieldByName("Parametr_max")->AsFloat){
+                                                              st=false;
+                                                              stl=false;
+
+                                                          }
+                                                          if  (FTtable<DataModule1->spc_variant_data->FieldByName("Parametr_min")->AsFloat){
+
+                                                           st=false;
+                                                           stl=false;
+                                                          }
+
+                                                    }//IF
+
+                                                DataModule1->Transat_Temp_Q->Next();
+                                            }
+                                            DataModule1->UpdatePsiDatatemp->SQL->Clear();
+                                            AnsiString sqld="Update psidatatemp set ";
+                                            switch (u) {
+                                                 case 0 : sqld=sqld+"variant_1=";
+                                                          break;
+
+                                                 case 1 : sqld=sqld+"variant_2=";
+                                                          break;
+
+                                                 case 2 : sqld=sqld+"variant_3=";
+                                                          break;
+                                                 default : sqld=sqld+"variant_1=";
+                                            }
+                                             if (stl) {
+                                                sqld=sqld+"'1' where Measure_ID='"+Measure_ID+"' and N='"+DataModule1->NumberCurrent->FieldByName("SNumber")->AsString+"' and Temp='"+DataModule1->spc_variant_data->FieldByName("Parametr_T")->AsString+"'";
+
+                                             }
+                                             else {
+                                               sqld=sqld+"'0' where Measure_ID='"+Measure_ID+"' and N='"+DataModule1->NumberCurrent->FieldByName("SNumber")->AsString+"' and Temp='"+DataModule1->spc_variant_data->FieldByName("Parametr_T")->AsString+"'";
+                                             }
+                                           DataModule1->UpdatePsiDatatemp->SQL->Add(sqld);
+                                           DataModule1->UpdatePsiDatatemp->Execute();
+                                          DataModule1->spc_variant_data->Next();
+                                         }
+                                    }
+                                 if (st==true){
+                                      Variantt=Variantt+DataModule1->spc_variant->FieldByName("Name")->AsString;
+                                      switch (u) {
+                                             case 0:
+                                                   variant_1=true;
+                                                  DataModule1->SQLPSIData->FieldByName("variant_1")->AsString="True";
+                                                  break;
+                                             case 1:
+                                                    variant_2=true;
+                                                    DataModule1->SQLPSIData->FieldByName("variant_2")->AsString="True";
+                                                    break;
+                                             case 2:
+                                                  variant_3=true;
+                                                 DataModule1->SQLPSIData->FieldByName("variant_3")->AsString="True";
+                                                 break;
+                                             default:
+                                                  DataModule1->SQLPSIData->FieldByName("variant_1")->AsString="True";
+                                                  DataModule1->SQLPSIData->FieldByName("variant_2")->AsString="True";
+                                                  DataModule1->SQLPSIData->FieldByName("variant_3")->AsString="True";
+
+                                        }
+                                        
+                                 }
+                                 else {
+                                  switch (u) {
+                                          case 0 :
+                                                 variant_1=false;
+                                                 DataModule1->SQLPSIData->FieldByName("variant_1")->AsString="False";
+                                                 break;
+                                          case 1:
+                                                 variant_2=false;
+                                                 DataModule1->SQLPSIData->FieldByName("variant_2")->AsString="False";
+                                                 break;
+                                          case 2:
+                                                variant_3=false;
+                                                 DataModule1->SQLPSIData->FieldByName("variant_3")->AsString="False";
+                                                 break;
+                                          default:
+
+                                                 DataModule1->SQLPSIData->FieldByName("variant_1")->AsString="False";
+                                                 DataModule1->SQLPSIData->FieldByName("variant_2")->AsString="False";
+                                                 DataModule1->SQLPSIData->FieldByName("variant_3")->AsString="False";
+                                       }
+
+                                 }
+                          DataModule1->spc_variant->Next();
+                        }
+                      DataModule1->SQLPSIData->FieldByName("variant")->AsString=Variantt;
+        }
+
+// расчет значение частоты
+
+
+
+
+  }
+//--------------------------------------------------------------------------------------------------------------------------------------------------
+   //Статус*************************************************************************************************************************************************
+ if(DataModule1->SqlSpecification->FieldByName("Status")->AsString=="True"){
+                     if(status==1){
+                                    ResultForm->ResultGrid->Cells[Nar[22]][i+1]="Брак";
+                                    counter=counter+1;
+                            }
+                       else if (status==2){
+                                 ResultForm->ResultGrid->Cells[Nar[22]][i+1]="Усл.Годен";
+                                 counter=counter+1;
+                            }
+                        else {
+
+                            ResultForm->ResultGrid->Cells[Nar[22]][i+1]="Годен";
+                        }
+
+                       AnsiString F2;
+
+
+                      F2="Select * from psidatatemp where psidatatemp.msk='"+NumberMForm->edtMSK->Text+"' and N='"+DataModule1->NumberCurrent->FieldByName("SNumber")->AsString+"' and File='"+NumberMForm->edtFile->Text+"'";
+                       DataModule1->SQLPSIDataT1->Active=false;
+                      DataModule1->SQLPSIDataT1->SQL->Clear();
+                       DataModule1->SQLPSIDataT1->SQL->Add(F2);
+                        DataModule1->SQLPSIDataT1->Active=true;
+                         AnsiString SS;
+                       if (Status2!="BAD"){
+                        SS=ResultForm->ResultGrid->Cells[Nar[22]][i+1];
+                        }
+                        else {
+                        SS="Брак";
+                        ResultForm->ResultGrid->Cells[Nar[22]][i+1]="Брак";
+                         }
+                          if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                  DataModule1->SQLPSIData->FieldByName("Status")->AsString=ResultForm->ResultGrid->Cells[Nar[22]][i+1];
+                           }
+                         if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                     DataModule1->SQLPSIData->Post();
+                           }
+                  for (int i1=0;i1<DataModule1->SQLPSIDataT1->RecordCount; i1++){
+                         DataModule1->SQLPSIDataT1->Edit();
+                         DataModule1->SQLPSIDataT1->FieldByName("Status1")->AsString=SS;
+                         DataModule1->SQLPSIDataT1->Post();
+                         DataModule1->SQLPSIDataT1->Next();
+                       }
+
+    }
+
+
+                   DataModule1->SQLPSIDataT1->Active=false;
+                   DataModule1->SQLPSIDataT->Active=false;
+                  DataModule1->NumberCurrent->Next();
+                  WorkProgress->Position=i+1;
+
+
+
+
+
+
+
+
+
+//***************************************************************************************************************************************************
+//*********************************************************************************************************************************
+
+
+
+      }//else
+
+//*************************************************DB PSI*****************************************************************************
+  /*    DataModule1->SQLPSI->Active=false;
+          DataModule1->SQLPSI->SQL->Clear();
+          AnsiString F2;
+  F2="Select * from psi where Measure_ID='"+Measure_ID+"'";
+          DataModule1->SQLPSI->SQL->Add(F2);
+          DataModule1->SQLPSI->Active=true;
+  DataModule1->SQLPSI->Edit();
+  DataModule1->SQLPSI->FieldByName("Bad")->AsString=counter;
+  DataModule1->SQLPSI->FieldByName("Good")->AsString=N-counter;
+  DataModule1->SQLPSI->FieldByName("Status")->AsString= "Сдано";
+  DataModule1->SQLPSI->FieldByName("transatN")->AsString=edtMachine->Text;
+         DataModule1->SQLPSI->FieldByName("File1")->AsString=NumberMForm->edtFile->Text;
+  */
+         AnsiString StartPosition,EndPosition;
+         if(DataModule1->Config->FieldByName("BeginRing")->AsFloat==0){
+                  StartPosition="L"+DataModule1->Config->FieldByName("FirstPosition")->AsString;
+                  }
+          if(DataModule1->Config->FieldByName("BeginRing")->AsFloat==1){
+                  StartPosition="U"+DataModule1->Config->FieldByName("FirstPosition")->AsString;
+                  }
+          if(DataModule1->Config->FieldByName("EndRing")->AsFloat==0){
+                  EndPosition="L"+DataModule1->Config->FieldByName("LastPosition")->AsString;
+                  }
+          if(DataModule1->Config->FieldByName("EndRing")->AsFloat==1){
+                  EndPosition="U"+DataModule1->Config->FieldByName("LastPosition")->AsString;
+                  }
+  /*
+  DataModule1->SQLPSI->FieldByName("Position")->AsString=StartPosition+"..."+EndPosition;
+  DataModule1->SQLPSI->FieldByName("Spc1")->AsString=DataModule1->SqlSpecification->FieldByName("Name")->AsString;
+  DataModule1->SQLPSI->FieldByName("DateEnd")->AsString=stD+"."+stMn+"."+stY;
+  DataModule1->SQLPSI->FieldByName("TimeEnd")->AsString=stH+":"+stM+":"+stS;
+  DataModule1->SQLPSI->FieldByName("Operator")->AsString=DataModule1->Dostup->FieldByName("Name")->AsString;
+  DataModule1->SQLPSI->Post();
+   */
+  Data_Measure->Insert_PSI->SQL->Clear();
+  AnsiString sqlInsert="Update `psi` set `Bad`='"+FloatToStr(counter)+"',`Good`='"+FloatToStr(N-counter)+"',`Status`='Сдано',`transatN`='"+edtMachine->Text+"',`File1`='"+NumberMForm->edtFile->Text+"',`Position`='"+StartPosition+"..."+EndPosition+"',`Spc1`='"+DataModule1->SqlSpecification->FieldByName("Name")->AsString+"',`DateEnd`='"+stD+"."+stMn+"."+stY+"',`TimeEnd`='"+stH+":"+stM+":"+stS+"',`Operator`='"+DataModule1->Dostup->FieldByName("Name")->AsString+"'";
+  Data_Measure->Insert_PSI->SQL->Add(sqlInsert);
+  Data_Measure->Insert_PSI->Execute();
+
+
+            //************************************************************************************************************************************************
+    if (DataModule1->SqlSpecification->FieldByName("Stat")->AsString=="True"){
+         float Max;
+         float Min;
+         int NN;
+         float AVG;
+         float STDEV;
+         int countBad;
+         int countA;
+         float AVG_A;
+         float Max_A;
+         float Min_A;
+         float STDEV_A;
+        DataModule1->SQLPSIData->Active=false;
+        DataModule1->SQLPSIData->SQL->Clear();
+        DataModule1->SQLPSIData->SQL->Add("Select * from psidata where Measure_ID='"+Measure_ID+"' order by ID");
+        DataModule1->SQLPSIData->Active=true;
+            AnsiString Commandx="Update psidatatemp set Fn='"+DataModule1->SQLPSIData->FieldByName("Fn")->AsString+"' where Measure_ID='"+Measure_ID+"'";
+         DataModule2->Comand->SQL->Clear();
+         DataModule2->Comand->SQL->Add(Commandx);
+         DataModule2->Comand->Execute();
+        DataModule2->Statistika->Active=false;
+        DataModule2->Statistika->SQL->Clear();
+        DataModule2->Statistika->SQL->Add("Select * from psi_statistika where Measure_ID='"+Measure_ID+"'");
+        DataModule2->Statistika->Active=true;
+
+        DataModule2->Parameters->Active=true;
+
+                DataModule2->Parameters->First();
+                for (int i=0; i<DataModule2->Parameters->RecordCount; i++){
+                        if (DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_Spc_Field")->AsString)->AsString=="True"){
+                             DataModule1->SQLPSIData->First();
+                             countBad=0;
+                             countA=0;
+                              Max=DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat;
+                             Min=DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat;
+                             NN=DataModule1->SQLPSIData->RecordCount;
+                             double Sum=0;
+                                for (int j=0; j<DataModule1->SQLPSIData->RecordCount; j++){
+                                                if (Max<DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat){
+                                                if (DataModule1->SQLPSIData->FieldByName("Status2")->AsString=="Good"){
+                                                   Max=DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat;
+                                                  }
+                                                }
+                                                if (Min>DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat){
+                                                   if (DataModule1->SQLPSIData->FieldByName("Status2")->AsString=="Good"  & DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsString!=""){
+                                                        Min=DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat;
+                                                    }
+                                                }
+                                                if (DataModule1->SQLPSIData->FieldByName("Status2")->AsString=="Good" & DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsString!=""){
+                                               Sum=Sum+DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat;
+                                                  }
+                                                        if (DataModule1->SQLPSIData->FieldByName("Status2")->AsString=="Good"){
+                                                                     if (DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_max")->AsString)->AsString!="no"){
+                                                       if(DataModule2->Parameters->FieldByName("DopuskField")->AsString!="no" || DataModule2->Parameters->FieldByName("DopuskField2")->AsString!="no" ){
+                                                       double Zap=0;
+                                                       if (DataModule2->Parameters->FieldByName("DopuskField2")->AsString!="no"){
+                                                        if(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("DopuskField2")->AsString)->AsString!=0){
+                                                           Zap=DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("DopuskField2")->AsString)->AsFloat;
+                                                           if (DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat>StrToFloat(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_max")->AsString)->AsString)-Zap){
+                                                           countBad++;
+                                                         }
+                                                        }
+                                                       }
+                                                       if (DataModule2->Parameters->FieldByName("DopuskField")->AsString!="no"){
+                                                        if(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("DopuskField")->AsString)->AsFloat!=0){
+                                                          Zap=DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("DopuskField")->AsString)->AsFloat;
+                                                          if (DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat>StrToFloat(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_max")->AsString)->AsString)-(Zap*StrToFloat(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_max")->AsString)->AsString)/100)){
+                                                           countBad++;
+                                                         }
+                                                        }
+                                                        }
+                                                        }
+                                                        else {
+                                                           if (DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat>StrToFloat(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_max")->AsString)->AsString)){
+                                                           countBad++;
+                                                         }
+                                                         }
+
+
+
+                                                }
+                                                if (DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_Min")->AsString)->AsString!="no"){
+                                                        if(DataModule2->Parameters->FieldByName("DopuskField")->AsString!="no" || DataModule2->Parameters->FieldByName("DopuskField2")->AsString!="no" ){
+                                                       double Zap=0;
+                                                       if (DataModule2->Parameters->FieldByName("DopuskField2")->AsString!="no"){
+                                                        if(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("DopuskField2")->AsString)->AsFloat!=0 ){
+                                                           Zap=DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("DopuskField2")->AsString)->AsFloat;
+                                                           if (DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat>StrToFloat(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_min")->AsString)->AsString)-Zap){
+                                                           countBad++;
+                                                         }
+                                                        }
+                                                        }
+                                                         if (DataModule2->Parameters->FieldByName("DopuskField")->AsString!="no"){
+                                                        if(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("DopuskField")->AsString)->AsFloat!=0){
+                                                          Zap=DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("DopuskField")->AsString)->AsFloat;
+                                                          if (DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat<StrToFloat(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_min")->AsString)->AsString)+((Zap/100)*StrToFloat(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_min")->AsString)->AsString))){
+                                                           countBad++;
+                                                         }
+                                                        }
+                                                        }
+                                                        }
+                                                        else {
+                                                           if (DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat>StrToFloat(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_min")->AsString)->AsString)){
+                                                           countBad++;
+                                                         }
+
+                                                        }
+
+                                                }
+
+                                          }
+                                        DataModule1->SQLPSIData->Next();
+                                }
+                              AVG=Sum/NN;
+                              DataModule1->SQLPSIData->First();
+                              double SumKV=0;
+                             for (int j=0; j<DataModule1->SQLPSIData->RecordCount; j++){
+                               if (DataModule1->SQLPSIData->FieldByName("Status2")->AsString=="Good" & DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsString!=""){
+                                SumKV=SumKV+pow((DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat-AVG),2);
+                                }
+                               DataModule1->SQLPSIData->Next();
+                             }
+                             STDEV=sqrt(SumKV/NN);
+
+                          DataModule1->SQLPSIData->First();
+                          Max_A=Min;
+                          Min_A=Max;
+                          AVG_A=0;
+                          double Sum_a=0;
+                                  for (int j=0; j<DataModule1->SQLPSIData->RecordCount; j++){
+                                     if (DataModule1->SQLPSIData->FieldByName("Status2")->AsString=="Good"){
+                                     double tabs1=fabs(DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat);
+                                     double tabs2=fabs(AVG)+3*fabs(STDEV);
+                                           if (tabs1<=tabs2){
+                                                   if (Max_A<DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat){
+                                                    Max_A=DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat;
+                                                   }
+                                                   if (Min_A>DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat & DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsString!=""){
+                                                    Min_A=DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat;
+                                                   }
+                                                   if (DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsString!=""){
+                                                 Sum_a=Sum_a+DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat;
+                                                   }
+                                           }
+                                           else {
+                                           if (DataModule1->SqlSpecification->FieldByName("Anomal")->AsString=="True" & DataModule1->SQLPSIData->FieldByName("Status")->AsString!="Брак"){
+                                              countA++;
+                                             DataModule1->SQLPSIData->Edit();
+                                             DataModule1->SQLPSIData->FieldByName("Status")->AsString="Аномал.";
+                                             DataModule1->SQLPSIData->Post();
+                                             ResultForm->ResultGrid->Cells[Nar[22]][j+1]="Аномал.";
+                                             AnsiString Command="Update psidatatemp set Status1='Аномал.' where Measure_ID='"+Measure_ID+"' and N='"+DataModule1->SQLPSIData->FieldByName("N")->AsString+"'";
+                                             DataModule2->Comand->SQL->Clear();
+                                             DataModule2->Comand->SQL->Add(Command);
+                                             DataModule2->Comand->Execute();
+                                                }
+                                                else if (DataModule1->SqlSpecification->FieldByName("AnomalR")->AsString=="True" & DataModule1->SQLPSIData->FieldByName("Status")->AsString!="Брак"){
+                                                         if (DataModule2->Parameters->FieldByName("ID")->AsString=="2" || DataModule2->Parameters->FieldByName("ID")->AsString=="12" || DataModule2->Parameters->FieldByName("ID")->AsString=="13" ){
+                                                                 countA++;
+                                                                 DataModule1->SQLPSIData->Edit();
+                                                                  DataModule1->SQLPSIData->FieldByName("Status")->AsString="Аномал.";
+                                                                 DataModule1->SQLPSIData->Post();
+                                                                  ResultForm->ResultGrid->Cells[Nar[22]][j+1]="Аномал.";
+                                                                          AnsiString Command="Update psidatatemp set Status1='Аномал.' where Measure_ID='"+Measure_ID+"' and N='"+DataModule1->SQLPSIData->FieldByName("N")->AsString+"'";
+                                                                           DataModule2->Comand->SQL->Clear();
+                                                                           DataModule2->Comand->SQL->Add(Command);
+                                                                   DataModule2->Comand->Execute();
+
+                                                         }
+                                                }
+                                             }   
+                                          }
+                                          else {
+                                              DataModule1->SQLPSIData->Edit();
+                                             DataModule1->SQLPSIData->FieldByName("Status")->AsString="Незамер.";
+                                             DataModule1->SQLPSIData->Post();
+                                             ResultForm->ResultGrid->Cells[Nar[22]][j+1]="Незамер.";
+                                              AnsiString Command="Update psidatatemp set Status1='Незамер.' where Measure_ID='"+Measure_ID+"' and N='"+DataModule1->SQLPSIData->FieldByName("N")->AsString+"'";
+                                             DataModule2->Comand->SQL->Clear();
+                                             DataModule2->Comand->SQL->Add(Command);
+                                             DataModule2->Comand->Execute();
+                                          }
+
+                                     DataModule1->SQLPSIData->Next();
+                                  }
+                            if (countA==0){
+                            AVG_A=0;
+                            }
+                            else {
+                           AVG_A=Sum_a/countA;
+                           }
+                           DataModule1->SQLPSIData->First();
+                              double SumKV_A=0;
+                             for (int j=0; j<DataModule1->SQLPSIData->RecordCount; j++){
+                              if (DataModule1->SQLPSIData->FieldByName("Status2")->AsString=="Good" & fabs(DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat)<=AVG+3*STDEV & DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsString!=""){
+                                SumKV_A=SumKV_A+pow((DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat-AVG_A),2);
+                                }
+                               DataModule1->SQLPSIData->Next();
+                             }
+                             STDEV_A=sqrt(SumKV_A/NN);
+                             double CPK=0;
+                              AnsiString VGT=DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_max")->AsString)->AsString;
+                               AnsiString NGT=DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_min")->AsString)->AsString;
+                               double VGD,NGD;
+                              if (VGT!="no"){
+                                VGD=StrToFloat(VGT);
+
+                               }
+                               else {
+                                VGD=0;
+                               }
+                               if (NGT!="no"){
+                                NGD=StrToFloat(NGT);
+
+                               }
+                               else {
+                                NGD=0;
+                               }
+                               double dG=fabs(VGD-NGD)/2;
+
+                               if (AVG_A==0){
+                                AVG_A=AVG;
+                               }
+                               if (STDEV_A==0){
+
+                                STDEV_A=STDEV;
+                               }
+
+                              if (STDEV_A!=0 & dG!=0){
+                                double dGx=fabs(((VGD+NGD)/2)-AVG_A);
+                                double k=dGx/dG;
+                                double Cp=dG/(3*STDEV_A);
+                                CPK=fabs(Cp*(1-k));
+                              
+                               }
+                               else {
+                                CPK=0;
+                               }
+                            DataModule2->Statistika->Append();
+                            DataModule2->Statistika->FieldByName("Measure_ID")->AsString=Measure_ID;
+                            DataModule2->Statistika->FieldByName("Parametr_ID")->AsString=DataModule2->Parameters->FieldByName("ID")->AsString;
+                            DataModule2->Statistika->FieldByName("MSK_ID")->AsString=DataModule1->SQLPSIData->FieldByName("Msk")->AsString;
+                           DataModule2->Statistika->FieldByName("Max")->AsFloat=Max;
+                           DataModule2->Statistika->FieldByName("Min")->AsFloat=Min;
+                            DataModule2->Statistika->FieldByName("AVG")->AsFloat=AVG;
+                            DataModule2->Statistika->FieldByName("STDEV")->AsFloat=STDEV;
+                            DataModule2->Statistika->FieldByName("Max_A")->AsFloat=Max_A;
+                           DataModule2->Statistika->FieldByName("Min_A")->AsFloat=Min_A;
+                            DataModule2->Statistika->FieldByName("AVG_A")->AsFloat=AVG_A;
+                            DataModule2->Statistika->FieldByName("STDEV_A")->AsFloat=STDEV_A;
+                            DataModule2->Statistika->FieldByName("Alln")->AsFloat=NN;
+                            DataModule2->Statistika->FieldByName("Badn")->AsFloat=countBad;
+                            DataModule2->Statistika->FieldByName("Goodn")->AsFloat=NN-countBad;
+                            DataModule2->Statistika->FieldByName("Anomal")->AsFloat=countA;
+                            DataModule2->Statistika->FieldByName("CPK")->AsFloat=CPK;
+                            DataModule2->Statistika->Post();
+                         }
+
+                   DataModule2->Parameters->Next();
+                }
+                 DataModule1->SQLPSIData->First();
+                         int anomal=0;
+                         int bad=0;
+                         int good=0;
+                         int nezamer=0;
+                         int all=0;
+                         for (int j=0;j<DataModule1->SQLPSIData->RecordCount; j++){
+                            all++;
+                            if (DataModule1->SQLPSIData->FieldByName("Status")->AsString=="Годен"){
+                             good++;
+                            }
+                            else if (DataModule1->SQLPSIData->FieldByName("Status")->AsString=="Брак"){
+                               bad++;
+                            }
+                            else if (DataModule1->SQLPSIData->FieldByName("Status")->AsString=="Аномал."){
+
+                               anomal++;
+                            }
+                            else if (DataModule1->SQLPSIData->FieldByName("Status")->AsString=="Незамер."){
+                             nezamer++;
+                            }
+
+                           DataModule1->SQLPSIData->Next();
+                         }
+                           int BADALL=bad+anomal+nezamer;
+
+                          AnsiString Command="Update psi set atall='"+FloatToStr(all)+"',Good='"+FloatToStr(good)+"', Bad='"+FloatToStr(BADALL)+"',Nezamer='"+FloatToStr(nezamer)+"', Anomal='"+FloatToStr(anomal)+"' where Measure_ID='"+Measure_ID+"'";
+                          DataModule2->Comand->SQL->Clear();
+                         DataModule2->Comand->SQL->Add(Command);
+                         DataModule2->Comand->Execute();
+            DataModule1->SQLPSIData->Active=false;
+            DataModule2->Statistika->Active=false;
+            ResultForm->btnJournal->Enabled=true;
+   }
+
+
+
+    DataModule1->Transat_Temp_Q->Active=false;
+    ledFinish->Active=true;
+    ResultForm->Show();
+
+  }
+ else if (MachineType=="KH7700"){
+   int l,N,Nt,k;
+
+          AnsiString l1;
+          AnsiString S,S1,S2;
+          DataModule1->KH7700_Temp->First();
+                    for(int i=0; i<MainForm->RzCheckList1->Count;i++){
+                        if(MainForm->RzCheckList1->ItemState[i]!=0){
+                                              l=i+1;
+                                             break;
+                                               }
+               }
+
+          SYSTEMTIME st;
+          GetLocalTime(&st);
+          AnsiString stD,stMn,stY,stH,stM,stS;
+          stD=st.wDay;
+          stMn=st.wMonth;
+          stY=st.wYear;
+          stH=st.wHour;
+          stM=st.wMinute;
+          stS=st.wSecond;
+          k=0;
+          DataModule1->KH7700_Config->First();
+                for (int i=0;i<DataModule1->KH7700_Config->RecordCount;i++){
+                      if (DataModule1->Config->FieldByName("SetupN")->AsFloat==l){
+                                  break;
+                            }
+                    DataModule1->KH7700_Config->Next();
+                                   }
+          N=DataModule1->KH7700_Config->FieldByName("Number")->AsFloat;
+           if (DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="Saunders (FR+FL)"){
+         Measure_Type="EqReact";
+
+     }
+     else if (DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="Saunders(FR)"){
+               Measure_Type="Series";
+     }
+     else if (DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="Saunders(FL)"){
+          Measure_Type="Physical";
+     }
+     else {
+        Measure_Type=DataModule1->SqlSpecification->FieldByName("LoadType")->AsString;
+     }
+
+//***************Задание столбца вывода и печать заголовков************
+//*******************************************************************
+if(DataModule1->SqlSpecification->FieldByName("Number")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="#";
+
+  Nar[0]=k;
+  k=k+1;
+  }
+//*******************************************************************
+ if(DataModule1->SqlSpecification->FieldByName("position")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Позиция";
+  Nar[1]=k;
+  k=k+1;
+
+  }
+//******************************************************************
+ if(DataModule1->SqlSpecification->FieldByName("Snumber")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Номер";
+
+  Nar[2]=k;
+  k=k+1;
+  }
+
+  //*****************************************************************
+   if(DataModule1->SqlSpecification->FieldByName("Ft")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Точность настройки,PPM";
+  Nar[3]=k;
+            if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Fmax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[3]][N+2]=DataModule1->SqlSpecification->FieldByName("Fmax")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("Fmin")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[3]][N+3]=DataModule1->SqlSpecification->FieldByName("Fmin")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+  //****************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("R")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Сопротивление,Ом";
+  Nar[4]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Rmax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[4]][N+2]=DataModule1->SqlSpecification->FieldByName("Rmax")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("Rmin")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[4]][N+3]=DataModule1->SqlSpecification->FieldByName("Rmin")->AsString;
+                                 }
+                    }
+
+  k=k+1;
+  }
+ //******************************************************************
+   if(DataModule1->SqlSpecification->FieldByName("C0")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Статическая емкость,пФ";
+  Nar[5]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("C0max")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[5]][N+2]=DataModule1->SqlSpecification->FieldByName("C0max")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("C0min")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[5]][N+3]=DataModule1->SqlSpecification->FieldByName("C0min")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+ //******************************************************************
+   if(DataModule1->SqlSpecification->FieldByName("Cq")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Динамическая емкость,фФ";
+  Nar[6]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[6]][N+2]=DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("Cqmin")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[6]][N+3]=DataModule1->SqlSpecification->FieldByName("Cqmin")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+  //****************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("Q")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Добротность,x1000";
+  Nar[7]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Qmax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[7]][N+2]=DataModule1->SqlSpecification->FieldByName("Qmax")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("Qmin")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[7]][N+3]=DataModule1->SqlSpecification->FieldByName("Qmin")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+  //*******************************************************************
+   if(DataModule1->SqlSpecification->FieldByName("Rb")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Rb,Ohm";
+  Nar[8]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Rbmax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[8]][N+2]=DataModule1->SqlSpecification->FieldByName("Rbmax")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("Rbmin")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[8]][N+3]=DataModule1->SqlSpecification->FieldByName("Rbmin")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+  //*******************************************************************
+   if(DataModule1->SqlSpecification->FieldByName("Rc_Rb")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="RC/RB";
+  Nar[10]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Rc_Rbmax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[10]][N+2]=DataModule1->SqlSpecification->FieldByName("Rc_Rbmax")->AsString;
+                                }
+
+                    }
+  k=k+1;
+  }
+  //******************************************************************
+ if(DataModule1->SqlSpecification->FieldByName("L")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="L,mH";
+  Nar[9]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Lmax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[12]][N+2]=DataModule1->SqlSpecification->FieldByName("Lmax")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("Lmin")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[12]][N+3]=DataModule1->SqlSpecification->FieldByName("Lmin")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+  //****************************************************************
+    if(DataModule1->SqlSpecification->FieldByName("Tmax")->AsString=="True"){
+       ResultForm->ResultGrid->Cells[k][0]="Tmax,C";
+       Nar[11]=k;
+         if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                               if(DataModule1->SqlSpecification->FieldByName("Tmaxmax")->AsString!="no"){
+                                           ResultForm->ResultGrid->Cells[Nar[11]][N+2]=DataModule1->SqlSpecification->FieldByName("Tmaxmax")->AsFloat;
+                                 }
+                                 if(DataModule1->SqlSpecification->FieldByName("Tmaxmin")->AsString!="no"){
+                                           ResultForm->ResultGrid->Cells[Nar[11]][N+3]=DataModule1->SqlSpecification->FieldByName("Tmaxmin")->AsFloat;
+                                 }
+          }
+      k=k+1;
+     }
+  //****************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("Tmin")->AsString=="True"){
+              ResultForm->ResultGrid->Cells[k][0]="Tmin,C";
+              Nar[12]=k;
+              if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Tminmax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[12]][N+2]=DataModule1->SqlSpecification->FieldByName("Tminmax")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("Tminmin")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[12]][N+3]=DataModule1->SqlSpecification->FieldByName("Tminmin")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+  //*****************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("TurnOver")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="IT,C";
+  Nar[13]=k;
+              if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                       if(DataModule1->SqlSpecification->FieldByName("Tomax")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[13]][N+2]=DataModule1->SqlSpecification->FieldByName("Tomax")->AsString;
+                         }
+                       if(DataModule1->SqlSpecification->FieldByName("Tomin")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[13]][N+3]=DataModule1->SqlSpecification->FieldByName("Tomin")->AsString;
+                         }
+
+                    }
+
+  k=k+1;
+  }
+//******************************************************************
+if(DataModule1->SqlSpecification->FieldByName("Rmx")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Rmax,Ом";
+  Nar[14]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Rmaxmax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[14]][N+2]=DataModule1->SqlSpecification->FieldByName("Rmaxmax")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("Rmaxmin")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[14]][N+3]=DataModule1->SqlSpecification->FieldByName("Rmaxmin")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+//******************************************************************
+if(DataModule1->SqlSpecification->FieldByName("Rmn")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Rmin,Ом";
+  Nar[15]=k;
+    k=k+1;
+  }
+//******************************************************************
+ if(DataModule1->SqlSpecification->FieldByName("RR")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Rmax/Rmin";
+  Nar[16]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("RRmax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[16]][N+2]=DataModule1->SqlSpecification->FieldByName("RRmax")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("RRmin")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[16]][N+3]=DataModule1->SqlSpecification->FieldByName("RRmin")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+  //***********************************************************
+ if(DataModule1->SqlSpecification->FieldByName("Fmx")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Fmax,ppm";
+  Nar[17]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[17]][N+2]=DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[17]][N+3]=DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+  //*************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("Fmn")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Fmin,ppm";
+  Nar[18]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Fminmax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[18]][N+2]=DataModule1->SqlSpecification->FieldByName("Fminmax")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("Fminmin")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[18]][N+3]=DataModule1->SqlSpecification->FieldByName("Fminmin")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+  //**************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("Fptp")->AsString=="True" || DataModule1->SqlSpecification->FieldByName("Fptp_2")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Fptp,ppm";
+  Nar[19]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                          if(DataModule1->SqlSpecification->FieldByName("Fptp")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Fptpmax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[19]][N+2]=DataModule1->SqlSpecification->FieldByName("Fptpmax")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("Fptpmin")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[19]][N+3]=DataModule1->SqlSpecification->FieldByName("Fptpmin")->AsString;
+                                 }
+                           }
+                           if(DataModule1->SqlSpecification->FieldByName("Fptp_2")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Fptp_2max")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[19]][N+2]=DataModule1->SqlSpecification->FieldByName("Fptp_2max")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("Fptp_2min")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[19]][N+3]=DataModule1->SqlSpecification->FieldByName("Fptp_2min")->AsString;
+                                 }
+                           }
+
+
+
+                    }
+  k=k+1;
+  }
+  //*************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("M")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Монотонность,ppm";
+  Nar[20]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Mmax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[20]][N+2]=DataModule1->SqlSpecification->FieldByName("Mmax")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("Mmin")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[20]][N+3]=DataModule1->SqlSpecification->FieldByName("Mmin")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+ //**************************************************************
+if(DataModule1->SqlSpecification->FieldByName("S")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Наклон,ppm";
+  Nar[21]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("Smax")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[21]][N+2]=DataModule1->SqlSpecification->FieldByName("Smax")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("Smin")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[21]][N+3]=DataModule1->SqlSpecification->FieldByName("Smin")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+  //************************************************************************
+  if(DataModule1->SqlSpecification->FieldByName("F")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="F,Mhz";
+  Nar[23]=k;
+  k=k+1;
+  }
+  //**********************************************************************
+   //*****************************************************************************************************************************
+   if(DataModule1->SqlSpecification->FieldByName("FTx")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]=" F(T="+DataModule1->SqlSpecification->FieldByName("Ftxt")->AsString+")";
+  Nar[24]=k;
+  k=k+1;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                       if(DataModule1->SqlSpecification->FieldByName("FTmax")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[24]][N+2]=DataModule1->SqlSpecification->FieldByName("FTmax")->AsString;
+                         }
+                       if(DataModule1->SqlSpecification->FieldByName("FTmin")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[24]][N+3]=DataModule1->SqlSpecification->FieldByName("FTmin")->AsString;
+                         }
+
+                    }
+
+
+
+  }
+//-------------------------------------------------------------------------------------------------------------------------------
+ if(DataModule1->SqlSpecification->FieldByName("Rmax-Rmin")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Rmax-Rmin";
+  Nar[25]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("RR1max")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[25]][N+2]=DataModule1->SqlSpecification->FieldByName("RR1max")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("RR1min")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[25]][N+3]=DataModule1->SqlSpecification->FieldByName("RR1min")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+ //-------------------------------------------------------------------------------------------------------------------------------------------
+ if(DataModule1->SqlSpecification->FieldByName("C0_C1")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="C0/C1";
+  Nar[26]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("C0_C1max")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[26]][N+2]=DataModule1->SqlSpecification->FieldByName("C0_C1max")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("C0_C1min")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[26]][N+3]=DataModule1->SqlSpecification->FieldByName("C0_C1min")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+
+  //-------------------------------------------------------------------------------------------------------------------------------------------
+ if(DataModule1->SqlSpecification->FieldByName("C1_2C0")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Перестройка";
+  Nar[33]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("C1_2C0max")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[33]][N+2]=DataModule1->SqlSpecification->FieldByName("C1_2C0max")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("C1_2C0min")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[33]][N+3]=DataModule1->SqlSpecification->FieldByName("C1_2C0min")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+ //---------------------------------------------------------------------------------------------------------
+ if(DataModule1->SqlSpecification->FieldByName("RR2")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]="Rmax/R25";
+  Nar[27]=k;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                              if(DataModule1->SqlSpecification->FieldByName("RR2max")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[27]][N+2]=DataModule1->SqlSpecification->FieldByName("RR2max")->AsString;
+                                }
+                                if(DataModule1->SqlSpecification->FieldByName("RR2min")->AsString!="no"){
+                                             ResultForm->ResultGrid->Cells[Nar[27]][N+3]=DataModule1->SqlSpecification->FieldByName("RR2min")->AsString;
+                                 }
+                    }
+  k=k+1;
+  }
+    //*****************************************************************************************************************************
+   if(DataModule1->SqlSpecification->FieldByName("Ft1")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]=" F(T="+DataModule1->SqlSpecification->FieldByName("Ft1t")->AsString+")";
+  Nar[28]=k;
+  k=k+1;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                       if(DataModule1->SqlSpecification->FieldByName("Ft1max")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[28]][N+2]=DataModule1->SqlSpecification->FieldByName("Ft1max")->AsString;
+                         }
+                       if(DataModule1->SqlSpecification->FieldByName("Ft1min")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[28]][N+3]=DataModule1->SqlSpecification->FieldByName("Ft1min")->AsString;
+                         }
+
+                    }
+
+
+
+  }
+
+    //*****************************************************************************************************************************
+   if(DataModule1->SqlSpecification->FieldByName("Ft2")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]=" F(T="+DataModule1->SqlSpecification->FieldByName("Ft2t")->AsString+")";
+  Nar[29]=k;
+  k=k+1;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                       if(DataModule1->SqlSpecification->FieldByName("Ft2max")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[29]][N+2]=DataModule1->SqlSpecification->FieldByName("Ft2max")->AsString;
+                         }
+                       if(DataModule1->SqlSpecification->FieldByName("Ft2min")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[29]][N+3]=DataModule1->SqlSpecification->FieldByName("Ft2min")->AsString;
+                         }
+
+                    }
+
+
+
+  }
+   if(DataModule1->SqlSpecification->FieldByName("Ft3")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]=" F(T="+DataModule1->SqlSpecification->FieldByName("Ft3t")->AsString+")";
+  Nar[30]=k;
+  k=k+1;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                       if(DataModule1->SqlSpecification->FieldByName("Ft3max")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[30]][N+2]=DataModule1->SqlSpecification->FieldByName("Ft3max")->AsString;
+                         }
+                       if(DataModule1->SqlSpecification->FieldByName("Ft3min")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[30]][N+3]=DataModule1->SqlSpecification->FieldByName("Ft3min")->AsString;
+                         }
+
+                    }
+
+
+
+  }
+    if(DataModule1->SqlSpecification->FieldByName("Ft4")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]=" F(T="+DataModule1->SqlSpecification->FieldByName("Ft4t")->AsString+")";
+  Nar[31]=k;
+  k=k+1;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                       if(DataModule1->SqlSpecification->FieldByName("Ft4max")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[31]][N+2]=DataModule1->SqlSpecification->FieldByName("Ft4max")->AsString;
+                         }
+                       if(DataModule1->SqlSpecification->FieldByName("Ft4min")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[31]][N+3]=DataModule1->SqlSpecification->FieldByName("Ft4min")->AsString;
+                         }
+
+       }             }
+ //----------------------------------------------------------------------------------------------------------------------------
+
+      if(DataModule1->SqlSpecification->FieldByName("RR3")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]=" R25/Rmin ";
+  Nar[32]=k;
+  k=k+1;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                       if(DataModule1->SqlSpecification->FieldByName("RR3max")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[32]][N+2]=DataModule1->SqlSpecification->FieldByName("RR3max")->AsString;
+                         }
+                       if(DataModule1->SqlSpecification->FieldByName("RR3min")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[32]][N+3]=DataModule1->SqlSpecification->FieldByName("RR3min")->AsString;
+                         }
+
+                    }
+
+     }
+
+//********************************************************************************************************************************************
+
+      if(DataModule1->SqlSpecification->FieldByName("RR4")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]=" Rmax-R25/R25";
+  Nar[33]=k;
+  k=k+1;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                       if(DataModule1->SqlSpecification->FieldByName("RR4max")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[33]][N+2]=DataModule1->SqlSpecification->FieldByName("RR4max")->AsString;
+                         }
+                       if(DataModule1->SqlSpecification->FieldByName("RR4min")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[33]][N+3]=DataModule1->SqlSpecification->FieldByName("RR4min")->AsString;
+                         }
+
+                    }
+
+     }
+
+//*******************************************************************************************************************************************
+       if(DataModule1->SqlSpecification->FieldByName("RR5")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]=" Rmin-R25/R25";
+  Nar[34]=k;
+  k=k+1;
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                       if(DataModule1->SqlSpecification->FieldByName("RR5max")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[34]][N+2]=DataModule1->SqlSpecification->FieldByName("RR5max")->AsString;
+                         }
+                       if(DataModule1->SqlSpecification->FieldByName("RR5min")->AsString!="no"){
+                                    ResultForm->ResultGrid->Cells[Nar[34]][N+3]=DataModule1->SqlSpecification->FieldByName("RR5min")->AsString;
+                         }
+
+                    }
+
+     }
+
+
+
+//---------------------------------------------------------------------------------------------------------------------------------
+  if(DataModule1->SqlSpecification->FieldByName("Status")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[k][0]=" Статус";
+  Nar[22]=k;
+  k=k+1;
+  }
+
+  //********************************************************************** вывод на печать заголовков норм***********************
+  if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[0][N+1]="Нормы";
+  ResultForm->ResultGrid->Cells[0][N+2]="МАКС";
+  ResultForm->ResultGrid->Cells[0][N+3]="МИН";
+  ResultForm->ResultGrid->RowCount=N+4;
+  }
+
+  if(DataModule1->SqlSpecification->FieldByName("Stat")->AsString=="True"){
+  ResultForm->ResultGrid->Cells[1][N+5]="Статистика";
+  ResultForm->ResultGrid->Cells[0][N+6]="Всего";
+  ResultForm->ResultGrid->Cells[0][N+7]="Годных";
+  ResultForm->ResultGrid->Cells[0][N+8]="Бракованных";
+   ResultForm->ResultGrid->Cells[0][N+9]="Выход годных %";
+  ResultForm->ResultGrid->Cells[0][N+10]="Макс";
+  ResultForm->ResultGrid->Cells[0][N+11]="Мин";
+  ResultForm->ResultGrid->Cells[0][N+12]="Среднее";
+  ResultForm->ResultGrid->Cells[0][N+13]="Девиация";
+  ResultForm->ResultGrid->RowCount=N+14;
+
+
+
+  }
+//*********************************************************************************************************************************************************
+//********************************************************************************************************************************************************
+//*******************************************************************************************************************************************************
+
+ }
+  ModifForm->chkPmi->Checked=false;
+  ModifForm->chkCn->Checked=false;
+  btnWork->Enabled=false;
+
+
+//****************************************************************************************************************************
+//****************************************************************************************************************************
+//****************************************************************************************************************************
+
+//---------------------------------------------------------------------------
+}
+
+
+
+void __fastcall TMainForm::btnArchiveClick(TObject *Sender)
+{
+ArchiveForm->Show();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::btnOptionsClick(TObject *Sender)
+{
+OptionsForm->Show();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::FormShow(TObject *Sender)
+{
+AnsiString VerCurrent;
+ResultForm->Color=OptionsForm->ColorBox1->Selected;
+ResultForm->Font->Name=DataModule1->Options->FieldByName("Font")->AsString;
+ResultForm->Font->Color=OptionsForm->ColorBox2->Selected;
+ResultForm->btnClose->Brush->Color=OptionsForm->colorBTN->Selected;
+ResultForm->ResultGrid->FixedColor=OptionsForm->colorFixGrid->Selected;
+SpcForm->Color=OptionsForm->ColorBox1->Selected;
+SpcForm->Font->Name=DataModule1->Options->FieldByName("Font")->AsString;
+SpcForm->Font->Color=OptionsForm->ColorBox2->Selected;
+SpcForm->btnSet->Brush->Color=OptionsForm->colorBTN->Selected;
+SpcForm->btnDetail->Brush->Color=OptionsForm->colorBTN->Selected;
+SpcForm->btnClose->Brush->Color=OptionsForm->colorBTN->Selected;
+SpcForm->btnTemperature->Brush->Color=OptionsForm->colorBTN->Selected;
+SpcForm->navigatorSpc->Color=OptionsForm->ColorBox1->Selected;
+SpcForm->RzPanel1->Color=OptionsForm->ColorBox1->Selected;
+SpcForm->gridSpc->FixedColor=OptionsForm->colorFixGrid->Selected;
+WorkProgress->Color=OptionsForm->ColorBox1->Selected;
+AnsiString Path;
+TRegistry& regKey =*new TRegistry();
+regKey.RootKey=HKEY_CURRENT_USER;
+regKey.OpenKey("SOFTWARE\\MORION\\MeasureSQL",false);
+MainForm->ver->Text=regKey.ReadString("Version");
+VerCurrent=regKey.ReadString("Version");
+Path=regKey.ReadString("Path");
+AnsiString StartVer=regKey.ReadString("Start");
+
+regKey.CloseKey();
+regKey.OpenKey("SOFTWARE\\MORION\\MeasureSQL",true);
+regKey.WriteString("User",DataModule1->Dostup->FieldByName("Name")->AsString);
+regKey.CloseKey();
+AnsiString PathSQL=Path+"MeasureSQL.exe";
+AnsiString PathStart=Path+"MeasureStart.exe";
+regKey.OpenKey("Control Panel\\International",true);
+regKey.WriteString("sDecimal",".");
+regKey.CloseKey();
+SpcForm->Repaint();
+OptionsForm->Color=OptionsForm->ColorBox1->Selected;
+OptionsForm->Font->Name=DataModule1->Options->FieldByName("Font")->AsString;
+OptionsForm->Font->Color=OptionsForm->ColorBox2->Selected;
+OptionsForm->btnClose->Brush->Color=OptionsForm->colorBTN->Selected;
+OptionsForm->btnSet->Brush->Color=OptionsForm->colorBTN->Selected;
+OptionsForm->Repaint();
+NumberForm->Color=OptionsForm->ColorBox1->Selected;
+NumberForm->Font->Name=DataModule1->Options->FieldByName("Font")->AsString;
+NumberForm->Font->Color=OptionsForm->ColorBox2->Selected;
+NumberForm->btnClose->Brush->Color=OptionsForm->colorBTN->Selected;
+NumberForm->btnSet->Brush->Color=OptionsForm->colorBTN->Selected;
+NumberForm->btnNew->Brush->Color=OptionsForm->colorBTN->Selected;
+NumberForm->btnRefresh->Brush->Color=OptionsForm->colorBTN->Selected;
+NumberForm->btnF1->Color=OptionsForm->colorBTN->Selected;
+NumberForm->btnF2->Color=OptionsForm->colorBTN->Selected;
+NumberForm->btnF3->Color=OptionsForm->colorBTN->Selected;
+NumberForm->gridNumbers->FixedColor=OptionsForm->colorFixGrid->Selected;
+NumberForm->navigatorNumber->Color=OptionsForm->ColorBox1->Selected;
+NumberForm->VrProgressBar1->Color=OptionsForm->ColorBox1->Selected;
+NumberForm->gridNumbers->Columns->Items[0]->Title->Color=OptionsForm->ColorBox1->Selected;
+NumberForm->gridNumbers->Columns->Items[1]->Title->Color=OptionsForm->ColorBox1->Selected;
+NumberForm->gridNumbers->Columns->Items[2]->Title->Color=OptionsForm->ColorBox1->Selected;
+NumberForm->gridNumbers->Columns->Items[3]->Title->Color=OptionsForm->ColorBox1->Selected;
+NumberForm->gridNumbers->Columns->Items[4]->Title->Color=OptionsForm->ColorBox1->Selected;
+NumberForm->gridNumbers->Columns->Items[5]->Title->Color=OptionsForm->ColorBox1->Selected;
+NumberForm->gridNumbers->Columns->Items[6]->Title->Color=OptionsForm->ColorBox1->Selected;
+NumberForm->gridNumbers->Columns->Items[0]->Color=OptionsForm->ColorBox1->Selected;
+NumberForm->gridNumbers->Columns->Items[1]->Color=OptionsForm->ColorBox1->Selected;
+NumberForm->gridNumbers->Columns->Items[2]->Color=OptionsForm->ColorBox1->Selected;
+NumberForm->gridNumbers->Columns->Items[3]->Color=OptionsForm->ColorBox1->Selected;
+NumberForm->gridNumbers->Columns->Items[4]->Color=OptionsForm->ColorBox1->Selected;
+NumberForm->gridNumbers->Columns->Items[5]->Color=OptionsForm->ColorBox1->Selected;
+NumberForm->gridNumbers->Columns->Items[6]->Color=OptionsForm->ColorBox1->Selected;
+NumberForm->gridNumbers->Color=OptionsForm->ColorBox1->Selected;
+NumberForm->Repaint();
+
+DataModule1->Version->Active=true;
+     DataModule1->Version->First();
+     AnsiString VerBD;
+     AnsiString SizeBD;
+     AnsiString md5DB;
+     for (int i=0; i<DataModule1->Version->RecordCount;i++){
+          if (DataModule1->Version->FieldByName("Program_ID")->AsString=="9"){
+             VerBD=DataModule1->Version->FieldByName("Version")->AsString;
+             SizeBD=DataModule1->Version->FieldByName("Size")->AsString;
+             md5DB=DataModule1->Version->FieldByName("md5")->AsString;
+             break;
+          }
+
+      DataModule1->Version->Next();
+     }
+       AnsiString Realmd5SQL;
+     AnsiString RealSizeSQL;
+       if (FileExists(PathSQL)){
+     LONGLONG nFileLen = 0;
+     WIN32_FILE_ATTRIBUTE_DATA fData;
+     int res = GetFileAttributesEx(PathSQL.c_str(), GetFileExInfoStandard, &fData);
+      if (res) {
+       nFileLen = (fData.nFileSizeHigh * (MAXDWORD+1)) + fData.nFileSizeLow;
+          }
+          md5wrapper md5;
+       std::string hash = md5.getHashFromFile(PathSQL.c_str());
+             Realmd5SQL=AnsiString(hash.c_str());
+             RealSizeSQL=AnsiString(nFileLen);
+             }
+
+
+      if (VerCurrent!=VerBD || SizeBD!=RealSizeSQL || Realmd5SQL!=md5DB){
+           DataModule1->Update_LOG->SQL->Clear();
+           AnsiString sql="Insert into LOG_Measure_Start (`_Date_`,`Version`,`User`,`Note`,`ProgramType`) Values ('";
+           SYSTEMTIME st;
+GetLocalTime(&st);
+AnsiString stD,stMn,stY,stH,stM,stS;
+stD=st.wDay;
+stMn=st.wMonth;
+stY=st.wYear;
+stH=st.wHour;
+stM=st.wMinute;
+stS=st.wSecond;
+AnsiString User=DataModule1->Dostup->FieldByName("Name")->AsString;
+           sql=sql+stD+"."+stMn+"."+stY+" "+stH+":"+stM+"','"+VerCurrent+"','"+User+"','Необходимо обновление','MeasureSQL')";
+           DataModule1->Update_LOG->SQL->Add(sql);
+           DataModule1->Update_LOG->Execute();
+
+       this->Close();
+      }
+
+
+     DataModule1->Version->First();
+     AnsiString VerStart;
+     AnsiString Size;
+     AnsiString md5sum;
+     for (int i=0; i<DataModule1->Version->RecordCount;i++){
+          if (DataModule1->Version->FieldByName("Program_ID")->AsString=="16"){
+             VerStart=DataModule1->Version->FieldByName("Version")->AsString;
+             Size=DataModule1->Version->FieldByName("Size")->AsString;
+             md5sum=DataModule1->Version->FieldByName("md5")->AsString;
+             break;
+          }
+
+      DataModule1->Version->Next();
+     }
+     AnsiString Realmd5;
+     AnsiString RealSize;
+       if (FileExists(PathStart)){
+     LONGLONG nFileLen = 0;
+     WIN32_FILE_ATTRIBUTE_DATA fData;
+     int res = GetFileAttributesEx(PathStart.c_str(), GetFileExInfoStandard, &fData);
+      if (res) {
+       nFileLen = (fData.nFileSizeHigh * (MAXDWORD+1)) + fData.nFileSizeLow;
+          }
+          md5wrapper md5;
+       std::string hash = md5.getHashFromFile(PathStart.c_str());
+             Realmd5=AnsiString(hash.c_str());
+             RealSize=AnsiString(nFileLen);
+             }
+     if (VerStart!=StartVer || Realmd5!=md5sum || Size!=RealSize ){
+       if (FileExists(PathStart)){
+                      DeleteFile(PathStart);
+       }
+           TMemoryStream *M1 = new TMemoryStream();
+           TStream *B1 = DataModule1->Version->CreateBlobStream(DataModule1->Version->FieldByName("Bin"),bmRead);
+           M1->CopyFrom(B1,B1->Size);
+           M1->SaveToFile(PathStart);
+          delete B1;
+          delete M1;
+                     SYSTEMTIME st;
+        GetLocalTime(&st);
+        AnsiString stD,stMn,stY,stH,stM,stS;
+        stD=st.wDay;
+        stMn=st.wMonth;
+        stY=st.wYear;
+        stH=st.wHour;
+        stM=st.wMinute;
+        stS=st.wSecond;
+        DataModule1->Update_LOG->SQL->Clear();
+          AnsiString User=DataModule1->Dostup->FieldByName("Name")->AsString;
+          AnsiString sql="Insert into LOG_Measure_Start (`_Date_`,`Version`,`User`,`Note`,`ProgramType`) Values ('";
+           sql=sql+stD+"."+stMn+"."+stY+" "+stH+":"+stM+"','"+StartVer+"','"+User+"','Необходимо обновление', 'MeasureStart')";
+           DataModule1->Update_LOG->SQL->Add(sql);
+           DataModule1->Update_LOG->Execute();
+
+     DataModule1->Version->Active=false;
+                   if (FileExists(PathStart)){
+     LONGLONG nFileLen = 0;
+     WIN32_FILE_ATTRIBUTE_DATA fData;
+     int res = GetFileAttributesEx(PathStart.c_str(), GetFileExInfoStandard, &fData);
+      if (res) {
+       nFileLen = (fData.nFileSizeHigh * (MAXDWORD+1)) + fData.nFileSizeLow;
+          }
+          md5wrapper md5;
+       std::string hash = md5.getHashFromFile(PathStart.c_str());
+             Realmd5=AnsiString(hash.c_str());
+             RealSize=AnsiString(nFileLen);
+             
+                if (Realmd5==md5sum & Size==RealSize){
+                   regKey.OpenKey("SOFTWARE\\MORION\\MeasureSQL",true);
+                        regKey.WriteString("Start",VerStart);
+
+                        regKey.CloseKey();
+              SYSTEMTIME st;
+        GetLocalTime(&st);
+        AnsiString stD,stMn,stY,stH,stM,stS;
+        stD=st.wDay;
+        stMn=st.wMonth;
+        stY=st.wYear;
+        stH=st.wHour;
+        stM=st.wMinute;
+        stS=st.wSecond;
+        AnsiString User=DataModule1->Dostup->FieldByName("Name")->AsString;
+      AnsiString sql="Insert into LOG_Measure_Start (`_Date_`,`Version`,`User`,`Note`,`ProgramType`) Values ('";
+           sql=sql+stD+"."+stMn+"."+stY+" "+stH+":"+stM+"','"+VerStart+"','"+User+"','Обновление завершено', 'MeasureStart')";
+           DataModule1->Update_LOG->SQL->Clear();
+           DataModule1->Update_LOG->SQL->Add(sql);
+           DataModule1->Update_LOG->Execute();
+
+                }
+                else {
+                    SYSTEMTIME st;
+        GetLocalTime(&st);
+        AnsiString stD,stMn,stY,stH,stM,stS;
+        stD=st.wDay;
+        stMn=st.wMonth;
+        stY=st.wYear;
+        stH=st.wHour;
+        stM=st.wMinute;
+        stS=st.wSecond;
+        AnsiString User=DataModule1->Dostup->FieldByName("Name")->AsString;
+        ShowMessage("Ошибка обновления обратитесь а администратору сети");
+      AnsiString sql="Insert into LOG_Measure_Start (`_Date_`,`Version`,`User`,`Note`,`ProgramType`) Values ('";
+           sql=sql+stD+"."+stMn+"."+stY+" "+stH+":"+stM+"','"+StartVer+"','"+User+"','Ошибка обновления', 'MeasureStart')";
+           DataModule1->Update_LOG->SQL->Clear();
+           DataModule1->Update_LOG->SQL->Add(sql);
+           DataModule1->Update_LOG->Execute();
+
+
+                }
+
+
+
+         }
+         else {
+
+           ShowMessage("Ошибка обновления обратитесь а администратору сети");
+              SYSTEMTIME st;
+        GetLocalTime(&st);
+        AnsiString stD,stMn,stY,stH,stM,stS;
+        stD=st.wDay;
+        stMn=st.wMonth;
+        stY=st.wYear;
+        stH=st.wHour;
+        stM=st.wMinute;
+        stS=st.wSecond;
+        AnsiString User=DataModule1->Dostup->FieldByName("Name")->AsString;
+       AnsiString sql="Insert into LOG_Measure_Start (`_Date_`,`Version`,`User`,`Note`,`ProgramType`) Values ('";
+           sql=sql+stD+"."+stMn+"."+stY+" "+stH+":"+stM+"','"+StartVer+"','"+User+"','Ошибка обновления', 'MeasureStart')";
+           DataModule1->Update_LOG->SQL->Clear();
+           DataModule1->Update_LOG->SQL->Add(sql);
+           DataModule1->Update_LOG->Execute();
+         }
+         }
+ DataModule1->Options->Active=false;
+ DataModule1->Options->Active=true;
+ ForceDirectories(DataModule1->Options->FieldByName("ReportDir")->AsString+"\\PhazeNoise\\XLS");
+ ForceDirectories(DataModule1->Options->FieldByName("ReportDir")->AsString+"\\PhazeNoise\\RTF");
+ ForceDirectories(DataModule1->Options->FieldByName("ReportDir")->AsString+"\\PhazeNoise\\JPG");
+ ForceDirectories(DataModule1->Options->FieldByName("ReportDir")->AsString+"\\JPG");
+ ForceDirectories(DataModule1->Options->FieldByName("ReportDir")->AsString+"\\XLS");
+ ForceDirectories(DataModule1->Options->FieldByName("ReportDir")->AsString+"\\RTF");
+ ForceDirectories(DataModule1->Options->FieldByName("ExportDir")->AsString+"\\PhazeNoise\\XLS");
+ ForceDirectories(DataModule1->Options->FieldByName("ExportDir")->AsString+"\\PhazeNoise\\RTF");
+ ForceDirectories(DataModule1->Options->FieldByName("ExportDir")->AsString+"\\PhazeNoise\\JPG");
+ ForceDirectories(DataModule1->Options->FieldByName("ExportDir")->AsString+"\\XLS");
+ ForceDirectories(DataModule1->Options->FieldByName("ExportDir")->AsString+"\\RTF");
+ ForceDirectories(DataModule1->Options->FieldByName("ExportDir")->AsString+"\\JPG");
+ ForceDirectories(DataModule1->Options->FieldByName("ImportDir")->AsString);
+ ForceDirectories(DataModule1->Options->FieldByName("GraphDir")->AsString);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::btnDataClick(TObject *Sender)
+{
+ DataForm->Show();
+}
+//---------------------------------------------------------------------------
+
+
+
+void __fastcall TMainForm::N1Click(TObject *Sender)
+{
+ProtokolForm->Show();
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TMainForm::N2Click(TObject *Sender)
+{
+RecForm->Show();
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TMainForm::N4Click(TObject *Sender)
+{
+OldForm->Show();
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TMainForm::N6Click(TObject *Sender)
+{
+PrBuildForm->Show();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::N8Click(TObject *Sender)
+{
+ DataForm->Show();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::PMClick(TObject *Sender)
+{
+PMForm->Show();
+}
+//---------------------------------------------------------------------------
+
+
+
+void __fastcall TMainForm::DataClick(TObject *Sender)
+{
+ DataForm->Show(); 
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TMainForm::N9Click(TObject *Sender)
+{
+TermoForm->Show();
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TMainForm::N23Click(TObject *Sender)
+{
+OldForm->Show();        
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::N17Click(TObject *Sender)
+{
+SpcForm->Show();        
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::N21Click(TObject *Sender)
+{
+ArchiveForm->Show();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::N12Click(TObject *Sender)
+{
+GpForm->Show();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::N13Click(TObject *Sender)
+{
+PMForm->Show();
+MainForm->Hide();
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TMainForm::N14Click(TObject *Sender)
+{
+RecForm->Show();        
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::N15Click(TObject *Sender)
+{
+ WriteForm->Show();         
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::N18Click(TObject *Sender)
+{
+NewSpcForm->Show();
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TMainForm::N3Click(TObject *Sender)
+{
+ModifForm->Show();        
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::N5Click(TObject *Sender)
+{
+ProtokolForm->Show();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::N7Click(TObject *Sender)
+{
+ArchiveForm->Show();
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TMainForm::btnTempDClick(TObject *Sender)
+{
+ TnumberForm->Show();
+ this->Hide();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::N22Click(TObject *Sender)
+{
+ TempMainForm->Show();
+ TempDataModule->Machine->Active=true;
+TempMainForm->edtMachine->Clear();
+TempDataModule->Machine->First();
+for (int i=0;i<TempDataModule->Machine->RecordCount;i++){
+ TempMainForm->edtMachine->Add(TempDataModule->Machine->FieldByName("Name")->AsString);
+
+ TempDataModule->Machine->Next();
+}
+TempDataModule->Machine->Active=false;
+TempDataModule->Chambers->Active=true;
+ TempMainForm->edtChamber->Clear();
+ TempDataModule->Chambers->First();
+for (int i=0;i<TempDataModule->Chambers->RecordCount;i++){
+ TempMainForm->edtChamber->Add(TempDataModule->Chambers->FieldByName("Name")->AsString);
+
+ TempDataModule->Chambers->Next();
+}
+
+
+TempDataModule->Chambers->Active=false;
+TempDataModule->TermoDatchik->Active=true;
+TempMainForm->edtTempD->Clear();
+TempDataModule->TermoDatchik->First();
+ for (int i=0;i<TempDataModule->TermoDatchik->RecordCount;i++){
+ TempMainForm->edtTempD->Add(TempDataModule->TermoDatchik->FieldByName("ID")->AsString);
+
+ TempDataModule->TermoDatchik->Next();
+}
+
+
+ TempDataModule->TermoDatchik->Active=false;
+ this->Hide();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::barCodeButtonClick(TObject *Sender)
+{
+BarCodeMskForm->Show();
+this->Hide();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::AdvGlassButton1Click(TObject *Sender)
+{
+Dialog1Form->Show();
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TMainForm::addProtokolClick(TObject *Sender)
+{
+ this->Hide();
+ FileLoadForm->Show();       
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::N31Click(TObject *Sender)
+{
+Protokol_Select_Form->Show();
+this->Hide();
+}
+//---------------------------------------------------------------------------
+
+
+
+
+
+void __fastcall TMainForm::N20Click(TObject *Sender)
+{
+PhazeNoiseForm->Show();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::N29Click(TObject *Sender)
+{
+Par_Form->Show();
+this->Hide();
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TMainForm::N30Click(TObject *Sender)
+{
+SortResultForm->Show();
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TMainForm::N32Click(TObject *Sender)
+{
+SpektrOLDForm->Show();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::selProverkaClick(TObject *Sender)
+{
+Proverka_PH_Form->Visible=true;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::N33Click(TObject *Sender)
+{
+Protokol_Print_Form->Visible=true;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::Set_Measure_SPCExecute(TObject *Sender)
+{
+MainForm->ledSpc->Active=true;
+MainForm->SpcLabel->Caption=DataModule1->SqlSpecification->FieldByName("Name")->AsString;
+MSK_Label->Caption=NumberMForm->edtMSK->Text;
+}
+//---------------------------------------------------------------------------
+

@@ -1,0 +1,532 @@
+object PMDetailForm: TPMDetailForm
+  Left = 328
+  Top = 366
+  BorderStyle = bsNone
+  Caption = 'PMDetailForm'
+  ClientHeight = 374
+  ClientWidth = 789
+  Color = clBlack
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clLime
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object RzPageControl1: TRzPageControl
+    Left = 0
+    Top = 0
+    Width = 789
+    Height = 328
+    ActivePage = TabSheet2
+    Align = alClient
+    BackgroundColor = clBlack
+    Color = clBlack
+    UseColoredTabs = True
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clLime
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    FlatColor = clTeal
+    ParentBackgroundColor = False
+    ParentColor = False
+    ParentFont = False
+    ShowMenuButton = True
+    SoftCorners = True
+    TabColors.Unselected = clMaroon
+    TabIndex = 1
+    TabOrder = 0
+    TextColors.Selected = clYellow
+    TextColors.Unselected = clTeal
+    FixedDimension = 19
+    object TabSheet1: TRzTabSheet
+      Color = clBlack
+      Caption = #1055#1072#1088#1072#1084#1077#1090#1088#1099
+      object gridPar: TRzDBGrid
+        Left = 0
+        Top = 0
+        Width = 785
+        Height = 305
+        Align = alClient
+        Color = clNone
+        Ctl3D = True
+        DataSource = DataModule2.Source2
+        FixedColor = clBlack
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clYellow
+        Font.Height = -11
+        Font.Name = 'MS Sans Serif'
+        Font.Style = []
+        Options = [dgTitles, dgIndicator, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgCancelOnExit]
+        ParentCtl3D = False
+        ParentFont = False
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clLime
+        TitleFont.Height = -13
+        TitleFont.Name = 'MS Sans Serif'
+        TitleFont.Style = []
+        OnDblClick = gridParDblClick
+        FocusColor = clBlack
+        FrameColor = clRed
+        FixedLineColor = clRed
+        LineColor = clLime
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'ID'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'N'
+            Title.Caption = #1053#1086#1084#1077#1088
+            Width = 68
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Position'
+            Title.Caption = #1055#1086#1079#1080#1094#1080#1103
+            Width = 61
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'File'
+            Title.Caption = #1060#1072#1081#1083
+            Width = 100
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'intervalgf'
+            Title.Caption = #1048#1085#1090#1077#1088#1074#1072#1083
+            Width = 74
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Status'
+            Title.Caption = #1057#1090#1072#1090#1091#1089
+            Width = 70
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Status2'
+            Title.Caption = #1057#1090#1072#1090#1091#1089
+            Width = 65
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Date'
+            Title.Caption = #1044#1072#1090#1072
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'ProtokolN'
+            Title.Caption = #1055#1088#1086#1090#1086#1082#1086#1083
+            Width = 71
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'MSK-M'
+            Title.Caption = #1047#1072#1084#1077#1088' '#8470
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'F'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'R'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'C0'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Cq'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'L'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Q'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Tmax'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Tmin'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'TurnOver'
+            Visible = True
+          end
+          item
+            Alignment = taRightJustify
+            Expanded = False
+            FieldName = 'Slope'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Fptp'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Fmax'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'RcRb'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Fmin'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Rmax'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Rmin'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'R1R2'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Mono'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'F0-Fl'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Rbmax'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Rsp1'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Rsp2'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Rsp3'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Time'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DateR'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Operator'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Fptp_2'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Fmaxm'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'FT'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Spur'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Shum'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Old1'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Old2'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Old3'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'RR1'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Rmax-Rmin'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'C0_C1'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'RR2'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Jmax'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Jmin'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Jptp'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Jt'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'MonoT'
+            Visible = True
+          end>
+      end
+    end
+    object TabSheet2: TRzTabSheet
+      Color = clBlack
+      Caption = #1044#1072#1085#1085#1099#1077' '#1074' '#1080#1085#1090#1077#1088#1074#1072#1083#1077' '#1090#1077#1084#1087#1077#1088#1072#1090#1091#1088
+      object RzDBGrid2: TRzDBGrid
+        Left = 0
+        Top = 0
+        Width = 785
+        Height = 305
+        Align = alClient
+        Color = clNone
+        DataSource = DataModule2.Source1
+        FixedColor = clBlack
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clYellow
+        Font.Height = -11
+        Font.Name = 'MS Sans Serif'
+        Font.Style = []
+        Options = [dgTitles, dgIndicator, dgColLines, dgRowLines, dgTabs, dgRowSelect]
+        ParentFont = False
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clLime
+        TitleFont.Height = -13
+        TitleFont.Name = 'MS Sans Serif'
+        TitleFont.Style = []
+        FocusColor = clBlack
+        FrameColor = clRed
+        FixedLineColor = clRed
+        LineColor = clLime
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'RecordId'
+            Title.Caption = 'ID'
+            Width = 22
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Temp'
+            Title.Caption = 'T'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'N'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Status'
+            Title.Caption = #1057#1090#1072#1090#1091#1089
+            Width = 56
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Status1'
+            Title.Caption = #1057#1090#1072#1090#1091#1089
+            Width = 71
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'F'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'R'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Rb'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'FL'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Mono'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'C0'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Cq'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Q'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'L'
+            Visible = True
+          end>
+      end
+    end
+  end
+  object RzPanel1: TRzPanel
+    Left = 0
+    Top = 328
+    Width = 789
+    Height = 46
+    Align = alBottom
+    BorderColor = clRed
+    BorderShadow = clMaroon
+    BorderWidth = 2
+    Color = clBlack
+    GradientColorStart = clBlack
+    Locked = True
+    TabOrder = 1
+    object DBAdvNavigator1: TDBAdvNavigator
+      Left = 8
+      Top = 13
+      Width = 276
+      Height = 25
+      AutoThemeAdapt = False
+      DataSource = DataModule2.Source2
+      VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast, nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh, nbSetBookmark, nbGotoBookMark]
+      BorderColor = clRed
+      BorderHotColor = clRed
+      Color = clBlack
+      ColorTo = clNone
+      ColorDown = clLime
+      ColorDownTo = clLime
+      ColorHot = clRed
+      ColorHotTo = clRed
+      DeleteDisabled = False
+      InsertDisabled = False
+      GlyphSize = gsSmall
+      GlyphCustomSize = 0
+      Orientation = noHorizontal
+      TabOrder = 0
+      Version = '1.3.1.1'
+    end
+    object bbtnClose: TAdvGlassButton
+      Left = 678
+      Top = 6
+      Width = 100
+      Height = 32
+      BackColor = clRed
+      Caption = #1047#1072#1082#1088#1099#1090#1100
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ForeColor = clWhite
+      GlowColor = 16760205
+      InnerBorderColor = clBlack
+      OuterBorderColor = clWhite
+      ParentFont = False
+      ShineColor = clWhite
+      TabOrder = 1
+      Version = '1.2.2.0'
+      OnClick = btnCloseClick
+    end
+  end
+end

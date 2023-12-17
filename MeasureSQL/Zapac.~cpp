@@ -1,0 +1,40 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "Zapac.h"
+#include "Data.h"
+#include "Spcdetail.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "VrButtons"
+#pragma link "VrControls"
+#pragma link "RzDBEdit"
+#pragma link "RzDBNav"
+#pragma link "RzEdit"
+#pragma link "AdvGlassButton"
+#pragma link "DBAdvNavigator"
+#pragma resource "*.dfm"
+TZapacForm *ZapacForm;
+//---------------------------------------------------------------------------
+__fastcall TZapacForm::TZapacForm(TComponent* Owner)
+        : TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall TZapacForm::btnCloseClick(TObject *Sender)
+{
+SpcDetailForm->Show();
+ZapacForm->Hide();
+}
+//---------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,118 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "dataview.h"
+#include "Data.h"
+#include "Main.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "VrButtons"
+#pragma link "VrControls"
+#pragma link "RzDBGrid"
+#pragma link "RzPanel"
+#pragma link "AdvGlassButton"
+#pragma resource "*.dfm"
+TDataForm *DataForm;
+//---------------------------------------------------------------------------
+__fastcall TDataForm::TDataForm(TComponent* Owner)
+        : TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall TDataForm::AdvGlassButton3Click(TObject *Sender)
+{
+DataForm->Hide();        
+}
+//---------------------------------------------------------------------------
+
+
+
+void __fastcall TDataForm::AdvGlassButton1Click(TObject *Sender)
+{
+RzDBGrid1->Visible=true;
+DataGrid->Visible=false;
+RzDBGrid2->Visible=false;
+RzDBGrid3->Visible=false;
+RzDBGrid4->Visible=false;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TDataForm::AdvGlassButton5Click(TObject *Sender)
+{
+ RzDBGrid1->Visible=false;
+DataGrid->Visible=true;
+RzDBGrid3->Visible=false;
+RzDBGrid2->Visible=false;
+RzDBGrid4->Visible=false;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TDataForm::AdvGlassButton2Click(TObject *Sender)
+{
+RzDBGrid1->Visible=false;
+RzDBGrid2->Visible=true;
+RzDBGrid3->Visible=false;
+DataGrid->Visible=false;
+RzDBGrid4->Visible=false;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TDataForm::FormShow(TObject *Sender)
+{
+if(MainForm->edtMachine->Text=="Saunders" || MainForm->edtMachine->Text=="Saunders1" || MainForm->edtMachine->Text=="Saunders2"){
+ AdvGlassButton1->Visible=true;
+ AdvGlassButton2->Visible=true;
+ AdvGlassButton4->Visible=true;
+
+ AdvGlassButton5->Visible=false;
+ AdvGlassButton6->Visible=false;
+ RzDBGrid1->Visible=true;
+ RzDBGrid2->Visible=false;
+ RzDBGrid3->Visible=false;
+ RzDBGrid4->Visible=false;
+DataGrid->Visible=false;
+
+
+
+}
+else {
+
+  AdvGlassButton1->Visible=false;
+ AdvGlassButton2->Visible=false;
+ AdvGlassButton4->Visible=false;
+
+ AdvGlassButton5->Visible=true;
+ AdvGlassButton6->Visible=true;
+ RzDBGrid1->Visible=false;
+ RzDBGrid2->Visible=false;
+ RzDBGrid3->Visible=false;
+ RzDBGrid4->Visible=false;
+DataGrid->Visible=true;
+
+}
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TDataForm::AdvGlassButton4Click(TObject *Sender)
+{
+RzDBGrid1->Visible=false;
+RzDBGrid2->Visible=false;
+RzDBGrid4->Visible=false;
+RzDBGrid3->Visible=true;
+DataGrid->Visible=false;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TDataForm::AdvGlassButton6Click(TObject *Sender)
+{
+RzDBGrid1->Visible=false;
+RzDBGrid2->Visible=false;
+RzDBGrid3->Visible=false;
+RzDBGrid4->Visible=true;
+DataGrid->Visible=false;
+}
+//---------------------------------------------------------------------------
+

@@ -1,0 +1,2039 @@
+object Par_Form: TPar_Form
+  Left = 481
+  Top = 225
+  Width = 1118
+  Height = 548
+  Caption = #1055#1086#1076#1073#1086#1088' '#1073#1083#1080#1078#1072#1081#1096#1080#1093' '#1087#1072#1088' '#1088#1077#1079#1086#1085#1072#1090#1086#1088#1086#1074
+  Color = clBlack
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clAqua
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnClose = FormClose
+  OnHide = FormHide
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 24
+    Top = 32
+    Width = 81
+    Height = 13
+    Caption = #1058#1080#1087' '#1088#1077#1079#1086#1085#1072#1090#1086#1088#1072
+  end
+  object Label2: TLabel
+    Left = 24
+    Top = 80
+    Width = 75
+    Height = 13
+    Caption = #1057#1087#1077#1094#1080#1092#1080#1082#1072#1094#1080#1103
+  end
+  object Label3: TLabel
+    Left = 24
+    Top = 128
+    Width = 23
+    Height = 13
+    Caption = #1052#1057#1050
+  end
+  object Label9: TLabel
+    Left = 24
+    Top = 176
+    Width = 121
+    Height = 13
+    Caption = #1048#1076#1077#1085#1090#1080#1092#1080#1082#1072#1090#1086#1088' '#1079#1072#1084#1077#1088#1072
+  end
+  object Label4: TLabel
+    Left = 328
+    Top = 24
+    Width = 63
+    Height = 13
+    Caption = #1057#1087#1080#1089#1086#1082' '#1052#1057#1050
+  end
+  object Label5: TLabel
+    Left = 520
+    Top = 24
+    Width = 84
+    Height = 13
+    Caption = #1057#1087#1080#1089#1086#1082' '#1085#1086#1084#1077#1088#1086#1074
+  end
+  object Label6: TLabel
+    Left = 696
+    Top = 24
+    Width = 28
+    Height = 13
+    Caption = #1055#1072#1088#1099
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clRed
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label7: TLabel
+    Left = 160
+    Top = 280
+    Width = 144
+    Height = 13
+    Caption = #1056#1072#1076#1080#1091#1089' '#1087#1086' '#1089#1086#1087#1088#1086#1090#1080#1074#1083#1077#1085#1080#1102' %'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clLime
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label8: TLabel
+    Left = 160
+    Top = 328
+    Width = 119
+    Height = 13
+    Caption = #1056#1072#1076#1080#1091#1089' '#1087#1086' '#1095#1072#1089#1090#1086#1090#1077', ppm'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clLime
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label10: TLabel
+    Left = 160
+    Top = 232
+    Width = 49
+    Height = 13
+    Caption = #1040#1083#1075#1086#1088#1080#1090#1084
+    Color = clBlack
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clFuchsia
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentColor = False
+    ParentFont = False
+  end
+  object VrProgressBar1: TVrProgressBar
+    Left = 32
+    Top = 440
+    Width = 1057
+    Height = 16
+    Bevel.InnerShadow = clBtnShadow
+    Bevel.InnerHighlight = clBtnHighlight
+    Bevel.InnerWidth = 1
+    Bevel.InnerStyle = bsNone
+    Bevel.InnerSpace = 0
+    Bevel.InnerColor = clBtnFace
+    Bevel.OuterShadow = clBtnShadow
+    Bevel.OuterHighlight = clBtnHighlight
+    Bevel.OuterStyle = bsLowered
+    Bevel.OuterOutline = osNone
+    Position = 0
+    StartColor = clAqua
+    EndColor = clFuchsia
+  end
+  object Label11: TLabel
+    Left = 24
+    Top = 288
+    Width = 11
+    Height = 13
+    Caption = 'ID'
+    Color = clBlack
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clFuchsia
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label12: TLabel
+    Left = 328
+    Top = 416
+    Width = 45
+    Height = 13
+    Caption = #1042#1099#1073#1088#1072#1085#1086
+    Color = clBlack
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clFuchsia
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label13: TLabel
+    Left = 512
+    Top = 416
+    Width = 45
+    Height = 13
+    Caption = #1042#1099#1073#1088#1072#1085#1086
+    Color = clBlack
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clFuchsia
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label14: TLabel
+    Left = 688
+    Top = 416
+    Width = 30
+    Height = 13
+    Caption = #1042#1089#1077#1075#1086
+    Color = clBlack
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clRed
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label15: TLabel
+    Left = 464
+    Top = 416
+    Width = 23
+    Height = 13
+    AutoSize = False
+    Color = clBlack
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clFuchsia
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label16: TLabel
+    Left = 632
+    Top = 416
+    Width = 40
+    Height = 17
+    AutoSize = False
+    Color = clBlack
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clFuchsia
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label17: TLabel
+    Left = 811
+    Top = 416
+    Width = 36
+    Height = 13
+    AutoSize = False
+    Color = clBlack
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clRed
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label18: TLabel
+    Left = 864
+    Top = 24
+    Width = 49
+    Height = 13
+    Caption = #1063#1077#1090#1074#1077#1088#1082#1080
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clRed
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label19: TLabel
+    Left = 1019
+    Top = 416
+    Width = 36
+    Height = 13
+    AutoSize = False
+    Color = clBlack
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clRed
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label20: TLabel
+    Left = 864
+    Top = 416
+    Width = 30
+    Height = 13
+    Caption = #1042#1089#1077#1075#1086
+    Color = clBlack
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clRed
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label21: TLabel
+    Left = 216
+    Top = 128
+    Width = 75
+    Height = 13
+    Caption = #1057#1087#1077#1094#1080#1092#1080#1082#1072#1094#1080#1103
+  end
+  object btnClose: TAdvGlassButton
+    Left = 1008
+    Top = 462
+    Width = 84
+    Height = 32
+    BackColor = clRed
+    Caption = #1047#1072#1082#1088#1099#1090#1100
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWhite
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ForeColor = clWhite
+    GlowColor = 16760205
+    InnerBorderColor = clBlack
+    OuterBorderColor = clWhite
+    ParentFont = False
+    ShineColor = clWhite
+    TabOrder = 0
+    Version = '1.2.3.0'
+    OnClick = btnCloseClick
+  end
+  object edtType: TRzComboBox
+    Left = 24
+    Top = 48
+    Width = 105
+    Height = 21
+    Color = clBlack
+    Ctl3D = False
+    DisabledColor = clBlack
+    FlatButtonColor = clLime
+    FlatButtons = True
+    FrameColor = clYellow
+    FrameHotColor = clFuchsia
+    FrameHotTrack = True
+    FrameVisible = True
+    ItemHeight = 13
+    ParentColor = True
+    ParentCtl3D = False
+    Sorted = True
+    TabOrder = 1
+    OnChange = edtTypeChange
+  end
+  object edtSpc: TRzComboBox
+    Left = 24
+    Top = 96
+    Width = 265
+    Height = 21
+    Color = clBlack
+    Ctl3D = False
+    DisabledColor = clBlack
+    FlatButtonColor = clLime
+    FlatButtons = True
+    FrameColor = clYellow
+    FrameHotColor = clFuchsia
+    FrameHotTrack = True
+    FrameVisible = True
+    ItemHeight = 13
+    ParentColor = True
+    ParentCtl3D = False
+    Sorted = True
+    TabOrder = 2
+    OnChange = edtSpcChange
+  end
+  object edtMsk: TRzComboBox
+    Left = 24
+    Top = 144
+    Width = 169
+    Height = 21
+    Color = clBlack
+    Ctl3D = False
+    DisabledColor = clBlack
+    FlatButtonColor = clLime
+    FlatButtons = True
+    FrameColor = clYellow
+    FrameHotColor = clFuchsia
+    FrameHotTrack = True
+    FrameVisible = True
+    ItemHeight = 13
+    ParentColor = True
+    ParentCtl3D = False
+    Sorted = True
+    TabOrder = 3
+    OnChange = edtMskChange
+  end
+  object cmb_ID: TRzComboBox
+    Left = 24
+    Top = 192
+    Width = 97
+    Height = 21
+    Color = clBlack
+    Ctl3D = False
+    DisabledColor = clBlack
+    FlatButtonColor = clLime
+    FlatButtons = True
+    FrameColor = clRed
+    FrameHotColor = clFuchsia
+    FrameHotTrack = True
+    FrameVisible = True
+    ItemHeight = 13
+    ParentColor = True
+    ParentCtl3D = False
+    Sorted = True
+    TabOrder = 4
+    OnChange = cmb_IDChange
+  end
+  object viewMSK: TRzCheckList
+    Left = 328
+    Top = 46
+    Width = 161
+    Height = 363
+    ItemFillColor = clYellow
+    ItemFocusColor = clSkyBlue
+    TransparentColor = clBlack
+    OnChange = viewMSKChange
+    Align = alCustom
+    Color = clBlack
+    FrameColor = clLime
+    FrameHotColor = clFuchsia
+    FrameHotTrack = True
+    FrameVisible = True
+    HorzExtent = 21
+    HorzScrollBar = True
+    ItemHeight = 17
+    ParentColor = True
+    Sorted = True
+    TabOrder = 5
+    UseGradients = False
+  end
+  object addButton: TAdvGlassButton
+    Left = 24
+    Top = 246
+    Width = 84
+    Height = 32
+    BackColor = clYellow
+    BackGroundSymbolColor = clLime
+    Caption = #1044#1086#1073#1072#1074#1080#1090#1100
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ForeColor = clWhite
+    GlowColor = 16760205
+    InnerBorderColor = clBlack
+    OuterBorderColor = clWhite
+    ParentFont = False
+    ShineColor = clWhite
+    TabOrder = 6
+    Version = '1.2.3.0'
+    OnClick = addButtonClick
+  end
+  object AdvGlassButton2: TAdvGlassButton
+    Left = 32
+    Top = 390
+    Width = 281
+    Height = 32
+    BackColor = clLime
+    BackGroundSymbolColor = clLime
+    Caption = #1054#1087#1088#1077#1076#1077#1083#1080#1090#1100' '#1087#1072#1088#1099
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ForeColor = clWhite
+    GlowColor = 16760205
+    InnerBorderColor = clBlack
+    OuterBorderColor = clWhite
+    ParentFont = False
+    ShineColor = clWhite
+    TabOrder = 7
+    Version = '1.2.3.0'
+    OnClick = AdvGlassButton2Click
+  end
+  object AdvGlassButton3: TAdvGlassButton
+    Left = 32
+    Top = 462
+    Width = 89
+    Height = 32
+    BackColor = clPurple
+    BackGroundSymbolColor = clLime
+    Caption = #1055#1077#1095#1072#1090#1100
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWhite
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ForeColor = clWhite
+    GlowColor = 16760205
+    InnerBorderColor = clBlack
+    OuterBorderColor = clWhite
+    ParentFont = False
+    ShineColor = clWhite
+    TabOrder = 8
+    Version = '1.2.3.0'
+    OnClick = AdvGlassButton3Click
+  end
+  object viewNumber: TRzCheckList
+    Left = 512
+    Top = 46
+    Width = 161
+    Height = 363
+    ItemFillColor = clYellow
+    ItemFocusColor = clSkyBlue
+    TransparentColor = clBlack
+    OnChange = viewNumberChange
+    Align = alCustom
+    Color = clBlack
+    FrameColor = clLime
+    FrameHotColor = clFuchsia
+    FrameHotTrack = True
+    FrameVisible = True
+    HorzExtent = 21
+    HorzScrollBar = True
+    ItemHeight = 17
+    ParentColor = True
+    Sorted = True
+    TabOrder = 9
+    UseGradients = False
+  end
+  object viewPar: TRzCheckList
+    Left = 688
+    Top = 46
+    Width = 161
+    Height = 363
+    ItemFillColor = clYellow
+    ItemFocusColor = clSkyBlue
+    TransparentColor = clBlack
+    Align = alCustom
+    Color = clBlack
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clRed
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    FrameColor = clRed
+    FrameHotColor = clRed
+    FrameHotTrack = True
+    FrameVisible = True
+    HorzExtent = 21
+    HorzScrollBar = True
+    ItemHeight = 17
+    ParentColor = True
+    ParentFont = False
+    Sorted = True
+    TabOrder = 10
+    UseGradients = False
+  end
+  object edt: TCheckBox
+    Left = 24
+    Top = 352
+    Width = 113
+    Height = 17
+    Caption = #1090#1086#1083#1100#1082#1086' '#1075#1086#1076#1085#1099#1077
+    TabOrder = 11
+  end
+  object CheckBox1: TCheckBox
+    Left = 24
+    Top = 328
+    Width = 113
+    Height = 17
+    Caption = #1041#1077#1079' '#1087#1072#1088#1099
+    TabOrder = 12
+  end
+  object edtR2: TRzEdit
+    Left = 160
+    Top = 304
+    Width = 57
+    Height = 21
+    Color = clBlack
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clLime
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    FrameColor = clPurple
+    FrameHotColor = clYellow
+    FrameHotTrack = True
+    FrameVisible = True
+    ParentFont = False
+    TabOrder = 13
+  end
+  object edtF2: TRzEdit
+    Left = 160
+    Top = 352
+    Width = 57
+    Height = 21
+    Color = clBlack
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clLime
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    FrameColor = clPurple
+    FrameHotColor = clYellow
+    FrameHotTrack = True
+    FrameVisible = True
+    ParentFont = False
+    TabOrder = 14
+  end
+  object AdvGlassButton4: TAdvGlassButton
+    Left = 128
+    Top = 462
+    Width = 97
+    Height = 32
+    BackColor = clNavy
+    BackGroundSymbolColor = clLime
+    Caption = #1042#1099#1076#1077#1083#1080#1090#1100' '#1074#1089#1077
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWhite
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ForeColor = clWhite
+    GlowColor = 16760205
+    InnerBorderColor = clBlack
+    OuterBorderColor = clWhite
+    ParentFont = False
+    ShineColor = clWhite
+    TabOrder = 15
+    Version = '1.2.3.0'
+    OnClick = AdvGlassButton4Click
+  end
+  object AdvGlassButton5: TAdvGlassButton
+    Left = 232
+    Top = 462
+    Width = 97
+    Height = 32
+    BackColor = clNavy
+    BackGroundSymbolColor = clLime
+    Caption = #1054#1095#1080#1089#1090#1080#1090#1100' '#1074#1089#1077
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWhite
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ForeColor = clWhite
+    GlowColor = 16760205
+    InnerBorderColor = clBlack
+    OuterBorderColor = clWhite
+    ParentFont = False
+    ShineColor = clWhite
+    TabOrder = 16
+    Version = '1.2.3.0'
+    OnClick = AdvGlassButton5Click
+  end
+  object RzComboBox1: TRzComboBox
+    Left = 160
+    Top = 256
+    Width = 153
+    Height = 21
+    BeepOnInvalidKey = False
+    Color = clBlack
+    Ctl3D = False
+    DisabledColor = clBlack
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clFuchsia
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    FlatButtonColor = clLime
+    FlatButtons = True
+    FrameColor = clFuchsia
+    FrameHotColor = clFuchsia
+    FrameHotTrack = True
+    FrameVisible = True
+    ItemHeight = 13
+    ParentColor = True
+    ParentCtl3D = False
+    ParentFont = False
+    Sorted = True
+    TabOrder = 17
+    Text = #1052#1072#1082#1089#1080#1084#1072#1083#1100#1085#1086#1077' '#1095#1080#1089#1083#1086' '#1087#1072#1088
+    Items.Strings = (
+      #1052#1072#1082#1089#1080#1084#1072#1083#1100#1085#1086#1077' '#1095#1080#1089#1083#1086' '#1087#1072#1088
+      #1054#1087#1090#1080#1084#1072#1083#1100#1085#1099#1081' '#1087#1086' '#1087#1072#1088#1072#1084#1077#1090#1088#1072#1084
+      #1055#1086' '#1084#1080#1085#1080#1084#1072#1083#1100#1085#1086#1081' '#1095#1072#1089#1090#1086#1090#1077
+      #1055#1086' '#1084#1080#1085#1080#1084#1072#1083#1100#1085#1086#1084#1091' '#1089#1086#1087#1088#1086#1090#1080#1074#1083#1077#1085#1080#1102)
+  end
+  object viewMeasureID: TRzCheckList
+    Left = 1120
+    Top = 54
+    Width = 161
+    Height = 382
+    ItemFillColor = clYellow
+    ItemFocusColor = clSkyBlue
+    TransparentColor = clBlack
+    Align = alCustom
+    Color = clBlack
+    FrameColor = clLime
+    FrameHotColor = clRed
+    FrameHotTrack = True
+    FrameVisible = True
+    HorzExtent = 21
+    HorzScrollBar = True
+    ItemHeight = 17
+    ParentColor = True
+    Sorted = True
+    TabOrder = 18
+    UseGradients = False
+    Visible = False
+  end
+  object RzEdit2: TRzEdit
+    Left = 24
+    Top = 304
+    Width = 121
+    Height = 21
+    Color = clBlack
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clLime
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    FrameColor = clPurple
+    FrameHotColor = clYellow
+    FrameHotTrack = True
+    FrameVisible = True
+    ParentFont = False
+    TabOrder = 19
+    Visible = False
+  end
+  object AdvGlassButton1: TAdvGlassButton
+    Left = 336
+    Top = 462
+    Width = 113
+    Height = 32
+    BackColor = clMaroon
+    BackGroundSymbolColor = clMaroon
+    Caption = #1054#1095#1080#1089#1090#1080#1090#1100' '#1089#1087#1080#1089#1082#1080
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWhite
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ForeColor = clWhite
+    GlowColor = 16760205
+    InnerBorderColor = clBlack
+    OuterBorderColor = clWhite
+    ParentFont = False
+    ShineColor = clWhite
+    TabOrder = 20
+    Version = '1.2.3.0'
+    OnClick = AdvGlassButton1Click
+  end
+  object viewPar2: TRzCheckList
+    Left = 864
+    Top = 46
+    Width = 225
+    Height = 363
+    ItemFillColor = clYellow
+    ItemFocusColor = clSkyBlue
+    TransparentColor = clBlack
+    Align = alCustom
+    Color = clBlack
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clRed
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    FrameColor = clRed
+    FrameHotColor = clRed
+    FrameHotTrack = True
+    FrameVisible = True
+    HorzExtent = 21
+    HorzScrollBar = True
+    ItemHeight = 17
+    ParentColor = True
+    ParentFont = False
+    Sorted = True
+    TabOrder = 21
+    UseGradients = False
+  end
+  object edtR4: TRzEdit
+    Left = 232
+    Top = 304
+    Width = 57
+    Height = 21
+    Color = clBlack
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clLime
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    FrameColor = clPurple
+    FrameHotColor = clYellow
+    FrameHotTrack = True
+    FrameVisible = True
+    ParentFont = False
+    TabOrder = 22
+  end
+  object edtF4: TRzEdit
+    Left = 232
+    Top = 352
+    Width = 57
+    Height = 21
+    Color = clBlack
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clLime
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    FrameColor = clPurple
+    FrameHotColor = clYellow
+    FrameHotTrack = True
+    FrameVisible = True
+    ParentFont = False
+    TabOrder = 23
+  end
+  object par_id: TRzComboBox
+    Left = 992
+    Top = 16
+    Width = 97
+    Height = 21
+    Color = clBlack
+    Ctl3D = False
+    DisabledColor = clBlack
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWhite
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    FlatButtonColor = clLime
+    FlatButtons = True
+    FrameColor = clNavy
+    FrameHotColor = clFuchsia
+    FrameHotTrack = True
+    FrameVisible = True
+    ItemHeight = 13
+    ParentColor = True
+    ParentCtl3D = False
+    ParentFont = False
+    Sorted = True
+    TabOrder = 24
+    OnChange = cmb_IDChange
+  end
+  object psi_par_data: TfrxDBDataset
+    UserName = 'psi_par_data'
+    CloseDataSource = False
+    FieldAliases.Strings = (
+      'ID=ID'
+      'N1=N1'
+      'N2=N2'
+      'Msk1=Msk1'
+      'Msk2=Msk2'
+      'Measure_ID1=Measure_ID1'
+      'Measure_ID2=Measure_ID2'
+      'Par_ID=Par_ID')
+    DataSet = DataModule2.psi_par_data_print
+    BCDToCurrency = False
+    Left = 192
+    Top = 16
+  end
+  object frxReport1: TfrxReport
+    Version = '4.9'
+    DataSetName = 'frxUserDataSet1'
+    DotMatrixReport = False
+    IniFile = '\Software\Fast Reports'
+    PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]
+    PreviewOptions.Zoom = 1
+    PrintOptions.Printer = #1055#1086' '#1091#1084#1086#1083#1095#1072#1085#1080#1102
+    PrintOptions.PrintOnSheet = 0
+    ReportOptions.CreateDate = 39953.7254732639
+    ReportOptions.LastChange = 41970.6866694097
+    ScriptLanguage = 'BasicScript'
+    ScriptText.Strings = (
+      '  ')
+    Left = 152
+    Top = 16
+    Datasets = <
+      item
+        DataSet = Dopusk
+        DataSetName = 'Dopusk'
+      end
+      item
+        DataSet = psi_par_data
+        DataSetName = 'psi_par_data'
+      end
+      item
+        DataSet = psi_par_data_2
+        DataSetName = 'psi_par_data_2'
+      end
+      item
+        DataSet = psi_par_data_temp
+        DataSetName = 'psi_par_data_temp'
+      end
+      item
+        DataSet = Spc
+        DataSetName = 'Spc'
+      end>
+    Variables = <>
+    Style = <>
+    object Data: TfrxDataPage
+      Height = 1000
+      Width = 1000
+    end
+    object Page1: TfrxReportPage
+      PaperWidth = 210
+      PaperHeight = 297
+      PaperSize = 9
+      LeftMargin = 10
+      RightMargin = 10
+      TopMargin = 10
+      BottomMargin = 10
+      Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+      object ReportTitle1: TfrxReportTitle
+        Height = 117.16543
+        Top = 18.89765
+        Width = 718.1107
+        OnBeforePrint = 'ReportTitle1OnBeforePrint'
+        object Memo1: TfrxMemoView
+          Left = 15.11812
+          Width = 396.85065
+          Height = 18.89765
+          ShowHint = False
+          Memo.UTF8 = (
+            
+              #1056#8217#1057#8249#1056#177#1056#1109#1057#1026#1056#1108#1056#176' '#1057#1026#1056#181#1056#183#1056#1109#1056#1029#1056#176#1057#8218#1056#1109#1057#1026#1056#1109#1056#1030' '#1056#1111#1056#1109' '#1057#8225#1056#176#1057#1027#1057#8218#1056#1109#1057#8218#1056#181' '#1056#1105' '#1057#1027#1056 +
+              #1109#1056#1111#1057#1026#1056#1109#1057#8218#1056#1105#1056#1030#1056#187#1056#181#1056#1029#1056#1105#1057#1035)
+        end
+        object Memo4: TfrxMemoView
+          Left = 15.11812
+          Top = 45.35436
+          Width = 143.62214
+          Height = 18.89765
+          ShowHint = False
+          Memo.UTF8 = (
+            #1056#1116#1056#1109#1056#1112#1056#181#1057#1026' '#1056#1111#1057#1026#1056#1109#1057#8218#1056#1109#1056#1108#1056#1109#1056#187#1056#176)
+        end
+        object BarCode2: TfrxBarCodeView
+          Left = 219.21274
+          Top = 45.35436
+          Width = 129
+          Height = 18.89765
+          ShowHint = False
+          BarType = bcCode39Extended
+          Expression = '<psi_par_data."Par_ID">'
+          Rotation = 0
+          ShowText = False
+          Text = '12345678'
+          WideBarRatio = 2
+          Zoom = 1
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = []
+        end
+        object Memo5: TfrxMemoView
+          Left = 15.11812
+          Top = 75.5906
+          Width = 143.62214
+          Height = 18.89765
+          ShowHint = False
+          Memo.UTF8 = (
+            #1056#1038#1056#1111#1056#181#1057#8224#1056#1105#1057#8222#1056#1105#1056#1108#1056#176#1057#8224#1056#1105#1057#1039)
+        end
+        object BarCode3: TfrxBarCodeView
+          Left = 219.21274
+          Top = 75.5906
+          Width = 129
+          Height = 18.89765
+          ShowHint = False
+          BarType = bcCode39Extended
+          Expression = '<Spc."ID">'
+          Rotation = 0
+          ShowText = False
+          Text = '12345678'
+          WideBarRatio = 2
+          Zoom = 1
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = []
+        end
+        object Memo22: TfrxMemoView
+          Left = 15.11812
+          Top = 98.26778
+          Width = 113.3859
+          Height = 18.89765
+          ShowHint = False
+          Memo.UTF8 = (
+            #1056#1108#1056#1109#1056#1112#1056#177#1056#1105#1056#1029#1056#176#1057#8224#1056#1105#1057#1039' '#1056#1111#1056#1109' 2')
+        end
+        object Memo2: TfrxMemoView
+          Left = 52.91342
+          Top = 18.89765
+          Width = 321.26005
+          Height = 18.89765
+          ShowHint = False
+          DataField = 'Name'
+          DataSet = Spc
+          DataSetName = 'Spc'
+          Memo.UTF8 = (
+            '[Spc."Name"]')
+        end
+      end
+      object Header1: TfrxHeader
+        Height = 34.01577
+        Top = 196.53556
+        Width = 718.1107
+        object Memo16: TfrxMemoView
+          Width = 64.25201
+          Height = 34.01577
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haCenter
+          Memo.UTF8 = (
+            #1074#8222#8211)
+          ParentFont = False
+          VAlign = vaCenter
+        end
+        object Line36: TfrxLineView
+          Left = 718.1107
+          Height = 34.01577
+          ShowHint = False
+          Frame.Typ = [ftLeft]
+        end
+        object Memo62: TfrxMemoView
+          Left = 64.25201
+          Width = 151.1812
+          Height = 34.01577
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haCenter
+          Memo.UTF8 = (
+            #1056#1116#1056#1109#1056#1112#1056#181#1057#1026'('#1056#1114#1057#1027#1056#1108')')
+          ParentFont = False
+          VAlign = vaCenter
+        end
+        object Memo3: TfrxMemoView
+          Left = 215.43321
+          Width = 162.51979
+          Height = 34.01577
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haCenter
+          Memo.UTF8 = (
+            #1056#1116#1056#1109#1056#1112#1056#181#1057#1026'('#1056#1114#1057#1027#1056#1108')')
+          ParentFont = False
+          VAlign = vaCenter
+        end
+      end
+      object MasterData1: TfrxMasterData
+        Height = 18.89765
+        Top = 253.22851
+        Width = 718.1107
+        OnBeforePrint = 'MasterData1OnBeforePrint'
+        DataSet = psi_par_data
+        DataSetName = 'psi_par_data'
+        RowCount = 0
+        object Memo29: TfrxMemoView
+          Width = 64.25201
+          Height = 18.89765
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haCenter
+          Memo.UTF8 = (
+            '[Line]')
+          ParentFont = False
+          VAlign = vaCenter
+        end
+        object psi_par_dataN1: TfrxMemoView
+          Left = 64.25201
+          Width = 151.1812
+          Height = 18.89765
+          ShowHint = False
+          DataSet = psi_par_data
+          DataSetName = 'psi_par_data'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haCenter
+          Memo.UTF8 = (
+            '[psi_par_data."N1"] ( [psi_par_data."Msk1"] )')
+          ParentFont = False
+          VAlign = vaCenter
+        end
+        object psi_par_dataN2: TfrxMemoView
+          Left = 215.43321
+          Width = 162.51979
+          Height = 18.89765
+          ShowHint = False
+          DataSet = psi_par_data
+          DataSetName = 'psi_par_data'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haCenter
+          Memo.UTF8 = (
+            '[psi_par_data."N2"] ([psi_par_data."Msk2"] )')
+          ParentFont = False
+          VAlign = vaCenter
+        end
+      end
+      object PageFooter1: TfrxPageFooter
+        Height = 22.67718
+        Top = 332.59864
+        Width = 718.1107
+        object Memo30: TfrxMemoView
+          Left = 86.92919
+          Top = 3.77953
+          Width = 37.7953
+          Height = 15.11812
+          ShowHint = False
+          Memo.UTF8 = (
+            '[Page#]')
+        end
+        object Memo31: TfrxMemoView
+          Left = 264.5671
+          Top = 3.77953
+          Width = 79.37013
+          Height = 15.11812
+          ShowHint = False
+          Memo.UTF8 = (
+            '[Date]')
+        end
+        object Memo32: TfrxMemoView
+          Left = 7.55906
+          Top = 3.77953
+          Width = 68.03154
+          Height = 15.11812
+          ShowHint = False
+          Memo.UTF8 = (
+            #1056#1038#1057#8218#1057#1026#1056#176#1056#1029#1056#1105#1057#8224#1056#176)
+        end
+        object Memo33: TfrxMemoView
+          Left = 132.28355
+          Top = 3.77953
+          Width = 22.67718
+          Height = 15.11812
+          ShowHint = False
+          Memo.UTF8 = (
+            #1056#1105#1056#183)
+        end
+        object Memo34: TfrxMemoView
+          Left = 162.51979
+          Top = 3.77953
+          Width = 30.23624
+          Height = 15.11812
+          ShowHint = False
+          Memo.UTF8 = (
+            '[TotalPages#]')
+        end
+        object Memo35: TfrxMemoView
+          Left = 411.96877
+          Top = 3.77953
+          Width = 60.47248
+          Height = 15.11812
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          HAlign = haCenter
+          Memo.UTF8 = (
+            '[Time]')
+          ParentFont = False
+        end
+        object Memo66: TfrxMemoView
+          Left = 211.65368
+          Top = 3.77953
+          Width = 37.7953
+          Height = 15.11812
+          ShowHint = False
+          Memo.UTF8 = (
+            #1056#8221#1056#176#1057#8218#1056#176)
+        end
+        object Memo67: TfrxMemoView
+          Left = 362.83488
+          Top = 3.77953
+          Width = 49.13389
+          Height = 15.11812
+          ShowHint = False
+          Memo.UTF8 = (
+            #1056#8217#1057#1026#1056#181#1056#1112#1057#1039)
+        end
+        object Memo68: TfrxMemoView
+          Left = 476.22078
+          Top = 3.77953
+          Width = 68.03154
+          Height = 15.11812
+          ShowHint = False
+          Memo.UTF8 = (
+            #1056#8217#1057#8249#1056#1111#1056#1109#1056#187#1056#1029#1056#1105#1056#187)
+        end
+        object Memo69: TfrxMemoView
+          Left = 555.59091
+          Top = 3.77953
+          Width = 154.96073
+          Height = 18.89765
+          ShowHint = False
+          DataSetName = 'frxDBDataset4'
+          Memo.UTF8 = (
+            '[Dopusk."Fname"]')
+        end
+      end
+    end
+    object Page2: TfrxReportPage
+      PaperWidth = 210
+      PaperHeight = 297
+      PaperSize = 9
+      LeftMargin = 10
+      RightMargin = 10
+      TopMargin = 10
+      BottomMargin = 10
+      object MasterData2: TfrxMasterData
+        Height = 18.89765
+        Top = 264.5671
+        Width = 718.1107
+        DataSet = psi_par_data_2
+        DataSetName = 'psi_par_data_2'
+        RowCount = 0
+        object psi_par_data_2N1: TfrxMemoView
+          Left = 68.03154
+          Width = 105.82684
+          Height = 18.89765
+          ShowHint = False
+          DataField = 'N1'
+          DataSet = psi_par_data_2
+          DataSetName = 'psi_par_data_2'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haCenter
+          Memo.UTF8 = (
+            '[psi_par_data_2."N1"]')
+          ParentFont = False
+          VAlign = vaCenter
+        end
+        object psi_par_data_2N2: TfrxMemoView
+          Left = 173.85838
+          Width = 120.94496
+          Height = 18.89765
+          ShowHint = False
+          DataField = 'N2'
+          DataSet = psi_par_data_2
+          DataSetName = 'psi_par_data_2'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haCenter
+          Memo.UTF8 = (
+            '[psi_par_data_2."N2"]')
+          ParentFont = False
+          VAlign = vaCenter
+        end
+        object psi_par_data_2N3: TfrxMemoView
+          Left = 294.80334
+          Width = 109.60637
+          Height = 18.89765
+          ShowHint = False
+          DataField = 'N3'
+          DataSet = psi_par_data_2
+          DataSetName = 'psi_par_data_2'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haCenter
+          Memo.UTF8 = (
+            '[psi_par_data_2."N3"]')
+          ParentFont = False
+          VAlign = vaCenter
+        end
+        object psi_par_data_2N4: TfrxMemoView
+          Left = 404.40971
+          Width = 120.94496
+          Height = 18.89765
+          ShowHint = False
+          DataField = 'N4'
+          DataSet = psi_par_data_2
+          DataSetName = 'psi_par_data_2'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haCenter
+          Memo.UTF8 = (
+            '[psi_par_data_2."N4"]')
+          ParentFont = False
+          VAlign = vaCenter
+        end
+        object Memo28: TfrxMemoView
+          Width = 68.03154
+          Height = 18.89765
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haCenter
+          Memo.UTF8 = (
+            '[Line]')
+          ParentFont = False
+          VAlign = vaCenter
+        end
+      end
+      object PageHeader1: TfrxPageHeader
+        Height = 128.50402
+        Top = 18.89765
+        Width = 718.1107
+        object Memo23: TfrxMemoView
+          Left = 3.77953
+          Width = 396.85065
+          Height = 18.89765
+          ShowHint = False
+          Memo.UTF8 = (
+            
+              #1056#8217#1057#8249#1056#177#1056#1109#1057#1026#1056#1108#1056#176' '#1057#1026#1056#181#1056#183#1056#1109#1056#1029#1056#176#1057#8218#1056#1109#1057#1026#1056#1109#1056#1030' '#1056#1111#1056#1109' '#1057#8225#1056#176#1057#1027#1057#8218#1056#1109#1057#8218#1056#181' '#1056#1105' '#1057#1027#1056 +
+              #1109#1056#1111#1057#1026#1056#1109#1057#8218#1056#1105#1056#1030#1056#187#1056#181#1056#1029#1056#1105#1057#1035)
+        end
+        object Memo25: TfrxMemoView
+          Left = 3.77953
+          Top = 45.35436
+          Width = 143.62214
+          Height = 18.89765
+          ShowHint = False
+          Memo.UTF8 = (
+            #1056#1116#1056#1109#1056#1112#1056#181#1057#1026' '#1056#1111#1057#1026#1056#1109#1057#8218#1056#1109#1056#1108#1056#1109#1056#187#1056#176)
+        end
+        object BarCode1: TfrxBarCodeView
+          Left = 219.21274
+          Top = 45.35436
+          Width = 129
+          Height = 18.89765
+          ShowHint = False
+          BarType = bcCode39Extended
+          Expression = '<psi_par_data."Par_ID">'
+          Rotation = 0
+          ShowText = False
+          Text = '12345678'
+          WideBarRatio = 2
+          Zoom = 1
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = []
+        end
+        object Memo26: TfrxMemoView
+          Left = 3.77953
+          Top = 75.5906
+          Width = 143.62214
+          Height = 18.89765
+          ShowHint = False
+          Memo.UTF8 = (
+            #1056#1038#1056#1111#1056#181#1057#8224#1056#1105#1057#8222#1056#1105#1056#1108#1056#176#1057#8224#1056#1105#1057#1039)
+        end
+        object BarCode4: TfrxBarCodeView
+          Left = 219.21274
+          Top = 75.5906
+          Width = 129
+          Height = 18.89765
+          ShowHint = False
+          BarType = bcCode39Extended
+          Expression = '<Spc."ID">'
+          Rotation = 0
+          ShowText = False
+          Text = '12345678'
+          WideBarRatio = 2
+          Zoom = 1
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = []
+        end
+        object Memo27: TfrxMemoView
+          Left = 3.77953
+          Top = 98.26778
+          Width = 113.3859
+          Height = 18.89765
+          ShowHint = False
+          Memo.UTF8 = (
+            #1056#1108#1056#1109#1056#1112#1056#177#1056#1105#1056#1029#1056#176#1057#8224#1056#1105#1057#1039' '#1056#1111#1056#1109' 4')
+        end
+        object Memo24: TfrxMemoView
+          Left = 60.47248
+          Top = 18.89765
+          Width = 321.26005
+          Height = 18.89765
+          ShowHint = False
+          DataField = 'Name'
+          DataSet = Spc
+          DataSetName = 'Spc'
+          Memo.UTF8 = (
+            '[Spc."Name"]')
+        end
+      end
+      object PageFooter2: TfrxPageFooter
+        Height = 22.67718
+        Top = 343.93723
+        Width = 718.1107
+        object Memo6: TfrxMemoView
+          Left = 86.92919
+          Top = 3.77953
+          Width = 37.7953
+          Height = 15.11812
+          ShowHint = False
+          Memo.UTF8 = (
+            '[Page#]')
+        end
+        object Memo7: TfrxMemoView
+          Left = 264.5671
+          Top = 3.77953
+          Width = 79.37013
+          Height = 15.11812
+          ShowHint = False
+          Memo.UTF8 = (
+            '[Date]')
+        end
+        object Memo8: TfrxMemoView
+          Left = 7.55906
+          Top = 3.77953
+          Width = 68.03154
+          Height = 15.11812
+          ShowHint = False
+          Memo.UTF8 = (
+            #1056#1038#1057#8218#1057#1026#1056#176#1056#1029#1056#1105#1057#8224#1056#176)
+        end
+        object Memo9: TfrxMemoView
+          Left = 132.28355
+          Top = 3.77953
+          Width = 22.67718
+          Height = 15.11812
+          ShowHint = False
+          Memo.UTF8 = (
+            #1056#1105#1056#183)
+        end
+        object Memo10: TfrxMemoView
+          Left = 162.51979
+          Top = 3.77953
+          Width = 30.23624
+          Height = 15.11812
+          ShowHint = False
+          Memo.UTF8 = (
+            '[TotalPages#]')
+        end
+        object Memo11: TfrxMemoView
+          Left = 411.96877
+          Top = 3.77953
+          Width = 60.47248
+          Height = 15.11812
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          HAlign = haCenter
+          Memo.UTF8 = (
+            '[Time]')
+          ParentFont = False
+        end
+        object Memo12: TfrxMemoView
+          Left = 211.65368
+          Top = 3.77953
+          Width = 37.7953
+          Height = 15.11812
+          ShowHint = False
+          Memo.UTF8 = (
+            #1056#8221#1056#176#1057#8218#1056#176)
+        end
+        object Memo13: TfrxMemoView
+          Left = 362.83488
+          Top = 3.77953
+          Width = 49.13389
+          Height = 15.11812
+          ShowHint = False
+          Memo.UTF8 = (
+            #1056#8217#1057#1026#1056#181#1056#1112#1057#1039)
+        end
+        object Memo14: TfrxMemoView
+          Left = 476.22078
+          Top = 3.77953
+          Width = 68.03154
+          Height = 15.11812
+          ShowHint = False
+          Memo.UTF8 = (
+            #1056#8217#1057#8249#1056#1111#1056#1109#1056#187#1056#1029#1056#1105#1056#187)
+        end
+        object Memo15: TfrxMemoView
+          Left = 555.59091
+          Width = 154.96073
+          Height = 18.89765
+          ShowHint = False
+          DataSetName = 'frxDBDataset4'
+          Memo.UTF8 = (
+            '[Dopusk."Fname"]')
+        end
+      end
+      object Header2: TfrxHeader
+        Height = 34.01577
+        Top = 207.87415
+        Width = 718.1107
+        object Memo17: TfrxMemoView
+          Width = 64.25201
+          Height = 34.01577
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haCenter
+          Memo.UTF8 = (
+            #1074#8222#8211)
+          ParentFont = False
+          VAlign = vaCenter
+        end
+        object Memo18: TfrxMemoView
+          Left = 64.25201
+          Width = 109.60637
+          Height = 34.01577
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haCenter
+          Memo.UTF8 = (
+            #1056#1116#1056#1109#1056#1112#1056#181#1057#1026)
+          ParentFont = False
+          VAlign = vaCenter
+        end
+        object Memo19: TfrxMemoView
+          Left = 173.85838
+          Width = 120.94496
+          Height = 34.01577
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haCenter
+          Memo.UTF8 = (
+            #1056#1116#1056#1109#1056#1112#1056#181#1057#1026)
+          ParentFont = False
+          VAlign = vaCenter
+        end
+        object Memo20: TfrxMemoView
+          Left = 294.80334
+          Width = 109.60637
+          Height = 34.01577
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haCenter
+          Memo.UTF8 = (
+            #1056#1116#1056#1109#1056#1112#1056#181#1057#1026)
+          ParentFont = False
+          VAlign = vaCenter
+        end
+        object Memo21: TfrxMemoView
+          Left = 404.40971
+          Width = 120.94496
+          Height = 34.01577
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haCenter
+          Memo.UTF8 = (
+            #1056#1116#1056#1109#1056#1112#1056#181#1057#1026)
+          ParentFont = False
+          VAlign = vaCenter
+        end
+      end
+    end
+  end
+  object frxPDFExport1: TfrxPDFExport
+    UseFileCache = True
+    ShowProgress = True
+    OverwritePrompt = False
+    PrintOptimized = False
+    Outline = False
+    Background = False
+    HTMLTags = True
+    Author = 'FastReport'
+    Subject = 'FastReport PDF export'
+    ProtectionFlags = [ePrint, eModify, eCopy, eAnnot]
+    HideToolbar = False
+    HideMenubar = False
+    HideWindowUI = False
+    FitWindow = False
+    CenterWindow = False
+    PrintScaling = False
+    Left = 152
+    Top = 72
+  end
+  object frxXLSExport1: TfrxXLSExport
+    UseFileCache = True
+    ShowProgress = True
+    OverwritePrompt = False
+    ExportEMF = True
+    AsText = False
+    Background = True
+    FastExport = True
+    PageBreaks = True
+    EmptyLines = True
+    SuppressPageHeadersFooters = False
+    Left = 192
+    Top = 72
+  end
+  object frxBarCodeObject1: TfrxBarCodeObject
+    Left = 232
+    Top = 72
+  end
+  object psi_par_data_temp: TfrxDBDataset
+    UserName = 'psi_par_data_temp'
+    CloseDataSource = False
+    FieldAliases.Strings = (
+      'ID=ID'
+      'N=N'
+      'F=F'
+      'R=R'
+      'Msk=Msk'
+      'Measure_ID=Measure_ID')
+    DataSet = DataModule2.psi_par_data_temp
+    BCDToCurrency = False
+    Left = 232
+    Top = 16
+  end
+  object Dopusk: TfrxDBDataset
+    UserName = 'Dopusk'
+    CloseDataSource = False
+    FieldAliases.Strings = (
+      'ID=ID'
+      'Name=Name'
+      'Password=Password'
+      #1044#1086#1087#1091#1089#1082'='#1044#1086#1087#1091#1089#1082
+      'SaundersID=SaundersID'
+      'MarkerID=MarkerID'
+      'DataBaseID=DataBaseID'
+      'AccessLevel=AccessLevel'
+      'Email=Email'
+      'Morion Login=Morion Login'
+      'Morion password=Morion password'
+      'Phone=Phone'
+      #1050#1086#1084#1087#1083#1077#1082#1089'='#1050#1086#1084#1087#1083#1077#1082#1089
+      #1054#1090#1076#1077#1083'='#1054#1090#1076#1077#1083
+      'Access=Access'
+      'Printer=Printer'
+      'Fname=Fname'
+      'PName=PName'
+      'NName=NName'
+      'BarCodeData=BarCodeData'
+      'morion_email=morion_email'
+      'Email_pass=Email_pass'
+      'PH_Login=PH_Login')
+    DataSet = DataModule1.Dostup
+    BCDToCurrency = False
+    Left = 272
+    Top = 16
+  end
+  object Spc: TfrxDBDataset
+    UserName = 'Spc'
+    CloseDataSource = False
+    FieldAliases.Strings = (
+      'Name=Name'
+      'NameR=NameR'
+      'C0=C0'
+      'Cq=Cq'
+      'R=R'
+      'Number=Number'
+      'F=F'
+      'Ft=Ft'
+      'Q=Q'
+      'L=L'
+      'S=S'
+      'M=M'
+      'Tmax=Tmax'
+      'Tmin=Tmin'
+      'TurnOver=TurnOver'
+      'RR=RR'
+      'Tip=Tip'
+      'Rmx=Rmx'
+      'Rmn=Rmn'
+      'Fmx=Fmx'
+      'Fmn=Fmn'
+      'Fptp=Fptp'
+      'Fptp_2=Fptp_2'
+      'F0FL=F0FL'
+      'Rb=Rb'
+      'Rc_Rb=Rc_Rb'
+      'Rsp1=Rsp1'
+      'Rsp2=Rsp2'
+      'Rsp3=Rsp3'
+      'Position=Position'
+      'Snumber=Snumber'
+      'Status=Status'
+      'Data=Data'
+      'Stat=Stat'
+      'norm=norm'
+      'BD=BD'
+      'Temperature=Temperature'
+      'BadOnly=BadOnly'
+      'GoodOnly=GoodOnly'
+      'OnlyNumbers=OnlyNumbers'
+      'PrintGraph=PrintGraph'
+      'Temperatureavto=Temperatureavto'
+      'PrintProtokol=PrintProtokol'
+      'CbFt=CbFt'
+      'CbR=CbR'
+      'CbQ=CbQ'
+      'CbC0=CbC0'
+      'CbCq=CbCq'
+      'CbL=CbL'
+      'CbTmax=CbTmax'
+      'CbTmin=CbTmin'
+      'CbTo=CbTo'
+      'CbS=CbS'
+      'CbM=CbM'
+      'CbFmax=CbFmax'
+      'CbFmin=CbFmin'
+      'CbFptp=CbFptp'
+      'CbRmax=CbRmax'
+      'CbRmin=CbRmin'
+      'CbRR=CbRR'
+      'CbRb=CbRb'
+      'CbRc_Rb=CbRc_Rb'
+      'CbF=CbF'
+      'CbF0-Fl=CbF0-Fl'
+      'CbRsp1=CbRsp1'
+      'CbRsp2=CbRsp2'
+      'CbRsp3=CbRsp3'
+      'Rmax=Rmax'
+      'Rmin=Rmin'
+      'Fmax=Fmax'
+      'Fmin=Fmin'
+      'Qmax=Qmax'
+      'Qmin=Qmin'
+      'C0max=C0max'
+      'C0min=C0min'
+      'Cqmax=Cqmax'
+      'Cqmin=Cqmin'
+      'Tmaxmax=Tmaxmax'
+      'Tmaxmin=Tmaxmin'
+      'Tminmax=Tminmax'
+      'Tomax=Tomax'
+      'Tomin=Tomin'
+      'Smax=Smax'
+      'Smin=Smin'
+      'Mmax=Mmax'
+      'Mmin=Mmin'
+      'Rmaxmax=Rmaxmax'
+      'Rmaxmin=Rmaxmin'
+      'Fmaxmax=Fmaxmax'
+      'Fmaxmin=Fmaxmin'
+      'Fptpmax=Fptpmax'
+      'Fptp_2max=Fptp_2max'
+      'Fptp_2min=Fptp_2min'
+      'Fptpmin=Fptpmin'
+      'F0FLmax=F0FLmax'
+      'F0FLmin=F0FLmin'
+      'Nominal=Nominal'
+      'RRmax=RRmax'
+      'RRmin=RRmin'
+      'points=points'
+      'A=A'
+      'B=B'
+      'Load=Load'
+      'Loadvalue=Loadvalue'
+      'Profile=Profile'
+      'Tminmin=Tminmin'
+      'Tnastr=Tnastr'
+      'Tpar=Tpar'
+      'Fminmax=Fminmax'
+      'Fminmin=Fminmin'
+      'Tnakl=Tnakl'
+      'Type=Type'
+      'HC=HC'
+      'Protokol=Protokol'
+      'Power=Power'
+      'LoadType=LoadType'
+      'String=String'
+      'TU=TU'
+      'Rbmax=Rbmax'
+      'Rbmin=Rbmin'
+      'RbT=RbT'
+      'Rc_Rbmax=Rc_Rbmax'
+      'Bmax=Bmax'
+      'Tf=Tf'
+      'Tft=Tft'
+      'Tc0=Tc0'
+      'Tcq=Tcq'
+      'Tq=Tq'
+      'TbBegin=TbBegin'
+      'TfmxEnd=TfmxEnd'
+      'TfmnBegin=TfmnBegin'
+      'TfmnEnd=TfmnEnd'
+      'TfptpBegin=TfptpBegin'
+      'TfptpEnd=TfptpEnd'
+      'TrrBegin=TrrBegin'
+      'TrrEnd=TrrEnd'
+      'TrmxBegin=TrmxBegin'
+      'TrmxEnd=TrmxEnd'
+      'TrmnBegin=TrmnBegin'
+      'TrmnEnd=TrmnEnd'
+      'Lmax=Lmax'
+      'Lmin=Lmin'
+      'Lt=Lt'
+      'Rsp1max=Rsp1max'
+      'Rsp1min=Rsp1min'
+      'Rsp2max=Rsp2max'
+      'Rsp2min=Rsp2min'
+      'Rsp3max=Rsp3max'
+      'Rsp3min=Rsp3min'
+      'Rsp1tBegin=Rsp1tBegin'
+      'Rsp1tEnd=Rsp1tEnd'
+      'Rsp2tBegin=Rsp2tBegin'
+      'Rsp2tEnd=Rsp2tEnd'
+      'Rsp3tBegin=Rsp3tBegin'
+      'Rsp3tEnd=Rsp3tEnd'
+      'ColorF0-Fl=ColorF0-Fl'
+      'ColorRsp1=ColorRsp1'
+      'ColorRsp2=ColorRsp2'
+      'ColorRsp3=ColorRsp3'
+      'SPC=SPC'
+      'TmBegin=TmBegin'
+      'TmEnd=TmEnd'
+      'TbEnd=TbEnd'
+      'CbFptp_2=CbFptp_2'
+      'CbCl=CbCl'
+      'ID=ID'
+      'Print=Print'
+      'FTx=FTx'
+      'FTxt=FTxt'
+      'FTmax=FTmax'
+      'FTmin=FTmin'
+      'DopuskCq=DopuskCq'
+      'DopuskC0=DopuskC0'
+      'DopuskF=DopuskF'
+      'DopuskR=DopuskR'
+      'DopuskQ=DopuskQ'
+      'DopuskFT=DopuskFT'
+      'DopuskFptp=DopuskFptp'
+      'DopuskSR=DopuskSR'
+      'DopuskFi=DopuskFi'
+      'DopuskRR=DopuskRR'
+      'DopuskSlope=DopuskSlope'
+      'Text=Text'
+      'Shum=Shum'
+      'ShMax=ShMax'
+      'ShMin=ShMin'
+      'Old1=Old1'
+      'old1max=old1max'
+      'old1min=old1min'
+      'Old2=Old2'
+      'Old2Max=Old2Max'
+      'old2min=old2min'
+      'Old3=Old3'
+      'Old3Max=Old3Max'
+      'Old3Min=Old3Min'
+      'Rmax-Rmin=Rmax-Rmin'
+      'RR1max=RR1max'
+      'RR1min=RR1min'
+      'Told1=Told1'
+      'Ft1=Ft1'
+      'Ft2=Ft2'
+      'Ft3=Ft3'
+      'Ft4=Ft4'
+      'Ft1max=Ft1max'
+      'Ft2max=Ft2max'
+      'Ft3max=Ft3max'
+      'Ft4max=Ft4max'
+      'Ft1min=Ft1min'
+      'Ft2min=Ft2min'
+      'Ft3min=Ft3min'
+      'Ft4min=Ft4min'
+      'Ft1t=Ft1t'
+      'Ft2t=Ft2t'
+      'Ft3t=Ft3t'
+      'Ft4t=Ft4t'
+      'Fmaxm=Fmaxm'
+      'Old2n=Old2n'
+      'polinom=polinom'
+      'C0_C1=C0_C1'
+      'C0_C1max=C0_C1max'
+      'C0_C1min=C0_C1min'
+      'C0_C1_T=C0_C1_T'
+      'RR2=RR2'
+      'RR2max=RR2max'
+      'RR2min=RR2min'
+      'GraphF=GraphF'
+      'GraphP=GraphP'
+      'Jump=Jump'
+      'JumpMax=JumpMax'
+      'JumpMin=JumpMin'
+      'JumpPTP=JumpPTP'
+      'JumpT=JumpT'
+      'JumpP=JumpP'
+      'MonoT=MonoT'
+      'Ftcode=Ftcode'
+      'FnastrHZ=FnastrHZ'
+      'RR3=RR3'
+      'RR3max=RR3max'
+      'RR3min=RR3min'
+      'TypeF=TypeF'
+      'Nom=Nom'
+      'C1_2C0=C1_2C0'
+      'C1_2C0min=C1_2C0min'
+      'C1_2C0max=C1_2C0max'
+      'C1_2C0T=C1_2C0T'
+      'Spc_ID=Spc_ID'
+      'DopuskFi_Real=DopuskFi_Real'
+      'Ftgk=Ftgk'
+      'Rtgk=Rtgk'
+      'DopuskF_P=DopuskF_P'
+      'RR4=RR4'
+      'RR4max=RR4max'
+      'RR4min=RR4min'
+      'RR5=RR5'
+      'RR5max=RR5max'
+      'RR5min=RR5min'
+      'DopuskT=DopuskT'
+      'PrintProfile=PrintProfile'
+      'TGK=TGK'
+      'DopuskFtgk=DopuskFtgk'
+      'DopuskRtgk=DopuskRtgk'
+      'MetalAu=MetalAu'
+      'MetalAg=MetalAg'
+      'MetalNi=MetalNi'
+      'MinNar=MinNar'
+      'Hran=Hran'
+      'Dopusk_L=Dopusk_L'
+      'Garmonica=Garmonica'
+      'DopuskRcRb=DopuskRcRb'
+      'IntervalName=IntervalName'
+      'Rc_Rbmin=Rc_Rbmin'
+      'Anomal=Anomal'
+      'AnomalR=AnomalR'
+      'Dead=Dead'
+      'Rsphere=Rsphere'
+      'RsphereT=RsphereT'
+      'RsphereK1=RsphereK1'
+      'RsphereK2=RsphereK2'
+      'RsphereMax=RsphereMax'
+      'RsphereMin=RsphereMin'
+      'Rminmin=Rminmin'
+      'Rminmax=Rminmax'
+      'TCHType=TCHType'
+      'TCH_Approx_Type=TCH_Approx_Type'
+      'TCH_Interval_Type=TCH_Interval_Type'
+      'IT_Temp_A=IT_Temp_A'
+      'IT_Temp_B=IT_Temp_B'
+      'TCH_Temp_A=TCH_Temp_A'
+      'TCH_Temp_B=TCH_Temp_B'
+      'TCH_Approx_IST=TCH_Approx_IST'
+      'Favg=Favg'
+      'Qavg=Qavg'
+      'K=K'
+      'Ftgk_Measure=Ftgk_Measure'
+      'ShOT=ShOT'
+      'Shum1=Shum1'
+      'Sh1Max=Sh1Max'
+      'Sh1Min=Sh1Min'
+      'Shum2=Shum2'
+      'Sh1OT=Sh1OT'
+      'Sh2Max=Sh2Max'
+      'Sh2Min=Sh2Min'
+      'Sh2OT=Sh2OT'
+      'Shum3=Shum3'
+      'Sh3Max=Sh3Max'
+      'Sh3Min=Sh3Min'
+      'Sh3OT=Sh3OT'
+      'PhazeNoise_Options=PhazeNoise_Options'
+      'DopuskRmax=DopuskRmax'
+      'DopuskC1_2C0=DopuskC1_2C0'
+      'GraphOnlyAprox=GraphOnlyAprox'
+      'GraphOnluMeasure=GraphOnluMeasure'
+      'RadiusF2=RadiusF2'
+      'RadiusR2=RadiusR2'
+      'RadiusF4=RadiusF4'
+      'RadiusR4=RadiusR4')
+    DataSet = DataModule2.SqlSpec
+    BCDToCurrency = False
+    Left = 232
+    Top = 120
+  end
+  object psi_par_data_2: TfrxDBDataset
+    UserName = 'psi_par_data_2'
+    CloseDataSource = False
+    FieldAliases.Strings = (
+      'ID=ID'
+      'ID_1=ID_1'
+      'ID_2=ID_2'
+      'N1=N1'
+      'N2=N2'
+      'N3=N3'
+      'N4=N4')
+    DataSet = DataModule2.psi_par_data_2_print
+    BCDToCurrency = False
+    Left = 200
+    Top = 120
+  end
+end

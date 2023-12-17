@@ -1,0 +1,234 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "Rec.h"
+#include "data1.h"
+#include "ManualRec.h"
+#include "data2.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "RzButton"
+#pragma link "RzGrids"
+#pragma link "RzPanel"
+#pragma link "ESBPCSDateTimeEdit"
+#pragma link "ESBPCSPanel"
+#pragma resource "*.dfm"
+TMRecForm *MRecForm;
+//---------------------------------------------------------------------------
+__fastcall TMRecForm::TMRecForm(TComponent* Owner)
+        : TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall TMRecForm::btnCloseClick(TObject *Sender)
+{
+MRecForm->Hide();
+}
+//---------------------------------------------------------------------------
+void __fastcall TMRecForm::btnRecClick(TObject *Sender)
+{
+AnsiString S;
+int count=0;
+for (int l=0;l<RecForm->listParameters->Count;l++){
+    if (RecForm->listParameters->ItemState[l]!=0){
+    count++;
+              AnsiString typeField;
+              AnsiString type=RecForm->listParameters->ItemCaption(l);
+              DataModule3->psi_measure_parameters->First();
+                        for (int i=0;i<DataModule3->psi_measure_parameters->RecordCount;i++){
+                                   if (DataModule3->psi_measure_parameters->FieldByName("Name")->AsString==type){
+                                              typeField=DataModule3->psi_measure_parameters->FieldByName("Field")->AsString;
+                                              break;
+                                              }
+                               DataModule3->psi_measure_parameters->Next();
+                            }
+for (int j=0; j<RzStringGrid1->RowCount;j++){
+           S=RzStringGrid1->Cells[0][j+1];
+                      DataModule2->psiData->First();
+                 for (int i=0;i<DataModule2->psiData->RecordCount;i++){
+                            if (S==DataModule2->psiData->FieldByName("N")->AsString){
+                              DataModule2->psiData->Edit();
+                               AnsiString dat=RzStringGrid1->Cells[count][j+1];
+                               if (!dat.IsEmpty()){
+                              DataModule2->psiData->FieldByName(typeField)->AsString=RzStringGrid1->Cells[count][j+1];
+                              }
+                              else {
+                              DataModule2->psiData->FieldByName(typeField)->AsString=100000;
+                              }
+                              //DataModule2->psiData->Post();
+                              break;
+                              }
+                              DataModule2->psiData->Next();
+                         }
+
+    }
+  }
+  }
+}
+//---------------------------------------------------------------------------
+void __fastcall TMRecForm::RzStringGrid1Enter(TObject *Sender)
+{
+ AnsiString S;
+int count=0;
+
+for (int l=0;l<RecForm->listParameters->Count;l++){
+    if (RecForm->listParameters->ItemState[l]!=0){
+    count++;
+              AnsiString typeField;
+              AnsiString type=RecForm->listParameters->ItemCaption(l);
+              DataModule3->psi_measure_parameters->First();
+                        for (int i=0;i<DataModule3->psi_measure_parameters->RecordCount;i++){
+                                   if (DataModule3->psi_measure_parameters->FieldByName("Name")->AsString==type){
+                                              typeField=DataModule3->psi_measure_parameters->FieldByName("Field")->AsString;
+                                              break;
+                                              }
+                               DataModule3->psi_measure_parameters->Next();
+                            }
+for (int j=0; j<RzStringGrid1->RowCount;j++){
+           S=RzStringGrid1->Cells[0][j+1];
+                      DataModule2->psiData->First();
+                 for (int i=0;i<DataModule2->psiData->RecordCount;i++){
+                            if (S==DataModule2->psiData->FieldByName("N")->AsString){
+                              DataModule2->psiData->Edit();
+                              AnsiString dat=RzStringGrid1->Cells[count][j+1];
+                              if (!dat.IsEmpty()){
+                              DataModule2->psiData->FieldByName(typeField)->AsString=RzStringGrid1->Cells[count][j+1];
+                              }
+                              else {
+                              DataModule2->psiData->FieldByName(typeField)->AsString=100000;
+                              }
+                              //DataModule2->psiData->Post();
+                              break;
+                              }
+                              DataModule2->psiData->Next();
+                         }
+
+    }
+  }
+  }
+
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMRecForm::FormHide(TObject *Sender)
+{
+AnsiString S;
+int count=0;
+for (int l=0;l<RecForm->listParameters->Count;l++){
+    if (RecForm->listParameters->ItemState[l]!=0){
+    count++;
+              AnsiString typeField;
+              AnsiString type=RecForm->listParameters->ItemCaption(l);
+              DataModule3->psi_measure_parameters->First();
+                        for (int i=0;i<DataModule3->psi_measure_parameters->RecordCount;i++){
+                                   if (DataModule3->psi_measure_parameters->FieldByName("Name")->AsString==type){
+                                              typeField=DataModule3->psi_measure_parameters->FieldByName("Field")->AsString;
+                                              break;
+                                              }
+                               DataModule3->psi_measure_parameters->Next();
+                            }
+for (int j=0; j<RzStringGrid1->RowCount;j++){
+           S=RzStringGrid1->Cells[0][j+1];
+                      DataModule2->psiData->First();
+                 for (int i=0;i<DataModule2->psiData->RecordCount;i++){
+                            if (S==DataModule2->psiData->FieldByName("N")->AsString){
+                              DataModule2->psiData->Edit();
+                              AnsiString dat=RzStringGrid1->Cells[count][j+1];
+                              if (!dat.IsEmpty()){
+                              DataModule2->psiData->FieldByName(typeField)->AsString=RzStringGrid1->Cells[count][j+1];
+                              }
+                              else {
+                              DataModule2->psiData->FieldByName(typeField)->AsString=100000;
+                              }
+                              //DataModule2->psiData->Post();
+                              break;
+                              }
+                              DataModule2->psiData->Next();
+                         }
+
+    }
+  }
+  }
+        
+}
+//---------------------------------------------------------------------------
+
+
+
+
+
+void __fastcall TMRecForm::RzStringGrid1KeyPress(TObject *Sender,
+      char &Key)
+{
+TGridRect NewSel ;
+int Row=RzStringGrid1->Row;
+int Col=RzStringGrid1->Col;
+    if (Key==13){
+
+
+if (Col<RzStringGrid1->ColCount-1){
+    NewSel.Left=Col+1;
+    NewSel.Right=Col+1;
+    NewSel.Top=Row;
+    NewSel.Bottom=Row;
+    RzStringGrid1->Selection= NewSel;
+    }
+     else {
+     NewSel.Left=1;
+    NewSel.Right=1;
+    NewSel.Top=Row+1;
+    NewSel.Bottom=Row+1;
+    RzStringGrid1->Selection= NewSel;
+  }
+}
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TMRecForm::RzStringGrid1SelectCell(TObject *Sender,
+      int ACol, int ARow, bool &CanSelect)
+{
+  AnsiString S;
+int count=0;
+
+for (int l=0;l<RecForm->listParameters->Count;l++){
+    if (RecForm->listParameters->ItemState[l]!=0){
+    count++;
+              AnsiString typeField;
+              AnsiString type=RecForm->listParameters->ItemCaption(l);
+              DataModule3->psi_measure_parameters->First();
+                        for (int i=0;i<DataModule3->psi_measure_parameters->RecordCount;i++){
+                                   if (DataModule3->psi_measure_parameters->FieldByName("Name")->AsString==type){
+                                              typeField=DataModule3->psi_measure_parameters->FieldByName("Field")->AsString;
+                                              break;
+                                              }
+                               DataModule3->psi_measure_parameters->Next();
+                            }
+for (int j=0; j<RzStringGrid1->RowCount;j++){
+           S=RzStringGrid1->Cells[0][j+1];
+                      DataModule2->psiData->First();
+                 for (int i=0;i<DataModule2->psiData->RecordCount;i++){
+                            if (S==DataModule2->psiData->FieldByName("N")->AsString){
+                              DataModule2->psiData->Edit();
+                              AnsiString dat=RzStringGrid1->Cells[count][j+1];
+                              if (!dat.IsEmpty()){
+                              DataModule2->psiData->FieldByName(typeField)->AsString=RzStringGrid1->Cells[count][j+1];
+                              }
+                              else {
+                              DataModule2->psiData->FieldByName(typeField)->AsString=100000;
+                              }
+                              //DataModule2->psiData->Post();
+                              break;
+                              }
+                              DataModule2->psiData->Next();
+                         }
+
+    }
+  }
+  }
+}
+//---------------------------------------------------------------------------
+
+

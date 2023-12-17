@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TfrxReport Version="4.9" DotMatrixReport="false" IniFile="\Software\Fast Reports" PreviewOptions.Buttons="4095" PreviewOptions.Zoom="1" PrintOptions.Printer="Default" PrintOptions.PrintOnSheet="0" ReportOptions.CreateDate="41005.6630541088" ReportOptions.Description.Text="" ReportOptions.LastChange="41005.6713885185" ScriptLanguage="PascalScript" ScriptText.Text="&#13;&#10;begin&#13;&#10;&#13;&#10;end." PropData="044C65667403980003546F70021008446174617365747301010C2E00000020446174615365743D22667278444244617461736574362220446174615365744E616D653D22446F7075736B692200010C3400000020446174615365743D22667278444244617461736574312220446174615365744E616D653D22667278444244617461736574312200010C3400000020446174615365743D22667278444244617461736574322220446174615365744E616D653D22667278444244617461736574322200010C3400000020446174615365743D22667278444244617461736574332220446174615365744E616D653D22667278444244617461736574332200010C3400000020446174615365743D22667278444244617461736574342220446174615365744E616D653D22667278444244617461736574342200010C3200000020446174615365743D22667278444244617461736574352220446174615365744E616D653D227073694461746154656D70220000095661726961626C65730100055374796C650100">
+  <TfrxDataPage Name="Data" Height="1000" Left="0" Top="0" Width="1000"/>
+  <TfrxReportPage Name="Page1" PaperWidth="210" PaperHeight="297" PaperSize="9" LeftMargin="10" RightMargin="10" TopMargin="10" BottomMargin="10" ColumnWidth="0" ColumnPositions.Text="" HGuides.Text="" VGuides.Text="">
+    <TfrxPageHeader Name="PageHeader1" Height="162.51979" Left="0" Top="18.89765" Width="718.1107" OnBeforePrint="PageHeader1OnBeforePrint">
+      <TfrxMemoView Name="Memo3" Left="294.80334" Top="7.55906" Width="109.60637" Height="18.89765" ShowHint="false" Font.Charset="1" Font.Color="0" Font.Height="-16" Font.Name="Arial" Font.Style="1" ParentFont="false" Text="Приложение"/>
+      <TfrxMemoView Name="Memo4" Left="464.88219" Top="7.55906" Width="204.09462" Height="15.11812" ShowHint="false" Font.Charset="1" Font.Color="0" Font.Height="-13" Font.Name="Arial" Font.Style="1" ParentFont="false" Text="МСК №  [frxDBDataset1.&#34;Msk&#34;]"/>
+      <TfrxMemoView Name="Memo5" Left="3.77953" Top="52.91342" Width="695.43352" Height="18.89765" ShowHint="false" Font.Charset="1" Font.Color="0" Font.Height="-13" Font.Name="Arial" Font.Style="0" ParentFont="false" Text="к извещению № ______________________________________________ от _______________________________"/>
+      <TfrxMemoView Name="Memo6" Left="3.77953" Top="79.37013" Width="215.43321" Height="18.89765" ShowHint="false" Font.Charset="1" Font.Color="0" Font.Height="-13" Font.Name="Arial" Font.Style="0" ParentFont="false" Text="Предъявляется для проверки ВП  "/>
+      <TfrxMemoView Name="Memo7" Left="234.33086" Top="79.37013" Width="396.85065" Height="18.89765" ShowHint="false" Font.Charset="1" Font.Color="0" Font.Height="-13" Font.Name="Arial" Font.Style="4" ParentFont="false" Text="[frxDBDataset2.&#34;Name&#34;]________________________________"/>
+      <TfrxMemoView Name="Memo8" Left="411.96877" Top="98.26778" Width="192.75603" Height="18.89765" ShowHint="false" Font.Charset="1" Font.Color="0" Font.Height="-13" Font.Name="Arial" Font.Style="4" ParentFont="false" Text="ТУ    [frxDBDataset2.&#34;TU&#34;]"/>
+      <TfrxMemoView Name="Memo9" Left="3.77953" Top="124.72449" Width="351.49629" Height="18.89765" ShowHint="false" Font.Charset="1" Font.Color="0" Font.Height="-13" Font.Name="Arial" Font.Style="0" ParentFont="false" Text="В количестве___________________________штук №№"/>
+      <TfrxMemoView Name="Memo10" Left="136.06308" Top="120.94496" Width="94.48825" Height="18.89765" ShowHint="false" Text=""/>
+      <TfrxMemoView Name="Memo13" Left="211.65368" Top="49.13389" Width="94.48825" Height="18.89765" ShowHint="false" Text="[Edit1.Text]"/>
+      <TfrxMemoView Name="Memo14" Left="487.55937" Top="49.13389" Width="75.5906" Height="18.89765" ShowHint="false" Text="[Edit2.Text]"/>
+      <TfrxMemoView Name="Memo30" Left="585.82715" Top="49.13389" Width="94.48825" Height="18.89765" ShowHint="false" Font.Charset="1" Font.Color="0" Font.Height="-13" Font.Name="Arial" Font.Style="0" ParentFont="false" Text="[YearOf(Now())] г."/>
+    </TfrxPageHeader>
+    <TfrxMasterData Name="MasterData2" Height="22.67718" Left="0" Top="241.88992" Width="718.1107" AllowSplit="true" Columns="7" ColumnWidth="102.425196850394" ColumnGap="0" DataSet="frxDBDataset1" DataSetName="frxDBDataset1" RowCount="0">
+      <TfrxMemoView Name="Memo11" Left="0" Top="0" Width="102.04731" Height="22.67718" OnAfterPrint="Memo11OnAfterPrint" ShowHint="false" Frame.Typ="15" HAlign="haCenter" Text="[frxDBDataset1.&#34;N&#34;]"/>
+    </TfrxMasterData>
+    <TfrxPageFooter Name="PageFooter1" Height="26.45671" Left="0" Top="325.03958" Width="718.1107">
+      <TfrxMemoView Name="Memo12" Left="3.77953" Top="7.55905999999999" Width="347.71676" Height="18.89765" ShowHint="false" Font.Charset="1" Font.Color="0" Font.Height="-13" Font.Name="Arial" Font.Style="0" ParentFont="false" Text="Представитель ОТК_____________________________"/>
+    </TfrxPageFooter>
+  </TfrxReportPage>
+  <TfrxDialogPage Name="DialogPage1" Font.Charset="1" Font.Color="0" Font.Height="-11" Font.Name="Tahoma" Font.Style="0" Height="173" ClientHeight="139" Left="265" Top="150" Width="300" ClientWidth="292">
+    <TfrxButtonControl Name="Button1" Left="100" Top="104" Width="75" Height="25" ShowHint="true" Caption="OK" ModalResult="1"/>
+    <TfrxEditControl Name="Edit1" Left="12" Top="28" Width="265" Height="21" ShowHint="true" Color="-2147483643" MaxLength="0" PasswordChar="0"/>
+    <TfrxEditControl Name="Edit2" Left="64" Top="72" Width="165" Height="21" ShowHint="true" Color="-2147483643" MaxLength="0" PasswordChar="0"/>
+    <TfrxLabelControl Name="Label1" Left="16" Top="8" Width="90" Height="13" ShowHint="true" Caption="����� ���������" Color="-2147483633"/>
+    <TfrxLabelControl Name="Label2" Left="96" Top="56" Width="85" Height="13" ShowHint="true" Caption="���� ���������" Color="-2147483633"/>
+  </TfrxDialogPage>
+</TfrxReport>

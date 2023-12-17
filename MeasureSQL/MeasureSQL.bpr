@@ -1,0 +1,318 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project -->
+<PROJECT>
+  <MACROS>
+    <VERSION value="BCB.06.00"/>
+    <PROJECT value="MeasureSQL.exe"/>
+    <OBJFILES value="MeasureSQL.obj Main.obj FileSelect.obj Data.obj number.obj spc.obj 
+      Result.obj NumberM.obj LoadNumbers.obj dialog1.obj Dostup.obj 
+      Spcdetail.obj SpcOptions.obj DataArchive.obj archive.obj options.obj 
+      archiveTable.obj seacrh.obj text.obj Zapac.obj temperature.obj 
+      dataview.obj MathLib.obj protokol.obj data1.obj SpcMore.obj ManualRec.obj 
+      Rec.obj termo.obj old.obj oldview.obj Graph.obj protokolbuild.obj 
+      WriteBD.obj WriteTable.obj Search.obj NewSpc.obj GraphOptions.obj PM.obj 
+      PMN.obj PMDetail.obj PassportNumbers.obj SortResult.obj ProtokolData.obj 
+      data2.obj Modif.obj Tnumber.obj Tmain.obj TempData.obj BarCodeMsk.obj 
+      SpcSelect.obj FileLoad.obj Protokol_Select.obj BarCodeEnter.obj 
+      StringFunction.obj addNorm.obj Spc_PhazeNoise.obj PhazeNoise.obj Par.obj 
+      PHN.obj md5.obj md5wrapper.obj SpcMore_1.obj SpektrOLD.obj 
+      Protokol_Proverke_PH.obj Protokol_Print.obj AddMskReal.obj SelectSpc.obj 
+      Data_RQ.obj New_Data4.obj Data_MeasureModule.obj"/>
+    <RESFILES value="MeasureSQL.res"/>
+    <IDLFILES value=""/>
+    <IDLGENFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES) Main.dfm FileSelect.dfm Data.dfm number.dfm spc.dfm Result.dfm 
+      NumberM.dfm LoadNumbers.dfm dialog1.dfm Dostup.dfm Spcdetail.dfm 
+      SpcOptions.dfm DataArchive.dfm archive.dfm options.dfm archiveTable.dfm 
+      seacrh.dfm text.dfm Zapac.dfm temperature.dfm dataview.dfm protokol.dfm 
+      data1.dfm SpcMore.dfm ManualRec.dfm Rec.dfm termo.dfm old.dfm oldview.dfm 
+      Graph.dfm protokolbuild.dfm WriteBD.dfm WriteTable.dfm Search.dfm 
+      NewSpc.dfm GraphOptions.dfm PM.dfm PMN.dfm PMDetail.dfm 
+      PassportNumbers.dfm SortResult.dfm ProtokolData.dfm data2.dfm Modif.dfm 
+      Tnumber.dfm Tmain.dfm TempData.dfm BarCodeMsk.dfm SpcSelect.dfm 
+      FileLoad.dfm Protokol_Select.dfm BarCodeEnter.dfm addNorm.dfm 
+      Spc_PhazeNoise.dfm PhazeNoise.dfm Par.dfm PHN.dfm SpcMore_1.dfm 
+      SpektrOLD.dfm Protokol_Proverke_PH.dfm Protokol_Print.dfm AddMskReal.dfm 
+      SelectSpc.dfm Data_RQ.dfm New_Data4.dfm Data_MeasureModule.dfm"/>
+    <LIBFILES value=""/>
+    <LIBRARIES value="lmd70_b6.lib clinetsuiteb6.lib dacvcl60.lib mydacvcl60.lib frxe6.lib 
+      TeePro8C6.lib fqb60.lib FSDB6.lib frxDB6.lib FS6.lib frx6.lib 
+      cxPageControlVCLC6.lib cxExtEditorsVCLC6.lib cxExportVCLC6.lib 
+      cxGridVCLC6.lib cxDataC6.lib cxEditorsVCLC6.lib dxThemeC6.lib 
+      cxLibraryVCLC6.lib esbpcs_dates_rt_c6.lib esbpcs_xtras_rt_c6.lib 
+      esbpcs_base_rt_c6.lib Tee8C6.lib TeeUI8C6.lib bdertl.lib VclSmp.lib 
+      tmsc6.lib mydac60.lib dac60.lib RaizeComponentsVclDb.lib dbrtl.lib 
+      vcldb.lib vclx.lib RaizeComponentsVcl.lib vcwb6.lib rtl.lib vcl.lib"/>
+    <SPARELIBS value="vcl.lib rtl.lib vcwb6.lib RaizeComponentsVcl.lib vclx.lib vcldb.lib 
+      dbrtl.lib RaizeComponentsVclDb.lib dac60.lib mydac60.lib tmsc6.lib 
+      VclSmp.lib bdertl.lib TeeUI8C6.lib Tee8C6.lib esbpcs_base_rt_c6.lib 
+      esbpcs_xtras_rt_c6.lib esbpcs_dates_rt_c6.lib cxLibraryVCLC6.lib 
+      dxThemeC6.lib cxEditorsVCLC6.lib cxDataC6.lib cxGridVCLC6.lib 
+      cxExportVCLC6.lib cxExtEditorsVCLC6.lib cxPageControlVCLC6.lib frx6.lib 
+      FS6.lib frxDB6.lib FSDB6.lib fqb60.lib TeePro8C6.lib frxe6.lib 
+      mydacvcl60.lib dacvcl60.lib clinetsuiteb6.lib lmd70_b6.lib"/>
+    <PACKAGES value="vcl.bpi rtl.bpi dbrtl.bpi adortl.bpi vcldb.bpi vclx.bpi bdertl.bpi 
+      vcldbx.bpi ibxpress.bpi dsnap.bpi cds.bpi bdecds.bpi qrpt.bpi 
+      visualclx.bpi visualdbclx.bpi dsnapcrba.bpi dsnapcon.bpi bcbsmp.bpi 
+      vclie.bpi xmlrtl.bpi inet.bpi inetdbbde.bpi inetdbxpress.bpi inetdb.bpi 
+      nmfast.bpi webdsnap.bpi bcbie.bpi websnap.bpi soaprtl.bpi dclocx.bpi 
+      dbexpress.bpi dbxcds.bpi indy.bpi bcb2kaxserver.bpi dac60.bpi dacvcl60.bpi 
+      CRControls60.bpi mydac60.bpi mydacvcl60.bpi RaizeComponentsVcl.bpi 
+      RaizeComponentsVclDb.bpi frxe6.bpi frx6.bpi FS6.bpi AbkStdCB6.bpi 
+      AbkDBStdCB6.bpi QImport3RT_C6.bpi QExport3RT_C6.bpi vcwb6.bpi adgrmc6.bpi 
+      vclZipForgeb6.bpi esbpcs_base_rt_c6.bpi esbpcs_base_db_rt_c6.bpi 
+      esbpcs_calcs_rt_c6.bpi esbpcs_calcs_db_rt_c6.bpi esbpcs_dates_rt_c6.bpi 
+      esbpcs_dates_db_rt_c6.bpi esbpcs_stats_rt_c6.bpi esbpcs_stats_db_rt_c6.bpi 
+      jpmopencompc6.bpi jpmopen_esbpcs_c6.bpi esbpcs_xtras_rt_c6.bpi 
+      esbpcs_xtras_db_rt_c6.bpi ECLPackb6.bpi acntBCB6_R.bpi lmd70_b6.bpi 
+      lmd70db_b6.bpi lmdbar10_b6.bpi lmddsg20_b6.bpi lmdrtf30_b6.bpi 
+      lmdrtf30db_b6.bpi lmdsp20_b6.bpi lmdsp20db_b6.bpi lmdstorage10_b6.bpi 
+      lmdsys20_b6.bpi lmdtxt70_b6.bpi lmdparse30_b6.bpi lmdweb30_b6.bpi 
+      cxLibraryVCLC6.bpi dxThemeC6.bpi cxEditorsVCLC6.bpi cxDataC6.bpi 
+      cxExtEditorsVCLC6.bpi cxPageControlVCLC6.bpi cxGridVCLC6.bpi 
+      TeeWorld8C6.bpi Tee8C6.bpi TeeUI8C6.bpi TeePro8C6.bpi frxcs6.bpi FSDB6.bpi 
+      frxDB6.bpi fqb60.bpi FSBDE6.bpi frxBDE6.bpi FSADO6.bpi frxADO6.bpi 
+      FSIBX6.bpi frxIBX6.bpi frxDBX6.bpi TeeDB8C6.bpi TeeGL8C6.bpi 
+      TeeLanguage8C6.bpi TeeImage8C6.bpi mySQLDACBCB6.bpi TeeQR8C6.bpi"/>
+    <PATHCPP value=".;"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;"/>
+    <PATHASM value=".;"/>
+    <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
+    <RELEASELIBPATH value="$(BCB)\lib\release"/>
+    <LINKER value="ilink32"/>
+    <USERDEFINES value="_DEBUG"/>
+    <SYSDEFINES value="NO_STRICT"/>
+    <MAINSOURCE value="MeasureSQL.cpp"/>
+    <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl;D:\Borland_LIB\FasfReport\LibBCB6;D:\Borland_LIB\ESBPCS4\bcb6;&quot;D:\Borland_LIB\TMS Instrumentation Workshop v1.4.5\TMS Instrumentation Workshop v1.4.5&quot;;D:\Borland_LIB\RC4\Lib\BCB6;&quot;D:\Borland_LIB\tmssoftware\TMS Component Pack&quot;;&quot;D:\Borland_LIB\CoreLab\MyDac for CBuilder 6\Include&quot;;D:\Borland_LIB\TeeChart\Sources\Compiled\Builder6\Include;&quot;D:\Borland_LIB\Clever Internet Suite\Lib\CB6\Include&quot;"/>
+    <LIBPATH value="$(BCB)\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\Borland_LIB\FasfReport\LibBCB6;D:\Borland_LIB\ESBPCS4\bcb6;&quot;D:\Borland_LIB\TMS Instrumentation Workshop v1.4.5\TMS Instrumentation Workshop v1.4.5&quot;;D:\Borland_LIB\RC4\Lib\BCB6;&quot;D:\Borland_LIB\tmssoftware\TMS Component Pack&quot;;&quot;D:\Borland_LIB\CoreLab\MyDac for CBuilder 6\Lib&quot;;D:\Borland_LIB\TeeChart\Sources\Compiled\Builder6\Lib;D:\Borland_LIB\TeeChart\Sources\Compiled\Builder6\Lib\Obj;&quot;D:\Borland_LIB\Clever Internet Suite\Lib\CB6&quot;"/>
+    <WARNINGS value="-w-par"/>
+    <OTHERFILES value=""/>
+  </MACROS>
+  <OPTIONS>
+    <IDLCFLAGS value="-I$(BCB)\include -I$(BCB)\include\vcl -ID:\Borland_LIB\FasfReport\LibBCB6 
+      -ID:\Borland_LIB\ESBPCS4\bcb6 
+      -I&quot;D:\Borland_LIB\TMS Instrumentation Workshop v1.4.5\TMS Instrumentation Workshop v1.4.5&quot; 
+      -ID:\Borland_LIB\RC4\Lib\BCB6 
+      -I&quot;D:\Borland_LIB\tmssoftware\TMS Component Pack&quot; 
+      -I&quot;D:\Borland_LIB\CoreLab\MyDac for CBuilder 6\Include&quot; 
+      -ID:\Borland_LIB\TeeChart\Sources\Compiled\Builder6\Include 
+      -I&quot;D:\Borland_LIB\Clever Internet Suite\Lib\CB6\Include&quot; -src_suffix cpp 
+      -D_DEBUG -boa"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Q -Vx -Ve -X- -r- -a8 -6 -b -d -k -y -v 
+      -vi- -c -tW -tWM"/>
+    <PFLAGS value="-$YD -$W -$O- -$A8 -v -JPHNE -M"/>
+    <RFLAGS value=""/>
+    <AFLAGS value="/mx /w2 /zi"/>
+    <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -Gn -w-snf -w-dee -w-srd -w-uld -w-nou -w-dup -w-rty 
+      -w-exp -v"/>
+    <OTHERFILES value=""/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="c0w32.obj sysinit.obj $(OBJFILES)"/>
+    <ALLRES value="$(RESFILES)"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mt.lib"/>
+    <OTHERFILES value=""/>
+  </LINKER>
+  <FILELIST>
+      <FILE FILENAME="MeasureSQL.res" FORMNAME="" UNITNAME="MeasureSQL.res" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="MeasureSQL.cpp" FORMNAME="" UNITNAME="MeasureSQL" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Main.cpp" FORMNAME="MainForm" UNITNAME="Main" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="FileSelect.cpp" FORMNAME="FileSelectForm" UNITNAME="FileSelect" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Data.cpp" FORMNAME="DataModule1" UNITNAME="Data" CONTAINERID="CCompiler" DESIGNCLASS="TDataModule" LOCALCOMMAND=""/>
+      <FILE FILENAME="number.cpp" FORMNAME="NumberForm" UNITNAME="number" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="spc.cpp" FORMNAME="SpcForm" UNITNAME="spc" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Result.cpp" FORMNAME="ResultForm" UNITNAME="Result" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="NumberM.cpp" FORMNAME="NumberMForm" UNITNAME="NumberM" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="LoadNumbers.cpp" FORMNAME="LoadNumbersForm" UNITNAME="LoadNumbers" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="dialog1.cpp" FORMNAME="Dialog1Form" UNITNAME="dialog1" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Dostup.cpp" FORMNAME="DostupForm" UNITNAME="Dostup" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Spcdetail.cpp" FORMNAME="SpcDetailForm" UNITNAME="Spcdetail" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="SpcOptions.cpp" FORMNAME="SpcOptionsForm" UNITNAME="SpcOptions" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="DataArchive.cpp" FORMNAME="ArchiveForm" UNITNAME="DataArchive" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="archive.cpp" FORMNAME="archivedata" UNITNAME="archive" CONTAINERID="CCompiler" DESIGNCLASS="TDataModule" LOCALCOMMAND=""/>
+      <FILE FILENAME="options.cpp" FORMNAME="OptionsForm" UNITNAME="options" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="archiveTable.cpp" FORMNAME="ArchiveTableForm" UNITNAME="archiveTable" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="seacrh.cpp" FORMNAME="SearchForm" UNITNAME="seacrh" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="text.cpp" FORMNAME="TextForm" UNITNAME="text" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Zapac.cpp" FORMNAME="ZapacForm" UNITNAME="Zapac" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="temperature.cpp" FORMNAME="TemperatureForm" UNITNAME="temperature" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="dataview.cpp" FORMNAME="DataForm" UNITNAME="dataview" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="MathLib.cpp" FORMNAME="" UNITNAME="MathLib" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="protokol.cpp" FORMNAME="ProtokolForm" UNITNAME="protokol" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="data1.cpp" FORMNAME="DataModule2" UNITNAME="data1" CONTAINERID="CCompiler" DESIGNCLASS="TDataModule" LOCALCOMMAND=""/>
+      <FILE FILENAME="SpcMore.cpp" FORMNAME="FormMore" UNITNAME="SpcMore" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ManualRec.cpp" FORMNAME="RecForm" UNITNAME="ManualRec" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Rec.cpp" FORMNAME="MRecForm" UNITNAME="Rec" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="termo.cpp" FORMNAME="TermoForm" UNITNAME="termo" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="old.cpp" FORMNAME="OldForm" UNITNAME="old" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="oldview.cpp" FORMNAME="OldViewForm" UNITNAME="oldview" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Graph.cpp" FORMNAME="GpForm" UNITNAME="Graph" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="protokolbuild.cpp" FORMNAME="PrBuildForm" UNITNAME="protokolbuild" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="WriteBD.cpp" FORMNAME="WriteForm" UNITNAME="WriteBD" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="WriteTable.cpp" FORMNAME="WriteTableForm" UNITNAME="WriteTable" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Search.cpp" FORMNAME="FastSearchForm" UNITNAME="Search" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="NewSpc.cpp" FORMNAME="NewSpcForm" UNITNAME="NewSpc" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="GraphOptions.cpp" FORMNAME="OptionsGraphForm" UNITNAME="GraphOptions" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="PM.cpp" FORMNAME="PMForm" UNITNAME="PM" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="PMN.cpp" FORMNAME="PMNameForm" UNITNAME="PMN" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="PMDetail.cpp" FORMNAME="PMDetailForm" UNITNAME="PMDetail" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="PassportNumbers.cpp" FORMNAME="PNForm" UNITNAME="PassportNumbers" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="SortResult.cpp" FORMNAME="SortResultForm" UNITNAME="SortResult" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ProtokolData.cpp" FORMNAME="Protokol_Data" UNITNAME="ProtokolData" CONTAINERID="CCompiler" DESIGNCLASS="TDataModule" LOCALCOMMAND=""/>
+      <FILE FILENAME="data2.cpp" FORMNAME="DataModule3" UNITNAME="data2" CONTAINERID="CCompiler" DESIGNCLASS="TDataModule" LOCALCOMMAND=""/>
+      <FILE FILENAME="Modif.cpp" FORMNAME="ModifForm" UNITNAME="Modif" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Tnumber.cpp" FORMNAME="TnumberForm" UNITNAME="Tnumber" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Tmain.cpp" FORMNAME="TempMainForm" UNITNAME="Tmain" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="TempData.cpp" FORMNAME="TempDataModule" UNITNAME="TempData" CONTAINERID="CCompiler" DESIGNCLASS="TDataModule" LOCALCOMMAND=""/>
+      <FILE FILENAME="BarCodeMsk.cpp" FORMNAME="BarCodeMskForm" UNITNAME="BarCodeMsk" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="SpcSelect.cpp" FORMNAME="SpcSelectForm" UNITNAME="SpcSelect" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="FileLoad.cpp" FORMNAME="FileLoadForm" UNITNAME="FileLoad" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Protokol_Select.cpp" FORMNAME="Protokol_Select_Form" UNITNAME="Protokol_Select" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="BarCodeEnter.cpp" FORMNAME="BarCodeEnterForm" UNITNAME="BarCodeEnter" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="StringFunction.cpp" FORMNAME="" UNITNAME="StringFunction" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="addNorm.cpp" FORMNAME="AddNormForm" UNITNAME="addNorm" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Spc_PhazeNoise.cpp" FORMNAME="Spc_PhazeNoise_Form" UNITNAME="Spc_PhazeNoise" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="PhazeNoise.cpp" FORMNAME="PhazeNoiseForm" UNITNAME="PhazeNoise" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Par.cpp" FORMNAME="Par_Form" UNITNAME="Par" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="PHN.cpp" FORMNAME="PHNForm" UNITNAME="PHN" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="md5.cpp" FORMNAME="" UNITNAME="md5" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="md5wrapper.cpp" FORMNAME="" UNITNAME="md5wrapper" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="SpcMore_1.cpp" FORMNAME="SpcMore1" UNITNAME="SpcMore_1" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="SpektrOLD.cpp" FORMNAME="SpektrOLDForm" UNITNAME="SpektrOLD" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Protokol_Proverke_PH.cpp" FORMNAME="Proverka_PH_Form" UNITNAME="Protokol_Proverke_PH" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Protokol_Print.cpp" FORMNAME="Protokol_Print_Form" UNITNAME="Protokol_Print" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="AddMskReal.cpp" FORMNAME="AddMskForm" UNITNAME="AddMskReal" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="SelectSpc.cpp" FORMNAME="SelectSpcForm" UNITNAME="SelectSpc" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Data_RQ.cpp" FORMNAME="RQ_Data" UNITNAME="Data_RQ" CONTAINERID="CCompiler" DESIGNCLASS="TDataModule" LOCALCOMMAND=""/>
+      <FILE FILENAME="New_Data4.cpp" FORMNAME="New_Data" UNITNAME="New_Data4" CONTAINERID="CCompiler" DESIGNCLASS="TDataModule" LOCALCOMMAND=""/>
+      <FILE FILENAME="Data_MeasureModule.cpp" FORMNAME="Data_Measure" UNITNAME="Data_MeasureModule" CONTAINERID="CCompiler" DESIGNCLASS="TDataModule" LOCALCOMMAND=""/>
+  </FILELIST>
+  <BUILDTOOLS>
+  </BUILDTOOLS>
+
+  <IDEOPTIONS>
+[Version Info]
+IncludeVerInfo=0
+AutoIncBuild=0
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=1049
+CodePage=1251
+
+[Version Info Keys]
+CompanyName=
+FileDescription=
+FileVersion=1.0.0.0
+InternalName=
+LegalCopyright=
+LegalTrademarks=
+OriginalFilename=
+ProductName=
+ProductVersion=1.0.0.0
+Comments=
+
+[Excluded Packages]
+D:\Borland_LIB\FasfReport\LibBCB6\fstee6.bpl=FastScript 1.9 Tee Components
+D:\Borland_LIB\FasfReport\LibBCB6\frxtee6.bpl=FastReport 4.0 Tee Components
+
+[HistoryLists\hlIncludePath]
+Count=23
+Item0=$(BCB)\include;$(BCB)\include\vcl;D:\Borland_LIB\FasfReport\LibBCB6;D:\Borland_LIB\ESBPCS4\bcb6;D:\Borland_LIB\TMS Instrumentation Workshop v1.4.5\TMS Instrumentation Workshop v1.4.5;D:\Borland_LIB\RC4\Lib\BCB6;D:\Borland_LIB\tmssoftware\TMS Component Pack;D:\Borland_LIB\CoreLab\MyDac for CBuilder 6\Include;D:\Borland_LIB\TeeChart\Sources\Compiled\Builder6\Include;D:\Borland_LIB\Clever Internet Suite\Lib\CB6\Include
+Item1=$(BCB)\include;$(BCB)\include\vcl;D:\Borland_LIB\FasfReport\LibBCB6;D:\Borland_LIB\ESBPCS4\bcb6;D:\Borland_LIB\TMS Instrumentation Workshop v1.4.5\TMS Instrumentation Workshop v1.4.5;D:\Borland_LIB\RC4\Lib\BCB6;D:\Borland_LIB\tmssoftware\TMS Component Pack;D:\Borland_LIB\CoreLab\MyDac for CBuilder 6\Include;D:\Borland_LIB\TeeChart\Sources\Compiled\Builder6\Include
+Item2=$(BCB)\include;$(BCB)\include\vcl;D:\Borland_LIB\FasfReport\LibBCB6;D:\Borland_LIB\ESBPCS4\bcb6;D:\Borland_LIB\TMS Instrumentation Workshop v1.4.5\TMS Instrumentation Workshop v1.4.5;D:\Borland_LIB\RC4\Lib\BCB6;D:\Borland_LIB\tmssoftware\TMS Component Pack;D:\Borland_LIB\CoreLab\MyDac for CBuilder 6\Include
+Item3=$(BCB)\include;$(BCB)\include\vcl;D:\Borland_LIB\FasfReport\LibBCB6;D:\Borland_LIB\ESBPCS4\bcb6;D:\Borland_LIB\TMS Instrumentation Workshop v1.4.5\TMS Instrumentation Workshop v1.4.5;D:\Borland_LIB\RC4\Lib\BCB6;D:\Borland_LIB\tmssoftware\TMS Component Pack
+Item4=$(BCB)\include;$(BCB)\include\vcl;D:\Borland_LIB\FasfReport\LibBCB6;D:\Borland_LIB\ESBPCS4\bcb6;D:\Borland_LIB\TMS Instrumentation Workshop v1.4.5\TMS Instrumentation Workshop v1.4.5
+Item5=$(BCB)\include;$(BCB)\include\vcl;D:\Borland_LIB\FasfReport\LibBCB6;D:\Borland_LIB\ESBPCS4\bcb6
+Item6=C:\Borland\CBuilder6\Projects;C:\Program Files (x86)\Borland\CBuilder6\Projects;C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;$(BCB)\include;$(BCB)\include\vcl;C:\Program Files\CoreLab\MyDac for CBuilder 6;C:\Program Files\Borland\CBuilder6\Res;C:\Program Files (x86)\Raize\RC4\Source;C:\Program Files (x86)\Raize\RC4\Lib\BCB6;C:\Program Files (x86)\FastReports\FastReport 4\LibBCB6;C:\Program Files (x86)\FastReports\FastReport 4\Source;C:\Borland\CBuilder6\Include\TMS_INST;C:\Borland\CBuilder6\Include\TMS;C:\Borland\CBuilder6\Include\TMS\XlsAdapter;C:\Borland\CBuilder6\Include\TMS\skins;C:\Borland\CBuilder6\Include\TMS\Doc;C:\Borland\CBuilder6\Include\ESB;C:\Borland\CBuilder6\Include\MyDac;C:\Borland\CBuilder6\Include\TeeChart;C:\Borland\CBuilder6\Lib\FastReport;C:\Borland\CBuilder6\Include\CleverInternet
+Item7=C:\Program Files (x86)\Borland\CBuilder6\Projects;C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;$(BCB)\include;$(BCB)\include\vcl;C:\Program Files\CoreLab\MyDac for CBuilder 6;C:\Program Files\Borland\CBuilder6\Res;C:\Program Files (x86)\Raize\RC4\Source;C:\Program Files (x86)\Raize\RC4\Lib\BCB6;C:\Program Files (x86)\FastReports\FastReport 4\LibBCB6;C:\Program Files (x86)\FastReports\FastReport 4\Source;C:\Borland\CBuilder6\Include\TMS_INST;C:\Borland\CBuilder6\Include\TMS;C:\Borland\CBuilder6\Include\TMS\XlsAdapter;C:\Borland\CBuilder6\Include\TMS\skins;C:\Borland\CBuilder6\Include\TMS\Doc;C:\Borland\CBuilder6\Include\ESB;C:\Borland\CBuilder6\Include\MyDac;C:\Borland\CBuilder6\Include\TeeChart;C:\Borland\CBuilder6\Lib\FastReport;C:\Borland\CBuilder6\Include\CleverInternet
+Item8=C:\Program Files (x86)\Borland\CBuilder6\Projects;C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;$(BCB)\include;$(BCB)\include\vcl;C:\Program Files\CoreLab\MyDac for CBuilder 6;C:\Program Files\Borland\CBuilder6\Res;C:\Program Files (x86)\Raize\RC4\Source;C:\Program Files (x86)\Raize\RC4\Lib\BCB6;C:\Program Files (x86)\FastReports\FastReport 4\LibBCB6;C:\Program Files (x86)\FastReports\FastReport 4\Source;C:\Borland\CBuilder6\Include\TMS_INST;C:\Borland\CBuilder6\Include\TMS;C:\Borland\CBuilder6\Include\TMS\XlsAdapter;C:\Borland\CBuilder6\Include\TMS\skins;C:\Borland\CBuilder6\Include\TMS\Doc;C:\Borland\CBuilder6\Include\ESB;C:\Borland\CBuilder6\Include\MyDac;C:\Borland\CBuilder6\Include\TeeChart;C:\Borland\CBuilder6\Lib\FastReport
+Item9=C:\Program Files (x86)\Borland\CBuilder6\Projects;C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;$(BCB)\include;$(BCB)\include\vcl;C:\Program Files\CoreLab\MyDac for CBuilder 6;C:\Program Files\Borland\CBuilder6\Res;C:\Program Files (x86)\Raize\RC4\Source;C:\Program Files (x86)\Raize\RC4\Lib\BCB6;C:\Program Files (x86)\FastReports\FastReport 4\LibBCB6;C:\Program Files (x86)\FastReports\FastReport 4\Source;C:\Borland\CBuilder6\Include\TMS_INST;C:\Borland\CBuilder6\Include\TMS;C:\Borland\CBuilder6\Include\TMS\XlsAdapter;C:\Borland\CBuilder6\Include\TMS\skins;C:\Borland\CBuilder6\Include\TMS\Doc;C:\Borland\CBuilder6\Include\ESB;C:\Borland\CBuilder6\Include\MyDac;C:\Borland\CBuilder6\Include\TeeChart
+Item10=C:\Program Files (x86)\Borland\CBuilder6\Projects;C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;$(BCB)\include;$(BCB)\include\vcl;C:\Program Files\CoreLab\MyDac for CBuilder 6;C:\Program Files\Borland\CBuilder6\Res;C:\Program Files (x86)\Raize\RC4\Source;C:\Program Files (x86)\Raize\RC4\Lib\BCB6;C:\Program Files (x86)\FastReports\FastReport 4\LibBCB6;C:\Program Files (x86)\FastReports\FastReport 4\Source;C:\Borland\CBuilder6\Include\TMS_INST;C:\Borland\CBuilder6\Include\TMS;C:\Borland\CBuilder6\Include\TMS\XlsAdapter;C:\Borland\CBuilder6\Include\TMS\skins;C:\Borland\CBuilder6\Include\TMS\Doc;C:\Borland\CBuilder6\Include\ESB;C:\Borland\CBuilder6\Include\MyDac
+Item11=C:\Program Files (x86)\Borland\CBuilder6\Projects;C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;$(BCB)\include;$(BCB)\include\vcl;C:\Program Files\CoreLab\MyDac for CBuilder 6;C:\Program Files\Borland\CBuilder6\Res;C:\Program Files (x86)\Raize\RC4\Source;C:\Program Files (x86)\Raize\RC4\Lib\BCB6;C:\Program Files (x86)\FastReports\FastReport 4\LibBCB6;C:\Program Files (x86)\FastReports\FastReport 4\Source;C:\Borland\CBuilder6\Include\TMS_INST;C:\Borland\CBuilder6\Include\TMS;C:\Borland\CBuilder6\Include\TMS\XlsAdapter;C:\Borland\CBuilder6\Include\TMS\skins;C:\Borland\CBuilder6\Include\TMS\Doc;C:\Borland\CBuilder6\Include\ESB
+Item12=C:\Program Files (x86)\Borland\CBuilder6\Projects;C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;$(BCB)\include;$(BCB)\include\vcl;C:\Program Files\CoreLab\MyDac for CBuilder 6;C:\Program Files\Borland\CBuilder6\Res;C:\Program Files (x86)\Raize\RC4\Source;C:\Program Files (x86)\Raize\RC4\Lib\BCB6;C:\Program Files (x86)\FastReports\FastReport 4\LibBCB6;C:\Program Files (x86)\FastReports\FastReport 4\Source;C:\Borland\CBuilder6\Include\TMS_INST;C:\Borland\CBuilder6\Include\TMS;C:\Borland\CBuilder6\Include\TMS\XlsAdapter;C:\Borland\CBuilder6\Include\TMS\skins;C:\Borland\CBuilder6\Include\TMS\Doc
+Item13=C:\Program Files (x86)\Borland\CBuilder6\Projects;C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;$(BCB)\include;$(BCB)\include\vcl;C:\Program Files\CoreLab\MyDac for CBuilder 6;C:\Program Files\Borland\CBuilder6\Res;C:\Program Files (x86)\Raize\RC4\Source;C:\Program Files (x86)\Raize\RC4\Lib\BCB6;C:\Program Files (x86)\FastReports\FastReport 4\LibBCB6;C:\Program Files (x86)\FastReports\FastReport 4\Source
+Item14=C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;$(BCB)\include;$(BCB)\include\vcl;C:\Program Files\CoreLab\MyDac for CBuilder 6;C:\Program Files\Borland\CBuilder6\Res;C:\Program Files (x86)\Raize\RC4\Source;C:\Program Files (x86)\Raize\RC4\Lib\BCB6;C:\Program Files (x86)\FastReports\FastReport 4\LibBCB6;C:\Program Files (x86)\FastReports\FastReport 4\Source
+Item15=C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;$(BCB)\include;$(BCB)\include\vcl;C:\Program Files\CoreLab\MyDac for CBuilder 6;C:\Program Files\Borland\CBuilder6\Res;C:\Program Files (x86)\Raize\RC4\Source;C:\Program Files (x86)\Raize\RC4\Lib\BCB6
+Item16=C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;$(BCB)\include;$(BCB)\include\vcl;C:\Program Files\CoreLab\MyDac for CBuilder 6;C:\Program Files\Borland\CBuilder6\Res
+Item17=C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;E:\Projects New\SaundersSQL2;$(BCB)\include;$(BCB)\include\vcl;C:\Program Files\TMS\TMS Component Pack;C:\Program Files\CoreLab\MyDac for CBuilder 6;C:\Program Files\Borland\CBuilder6\Res;C:\Program Files\Devart\MyDac for CBuilder 6\Lib
+Item18=C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;E:\Projects New\SaundersSQL2;$(BCB)\include;$(BCB)\include\vcl;C:\Program Files\TMS\TMS Component Pack;C:\Program Files\CoreLab\MyDac for CBuilder 6;C:\Program Files\Borland\CBuilder6\Res
+Item19=C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;E:\Projects New\SaundersSQL2;$(BCB)\include;$(BCB)\include\vcl;C:\Program Files\TMS\TMS Component Pack;C:\Program Files\CoreLab\MyDac for CBuilder 6
+Item20=C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;E:\Projects New\SaundersSQL2;$(BCB)\include;$(BCB)\include\vcl;C:\Program Files\TMS\TMS Component Pack
+Item21=C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;E:\Projects New\SaundersSQL2;$(BCB)\include;$(BCB)\include\vcl;C:\Program Files\TMS\TMS Component Pack
+Item22=C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;E:\Projects New\SaundersSQL2;$(BCB)\include;$(BCB)\include\vcl
+
+[HistoryLists\hlLibraryPath]
+Count=24
+Item0=$(BCB)\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\Borland_LIB\FasfReport\LibBCB6;D:\Borland_LIB\ESBPCS4\bcb6;D:\Borland_LIB\TMS Instrumentation Workshop v1.4.5\TMS Instrumentation Workshop v1.4.5;D:\Borland_LIB\RC4\Lib\BCB6;D:\Borland_LIB\tmssoftware\TMS Component Pack;D:\Borland_LIB\CoreLab\MyDac for CBuilder 6\Lib;D:\Borland_LIB\TeeChart\Sources\Compiled\Builder6\Lib;D:\Borland_LIB\TeeChart\Sources\Compiled\Builder6\Lib\Obj;D:\Borland_LIB\Clever Internet Suite\Lib\CB6
+Item1=$(BCB)\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\Borland_LIB\FasfReport\LibBCB6;D:\Borland_LIB\ESBPCS4\bcb6;D:\Borland_LIB\TMS Instrumentation Workshop v1.4.5\TMS Instrumentation Workshop v1.4.5;D:\Borland_LIB\RC4\Lib\BCB6;D:\Borland_LIB\tmssoftware\TMS Component Pack;D:\Borland_LIB\CoreLab\MyDac for CBuilder 6\Lib;D:\Borland_LIB\TeeChart\Sources\Compiled\Builder6\Lib;D:\Borland_LIB\TeeChart\Sources\Compiled\Builder6\Lib\Obj
+Item2=$(BCB)\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\Borland_LIB\FasfReport\LibBCB6;D:\Borland_LIB\ESBPCS4\bcb6;D:\Borland_LIB\TMS Instrumentation Workshop v1.4.5\TMS Instrumentation Workshop v1.4.5;D:\Borland_LIB\RC4\Lib\BCB6;D:\Borland_LIB\tmssoftware\TMS Component Pack;D:\Borland_LIB\CoreLab\MyDac for CBuilder 6\Lib
+Item3=$(BCB)\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\Borland_LIB\FasfReport\LibBCB6;D:\Borland_LIB\ESBPCS4\bcb6;D:\Borland_LIB\TMS Instrumentation Workshop v1.4.5\TMS Instrumentation Workshop v1.4.5;D:\Borland_LIB\RC4\Lib\BCB6;D:\Borland_LIB\tmssoftware\TMS Component Pack
+Item4=$(BCB)\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\Borland_LIB\FasfReport\LibBCB6;D:\Borland_LIB\ESBPCS4\bcb6;D:\Borland_LIB\TMS Instrumentation Workshop v1.4.5\TMS Instrumentation Workshop v1.4.5
+Item5=$(BCB)\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\Borland_LIB\FasfReport\LibBCB6;D:\Borland_LIB\ESBPCS4\bcb6
+Item6=C:\Borland\CBuilder6\Projects;C:\Program Files (x86)\Borland\CBuilder6\Projects;C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;$(BCB)\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;C:\Program Files\CoreLab\MyDac for CBuilder 6;C:\Program Files\Borland\CBuilder6\Res;C:\Program Files\CoreLab\MyDac for CBuilder 6\Lib;C:\Program Files (x86)\Raize\RC4\Lib\BCB6;C:\Program Files (x86)\FastReports\FastReport 4\LibBCB6;C:\Borland\CBuilder6\Lib\MyDac;C:\Borland\CBuilder6\Lib\TeeChart;C:\Borland\CBuilder6\Lib\TeeChart\Obj;C:\Borland\CBuilder6\Lib\FastReport;C:\Borland\CBuilder6\Lib\CleverInternet;C:\Borland\CBuilder6\Include\TMS;C:\Borland\CBuilder6\Include\TMS\XlsAdapter;C:\Borland\CBuilder6\Include\TMS\skins;C:\Borland\CBuilder6\Include\TMS\Doc;C:\Borland\CBuilder6\Include\TMS_INST
+Item7=C:\Program Files (x86)\Borland\CBuilder6\Projects;C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;$(BCB)\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;C:\Program Files\CoreLab\MyDac for CBuilder 6;C:\Program Files\Borland\CBuilder6\Res;C:\Program Files\CoreLab\MyDac for CBuilder 6\Lib;C:\Program Files (x86)\Raize\RC4\Lib\BCB6;C:\Program Files (x86)\FastReports\FastReport 4\LibBCB6;C:\Borland\CBuilder6\Lib\MyDac;C:\Borland\CBuilder6\Lib\TeeChart;C:\Borland\CBuilder6\Lib\TeeChart\Obj;C:\Borland\CBuilder6\Lib\FastReport;C:\Borland\CBuilder6\Lib\CleverInternet;C:\Borland\CBuilder6\Include\TMS;C:\Borland\CBuilder6\Include\TMS\XlsAdapter;C:\Borland\CBuilder6\Include\TMS\skins;C:\Borland\CBuilder6\Include\TMS\Doc;C:\Borland\CBuilder6\Include\TMS_INST
+Item8=C:\Program Files (x86)\Borland\CBuilder6\Projects;C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;$(BCB)\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;C:\Program Files\CoreLab\MyDac for CBuilder 6;C:\Program Files\Borland\CBuilder6\Res;C:\Program Files\CoreLab\MyDac for CBuilder 6\Lib;C:\Program Files (x86)\Raize\RC4\Lib\BCB6;C:\Program Files (x86)\FastReports\FastReport 4\LibBCB6;C:\Borland\CBuilder6\Lib\MyDac;C:\Borland\CBuilder6\Lib\TeeChart;C:\Borland\CBuilder6\Lib\TeeChart\Obj;C:\Borland\CBuilder6\Lib\FastReport;C:\Borland\CBuilder6\Lib\CleverInternet;C:\Borland\CBuilder6\Include\TMS;C:\Borland\CBuilder6\Include\TMS\XlsAdapter;C:\Borland\CBuilder6\Include\TMS\skins;C:\Borland\CBuilder6\Include\TMS\Doc
+Item9=C:\Program Files (x86)\Borland\CBuilder6\Projects;C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;$(BCB)\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;C:\Program Files\CoreLab\MyDac for CBuilder 6;C:\Program Files\Borland\CBuilder6\Res;C:\Program Files\CoreLab\MyDac for CBuilder 6\Lib;C:\Program Files (x86)\Raize\RC4\Lib\BCB6;C:\Program Files (x86)\FastReports\FastReport 4\LibBCB6;C:\Borland\CBuilder6\Lib\MyDac;C:\Borland\CBuilder6\Lib\TeeChart;C:\Borland\CBuilder6\Lib\TeeChart\Obj;C:\Borland\CBuilder6\Lib\FastReport;C:\Borland\CBuilder6\Lib\CleverInternet
+Item10=C:\Program Files (x86)\Borland\CBuilder6\Projects;C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;$(BCB)\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;C:\Program Files\CoreLab\MyDac for CBuilder 6;C:\Program Files\Borland\CBuilder6\Res;C:\Program Files\CoreLab\MyDac for CBuilder 6\Lib;C:\Program Files (x86)\Raize\RC4\Lib\BCB6;C:\Program Files (x86)\FastReports\FastReport 4\LibBCB6;C:\Borland\CBuilder6\Lib\MyDac;C:\Borland\CBuilder6\Lib\TeeChart;C:\Borland\CBuilder6\Lib\TeeChart\Obj;C:\Borland\CBuilder6\Lib\FastReport
+Item11=C:\Program Files (x86)\Borland\CBuilder6\Projects;C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;$(BCB)\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;C:\Program Files\CoreLab\MyDac for CBuilder 6;C:\Program Files\Borland\CBuilder6\Res;C:\Program Files\CoreLab\MyDac for CBuilder 6\Lib;C:\Program Files (x86)\Raize\RC4\Lib\BCB6;C:\Program Files (x86)\FastReports\FastReport 4\LibBCB6;C:\Borland\CBuilder6\Lib\MyDac;C:\Borland\CBuilder6\Lib\TeeChart;C:\Borland\CBuilder6\Lib\TeeChart\Obj
+Item12=C:\Program Files (x86)\Borland\CBuilder6\Projects;C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;$(BCB)\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;C:\Program Files\CoreLab\MyDac for CBuilder 6;C:\Program Files\Borland\CBuilder6\Res;C:\Program Files\CoreLab\MyDac for CBuilder 6\Lib;C:\Program Files (x86)\Raize\RC4\Lib\BCB6;C:\Program Files (x86)\FastReports\FastReport 4\LibBCB6;C:\Borland\CBuilder6\Lib\MyDac
+Item13=C:\Program Files (x86)\Borland\CBuilder6\Projects;C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;$(BCB)\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;C:\Program Files\CoreLab\MyDac for CBuilder 6;C:\Program Files\Borland\CBuilder6\Res;C:\Program Files\CoreLab\MyDac for CBuilder 6\Lib;C:\Program Files (x86)\Raize\RC4\Lib\BCB6;C:\Program Files (x86)\FastReports\FastReport 4\LibBCB6
+Item14=C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;$(BCB)\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;C:\Program Files\CoreLab\MyDac for CBuilder 6;C:\Program Files\Borland\CBuilder6\Res;C:\Program Files\CoreLab\MyDac for CBuilder 6\Lib;C:\Program Files (x86)\Raize\RC4\Lib\BCB6;C:\Program Files (x86)\FastReports\FastReport 4\LibBCB6
+Item15=C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;$(BCB)\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;C:\Program Files\CoreLab\MyDac for CBuilder 6;C:\Program Files\Borland\CBuilder6\Res;C:\Program Files\CoreLab\MyDac for CBuilder 6\Lib;C:\Program Files (x86)\Raize\RC4\Lib\BCB6
+Item16=C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;$(BCB)\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;C:\Program Files\CoreLab\MyDac for CBuilder 6;C:\Program Files\Borland\CBuilder6\Res;C:\Program Files\CoreLab\MyDac for CBuilder 6\Lib
+Item17=C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;$(BCB)\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;C:\Program Files\CoreLab\MyDac for CBuilder 6;C:\Program Files\Borland\CBuilder6\Res
+Item18=C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;E:\Projects New\SaundersSQL2;..\..\..\ComponentAce\EasyCompressionLibrary\Lib\C++ Builder 6;$(BCB)\Include;..\..\..\ComponentAce\ZipForge\Lib\C++ Builder 6;$(BCB)\Projects\Lib;c:\Abakus\CB6;..\..\..\FastReports\FastReport 4\LibBCB6;..\..\..\Raize\RC4\Lib\BCB6;$(BCB)\lib\obj;$(BCB)\lib;C:\Program Files\TMS\TMS Component Pack;C:\Program Files\CoreLab\MyDac for CBuilder 6;C:\Program Files\Borland\CBuilder6\Res;C:\Program Files\Devart\MyDac for CBuilder 6\Lib
+Item19=C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;E:\Projects New\SaundersSQL2;..\..\..\ComponentAce\EasyCompressionLibrary\Lib\C++ Builder 6;$(BCB)\Include;..\..\..\ComponentAce\ZipForge\Lib\C++ Builder 6;$(BCB)\Projects\Lib;c:\Abakus\CB6;..\..\..\FastReports\FastReport 4\LibBCB6;..\..\..\Raize\RC4\Lib\BCB6;$(BCB)\lib\obj;$(BCB)\lib;C:\Program Files\TMS\TMS Component Pack;C:\Program Files\CoreLab\MyDac for CBuilder 6;C:\Program Files\Borland\CBuilder6\Res
+Item20=C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;E:\Projects New\SaundersSQL2;..\..\..\ComponentAce\EasyCompressionLibrary\Lib\C++ Builder 6;$(BCB)\Include;..\..\..\ComponentAce\ZipForge\Lib\C++ Builder 6;$(BCB)\Projects\Lib;c:\Abakus\CB6;..\..\..\FastReports\FastReport 4\LibBCB6;..\..\..\Raize\RC4\Lib\BCB6;$(BCB)\lib\obj;$(BCB)\lib;C:\Program Files\TMS\TMS Component Pack;C:\Program Files\CoreLab\MyDac for CBuilder 6
+Item21=C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;E:\Projects New\SaundersSQL2;..\..\..\ComponentAce\EasyCompressionLibrary\Lib\C++ Builder 6;$(BCB)\Include;..\..\..\ComponentAce\ZipForge\Lib\C++ Builder 6;$(BCB)\Projects\Lib;c:\Abakus\CB6;..\..\..\FastReports\FastReport 4\LibBCB6;..\..\..\Raize\RC4\Lib\BCB6;$(BCB)\lib\obj;$(BCB)\lib;C:\Program Files\TMS\TMS Component Pack
+Item22=C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;E:\Projects New\SaundersSQL2;..\..\..\ComponentAce\EasyCompressionLibrary\Lib\C++ Builder 6;$(BCB)\Include;..\..\..\ComponentAce\ZipForge\Lib\C++ Builder 6;$(BCB)\Projects\Lib;c:\Abakus\CB6;..\..\..\FastReports\FastReport 4\LibBCB6;..\..\..\Raize\RC4\Lib\BCB6;$(BCB)\lib\obj;$(BCB)\lib;C:\Program Files\TMS\TMS Component Pack
+Item23=C:\Program Files\Raize\RC4\Lib\BCB6;C:\Program Files\Borland\CBuilder6\Projects;E:\Projects New\SaundersSQL2;..\..\..\ComponentAce\EasyCompressionLibrary\Lib\C++ Builder 6;$(BCB)\Include;..\..\..\ComponentAce\ZipForge\Lib\C++ Builder 6;$(BCB)\Projects\Lib;c:\Abakus\CB6;..\..\..\FastReports\FastReport 4\LibBCB6;..\..\..\Raize\RC4\Lib\BCB6;$(BCB)\lib\obj;$(BCB)\lib
+
+[HistoryLists\hlDebugSourcePath]
+Count=1
+Item0=$(BCB)\source\vcl
+
+[HistoryLists\hlConditionals]
+Count=1
+Item0=_DEBUG
+
+[Debugging]
+DebugSourceDirs=$(BCB)\source\vcl
+
+[Parameters]
+RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
+HostApplication=
+RemoteHost=
+RemotePath=
+RemoteLauncher=
+RemoteCWD=
+RemoteDebug=0
+
+[Compiler]
+ShowInfoMsgs=1
+LinkDebugVcl=0
+LinkCGLIB=0
+
+[CORBA]
+AddServerUnit=1
+AddClientUnit=1
+PrecompiledHeaders=1
+
+[Language]
+ActiveLang=
+ProjectLang=
+RootDir=
+  </IDEOPTIONS>
+</PROJECT>

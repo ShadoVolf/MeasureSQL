@@ -10523,6 +10523,33 @@ if(DataModule1->SqlSpecification->FieldByName("S")->AsString=="True"){
 //************ИНИЦИАЛИЗАЦИЯ ПЕРЕМЕННЫХ********************************************************************************************************************
 //ОКРУГЛЕНИЕ
    int round;
+ int status=0;
+
+//************Сопротивление
+double MinR,MaxR;
+double SumR;
+ int counter,counterR;
+//**********Добротность
+double MinQ,MaxQ;
+double SumQ;
+int counterQ;
+//**********Индуктивность
+double MinL,MaxL;
+double SumL;
+int counterL;
+//**********Статическая емкость
+double MinC0,MaxC0;
+double SumC0;
+int counterC0;
+//**********Динамическая емкость
+double MinCq,MaxCq;
+double SumCq;
+int counterCq;
+//**********Емкостной коэффициент
+double MinC0_C1,MaxC0_C1;
+double SumC0_C1;
+int counterC0_C1;
+
 //****************************************************************************************************************************************************
 //*******************************************************************************************************************************************************
 //********************ПОДКЛЮЧЕНИЕ ТАБЛИЦ БД***********************************************************************************************************************************
@@ -10885,8 +10912,285 @@ if(DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString!="no"){
      DataModule1->SQLPSIData->FieldByName("Status2")->AsString=Status2;
 
  }
-
+ //Записываем данные в таблицу psidatatemp
  DataModule1->SQLPSIDataT->Post();
+ //********************Расчет параметров на одной точке**************************************************************************
+ //---------------------------------------------------------------------------------R--------------------------------------------------------------------------------------------------------
+
+ if (DataModule1->SqlSpecification->FieldByName("Tpar")->AsString==DataModule1->KH7700_Temp->FieldByName("TEMP")->AsString){
+                    R=DataModule1->KH7700_Temp->FieldByName("RS")->AsFloat;
+                    ResultForm->ResultGrid->Cells[Nar[4]][i+1]=FloatToStrF(R,ffFixed,4,1);
+                        if(DataModule1->SqlSpecification->FieldByName("R")->AsString=="True"){
+                                if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                        DataModule1->SQLPSIData->FieldByName("R")->AsString=R;
+                                                if (DataModule1->SqlSpecification->FieldByName("Ftgk_Measure")->AsString=="True"){
+                                                        DataModule1->SQLPSIData->FieldByName("Rtgk")->AsString=R;
+                                                }
+                                }
+                        }
+                        if(DataModule1->SqlSpecification->FieldByName("Rmax")->AsString!="no"){
+                                if(R>DataModule1->SqlSpecification->FieldByName("Rmax")->AsFloat){
+                                        status=1;
+                                        counterR=counterR+1;
+                                }
+                                if (DataModule1->SqlSpecification->FieldByName("DopuskR")->AsFloat>0){
+                                         if(R>DataModule1->SqlSpecification->FieldByName("Rmax")->AsFloat-(DataModule1->SqlSpecification->FieldByName("Rmax")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskR")->AsFloat/100)){
+                                                  if (status!=1){
+                                                          status=2;
+                                                 }
+                                                 counterR=counterR+1;
+                                          }
+
+                                }
+
+                        }
+                        if(DataModule1->SqlSpecification->FieldByName("Rmin")->AsString!="no"){
+                                if(R<DataModule1->SqlSpecification->FieldByName("Rmin")->AsFloat){
+                                        status=1;
+                                        counterR=counterR+1;
+                                }
+                               if (DataModule1->SqlSpecification->FieldByName("DopuskR")->AsFloat>0){
+                                         if(R<DataModule1->SqlSpecification->FieldByName("Rmin")->AsFloat+(DataModule1->SqlSpecification->FieldByName("Rmin")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskR")->AsFloat/100)){
+                                                  if (status!=1){
+                                                          status=2;
+                                                    }
+                                          counterR=counterR+1;
+                                          }
+
+                                  }
+                        }
+
+                        if(R>MaxR){
+                                MaxR=R;
+                        }
+                        if(R<MinR){
+                                MinR=R;
+                        }
+                        SumR=SumR+R;
+
+ }
+//-------------------------------------------------------------------------------Q-------------------------------------------------------------------------------------------------------------
+                                        if(DataModule1->SqlSpecification->FieldByName("Q")->AsString=="True"){
+                                                          if (DataModule1->SqlSpecification->FieldByName("Tq")->AsString==DataModule1->KH7700_Temp->FieldByName("TEMP")->AsString){
+                                                                          Q=DataModule1->KH7700_Temp->FieldByName("Q")->AsFloat;
+                                                                           ResultForm->ResultGrid->Cells[Nar[7]][i+1]=FloatToStrF(Q,ffFixed,4,0);
+                                                                          if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                      DataModule1->SQLPSIData->FieldByName("Q")->AsString=Q;
+                                                                                 }
+
+                                                               if(DataModule1->SqlSpecification->FieldByName("Qmax")->AsString!="no"){
+                                                                             if(Q>DataModule1->SqlSpecification->FieldByName("Qmax")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterQ=counterQ+1;
+                                                                                     }
+                                                                                if (DataModule1->SqlSpecification->FieldByName("DopuskQ")->AsFloat>0){
+                                                                                     if(Q>DataModule1->SqlSpecification->FieldByName("Qmax")->AsFloat-(DataModule1->SqlSpecification->FieldByName("Qmax")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskQ")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterQ=counterQ+1;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                                                              if(DataModule1->SqlSpecification->FieldByName("Qmin")->AsString!="no"){
+                                                                             if(Q<DataModule1->SqlSpecification->FieldByName("Qmin")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterQ=counterQ+1;
+                                                                                     }
+                                                                               if (DataModule1->SqlSpecification->FieldByName("DopuskQ")->AsFloat>0){
+                                                                                     if(Q<DataModule1->SqlSpecification->FieldByName("Qmin")->AsFloat+(DataModule1->SqlSpecification->FieldByName("Qmin")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskQ")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterQ=counterQ+1;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                                                              if(Q>MaxQ){
+                                                                   MaxQ=Q;
+                                                                   }
+                                                              if(Q<MinQ){
+                                                                    MinQ=Q;
+                                                                    }
+                                                              SumQ=SumQ+Q;
+
+                                                            }
+
+}
+
+
+//************************************************************************************************************************************
+//----------------------------------------------------------------------------------L-----------------------------------------------------------------------------------------------------------
+                                          if(DataModule1->SqlSpecification->FieldByName("L")->AsString=="True"){
+                                                       if (DataModule1->SqlSpecification->FieldByName("Lt")->AsString==DataModule1->KH7700_Temp->FieldByName("TEMP")->AsString){
+                                                                     Lq=DataModule1->KH7700_Temp->FieldByName("L")->AsFloat;
+                                                                     ResultForm->ResultGrid->Cells[Nar[9]][i+1]=FloatToStrF(Lq,ffFixed,5,3);
+                                                                          if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                      DataModule1->SQLPSIData->FieldByName("L")->AsString=Lq;
+                                                                                 }
+                                                                  if(DataModule1->SqlSpecification->FieldByName("Lmax")->AsString!="no"){
+                                                                             if(Lq>DataModule1->SqlSpecification->FieldByName("Lmax")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterL=counterL+1;
+                                                                                     }
+
+                                                                }
+                                                              if(DataModule1->SqlSpecification->FieldByName("Lmin")->AsString!="no"){
+                                                                             if(Lq<DataModule1->SqlSpecification->FieldByName("Lmin")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterL=counterL+1;
+                                                                                     }
+                                                                }
+                                                              if(Lq>MaxL){
+                                                                   MaxL=Lq;
+                                                                   }
+                                                              if(Lq<MinL){
+                                                                    MinL=Lq;
+                                                                    }
+                                                              SumL=SumL+Lq;
+
+                                                                }
+                                             }
+//************************************************************************************************************************************************************************************************
+//------------------------------------------------------------------------------------C0---------------------------------------------------------------------------------------------------------
+                                          if(DataModule1->SqlSpecification->FieldByName("C0")->AsString=="True"){
+                                                         if (DataModule1->SqlSpecification->FieldByName("Tc0")->AsString==DataModule1->KH7700_Temp->FieldByName("TEMP")->AsString){
+                                                                         C0=DataModule1->KH7700_Temp->FieldByName("C0")->AsFloat;
+                                                                         ResultForm->ResultGrid->Cells[Nar[5]][i+1]=FloatToStrF(C0,ffFixed,5,3);
+                                                                                  if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                             DataModule1->SQLPSIData->FieldByName("C0")->AsString=C0;
+                                                                                    }
+                                                                 if(DataModule1->SqlSpecification->FieldByName("C0max")->AsString!="no"){
+                                                                             if(C0>DataModule1->SqlSpecification->FieldByName("C0max")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterC0=counterC0+1;
+                                                                                     }
+                                                                              if (DataModule1->SqlSpecification->FieldByName("DopuskC0")->AsFloat>0){
+                                                                                     if(C0>DataModule1->SqlSpecification->FieldByName("C0max")->AsFloat-(DataModule1->SqlSpecification->FieldByName("C0max")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskC0")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterC0=counterC0+1;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                                                              if(DataModule1->SqlSpecification->FieldByName("C0min")->AsString!="no"){
+                                                                             if(C0<DataModule1->SqlSpecification->FieldByName("C0min")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterC0=counterC0+1;
+                                                                                     }
+                                                                             if (DataModule1->SqlSpecification->FieldByName("DopuskC0")->AsFloat>0){
+                                                                                     if(C0<DataModule1->SqlSpecification->FieldByName("C0min")->AsFloat+(DataModule1->SqlSpecification->FieldByName("C0min")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskC0")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterC0=counterC0+1;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                                                              if(C0>MaxC0){
+                                                                   MaxC0=C0;
+                                                                   }
+                                                              if(C0<MinC0){
+                                                                    MinC0=C0;
+                                                                    }
+                                                              SumC0=SumC0+C0;
+                                                           }
+                                            }
+ //********************************************************************************************************************************************************************************************************
+ //-------------------------------------------------------------------------------Cq-----------------------------------------------------------------------------------------------------------------
+                                            if(DataModule1->SqlSpecification->FieldByName("Cq")->AsString=="True"){
+                                                                 if (DataModule1->SqlSpecification->FieldByName("Tcq")->AsString==DataModule1->KH7700_Temp->FieldByName("TEMP")->AsString){
+                                                                           double kkk=DataModule1->KH7700_Temp->FieldByName("C1")->AsFloat;
+                                                                           Cq=StrToFloat(FloatToStrF(kkk,ffFixed,5,2));
+                                                                           ResultForm->ResultGrid->Cells[Nar[6]][i+1]=Cq;
+                                                                          if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                      DataModule1->SQLPSIData->FieldByName("Cq")->AsString=Cq;
+                                                                                 }
+                                                                                 if(DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString!="no"){
+                                                                             if(Cq>DataModule1->SqlSpecification->FieldByName("Cqmax")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterCq=counterCq+1;
+                                                                                     }
+                                                                                if (DataModule1->SqlSpecification->FieldByName("DopuskCq")->AsFloat>0){
+                                                                                     if(Cq>DataModule1->SqlSpecification->FieldByName("Cqmax")->AsFloat-(DataModule1->SqlSpecification->FieldByName("Cqmax")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskCq")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterCq=counterCq+1;
+                                                                                     }
+
+                                                                                    }
+                                                                              }
+                                                              if(DataModule1->SqlSpecification->FieldByName("Cqmin")->AsString!="no"){
+                                                                             if(Cq<DataModule1->SqlSpecification->FieldByName("Cqmin")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterCq=counterCq+1;
+                                                                                     }
+                                                                              if (DataModule1->SqlSpecification->FieldByName("DopuskCq")->AsFloat>0){
+                                                                                     if(Cq<DataModule1->SqlSpecification->FieldByName("Cqmin")->AsFloat+(DataModule1->SqlSpecification->FieldByName("Cqmin")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskCq")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterCq=counterCq+1;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                                                              if(Cq>MaxCq){
+                                                                   MaxCq=Cq;
+                                                                   }
+                                                              if(Cq<MinCq){
+                                                                    MinCq=Cq;
+                                                                    }
+                                                              SumCq=SumCq+Cq;
+                                                                  }
+                                              }
+//****************************************************************************************************************************************************************************************************************
+//--------------------------------------------------------------------------C0_C1------------------------------------------------------------------------
+     if(DataModule1->SqlSpecification->FieldByName("C0_C1")->AsString=="True"){
+                                                                 if (DataModule1->SqlSpecification->FieldByName("C0_C1_T")->AsString==DataModule1->KH7700_Temp->FieldByName("TEMP")->AsString){
+                                                                            C0_C1=DataModule1->KH7700_Temp->FieldByName("C0C1")->AsFloat;
+                                                                            ResultForm->ResultGrid->Cells[Nar[26]][i+1]=FloatToStrF(C0_C1,ffFixed,5,2);
+                                                                          if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                                                    if (C0_C1>0 & C0_C1<100000){
+                                                                                      DataModule1->SQLPSIData->FieldByName("C0_C1")->AsString=C0_C1;
+                                                                                      }
+                                                                                     else {
+
+                                                                                      DataModule1->SQLPSIData->FieldByName("C0_C1")->AsString=0;
+                                                                                     }
+                                                                                 }
+                                                                                 if(DataModule1->SqlSpecification->FieldByName("C0_C1max")->AsString!="no"){
+                                                                             if(C0_C1>DataModule1->SqlSpecification->FieldByName("C0_C1max")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterC0_C1=counterC0_C1+1;
+                                                                                     }
+
+                                                                }
+                                                              if(DataModule1->SqlSpecification->FieldByName("C0_C1min")->AsString!="no"){
+                                                                             if(C0_C1<DataModule1->SqlSpecification->FieldByName("C0_C1min")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterC0_C1=counterC0_C1+1;
+                                                                                     }
+                                                                }
+                                                              if(C0_C1>MaxC0_C1){
+                                                                   MaxC0_C1=C0_C1;
+                                                                   }
+                                                              if(C0_C1<MinC0_C1){
+                                                                    MinC0_C1=C0_C1;
+                                                                    }
+                                                              SumC0_C1=SumC0_C1+C0_C1;
+                                                                  }
+                                              }
+
+//****************************************************************************************************************************************************************************************************
+
+
  DataModule1->KH7700_Temp->Next();
   }// Цикл по всем температурным точкам для одной позиции
 //***********************************************************************************************************************************

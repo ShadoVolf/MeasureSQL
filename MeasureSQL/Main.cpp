@@ -9967,7 +9967,7 @@ DataModule1->spc_variant->Active=true;
           k=0;
           DataModule1->KH7700_Config->First();
                 for (int i=0;i<DataModule1->KH7700_Config->RecordCount;i++){
-                      if (DataModule1->Config->FieldByName("SetupN")->AsFloat==l){
+                      if (DataModule1->KH7700_Config->FieldByName("SetupN")->AsFloat==l){
                                   break;
                             }
                     DataModule1->KH7700_Config->Next();
@@ -10530,26 +10530,373 @@ if(DataModule1->SqlSpecification->FieldByName("S")->AsString=="True"){
      WorkProgress->MaxValue=N-1;
      WorkProgress->Position=0;
      ResultForm->ResultGrid->ColCount=k;
+//Подклюяаем таблицу данных**************************************************************************************
      DataModule1->KH7700_Temp->Active=true;
       DataModule1->KH7700_Temp->First();
-
+//Подключаем тпблицу с номерами*********************************************************************************
       DataModule1->NumberCurrent->Active=true;
       DataModule1->NumberCurrent->First();
-       if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
-                                        DataModule1->SQLPSIData->Active=false;
-                                        DataModule1->SQLPSIData->SQL->Clear();
-                                        DataModule1->SQLPSIData->SQL->Add("Select * from psidata where Measure_ID='"+Measure_ID+"'");
-                                         DataModule1->SQLPSIData->Active=true;
+//Если разрешена запись в БД подключаем таблицу исходящих данных
+ if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+        DataModule1->SQLPSIData->Active=false;
+        DataModule1->SQLPSIData->SQL->Clear();
+        DataModule1->SQLPSIData->SQL->Add("Select * from psidata where Measure_ID='"+Measure_ID+"'");
+        DataModule1->SQLPSIData->Active=true;
+     }
 
-                          }
-    for (int i=0;i<N;i++){
-       status=0;
-                        if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+        for (int i=0;i<N;i++){
+                  if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                      DataModule1->SQLPSIData->Append();
+                  }
+//********************************************************************************************************************************************************************
+//*****************************************ОБРАБОТКА*********************************************************************************************************
+//Порядковый номер****************************************************************************************************************************************
+       if(DataModule1->SqlSpecification->FieldByName("Number")->AsString=="True"){
+                          ResultForm->ResultGrid->Cells[Nar[0]][i+1]=i+1;
+        }
+//Позиция************************************************************************************************************************************************
+        if(DataModule1->SqlSpecification->FieldByName("position")->AsString=="True"){
+                       ResultForm->ResultGrid->Cells[Nar[1]][i+1]=DataModule1->NumberCurrent->FieldByName("Position")->AsString;
+                                if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                             DataModule1->SQLPSIData->FieldByName("Position")->AsString=ResultForm->ResultGrid->Cells[Nar[1]][i+1];
+                                }
+           }
+//***********МСК      Файл       Спецификация******************************************************************************************************************************************
+   ResultForm->edtMSK->Text=NumberMForm->edtMSK->Text;
+   ResultForm->edtFile->Text=NumberMForm->edtFile->Text;
+   ResultForm->edtSpc->Text=DataModule1->SqlSpecification->FieldByName("Name")->AsString;
+          if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                             DataModule1->SQLPSIData->FieldByName("Msk")->AsString=NumberMForm->edtMSK->Text;
+                                             DataModule1->SQLPSIData->FieldByName("Measure_ID")->AsString=Measure_ID;
+                                             //Тип установки*******************************************************************************
+                                             DataModule1->SQLPSIData->FieldByName("MachineType")->AsString="KH7700";
+                                             DataModule1->SQLPSIData->FieldByName("Machine_ID")->AsString=Machine_ID;
+                                             DataModule1->SQLPSIData->FieldByName("Machine_Serial")->AsString=Machine_Serial;
+                                             DataModule1->SQLPSIData->FieldByName("Machine_Call_Date")->AsString=Machine_Call_Date;
+                                             DataModule1->SQLPSIData->FieldByName("M_Type")->AsString=M_Type;
+                                             DataModule1->SQLPSIData->FieldByName("PoverKa")->AsBoolean=Poverka;
+                                             DataModule1->SQLPSIData->FieldByName("Version")->AsString=ver->Text;
+                                             DataModule1->SQLPSIData->FieldByName("MSK-M")->AsString=NumberMForm->edtM->Text;
+                                             DataModule1->SQLPSIData->FieldByName("File")->AsString=NumberMForm->edtFile->Text;
+                                             DataModule1->SQLPSIData->FieldByName("Factory")->AsString=NumberMForm->edtFactory->Text;
+                                             DataModule1->SQLPSIData->FieldByName("Lot_Date")->AsString=NumberMForm->edtKonvert->Text;
+                                             DataModule1->SQLPSIData->FieldByName("type")->AsBoolean=NumberMForm->iiBox->Checked;
+                                             DataModule1->SQLPSIData->FieldByName("Spc")->AsString=DataModule1->SqlSpecification->FieldByName("Name")->AsString;
+                                             DataModule1->SQLPSIData->FieldByName("Nominal")->AsString=DataModule1->SqlSpecification->FieldByName("Nominal")->AsString;
+                                             DataModule1->SQLPSIData->FieldByName("intervalgf")->AsString=intervalGF;
+                                             DataModule1->SQLPSIData->FieldByName("Date")->AsString=stD+"."+stMn+"."+stY;
+                                             DataModule1->SQLPSIData->FieldByName("Time")->AsString=stH+"."+stM+"."+stS;
+                                             DataModule1->SQLPSIData->FieldByName("DateR")->AsDateTime=ESBDateTimeEdit1->AsDateTime;
+                                             DataModule1->SQLPSIData->FieldByName("Operator")->AsString=DataModule1->Dostup->FieldByName("Name")->AsString;
+                                              if (ModifForm->chkCn){
+                                                      DataModule1->SQLPSIData->FieldByName("Cn")->AsString=ModifForm->edtCn->Text;
 
-                                         DataModule1->SQLPSIData->Append();
-                          }
+                                                                   }
+                                                         else {
+                                                                        DataModule1->SQLPSIData->FieldByName("Cn")->AsString=DataModule1->SqlSpecification->FieldByName("LoadValue")->AsString;;
+                                                                }
+                                                if (ModifForm->chkPmi->Checked){
+                                                         DataModule1->SQLPSIData->FieldByName("PMI")->AsString="True";
+                                                         }
+                                                         else {
+                                                                 DataModule1->SQLPSIData->FieldByName("PMI")->AsString="False";
+                                                                 }
+
+
+                                }
+//*****************************************************************************************************************************************************
+//*******************************************************************************************************************************************************
+//Параметры***(В интервале температур)***************************************************************************************************
+              double R,C0,Cq,Lq,Fs,FL,F0L,F,Slope,TMax,TMin,Mono,Fmax,Fmin,Fptp,FT,C0_C1,C0_C1max,C0_C1min,RR2max,RR2min;
+              double Q;
+              double Rt;
+              double Rmax;
+              double Rmin;
+              double RR;
+              double C1_2C0;
+              double Nominal=DataModule1->SqlSpecification->FieldByName("Nominal")->AsFloat;
+               AnsiString S;
+               S=DataModule1->NumberCurrent->FieldByName("Position")->AsString;
+//************Выбираем одну текущую позицию  и Переводим указатель таблицы даных на 1 позицию**************************************************************************
+              DataModule1->KH7700_Temp->Filtered=false;
+              DataModule1->KH7700_Temp->Filter="XTALROW='"+S+"'";
+              DataModule1->KH7700_Temp->Filtered=true;
+              DataModule1->KH7700_Temp->First();
+//***********Подготавливаем таблицу для записи результатов********************************************************************
+              AnsiString F1;
+              F1="Select * from psidatatemp where Measure_ID='"+Measure_ID+"'";
+              DataModule1->SQLPSIDataT->Active=false;
+              DataModule1->SQLPSIDataT->SQL->Clear();
+              DataModule1->SQLPSIDataT->SQL->Add(F1);
+              DataModule1->SQLPSIDataT->Active=true;
+
+//*******************************Порядковый номер******************************************************************************************************
+                if(DataModule1->SqlSpecification->FieldByName("Snumber")->AsString=="True"){
+                       ResultForm->ResultGrid->Cells[Nar[2]][i+1]=DataModule1->NumberCurrent->FieldByName("SNumber")->AsString;
+                              if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                     DataModule1->SQLPSIData->FieldByName("N")->AsString=DataModule1->NumberCurrent->FieldByName("SNumber")->AsString;
+                               }
+                   }
+//Задаем начальное значение Status2
+   Status2="Good";
+ ///-------------------------------------------------------------------------------------------------------------------
+ap::real_1d_array XZ,YZ,KpZ;             //инициализация переменых
+ap::real_1d_array WZ;
+int TempCountZ=DataModule1->KH7700_Temp->RecordCount;
+XZ.setbounds(0,TempCountZ);
+YZ.setbounds(0,TempCountZ);
+WZ.setbounds(0,TempCountZ);
+KpZ.setbounds(0,TempCountZ);
+double MonoZ;
+double X1Z,Y1Z;
+double Az,Bz;   //температурные пределы
+int Mz=DataModule1->SqlSpecification->FieldByName("Polinom")->AsFloat;;//порядок полинома
+//Задаем начальное значение температуры как первую точку измерений
+Az=DataModule1->KH7700_Temp->FieldByName("TEMP")->AsFloat;
+//****************Выбиараем колонку частоты в зависимости от типа измерений*********************************
+      for( int u=0;u<TempCountZ;u++){
+           XZ(u)=DataModule1->KH7700_Temp->FieldByName("TEMP")->AsFloat;
+           WZ(u)=1;
+             if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                  if (Measure_Type=="Series"){
+                     YZ(u)=((DataModule1->KH7700_Temp->FieldByName("FS")->AsFloat-Nominal*1E6)/Nominal);
+                   }
+                  if (Measure_Type=="EqReact"){
+                     YZ(u)=((DataModule1->KH7700_Temp->FieldByName("FS")->AsFloat-Nominal*1E6)/Nominal);
+                   }
+                  if (Measure_Type=="Physical"){
+                     YZ(u)=((DataModule1->KH7700_Temp->FieldByName("FL")->AsFloat-Nominal)*1E6/Nominal);
+                   }
+              }
+             else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                     YZ(u)=((DataModule1->KH7700_Temp->FieldByName("FS")->AsFloat-Nominal*1E6)/Nominal);
+                    }
+             else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                    YZ(u)=((DataModule1->KH7700_Temp->FieldByName("FL")->AsFloat-Nominal*1E6)/Nominal);
+                    }
+             else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                    YZ(u)=((DataModule1->KH7700_Temp->FieldByName("FL")->AsFloat-Nominal*1E6)/Nominal);
+                  }
+           DataModule1->KH7700_Temp->Next();
+          }//for
+//Задаем максимальную температуру измерения как последнюю точку*****************************************
+DataModule1->KH7700_Temp->Last();
+Bz=DataModule1->KH7700_Temp->FieldByName("TEMP")->AsFloat;
+//Переводим указатель таблицы данных на первую позицию******************************************************
+DataModule1->KH7700_Temp->First();
+//Начинаем цикл по всем температурным точкам*************************************************
+for (int j=0;j<DataModule1->KH7700_Temp->RecordCount;j++){
+
+//Преводим таблицу TEMP в режим добавления данных
+ DataModule1->SQLPSIDataT->Append();
+ //Активируем счетчик брака
+  int ll=0;
+//*************Добавляем статические данные*********************************************************
+ DataModule1->SQLPSIDataT->FieldByName("Msk")->AsString=NumberMForm->edtMSK->Text;
+ DataModule1->SQLPSIDataT->FieldByName("MSK-M")->AsString=NumberMForm->edtM->Text;
+ DataModule1->SQLPSIDataT->FieldByName("Measure_ID")->AsString=Measure_ID;
+ DataModule1->SQLPSIDataT->FieldByName("N")->AsString=DataModule1->NumberCurrent->FieldByName("SNumber")->AsString;
+ DataModule1->SQLPSIDataT->FieldByName("File")->AsString=NumberMForm->edtFile->Text;
+ DataModule1->SQLPSIDataT->FieldByName("pos")->AsString=ResultForm->ResultGrid->Cells[Nar[1]][i+1];
+ DataModule1->SQLPSIDataT->FieldByName("Temp")->AsString=DataModule1->KH7700_Temp->FieldByName("TEMP")->AsString;
+ double rhmax,rhmin,qhmax,qhmin,c0hmax,c0hmin,lhmax,lhmin,fhmax,fhmin,c1hmax,c1hmin;
+ //*************************************** Устанавливаем порого анаомальных значений для сопротивления*******************
+if(DataModule1->SqlSpecification->FieldByName("Rmax")->AsString!="no"){
+     rhmax=StrToFloat(DataModule1->SqlSpecification->FieldByName("Rmax")->AsString)*10;
+ }
+ else {
+      rhmax=5000;
+     }
+ if(DataModule1->SqlSpecification->FieldByName("Rmin")->AsString!="no"){
+     rhmin=StrToFloat(DataModule1->SqlSpecification->FieldByName("Rmin")->AsString)/10;
+   }
+   else {
+       rhmin=0;
+     }
+//*****************Проверяем значение сопротивление если оно в пределах допуска записываем данные в базу****************************************************************************************
+ if (DataModule1->KH7700_Temp->FieldByName("RS")->AsFloat<rhmax & DataModule1->KH7700_Temp->FieldByName("RS")->AsFloat>rhmin){
+   DataModule1->SQLPSIDataT->FieldByName("R")->AsString=DataModule1->KH7700_Temp->FieldByName("RS")->AsFloat;
+  }
+ else {
+  DataModule1->SQLPSIDataT->FieldByName("R")->AsString=DataModule1->KH7700_Temp->FieldByName("RS")->AsFloat;
+  ll=1;
+ }
+ //*******************************Устанавливаем порого анаомальных значений для добротности***********
+  if(DataModule1->SqlSpecification->FieldByName("Qmax")->AsString!="no"){
+     qhmax=StrToFloat(DataModule1->SqlSpecification->FieldByName("Qmax")->AsString)*10;
+   }
+   else {
+       qhmax=50000000;
+     }
+   if(DataModule1->SqlSpecification->FieldByName("Qmin")->AsString!="no"){
+     qhmin=StrToFloat(DataModule1->SqlSpecification->FieldByName("Qmin")->AsString)/10;
+   }
+   else {
+       qhmin=0;
+     }
+//*****************Проверяем значение сопротивление если оно в пределах допуска записываем данные в базу**************
+ if (DataModule1->KH7700_Temp->FieldByName("Q")->AsFloat<qhmax & DataModule1->KH7700_Temp->FieldByName("Q")->AsFloat>qhmin){
+ DataModule1->SQLPSIDataT->FieldByName("Q")->AsString=DataModule1->KH7700_Temp->FieldByName("Q")->AsFloat;
+  }
+  else {
+  DataModule1->SQLPSIDataT->FieldByName("Q")->AsString=DataModule1->KH7700_Temp->FieldByName("Q")->AsFloat;
+  ll=1;
+ }
+
+//************************************Устанавливаем порого анаомальных значений для статической емкости*******************************
+  if(DataModule1->SqlSpecification->FieldByName("C0max")->AsString!="no"){
+     c0hmax=StrToFloat(DataModule1->SqlSpecification->FieldByName("C0max")->AsString)*10;
+   }
+   else {
+       c0hmax=5000;
+     }
+   if(DataModule1->SqlSpecification->FieldByName("C0min")->AsString!="no"){
+     c0hmin=StrToFloat(DataModule1->SqlSpecification->FieldByName("C0min")->AsString)/10;
+   }
+   else {
+       c0hmin=0;
+     }
+ //*****************Проверяем значение сопротивление если оно в пределах допуска записываем данные в базу**************
+ if (DataModule1->KH7700_Temp->FieldByName("C0")->AsFloat<c0hmax & DataModule1->KH7700_Temp->FieldByName("C0")->AsFloat>c0hmin){
+  DataModule1->SQLPSIDataT->FieldByName("C0")->AsString=DataModule1->KH7700_Temp->FieldByName("C0")->AsFloat;
+  }
+  else {
+   DataModule1->SQLPSIDataT->FieldByName("C0")->AsString=DataModule1->KH7700_Temp->FieldByName("C0")->AsFloat;
+  ll=1;
+ }
+//****************************************Устанавливаем порого анаомальных значений для динамической емкости**********************************
+if(DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString!="no"){
+     c1hmax=StrToFloat(DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString)*10;
+   }
+   else {
+       c1hmax=5000;
+     }
+   if(DataModule1->SqlSpecification->FieldByName("Cqmin")->AsString!="no"){
+     c1hmin=StrToFloat(DataModule1->SqlSpecification->FieldByName("Cqmin")->AsString)/10;
+   }
+   else {
+       c1hmin=0;
+     }
+  //*****************Проверяем значение сопротивление если оно в пределах допуска записываем данные в базу**************
+ if (DataModule1->KH7700_Temp->FieldByName("C1")->AsFloat<c1hmax & DataModule1->KH7700_Temp->FieldByName("C1")->AsFloat>c1hmin){
+      DataModule1->SQLPSIDataT->FieldByName("Cq")->AsString=DataModule1->KH7700_Temp->FieldByName("C1")->AsFloat;
+  }
+  else {
+     DataModule1->SQLPSIDataT->FieldByName("Cq")->AsString=DataModule1->KH7700_Temp->FieldByName("C1")->AsFloat;
+  ll=1;
+ }
+//*************************************Устанавливаем порого анаомальных значений для индуктивности******************************************************
+ if(DataModule1->SqlSpecification->FieldByName("Lmax")->AsString!="no"){
+     lhmax=StrToFloat(DataModule1->SqlSpecification->FieldByName("Lmax")->AsString)*10;
+   }
+   else {
+       lhmax=100000;
+     }
+   if(DataModule1->SqlSpecification->FieldByName("Lmin")->AsString!="no"){
+     lhmin=StrToFloat(DataModule1->SqlSpecification->FieldByName("Lmin")->AsString)/10;
+   }
+   else {
+       lhmin=0;
+     }
+  //*****************Проверяем значение сопротивление если оно в пределах допуска записываем данные в базу**************
+ if (DataModule1->KH7700_Temp->FieldByName("L")->AsFloat<lhmax & DataModule1->KH7700_Temp->FieldByName("L")->AsFloat>lhmin){
+      DataModule1->SQLPSIDataT->FieldByName("L")->AsString=DataModule1->KH7700_Temp->FieldByName("L")->AsFloat;
+  }
+  else {
+     DataModule1->SQLPSIDataT->FieldByName("L")->AsString=DataModule1->KH7700_Temp->FieldByName("L")->AsFloat;
+  ll=1;
+ }
+//***************************************************************************************************************
+//**************************************Устанавливаем порого анаомальных значений для точности настройки*****************************************
+ Fs=DataModule1->KH7700_Temp->FieldByName("FS")->AsFloat;
+ FL=DataModule1->KH7700_Temp->FieldByName("FL")->AsFloat;
+ F0L=DataModule1->KH7700_Temp->FieldByName("FL")->AsFloat;
+ double ffs,ffl;
+ //************************************************************************************************************
+
+ if (Measure_Type=="Series"){
+                  ffs=((Fs-Nominal*1E6)/Nominal);
+                 ffl=0;
+                 }
+ if (Measure_Type=="EqReact"){
+                  ffs=((Fs-Nominal*1E6)/Nominal);
+                  ffl=((FL-Nominal*1E6)/Nominal);
+      }
+   if (Measure_Type=="Physical"){
+                  ffs=((FL-Nominal*1E6)/Nominal);
+                  ffl=((F0L-Nominal*1E6)/Nominal);
+         }
+       fhmax=5000;
+       fhmin=-5000;
+
+ if (ffs>fhmin & ffs<fhmax){
+      DataModule1->SQLPSIDataT->FieldByName("F")->AsString=ffs;
+      DataModule1->SQLPSIDataT->FieldByName("FL")->AsString=ffl;
+  }
+  else {
+     DataModule1->SQLPSIDataT->FieldByName("F")->AsString=ffs;
+      DataModule1->SQLPSIDataT->FieldByName("FL")->AsString=ffl;
+  ll=1;
+ }
+
+ if (TempCountZ>=Mz+1){
+    X1Z=DataModule1->KH7700_Temp->FieldByName("TEMP")->AsFloat;
+  if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+    if (Measure_Type=="Series"){
+                Y1Z=ffs;
+           }
+     if (Measure_Type=="EqReact"){
+                Y1Z=ffs;
+                 }
+    if (Measure_Type=="Physical"){
+                 Y1Z=ffl;
+               }
+
+   }
+   else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+
+            Y1Z=((Fs-Nominal*1E6)/Nominal);
+   }
+   else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+
+            Y1Z=((FL-Nominal*1E6)/Nominal);
+   }
+   else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+
+            Y1Z=((F0L-Nominal*1E6)/Nominal);
+   }
+
+    MonotonP1(XZ,YZ,Az,Bz,MonoZ,TempCountZ,WZ,Mz,X1Z,Y1Z);
+    DataModule1->SQLPSIDataT->FieldByName("Mono")->AsString=FloatToStrF(MonoZ,ffFixed,5,3);
 
  }
+
+//Устанавливаем переменную Status2 в зависимости отналичия анаомальных измерений
+ if (ll==1){
+   DataModule1->SQLPSIDataT->FieldByName("Status")->AsString="Fail";
+   Status2="BAD";
+ }
+ else {
+   DataModule1->SQLPSIDataT->FieldByName("Status")->AsString="Pass";
+
+ }
+ //Устанавливаем статус в выходной таблице
+  if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+     DataModule1->SQLPSIData->FieldByName("Status2")->AsString=Status2;
+
+ }
+
+ DataModule1->SQLPSIDataT->Post();
+ DataModule1->KH7700_Temp->Next();
+  }// Цикл по всем температурным точкам для одной позиции
+//***********************************************************************************************************************************
+       DataModule1->SQLPSIData->Post();
+       DataModule1->NumberCurrent->Next();
+       WorkProgress->Position=i+1;
+       }//For  по всем номерам KH7700
+
+
+        }   //   KH7700
 //*******************Окончание модуля KH7700*******************************************************************************
 
   ModifForm->chkPmi->Checked=false;

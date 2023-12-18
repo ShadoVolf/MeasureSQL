@@ -10569,6 +10569,22 @@ int counterTmin;
 double MinTmax,MaxTmax;
 double SumTmax;
 int counterTmax;
+//**********ћонотонность
+double MinM,MaxM;
+double SumM;
+int counterM;
+//**********Fmax
+double MinFmax,MaxFmax;
+double SumFmax;
+int counterFmax;
+//**********Fmin
+double MinFmin,MaxFmin;
+double SumFmin;
+int counterFmin;
+//**********Fptp
+double MinFptp,MaxFptp;
+double SumFptp;
+int counterFptp;
 
 //****************************************************************************************************************************************************
 //*******************************************************************************************************************************************************
@@ -12132,7 +12148,419 @@ if (DataModule1->SqlSpecification->FieldByName("Tmax")->AsString=="True" ||  Dat
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------
     }
 //*************************************************************************************************************************
+//*************************************************************************************************************************
+//*************************монотонность*******************************************************************************************
+   if (DataModule1->SqlSpecification->FieldByName("M")->AsString=="True"){
 
+          double MonoT;
+          if (TempCountM>0){
+          MonotonP(X1,Y1,Am,Bm,Mono,TempCountM,W,M,mono1,MonoT);
+          }
+          else {
+             Mono=0;
+             MonoT=0;
+          }
+
+          ResultForm->ResultGrid->Cells[Nar[20]][i+1]=FloatToStrF(Mono,ffFixed,8,4);
+                          if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                         if (Mono>30 || Mono<-100){
+                                         DataModule1->SQLPSIData->FieldByName("Mono")->AsFloat=0;
+                                         }
+                                         else {
+                                             DataModule1->SQLPSIData->FieldByName("Mono")->AsFloat=Mono;
+                                             }
+                                             DataModule1->SQLPSIData->FieldByName("MonoT")->AsFloat=MonoT;
+                           }
+                       if (Mono==0){
+                        Status2="BAD";
+                       }
+              if(DataModule1->SqlSpecification->FieldByName("Mmax")->AsString!="no"){
+                                  if(Mono>DataModule1->SqlSpecification->FieldByName("Mmax")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterM=counterM+1;
+                                                                                     }
+                                                                }
+                                                              if(DataModule1->SqlSpecification->FieldByName("Mmin")->AsString!="no"){
+                                                                             if(Mono<DataModule1->SqlSpecification->FieldByName("Mmin")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterM=counterM+1;
+                                                                                     }
+                                                                }
+                                                              if(Mono>MaxM){
+                                                                   MaxM=Mono;
+                                                                   }
+                                                              if(Mono<MinM){
+                                                                    MinM=Mono;
+                                                                    }
+                                                              SumM=SumM+Mono;
+
+
+
+
+    }
+
+//**********************************************************************************************************************************
+//*********************************************************Fmax/Fmin/Fptp***********************************************************
+ if (DataModule1->SqlSpecification->FieldByName("Fmx")->AsString=="True" ||  DataModule1->SqlSpecification->FieldByName("Fmn")->AsString=="True" || DataModule1->SqlSpecification->FieldByName("Fptp")->AsString=="True" || DataModule1->SqlSpecification->FieldByName("Fptp_2")->AsString=="True"){
+     DataModule1->KH7700_Temp->First();
+     double fq[300];
+     double Fn;
+     double Totn;
+                               if (DataModule1->SqlSpecification->FieldByName("Tint")->AsString=="True"){
+                                   Totn=DataModule1->SqlSpecification->FieldByName("TintValue")->AsFloat;
+                               }
+                               else{
+                                 Totn=DataModule1->SqlSpecification->FieldByName("Tnastr")->AsFloat;
+                               }
+                               for (int j=0;j<DataModule1->KH7700_Temp->RecordCount;j++){
+                                                if (DataModule1->KH7700_Temp->FieldByName("TEMP")->AsFloat==Totn){
+
+                                                        if (DataModule1->KH7700_Temp->FieldByName("RS")->AsFloat!=0){
+                                                                  if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                                         if (Measure_Type=="Series"){
+                                                                                   Fn=DataModule1->KH7700_Temp->FieldByName("FS")->AsFloat;
+
+                                                                          }
+                                                                         if (Measure_Type=="EqReact"){
+
+                                                                                         Fn=DataModule1->KH7700_Temp->FieldByName("FS")->AsFloat;
+                                                                                         }
+                                                                         if (Measure_Type=="Physical"){
+                                                                                            Fn=DataModule1->KH7700_Temp->FieldByName("FL")->AsFloat;
+                                                                                 }
+                                                                         }
+                                                                   else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                                                     Fn=DataModule1->KH7700_Temp->FieldByName("FS")->AsFloat;
+
+                                                                         }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                                                         Fn=DataModule1->KH7700_Temp->FieldByName("FL")->AsFloat;
+
+                                                                                  }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                                                         Fn=DataModule1->KH7700_Temp->FieldByName("FL")->AsFloat;
+
+                                                        }
+
+                                                           }
+                                                           else {
+                                                                 Fn=1;
+                                                                 }
+                                                            break;
+                                                           }  //if
+
+                                           DataModule1->KH7700_Temp->Next();
+                                }  //for
+                                  Fn=((Fn-Nominal*1E6)/Nominal);
+                                DataModule1->KH7700_Temp->First();
+
+                                for (int j=0;j<DataModule1->KH7700_Temp->RecordCount;j++){
+
+                                                    if (DataModule1->KH7700_Temp->FieldByName("RS")->AsFloat!=0){
+
+                                                                fq[j]=Y2(j)-Fn;
+
+                                                              } //if
+                                                        else {
+
+                                                           if (j>0){fq[j]=fq[j-1];}
+
+                                                             if(j==0){fq[j]=1;}
+
+                                                            }  //else
+
+
+
+
+
+                                        DataModule1->KH7700_Temp->Next();
+                                } //for
+
+
+             MaxMin(fq,Fmax,Fmin,Fptp,l_1);
+
+//----------------------------------------------------------------------------------Fmax----------------------------------------------------------------------------------------
+            if (DataModule1->SqlSpecification->FieldByName("Fmx")->AsString=="True" ){
+                         ResultForm->ResultGrid->Cells[Nar[17]][i+1]=FloatToStrF(Fmax,ffFixed,6,2);
+                                      if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                                   if(Fmax<1000 & Fmax>-1000){
+                                              DataModule1->SQLPSIData->FieldByName("Fmax")->AsFloat=Fmax;
+                                               }
+                                               else {
+                                                  DataModule1->SQLPSIData->FieldByName("Fmax")->AsFloat=0;
+                                                  }
+
+                                        }//if
+                                        if(DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsString!="no"){
+                                                                             if(Fmax>DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterFmax=counterFmax+1;
+                                                                                     }
+                                                                   if (DataModule1->SqlSpecification->FieldByName("DopuskFi")->AsFloat>0){
+                                                                                     if(Fmax>DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsFloat-(fabs(DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsFloat)*DataModule1->SqlSpecification->FieldByName("DopuskFi")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterFmax=counterFmax+1;
+                                                                                     }
+
+                                                                                    }
+                                                                          if (DataModule1->SqlSpecification->FieldByName("DopuskFi_Real")->AsFloat>0){
+                                                                                     if(Fmax>DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsFloat-DataModule1->SqlSpecification->FieldByName("DopuskFi_Real")->AsFloat){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterFmax=counterFmax+1;
+                                                                                     }
+
+                                                                                    }
+                                                                    }
+
+
+                                                              if(DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsString!="no"){
+                                                                             if(Fmax<DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterFmax=counterFmax+1;
+                                                                                     }
+                                                                              if (DataModule1->SqlSpecification->FieldByName("DopuskFi")->AsFloat>0){
+                                                                                     if(Fmax<DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsFloat+(fabs(DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsFloat)*DataModule1->SqlSpecification->FieldByName("DopuskFi")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterFmax++;
+                                                                                     }
+
+                                                                                    }
+                                                                               if (DataModule1->SqlSpecification->FieldByName("DopuskFi_Real")->AsFloat>0){
+                                                                                     if(Fmax>DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsFloat+DataModule1->SqlSpecification->FieldByName("DopuskFi_Real")->AsFloat){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterFmax++;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                                                              if(Fmax>MaxFmax){
+                                                                   MaxFmax=Fmax;
+                                                                   }
+                                                              if(Fmax<MinFmax){
+                                                                    MinFmax=Fmax;
+                                                                    }
+                                                              SumFmax=SumFmax+Fmax;
+
+
+
+              }//if
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------Fmin---------------------------------------------------------------------------------------------------
+             if (DataModule1->SqlSpecification->FieldByName("Fmn")->AsString=="True" ){
+                         ResultForm->ResultGrid->Cells[Nar[18]][i+1]=FloatToStrF(Fmin,ffFixed,6,2);
+                                      if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                            if(Fmin<1000 & Fmin>-1000){
+                                             DataModule1->SQLPSIData->FieldByName("Fmin")->AsFloat=Fmin;
+                                               }
+                                               else {
+                                                  DataModule1->SQLPSIData->FieldByName("Fmin")->AsFloat=0;
+                                                  }
+
+                                        }
+                        if(DataModule1->SqlSpecification->FieldByName("Fminmax")->AsString!="no"){
+                                                                             if(Fmin>DataModule1->SqlSpecification->FieldByName("Fmaxmax")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterFmin=counterFmin+1;
+                                                                                     }
+                                                                       if (DataModule1->SqlSpecification->FieldByName("DopuskFi")->AsFloat>0){
+                                                                                     if(Fmin>DataModule1->SqlSpecification->FieldByName("Fminmax")->AsFloat-(fabs(DataModule1->SqlSpecification->FieldByName("Fminmax")->AsFloat)*DataModule1->SqlSpecification->FieldByName("DopuskFi")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterFmin++;
+                                                                                     }
+
+                                                                                    }
+                                                                           if (DataModule1->SqlSpecification->FieldByName("DopuskFi_Real")->AsFloat>0){
+                                                                                     if(Fmin>DataModule1->SqlSpecification->FieldByName("Fminmax")->AsFloat-DataModule1->SqlSpecification->FieldByName("DopuskFi_Real")->AsFloat){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterFmin++;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                          if(DataModule1->SqlSpecification->FieldByName("Fminmin")->AsString!="no"){
+                                                                             if(Fmin<DataModule1->SqlSpecification->FieldByName("Fminmin")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterFmin=counterFmin+1;
+                                                                                     }
+                                                                      if (DataModule1->SqlSpecification->FieldByName("DopuskFi")->AsFloat>0){
+                                                                                     if(Fmin<DataModule1->SqlSpecification->FieldByName("Fminmin")->AsFloat+(fabs(DataModule1->SqlSpecification->FieldByName("Fminmin")->AsFloat)*DataModule1->SqlSpecification->FieldByName("DopuskFi")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterFmin++;
+                                                                                     }
+
+                                                                                    }
+                                                                       if (DataModule1->SqlSpecification->FieldByName("DopuskFi_Real")->AsFloat>0){
+                                                                                     if(Fmin>DataModule1->SqlSpecification->FieldByName("Fminmin")->AsFloat+DataModule1->SqlSpecification->FieldByName("DopuskFi_Real")->AsFloat){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterFmin++;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                                                              if(Fmin>MaxFmin){
+                                                                   MaxFmin=Fmin;
+                                                                   }
+                                                              if(Fmin<MinFmin){
+                                                                    MinFmin=Fmin;
+                                                                    }
+                                                              SumFmin=SumFmin+Fmin;
+
+              }
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------FMM-------------------------------------------------------------------------------------------------------------
+   if (DataModule1->SqlSpecification->FieldByName("Fmn")->AsString=="True" & DataModule1->SqlSpecification->FieldByName("Fmx")->AsString=="True"){
+             double Fmaxz,Fminz;
+             if (Fmax>=0){
+                  Fmaxz=Fmax;
+                  }
+                  else {
+                  Fmaxz=-1*Fmax;
+                  }
+             if(Fmin>=0){
+                      Fminz=Fmin;
+                      }
+                      else{
+                    Fminz=-1*Fmin;
+                    }
+                if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                               if(Fmin<1000 & Fmin>-1000 & Fmax<1000 & Fmax>-1000){
+                                            if (Fmaxz>Fminz){
+                                             DataModule1->SQLPSIData->FieldByName("Fmaxm")->AsFloat=Fmax;
+                                           }
+                                           else {
+                                                DataModule1->SQLPSIData->FieldByName("Fmaxm")->AsFloat=Fmin;
+                                                }
+                                  }
+                                 else {
+                                              DataModule1->SQLPSIData->FieldByName("Fmaxm")->AsFloat=0;
+                                       }
+                   }
+
+
+      }
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------Fptp-------------------------------------------------------------------------------------------------
+              if (DataModule1->SqlSpecification->FieldByName("Fptp")->AsString=="True" ){
+                         ResultForm->ResultGrid->Cells[Nar[19]][i+1]=FloatToStrF(Fptp,ffFixed,6,2);
+                                      if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                               if(Fptp<1000 & Fptp>-1000){
+                                             DataModule1->SQLPSIData->FieldByName("Fptp")->AsFloat=Fptp;
+                                               }
+                                               else {
+                                                  DataModule1->SQLPSIData->FieldByName("Fptp")->AsFloat=0;
+                                                  }
+                                        }
+                         if(DataModule1->SqlSpecification->FieldByName("Fptpmax")->AsString!="no"){
+                                                                             if(Fptp>DataModule1->SqlSpecification->FieldByName("Fptpmax")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterFptp=counterFptp+1;
+                                                                                     }
+                                                                        if (DataModule1->SqlSpecification->FieldByName("DopuskFptp")->AsFloat>0){
+                                                                                     if(Fptp>DataModule1->SqlSpecification->FieldByName("Fptpmax")->AsFloat-(DataModule1->SqlSpecification->FieldByName("Fptpmax")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskFptp")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterFptp=counterFptp+1;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                         if(DataModule1->SqlSpecification->FieldByName("Fptpmin")->AsString!="no"){
+                                                                             if(Fptp<DataModule1->SqlSpecification->FieldByName("Fptpmin")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterFptp=counterFptp+1;
+                                                                                     }
+                                                                           if (DataModule1->SqlSpecification->FieldByName("DopuskFptp")->AsFloat>0){
+                                                                                     if(Fptp<DataModule1->SqlSpecification->FieldByName("Fptpmin")->AsFloat+(DataModule1->SqlSpecification->FieldByName("Fptpmin")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskFptp")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterFptp=counterFptp+1;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                                                              if(Fptp>MaxFptp){
+                                                                   MaxFptp=Fptp;
+                                                                   }
+                                                              if(Fptp<MinFptp){
+                                                                    MinFptp=Fptp;
+                                                                    }
+                                                              SumFptp=SumFptp+Fptp;
+
+              }
+
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  if (DataModule1->SqlSpecification->FieldByName("Fptp_2")->AsString=="True" ){
+                         ResultForm->ResultGrid->Cells[Nar[19]][i+1]=FloatToStrF(Fptp/2,ffFixed,6,2);
+                                      if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                               if(Fptp<1000 & Fptp>-1000){
+                                             DataModule1->SQLPSIData->FieldByName("Fptp_2")->AsFloat=Fptp/2;
+                                               }
+                                               else {
+                                                  DataModule1->SQLPSIData->FieldByName("Fptp_2")->AsFloat=0;
+                                                  }
+                                        }
+                         if(DataModule1->SqlSpecification->FieldByName("Fptp_2max")->AsString!="no"){
+                                                                             if(Fptp/2>DataModule1->SqlSpecification->FieldByName("Fptp_2max")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterFptp=counterFptp+1;
+                                                                                     }
+                                                                            if (DataModule1->SqlSpecification->FieldByName("DopuskFptp")->AsFloat>0){
+                                                                                     if(Fptp/2>DataModule1->SqlSpecification->FieldByName("Fptp_2max")->AsFloat-(DataModule1->SqlSpecification->FieldByName("Fptp_2max")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskFptp")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterFptp=counterFptp+1;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                         if(DataModule1->SqlSpecification->FieldByName("Fptp_2min")->AsString!="no"){
+                                                                             if(Fptp/2<DataModule1->SqlSpecification->FieldByName("Fptp_2min")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterFptp=counterFptp+1;
+                                                                                     }
+                                                                               if (DataModule1->SqlSpecification->FieldByName("DopuskFptp")->AsFloat>0){
+                                                                                     if(Fptp/2<DataModule1->SqlSpecification->FieldByName("Fptp_2min")->AsFloat+(DataModule1->SqlSpecification->FieldByName("Fptp_2min")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskFptp")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterFptp=counterFptp+1;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                                                              if(Fptp/2>MaxFptp){
+                                                                   MaxFptp=Fptp/2;
+                                                                   }
+                                                              if(Fptp/2<MinFptp){
+                                                                    MinFptp=Fptp/2;
+                                                                    }
+                                                              SumFptp=SumFptp+Fptp/2;
+
+              }
+
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  }
+//******************************************************************************************************************************************************************************************************************
 
 
 

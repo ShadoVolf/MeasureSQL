@@ -13849,19 +13849,65 @@ DataModule1->spc_variant->Active=true;
 
   }
 //--------------------------------------------------------------------------------------------------------------------------------------------------
+ //--------------------------------------------------------------------------------------------------------------------------------------------------
+   //Статус*************************************************************************************************************************************************
+ if(DataModule1->SqlSpecification->FieldByName("Status")->AsString=="True"){
+                     if(status==1){
+                                    ResultForm->ResultGrid->Cells[Nar[22]][i+1]="Брак";
+                                    counter=counter+1;
+                            }
+                       else if (status==2){
+                                 ResultForm->ResultGrid->Cells[Nar[22]][i+1]="Усл.Годен";
+                                 counter=counter+1;
+                            }
+                        else {
+
+                            ResultForm->ResultGrid->Cells[Nar[22]][i+1]="Годен";
+                        }
+
+                       AnsiString F2;
 
 
+                      F2="Select * from psidatatemp where psidatatemp.msk='"+NumberMForm->edtMSK->Text+"' and N='"+DataModule1->NumberCurrent->FieldByName("SNumber")->AsString+"' and File='"+NumberMForm->edtFile->Text+"'";
+                       DataModule1->SQLPSIDataT1->Active=false;
+                      DataModule1->SQLPSIDataT1->SQL->Clear();
+                       DataModule1->SQLPSIDataT1->SQL->Add(F2);
+                        DataModule1->SQLPSIDataT1->Active=true;
+                         AnsiString SS;
+                       if (Status2!="BAD"){
+                        SS=ResultForm->ResultGrid->Cells[Nar[22]][i+1];
+                        }
+                        else {
+                        SS="Брак";
+                        ResultForm->ResultGrid->Cells[Nar[22]][i+1]="Брак";
+                         }
+                          if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                  DataModule1->SQLPSIData->FieldByName("Status")->AsString=ResultForm->ResultGrid->Cells[Nar[22]][i+1];
+                           }
+                         if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                     DataModule1->SQLPSIData->Post();
+                           }
+                  for (int i1=0;i1<DataModule1->SQLPSIDataT1->RecordCount; i1++){
+                         DataModule1->SQLPSIDataT1->Edit();
+                         DataModule1->SQLPSIDataT1->FieldByName("Status1")->AsString=SS;
+                         DataModule1->SQLPSIDataT1->Post();
+                         DataModule1->SQLPSIDataT1->Next();
+                       }
+
+                }
 
 
+                   DataModule1->SQLPSIDataT1->Active=false;
+                   DataModule1->SQLPSIDataT->Active=false;
+                  DataModule1->NumberCurrent->Next();
+                  WorkProgress->Position=i+1;
 
 //***********************************************************************************************************************************************************************************************************
-       DataModule1->SQLPSIData->Post();
-       DataModule1->NumberCurrent->Next();
-       WorkProgress->Position=i+1;
+
        }//For  по всем номерам KH7700
 
 
-        }   //   KH7700
+}   //   KH7700
 //*******************Окончание модуля KH7700*******************************************************************************
 
   ModifForm->chkPmi->Checked=false;

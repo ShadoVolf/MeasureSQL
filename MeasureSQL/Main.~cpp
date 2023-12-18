@@ -13349,7 +13349,7 @@ buildchebyshevleastsquares(X1,Y1,W,A,B,count_er,M,Kp1);//апроксимаци€
                                                 }
   //-----------------------------------------------------------------------------FT1-----------------------------------------------------
                              if (DataModule1->SqlSpecification->FieldByName("Ft1")->AsString=="True"){
-                                               if (DataModule1->SqlSpecification->FieldByName("Ft1t")->AsString==DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsString){
+                                               if (DataModule1->SqlSpecification->FieldByName("Ft1t")->AsString==DataModule1->KH7700_Temp->FieldByName("TEMP")->AsString){
                                                kl2++;
                                                  if (kl2>1){
                                                              Fs=(DataModule1->KH7700_Temp->FieldByName("FS")->AsFloat+Fs)/2;
@@ -13422,7 +13422,7 @@ buildchebyshevleastsquares(X1,Y1,W,A,B,count_er,M,Kp1);//апроксимаци€
 
                  //---------------------------------------------------Ft2--------------------------------------------------------------------------------
                           if (DataModule1->SqlSpecification->FieldByName("Ft2")->AsString=="True"){
-                             if (DataModule1->SqlSpecification->FieldByName("Ft2t")->AsString==DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsString){
+                             if (DataModule1->SqlSpecification->FieldByName("Ft2t")->AsString==DataModule1->KH7700_Temp->FieldByName("TEMP")->AsString){
                              kl3++;
                                                             if (kl3>1){
                                                              Fs=(DataModule1->KH7700_Temp->FieldByName("FS")->AsFloat+Fs)/2;
@@ -13493,7 +13493,7 @@ buildchebyshevleastsquares(X1,Y1,W,A,B,count_er,M,Kp1);//апроксимаци€
                                            }
           //-----------------------------------------------------------------------------------Ft3---------------------------------------------------------
               if (DataModule1->SqlSpecification->FieldByName("Ft3")->AsString=="True"){
-                             if (DataModule1->SqlSpecification->FieldByName("Ft3t")->AsString==DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsString){
+                             if (DataModule1->SqlSpecification->FieldByName("Ft3t")->AsString==DataModule1->KH7700_Temp->FieldByName("TEMP")->AsString){
                              kl4++;
                                                              if (kl4>1){
                                                              Fs=(DataModule1->KH7700_Temp->FieldByName("FS")->AsFloat+Fs)/2;
@@ -13565,7 +13565,7 @@ buildchebyshevleastsquares(X1,Y1,W,A,B,count_er,M,Kp1);//апроксимаци€
 
           //---------------------------------------------------------------------------Ft4----------------------------------------------------------------
           if (DataModule1->SqlSpecification->FieldByName("Ft4")->AsString=="True"){
-                             if (DataModule1->SqlSpecification->FieldByName("Ft4t")->AsString==DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsString){
+                             if (DataModule1->SqlSpecification->FieldByName("Ft4t")->AsString==DataModule1->KH7700_Temp->FieldByName("TEMP")->AsString){
                              kl5++;
                                                             if (kl5>1){
                                                              Fs=(DataModule1->KH7700_Temp->FieldByName("FS")->AsFloat+Fs)/2;
@@ -13644,8 +13644,217 @@ buildchebyshevleastsquares(X1,Y1,W,A,B,count_er,M,Kp1);//апроксимаци€
 
 
 //*************************************************************************************************************************************************************************************************************
+ //-----------------------------------------------------–азбраковка “чх по таблице-------------------------------------------------------------------------------------------------------------------------------------------------
+  
+  if (DataModule1->SqlSpecification->FieldByName("TCHTable")->AsString=="True"){
+  bool variant_1,variant_2,variant_3,st=true;
+  double Fn;
+  AnsiString Variantt;
+  // поиск номинальной частоты
+   DataModule1->KH7700_Temp->First();
+   for (int j=0;j<DataModule1->KH7700_Temp->RecordCount;j++){
+                                                if (DataModule1->KH7700_Temp->FieldByName("TEMP")->AsFloat==DataModule1->SqlSpecification->FieldByName("Tnastr")->AsFloat){
+
+                                                         if (DataModule1->KH7700_Temp->FieldByName("RS")->AsFloat!=0){
+                                                           if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+                                                                         if (Measure_Type=="Series"){
+                                                                                   Fn=DataModule1->KH7700_Temp->FieldByName("FS")->AsFloat;
+
+                                                                          }
+                                                                         if (Measure_Type=="EqReact"){
+
+                                                                                         Fn=DataModule1->KH7700_Temp->FieldByName("FL")->AsFloat;
+                                                                                         }
+                                                                         if (Measure_Type=="Physical"){
+                                                                                            Fn=DataModule1->KH7700_Temp->FieldByName("FL")->AsFloat;
+                                                                                 }
+                                                                         }
+                                                                   else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                                                     Fn=DataModule1->KH7700_Temp->FieldByName("FS")->AsFloat;
+
+                                                                         }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                                                         Fn=DataModule1->KH7700_Temp->FieldByName("FL")->AsFloat;
+
+                                                                                  }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                                                         Fn=DataModule1->KH7700_Temp->FieldByName("FL")->AsFloat;
+
+                                                        }
+                                                             }
+                                                             else {
+                                                                  Fn=1;
+                                                                  }
+                                                            break;
+                                                           }  //if
+
+                                           DataModule1->KH7700_Temp->Next();
+                                }  //for
 
 
+
+//«агрузка таблицы спецификаций
+DataModule1->spc_variant->Active=false;
+DataModule1->spc_variant->SQL->Clear();
+DataModule1->spc_variant->SQL->Add("Select * from Spc_Variant where SPC_ID='"+DataModule1->SqlSpecification->FieldByName("ID")->AsString+"' order by Name");
+DataModule1->spc_variant->Active=true;
+        if (DataModule1->spc_variant->RecordCount>0){
+                DataModule1->spc_variant->First();
+                        for (int u=0;u<DataModule1->spc_variant->RecordCount;u++){
+                                st=true;
+                                DataModule1->spc_variant_data->Active=false;
+                                DataModule1->spc_variant_data->SQL->Clear();
+                                DataModule1->spc_variant_data->SQL->Add("Select * from spc_variant_data where spc_variant_id='"+DataModule1->spc_variant->FieldByName("ID")->AsString+"'");
+                                DataModule1->spc_variant_data->Active=true;
+
+
+
+                                    if (DataModule1->spc_variant_data->RecordCount>0){
+                                          DataModule1->spc_variant_data->First();
+                                         for (int uu=0;uu<DataModule1->spc_variant_data->RecordCount; uu++){
+
+                                              bool stl=true;
+                                              DataModule1->KH7700_Temp->First();
+                                              double FTtable;
+                                                   for (int j=0;j<DataModule1->KH7700_Temp->RecordCount;j++){
+
+                                            if (DataModule1->spc_variant_data->FieldByName("Parametr_T")->AsString==DataModule1->KH7700_Temp->FieldByName("TEMP")->AsString){
+
+                                                             Fs=DataModule1->KH7700_Temp->FieldByName("FS")->AsFloat;
+                                                             FL=DataModule1->KH7700_Temp->FieldByName("FL")->AsFloat;
+                                                             F0L=DataModule1->KH7700_Temp->FieldByName("FL")->AsFloat;
+
+                                                   if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
+
+                                                          if (Measure_Type=="Series"){
+                                                                        FTtable=((Fs-Fn)/Fn)*1E6;
+                                                             }
+                                                          if (Measure_Type=="EqReact"){
+                                                           if (DataModule1->SqlSpecification->FieldByName("TypeF")->AsString=="True"){
+                                                                   FTtable=((Fs-Fn)/Fn)*1E6;
+
+                                                            }
+                                                            else {
+                                                                        FTtable=((FL-Fn)/Fn)*1E6;
+                                                                   }
+                                                             }
+                                                          if (Measure_Type=="Physical"){
+                                                                        FTtable=((F0L-Fn)/Fn)*1E6;
+                                                             }
+                                                         }
+                                                          else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
+                                                                                     FTtable=((Fs-Fn)/Fn)*1E6;
+
+                                                                         }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL"){
+                                                                                         FTtable=((FL-Fn)/Fn)*1E6;
+
+                                                                                  }
+                                                                  else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="FL0"){
+                                                                                         FTtable=((F0L-Fn)/Fn)*1E6;
+
+                                                           }
+
+                                                          if (FTtable>DataModule1->spc_variant_data->FieldByName("Parametr_max")->AsFloat){
+                                                              st=false;
+                                                              stl=false;
+
+                                                          }
+                                                          if  (FTtable<DataModule1->spc_variant_data->FieldByName("Parametr_min")->AsFloat){
+
+                                                           st=false;
+                                                           stl=false;
+                                                          }
+
+                                                    }//IF
+
+                                                DataModule1->KH7700_Temp->Next();
+                                            }
+                                            DataModule1->UpdatePsiDatatemp->SQL->Clear();
+                                            AnsiString sqld="Update psidatatemp set ";
+                                            switch (u) {
+                                                 case 0 : sqld=sqld+"variant_1=";
+                                                          break;
+
+                                                 case 1 : sqld=sqld+"variant_2=";
+                                                          break;
+
+                                                 case 2 : sqld=sqld+"variant_3=";
+                                                          break;
+                                                 default : sqld=sqld+"variant_1=";
+                                            }
+                                             if (stl) {
+                                                sqld=sqld+"'1' where Measure_ID='"+Measure_ID+"' and N='"+DataModule1->NumberCurrent->FieldByName("SNumber")->AsString+"' and Temp='"+DataModule1->spc_variant_data->FieldByName("Parametr_T")->AsString+"'";
+
+                                             }
+                                             else {
+                                               sqld=sqld+"'0' where Measure_ID='"+Measure_ID+"' and N='"+DataModule1->NumberCurrent->FieldByName("SNumber")->AsString+"' and Temp='"+DataModule1->spc_variant_data->FieldByName("Parametr_T")->AsString+"'";
+                                             }
+                                           DataModule1->UpdatePsiDatatemp->SQL->Add(sqld);
+                                           DataModule1->UpdatePsiDatatemp->Execute();
+                                          DataModule1->spc_variant_data->Next();
+                                         }
+                                    }
+                                 if (st==true){
+                                      Variantt=Variantt+DataModule1->spc_variant->FieldByName("Name")->AsString;
+                                      switch (u) {
+                                             case 0:
+                                                   variant_1=true;
+                                                  DataModule1->SQLPSIData->FieldByName("variant_1")->AsString="True";
+                                                  break;
+                                             case 1:
+                                                    variant_2=true;
+                                                    DataModule1->SQLPSIData->FieldByName("variant_2")->AsString="True";
+                                                    break;
+                                             case 2:
+                                                  variant_3=true;
+                                                 DataModule1->SQLPSIData->FieldByName("variant_3")->AsString="True";
+                                                 break;
+                                             default:
+                                                  DataModule1->SQLPSIData->FieldByName("variant_1")->AsString="True";
+                                                  DataModule1->SQLPSIData->FieldByName("variant_2")->AsString="True";
+                                                  DataModule1->SQLPSIData->FieldByName("variant_3")->AsString="True";
+
+                                        }
+                                        
+                                 }
+                                 else {
+                                  switch (u) {
+                                          case 0 :
+                                                 variant_1=false;
+                                                 DataModule1->SQLPSIData->FieldByName("variant_1")->AsString="False";
+                                                 break;
+                                          case 1:
+                                                 variant_2=false;
+                                                 DataModule1->SQLPSIData->FieldByName("variant_2")->AsString="False";
+                                                 break;
+                                          case 2:
+                                                variant_3=false;
+                                                 DataModule1->SQLPSIData->FieldByName("variant_3")->AsString="False";
+                                                 break;
+                                          default:
+
+                                                 DataModule1->SQLPSIData->FieldByName("variant_1")->AsString="False";
+                                                 DataModule1->SQLPSIData->FieldByName("variant_2")->AsString="False";
+                                                 DataModule1->SQLPSIData->FieldByName("variant_3")->AsString="False";
+                                       }
+
+                                 }
+                          DataModule1->spc_variant->Next();
+                        }
+                      DataModule1->SQLPSIData->FieldByName("variant")->AsString=Variantt;
+        }
+
+// расчет значение частоты
+
+  }
+//--------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+//***********************************************************************************************************************************************************************************************************
        DataModule1->SQLPSIData->Post();
        DataModule1->NumberCurrent->Next();
        WorkProgress->Position=i+1;

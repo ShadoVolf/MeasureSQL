@@ -11154,7 +11154,7 @@ if(DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString!="no"){
 //--------------------------------------------------------------------------C0_C1------------------------------------------------------------------------
      if(DataModule1->SqlSpecification->FieldByName("C0_C1")->AsString=="True"){
                                                                  if (DataModule1->SqlSpecification->FieldByName("C0_C1_T")->AsString==DataModule1->KH7700_Temp->FieldByName("TEMP")->AsString){
-                                                                            C0_C1=(DataModule1->KH7700_Temp->FieldByName("C0C1")->AsFloat;
+                                                                            C0_C1=DataModule1->KH7700_Temp->FieldByName("C0C1")->AsFloat;
                                                                             ResultForm->ResultGrid->Cells[Nar[26]][i+1]=FloatToStrF(C0_C1,ffFixed,5,2);
                                                                           if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
                                                                                     if (C0_C1>0 & C0_C1<100000){

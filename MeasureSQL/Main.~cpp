@@ -10573,7 +10573,50 @@ int counterTmax;
 double MinM,MaxM;
 double SumM;
 int counterM;
-
+//**********Fmax
+double MinFmax,MaxFmax;
+double SumFmax;
+int counterFmax;
+//**********Fmin
+double MinFmin,MaxFmin;
+double SumFmin;
+int counterFmin;
+//**********Fptp
+double MinFptp,MaxFptp;
+double SumFptp;
+int counterFptp;
+//**********Rmax
+double MinRmax,MaxRmax;
+double SumRmax;
+int counterRmax;
+//**********Rmin
+double MinRmin,MaxRmin;
+double SumRmin;
+int counterRmin;
+//**********RR
+double MinRR,MaxRR;
+double SumRR;
+int counterRR;
+//**********RR1
+double MinRR1,MaxRR1;
+double SumRR1;
+int counterRR1;
+//**********RR2
+double MinRR2,MaxRR2;
+double SumRR2;
+int counterRR2;
+//**********RR3
+double MinRR3,MaxRR3;
+double SumRR3;
+int counterRR3;
+//**********RR4
+double MinRR4,MaxRR4;
+double SumRR4;
+int counterRR4;
+//**********RR5
+double MinRR5,MaxRR5;
+double SumRR5;
+int counterRR5;
 
 //****************************************************************************************************************************************************
 //*******************************************************************************************************************************************************
@@ -12550,6 +12593,413 @@ if (DataModule1->SqlSpecification->FieldByName("Tmax")->AsString=="True" ||  Dat
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   }
 //******************************************************************************************************************************************************************************************************************
+ //*********************************************************************************************************************************
+//********************************************Rmax/Rmin/RR*************************************************************************
+ if (DataModule1->SqlSpecification->FieldByName("Rmx")->AsString=="True" ||  DataModule1->SqlSpecification->FieldByName("Rmn")->AsString=="True" || DataModule1->SqlSpecification->FieldByName("RR")->AsString=="True" || DataModule1->SqlSpecification->FieldByName("Rmax-Rmin")->AsString=="True"|| DataModule1->SqlSpecification->FieldByName("RR2")->AsString=="True"|| DataModule1->SqlSpecification->FieldByName("RR3")->AsString=="True" || DataModule1->SqlSpecification->FieldByName("RR4")->AsString=="True" || DataModule1->SqlSpecification->FieldByName("RR5")->AsString=="True"){
+            double rq[100];
+            double r1;
+            DataModule1->KH7700_Temp->First();
+                                for (int j=0;j<DataModule1->KH7700_Temp->RecordCount;j++){
+
+                                                   rq[j]=DataModule1->KH7700_Temp->FieldByName("RS")->AsFloat;
+                                                   DataModule1->KH7700_Temp->Next();
+                                } //for
+
+             MaxMin(rq,Rmax,Rmin,r1,TempCount);
+//----------------------------------------------------------------------Rmax----------------------------------------------------------------------------------------------------------
+            if (DataModule1->SqlSpecification->FieldByName("Rmx")->AsString=="True" ){
+                         ResultForm->ResultGrid->Cells[Nar[14]][i+1]=FloatToStrF(Rmax,ffFixed,6,1);
+                                                                                     }
+                                      if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                             DataModule1->SQLPSIData->FieldByName("Rmax")->AsFloat=Rmax;
+                                        }
+                                        if(DataModule1->SqlSpecification->FieldByName("Rmaxmax")->AsString!="no"){
+                                                                             if(Rmax>DataModule1->SqlSpecification->FieldByName("Rmaxmax")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterRmax=counterRmax+1;
+                                                                                     }
+                                                                      if (DataModule1->SqlSpecification->FieldByName("DopuskR")->AsFloat>0){
+                                                                                     if(Rmax>DataModule1->SqlSpecification->FieldByName("Rmaxmax")->AsFloat-(DataModule1->SqlSpecification->FieldByName("Rmaxmax")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskR")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterRmax=counterRmax+1;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                                          if(DataModule1->SqlSpecification->FieldByName("Rmaxmin")->AsString!="no"){
+                                                                             if(Rmax<DataModule1->SqlSpecification->FieldByName("Rmaxmin")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterRmax=counterRmax+1;
+                                                                                     }
+                                                                       if (DataModule1->SqlSpecification->FieldByName("DopuskR")->AsFloat>0){
+                                                                                     if(Rmax<DataModule1->SqlSpecification->FieldByName("Rmaxmin")->AsFloat+(DataModule1->SqlSpecification->FieldByName("Rmaxmin")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskR")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterRmax=counterRmax+1;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                                                              if(Rmax>MaxRmax){
+                                                                   MaxRmax=Rmax;
+                                                                   }
+                                                              if(Rmax<MinRmax){
+                                                                    MinRmax=Rmax;
+                                                                    }
+                                                              SumRmax=SumRmax+Rmax;
+
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------Rmin-----------------------------------------------------------------------------------------------------
+             if (DataModule1->SqlSpecification->FieldByName("Rmn")->AsString=="True" ){
+                         ResultForm->ResultGrid->Cells[Nar[15]][i+1]=FloatToStrF(Rmin,ffFixed,6,1);
+                         }
+                                      if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                             DataModule1->SQLPSIData->FieldByName("Rmin")->AsFloat=Rmin;
+                                        }
+
+                                                              if(Rmin>MaxRmin){
+                                                                   MaxRmin=Rmin;
+                                                                   }
+                                                              if(Rmin<MinRmin){
+                                                                    MinRmin=Rmin;
+                                                                    }
+                                                              SumRmin=SumRmin+Rmin;
+
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------RR----------------------------------------------------------------------------------------------------
+              if (DataModule1->SqlSpecification->FieldByName("RR")->AsString=="True" ){
+                          double RR;
+
+                          if (Rmin!=0){
+                                ResultForm->ResultGrid->Cells[Nar[16]][i+1]=FloatToStrF(Rmax/Rmin,ffFixed,6,1);
+                                RR=Rmax/Rmin;
+                                }
+                                     else{
+                                        ResultForm->ResultGrid->Cells[Nar[16]][i+1]=0;
+                                        RR=0;
+                                      }
+                                      if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                           if (Rmin!=0){
+                                             DataModule1->SQLPSIData->FieldByName("R1R2")->AsFloat=RR;
+                                             }
+                                             else{
+                                                 DataModule1->SQLPSIData->FieldByName("R1R2")->AsFloat=0;
+
+                                                 }
+                                             if(RR==0){
+                                                                 Status2="BAD";
+                                                     }     
+                                        }
+                               if(DataModule1->SqlSpecification->FieldByName("RRmax")->AsString!="no"){
+                                                                             if(RR>DataModule1->SqlSpecification->FieldByName("RRmax")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterRR++;
+                                                                                     }
+                                                                    if (DataModule1->SqlSpecification->FieldByName("DopuskRR")->AsFloat>0){
+                                                                                     if(RR>DataModule1->SqlSpecification->FieldByName("RRmax")->AsFloat-(DataModule1->SqlSpecification->FieldByName("RRmax")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskRR")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterRR++;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+
+                                          if(DataModule1->SqlSpecification->FieldByName("RRmin")->AsString!="no"){
+                                                                             if(RR<DataModule1->SqlSpecification->FieldByName("RRmin")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterRR++;
+                                                                                     }
+                                                                        if (DataModule1->SqlSpecification->FieldByName("DopuskRR")->AsFloat>0){
+                                                                                     if(RR<DataModule1->SqlSpecification->FieldByName("RRmin")->AsFloat+(DataModule1->SqlSpecification->FieldByName("RRmin")->AsFloat*DataModule1->SqlSpecification->FieldByName("DopuskRR")->AsFloat/100)){
+                                                                                           if (status!=1){
+                                                                                             status=2;
+                                                                                           }
+                                                                                     counterRR++;
+                                                                                     }
+
+                                                                                    }
+                                                                }
+                                                              if(RR>MaxRR){
+                                                                   MaxRR=RR;
+                                                                   }
+                                                              if(RR<MinRR){
+                                                                    MinRR=RR;
+                                                                    }
+                                                              SumRR=SumRR+RR;
+              }
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------Rmax-Rmin-----------------------------------------------------------------]
+          if (DataModule1->SqlSpecification->FieldByName("Rmax-Rmin")->AsString=="True" ){
+                    double RR1;
+                    RR1=Rmax-Rmin;
+                         ResultForm->ResultGrid->Cells[Nar[25]][i+1]=FloatToStrF(RR1,ffFixed,6,1);
+
+                                      if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                      if(RR1>-10000 & RR1<10000){
+                                             DataModule1->SQLPSIData->FieldByName("RR1")->AsFloat=RR1;
+                                             }
+                                        else {
+                                           DataModule1->SQLPSIData->FieldByName("RR1")->AsFloat=0;
+                                        }
+                                        }
+                                        if (RR1==0){
+                                         Status2="BAD";
+
+                                        }
+                               if(DataModule1->SqlSpecification->FieldByName("RR1max")->AsString!="no"){
+                                                                             if(RR1>DataModule1->SqlSpecification->FieldByName("RR1max")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterRR1++;
+                                                                                     }
+                                                                }
+                                          if(DataModule1->SqlSpecification->FieldByName("RR1min")->AsString!="no"){
+                                                                             if(RR1<DataModule1->SqlSpecification->FieldByName("RR1min")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterRR1++;
+                                                                                     }
+                                                                }
+                                                              if(RR1>MaxRR1){
+                                                                   MaxRR1=RR1;
+                                                                   }
+                                                              if(RR1<MinRR1){
+                                                                    MinRR1=RR1;
+                                                                    }
+                                                              SumRR1=SumRR1+RR1;
+
+
+
+
+
+
+             }
+
+//------------------------------------------------------------------------RR2----------------------------------------------------------------------------------------------------------------
+  if (DataModule1->SqlSpecification->FieldByName("RR2")->AsString=="True" ){
+                    double RR2,RR21;
+                    if (R>0){
+                    RR21=Rmax/R;
+
+                    }
+                    else {
+                    RR21=1000;
+                    }
+
+                    RR2=RR21;
+
+                         ResultForm->ResultGrid->Cells[Nar[27]][i+1]=FloatToStrF(RR2,ffFixed,6,1);
+
+                                      if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                       if (RR2>-10000 & RR2<10000){
+                                             DataModule1->SQLPSIData->FieldByName("RR2")->AsFloat=RR2;
+                                           }
+                                        else {
+                                          DataModule1->SQLPSIData->FieldByName("RR2")->AsFloat=0;
+                                        }
+                                        }
+                                        if (RR2==0){
+                                         Status2="BAD";
+                                        }
+                               if(DataModule1->SqlSpecification->FieldByName("RR2max")->AsString!="no"){
+                                                                             if(RR2>DataModule1->SqlSpecification->FieldByName("RR2max")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterRR2++;
+                                                                                     }
+                                                                }
+                                          if(DataModule1->SqlSpecification->FieldByName("RR2min")->AsString!="no"){
+                                                                             if(RR2<DataModule1->SqlSpecification->FieldByName("RR2min")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterRR2++;
+                                                                                     }
+                                                                }
+                                                              if(RR2>MaxRR2){
+                                                                   MaxRR2=RR2;
+                                                                   }
+                                                              if(RR2<MinRR2){
+                                                                    MinRR2=RR2;
+                                                                    }
+                                                              SumRR2=SumRR2+RR2;
+
+
+
+
+
+
+             }
+
+
+
+
+
+//--------------------------------------------------------------RR3---------------------------------------------------------
+ if (DataModule1->SqlSpecification->FieldByName("RR3")->AsString=="True" ){
+                    double RR3;
+
+                    if (Rmin>0){
+                     RR3=R/Rmin;
+                    }
+                     else {
+                      RR3=0;
+                     }
+                         ResultForm->ResultGrid->Cells[Nar[32]][i+1]=FloatToStrF(RR3,ffFixed,6,1);
+                                      if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                         if (RR3>-10000 & RR3<10000){
+                                             DataModule1->SQLPSIData->FieldByName("RR3")->AsFloat=RR3;
+                                             }
+                                          else {
+
+                                           DataModule1->SQLPSIData->FieldByName("RR3")->AsFloat=0;
+                                          }
+                                        }
+                                        if (RR3==0){
+
+                                         Status2="BAD";
+                                        }
+                               if(DataModule1->SqlSpecification->FieldByName("RR3max")->AsString!="no"){
+                                                                             if(RR3>DataModule1->SqlSpecification->FieldByName("RR3max")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterRR3++;
+                                                                                     }
+                                                                }
+                                          if(DataModule1->SqlSpecification->FieldByName("RR3min")->AsString!="no"){
+                                                                             if(RR3<DataModule1->SqlSpecification->FieldByName("RR3min")->AsFloat){
+                                                                                     status=1;
+                                                                                     counterRR3++;
+                                                                                     }
+                                                                }
+                                                              if(RR3>MaxRR3){
+                                                                   MaxRR3=RR3;
+                                                                   }
+                                                              if(RR3<MinRR3){
+                                                                    MinRR3=RR3;
+                                                                    }
+                                                              SumRR3=SumRR3+RR3;
+
+
+
+
+
+
+             }
+
+
+ //******************************************************RR4*************************************************************************************
+
+ if (DataModule1->SqlSpecification->FieldByName("RR4")->AsString=="True" ){
+                    double RR4;
+
+                    if (R>0){
+                     RR4=((Rmax-R)/R)*100;
+                    }
+                     else {
+                      RR4=0;
+                     }
+                         ResultForm->ResultGrid->Cells[Nar[33]][i+1]=FloatToStrF(RR4,ffFixed,6,1);
+                                      if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                         if (RR4>-10000 & RR4<10000){
+                                             DataModule1->SQLPSIData->FieldByName("RR4")->AsFloat=RR4;
+                                             }
+                                          else {
+
+                                           DataModule1->SQLPSIData->FieldByName("RR4")->AsFloat=0;
+                                          }
+                                        }
+                                        if (RR4==0){
+                                        Status2="BAD";
+                                        }
+
+                               if(DataModule1->SqlSpecification->FieldByName("RR4max")->AsString!="no"){
+                                                                             if(RR4>DataModule1->SqlSpecification->FieldByName("RR4max")->AsFloat){
+                                                                                     status=1;
+                                                                                     CountRR4++;
+                                                                                     }
+                                                                }
+                                          if(DataModule1->SqlSpecification->FieldByName("RR4min")->AsString!="no"){
+                                                                             if(RR4<DataModule1->SqlSpecification->FieldByName("RR4min")->AsFloat){
+                                                                                     status=1;
+                                                                                     CountRR4++;
+                                                                                     }
+                                                                }
+                                                              if(RR4>MaxRR4){
+                                                                   MaxRR4=RR4;
+                                                                   }
+                                                              if(RR4<MinRR4){
+                                                                    MinRR4=RR4;
+                                                                    }
+                                                              SumRR4=SumRR4+RR4;
+
+
+
+
+
+
+             }
+
+
+
+
+//**************************************************RR5*******************************************************************************************
+  if (DataModule1->SqlSpecification->FieldByName("RR5")->AsString=="True" ){
+                    double RR5;
+
+                    if (R>0){
+                     RR5=((R-Rmin)/R)*100;
+                    }
+                     else {
+                      RR5=0;
+                     }
+                         ResultForm->ResultGrid->Cells[Nar[34]][i+1]=FloatToStrF(RR5,ffFixed,6,1);
+                                      if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+                                         if (RR5>-10000 & RR5<10000){
+                                             DataModule1->SQLPSIData->FieldByName("RR5")->AsFloat=RR5;
+                                             }
+                                          else {
+
+                                           DataModule1->SQLPSIData->FieldByName("RR5")->AsFloat=0;
+                                          }
+                                        }
+                                        if (RR5==0){
+
+                                            Status2="BAD";
+                                        }
+                               if(DataModule1->SqlSpecification->FieldByName("RR5max")->AsString!="no"){
+                                                                             if(RR5>DataModule1->SqlSpecification->FieldByName("RR5max")->AsFloat){
+                                                                                     status=1;
+                                                                                     CountRR5++;
+                                                                                     }
+                                                                }
+                                          if(DataModule1->SqlSpecification->FieldByName("RR5min")->AsString!="no"){
+                                                                             if(RR5<DataModule1->SqlSpecification->FieldByName("RR5min")->AsFloat){
+                                                                                     status=1;
+                                                                                     CountRR5++;
+                                                                                     }
+                                                                }
+                                                              if(RR5>MaxRR5){
+                                                                   MaxRR5=RR5;
+                                                                   }
+                                                              if(RR5<MinRR5){
+                                                                    MinRR5=RR5;
+                                                                    }
+                                                              SumRR5=SumRR5+RR5;
+
+
+
+
+
+
+             }
+
+  }
+
+
+
+//**************************************************************************************************************************************************************************************************************
 
 
 

@@ -141,6 +141,8 @@ __published:	// IDE-managed Components
         TMyScript *KH7700_User_Config_Create;
         TMyScript *KH7700_User_Config_Drop;
         TMyTable *KH7700_User_Config;
+        TMyDataSource *KH7700_Temp_Source;
+        TMyDataSource *KH7700_Config_Source;
         void __fastcall ProfileDataBeforePost(TDataSet *DataSet);
         void __fastcall DataModuleCreate(TObject *Sender);
 private:	// User declarations

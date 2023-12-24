@@ -32,6 +32,10 @@ __published:	// IDE-managed Components
         TRzDBGrid *RzDBGrid2;
         TRzDBGrid *RzDBGrid3;
         TRzDBGrid *RzDBGrid4;
+        TRzDBGrid *RzDBGrid5;
+        TRzDBGrid *RzDBGrid6;
+        TAdvGlassButton *AdvGlassButton7;
+        TAdvGlassButton *AdvGlassButton8;
         void __fastcall AdvGlassButton3Click(TObject *Sender);
         void __fastcall AdvGlassButton1Click(TObject *Sender);
         void __fastcall AdvGlassButton5Click(TObject *Sender);
@@ -39,6 +43,8 @@ __published:	// IDE-managed Components
         void __fastcall FormShow(TObject *Sender);
         void __fastcall AdvGlassButton4Click(TObject *Sender);
         void __fastcall AdvGlassButton6Click(TObject *Sender);
+        void __fastcall AdvGlassButton7Click(TObject *Sender);
+        void __fastcall AdvGlassButton8Click(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
         __fastcall TDataForm(TComponent* Owner);

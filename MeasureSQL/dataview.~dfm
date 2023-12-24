@@ -675,6 +675,44 @@ object DataForm: TDataForm
       FixedLineColor = clRed
       LineColor = clLime
     end
+    object RzDBGrid5: TRzDBGrid
+      Left = 2
+      Top = 2
+      Width = 818
+      Height = 487
+      Align = alClient
+      Color = clBlack
+      DataSource = DataModule1.KH7700_Temp_Source
+      FixedColor = clBlack
+      TabOrder = 5
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clYellow
+      TitleFont.Height = -11
+      TitleFont.Name = 'MS Sans Serif'
+      TitleFont.Style = []
+      Visible = False
+      FixedLineColor = clRed
+      LineColor = clLime
+    end
+    object RzDBGrid6: TRzDBGrid
+      Left = 2
+      Top = 2
+      Width = 818
+      Height = 487
+      Align = alClient
+      Color = clBlack
+      DataSource = DataModule1.TransatConfigSource
+      FixedColor = clBlack
+      TabOrder = 6
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clYellow
+      TitleFont.Height = -11
+      TitleFont.Name = 'MS Sans Serif'
+      TitleFont.Style = []
+      Visible = False
+      FixedLineColor = clRed
+      LineColor = clLime
+    end
   end
   object RzPanel2: TRzPanel
     Left = 0
@@ -817,6 +855,50 @@ object DataForm: TDataForm
       TabOrder = 5
       Version = '1.2.3.0'
       OnClick = AdvGlassButton6Click
+    end
+    object AdvGlassButton7: TAdvGlassButton
+      Left = 360
+      Top = 7
+      Width = 129
+      Height = 32
+      BackColor = clBlack
+      Caption = 'Data'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clRed
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ForeColor = clWhite
+      GlowColor = 16760205
+      InnerBorderColor = clBlack
+      OuterBorderColor = clWhite
+      ParentFont = False
+      ShineColor = clWhite
+      TabOrder = 6
+      Version = '1.2.3.0'
+      OnClick = AdvGlassButton7Click
+    end
+    object AdvGlassButton8: TAdvGlassButton
+      Left = 512
+      Top = 7
+      Width = 129
+      Height = 32
+      BackColor = clBlack
+      Caption = 'Configuration'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clRed
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ForeColor = clWhite
+      GlowColor = 16760205
+      InnerBorderColor = clBlack
+      OuterBorderColor = clWhite
+      ParentFont = False
+      ShineColor = clWhite
+      TabOrder = 7
+      Version = '1.2.3.0'
+      OnClick = AdvGlassButton8Click
     end
   end
 end

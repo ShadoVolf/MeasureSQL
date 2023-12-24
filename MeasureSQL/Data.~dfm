@@ -838,7 +838,7 @@ object DataModule1: TDataModule1
   end
   object KH7700_User_Config_Create: TMyScript
     SQL.Strings = (
-      'CREATE TABLE `KH7700_User_Config` ('
+      'CREATE TEMPORARY TABLE `KH7700_User_Config` ('
       '  `Position` VARCHAR(20) COLLATE cp1251_general_ci NOT NULL,'
       '  `Pos_Str` VARCHAR(20) COLLATE cp1251_general_ci DEFAULT NULL,'
       '  `Setup_N` INTEGER(11) DEFAULT NULL,'
@@ -861,5 +861,11 @@ object DataModule1: TDataModule1
     AfterCancel = ProfileDataBeforePost
     Left = 1032
     Top = 768
+  end
+  object KH7700_Temp_Source: TMyDataSource
+    AutoEdit = False
+    DataSet = KH7700_Temp
+    Left = 1024
+    Top = 712
   end
 end

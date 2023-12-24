@@ -862,4 +862,16 @@ object DataModule1: TDataModule1
     Left = 1032
     Top = 768
   end
+  object KH7700_Temp_Source: TMyDataSource
+    AutoEdit = False
+    DataSet = KH7700_Temp
+    Left = 1024
+    Top = 712
+  end
+  object KH7700_Config_Source: TMyDataSource
+    AutoEdit = False
+    DataSet = KH7700_Config
+    Left = 1136
+    Top = 712
+  end
 end

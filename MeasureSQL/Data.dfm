@@ -836,4 +836,30 @@ object DataModule1: TDataModule1
     Left = 796
     Top = 749
   end
+  object KH7700_User_Config_Create: TMyScript
+    SQL.Strings = (
+      'CREATE TEMPORARY TABLE `KH7700_User_Config` ('
+      '  `Position` VARCHAR(20) COLLATE cp1251_general_ci NOT NULL,'
+      '  `Pos_Str` VARCHAR(20) COLLATE cp1251_general_ci DEFAULT NULL,'
+      '  `Setup_N` INTEGER(11) DEFAULT NULL,'
+      '  PRIMARY KEY USING HASH (`Position`)'
+      ') ENGINE=MEMORY'
+      'CHARACTER SET '#39'cp1251'#39' COLLATE '#39'cp1251_general_ci'#39';')
+    Connection = CoordinatorDB
+    Left = 48
+    Top = 784
+  end
+  object KH7700_User_Config_Drop: TMyScript
+    SQL.Strings = (
+      'drop table if exists `KH7700_User_Config`;')
+    Connection = CoordinatorDB
+    Left = 192
+    Top = 784
+  end
+  object KH7700_User_Config: TMyTable
+    Connection = CoordinatorDB
+    AfterCancel = ProfileDataBeforePost
+    Left = 1032
+    Top = 768
+  end
 end

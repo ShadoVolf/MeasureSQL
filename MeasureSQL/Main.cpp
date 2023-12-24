@@ -298,15 +298,50 @@ TnumberForm->lCount->Text=ListBox1->Items->Strings[l-1];
          NumberMForm->gridNumbers->Cells[2][0]="Номер";
          NumberMForm->edtFirstPosition->Items->Clear();
          NumberMForm->edtEndPosition->Items->Clear();
+         DataModule1->KH7700_User_Config_Drop->SQL->Clear();
+         DataModule1->KH7700_User_Config_Drop->SQL->Add("drop table if exists `KH7700_User_Config`");
+         DataModule1->KH7700_User_Config_Drop->Execute();
+         DataModule1->KH7700_User_Config_Create->Execute();
+
+         DataModule1->KH7700_User_Config->Active=false;
+         DataModule1->KH7700_User_Config->SQL->Clear();
+         DataModule1->KH7700_User_Config->SQL->Add("Select * from `KH7700_User_Config`");
+         DataModule1->KH7700_User_Config->Active=true;
+         DataModule1->KH7700_Temp->First();
+
+         for (int i=0;i<DataModule1->KH7700_Temp->RecordCount;i++){
+            DataModule1->KH7700_User_Config->Append();
+            DataModule1->KH7700_User_Config->FieldByName("Position")->AsString=DataModule1->KH7700_Temp->FieldByName("XTALROW")->AsString;
+            AnsiString Pos=DataModule1->KH7700_Temp->FieldByName("XTALROW")->AsString;
+            AnsiString Row=Pos.SubString(0,1);
+            AnsiString Pos_N=Pos.SubString(2,Pos.Length()-1);
+            if (Pos_N.Length()==1){
+             Pos_N="00"+Pos_N;
+            }
+            else if(Pos_N.Length()==2){
+              Pos_N="0"+Pos_N;
+            }
+            DataModule1->KH7700_User_Config->FieldByName("Pos_Str")->AsString=Row+Pos_N;
+            DataModule1->KH7700_User_Config->FieldByName("Setup_N")->AsString="1";
+            DataModule1->KH7700_User_Config->Post();
+            DataModule1->KH7700_Temp->Next();
+         }
+         DataModule1->KH7700_Temp->First();
 
         int kk=0;
-        for (int i=0;i<DataModule1->KH7700_Temp->RecordCount;i++){
-                      NumberMForm->gridNumbers->Cells[1][1+kk]=DataModule1->KH7700_Temp->FieldByName("XTALROW")->AsString;
-                      NumberMForm->edtFirstPosition->Items->Add(DataModule1->KH7700_Temp->FieldByName("XTALROW")->AsString);
-                      NumberMForm->edtEndPosition->Items->Add(DataModule1->KH7700_Temp->FieldByName("XTALROW")->AsString);
+        DataModule1->KH7700_User_Config->Active=false;
+         DataModule1->KH7700_User_Config->SQL->Clear();
+         DataModule1->KH7700_User_Config->SQL->Add("Select * from `KH7700_User_Config` Order by `Pos_Str`");
+         DataModule1->KH7700_User_Config->Active=true;
+         DataModule1->KH7700_User_Config->First();
+
+        for (int i=0;i<DataModule1->KH7700_User_Config->RecordCount;i++){
+                      NumberMForm->gridNumbers->Cells[1][1+kk]=DataModule1->KH7700_User_Config->FieldByName("Position")->AsString;
+                      NumberMForm->edtFirstPosition->Items->Add(DataModule1->KH7700_User_Config->FieldByName("Position")->AsString);
+                      NumberMForm->edtEndPosition->Items->Add(DataModule1->KH7700_User_Config->FieldByName("Position")->AsString);
                       NumberMForm->gridNumbers->Cells[0][1+kk]=kk+1;
                       kk++;
-                      DataModule1->KH7700_Temp->Next();
+                      DataModule1->KH7700_User_Config->Next();
       }
      NumberMForm->edtFirstPosition->ItemIndex=0;
     NumberMForm->edtEndPosition->ItemIndex=kk-1;

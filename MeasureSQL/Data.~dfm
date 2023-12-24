@@ -1,10 +1,10 @@
 object DataModule1: TDataModule1
   OldCreateOrder = False
   OnCreate = DataModuleCreate
-  Left = 319
-  Top = 146
-  Height = 874
-  Width = 1430
+  Left = 281
+  Top = 97
+  Height = 927
+  Width = 1465
   object CoordinatorDB: TMyConnection
     Database = 'coordinator'
     Options.Compress = True
@@ -826,6 +826,40 @@ object DataModule1: TDataModule1
     Connection = CoordinatorDB
     AfterCancel = ProfileDataBeforePost
     Left = 928
+    Top = 768
+  end
+  object TTS100_Alter: TMyScript
+    SQL.Strings = (
+      'ALTER TABLE transat_temp_1'
+      'ADD `Profile` VARCHAR(50) NULL;')
+    Connection = CoordinatorDB
+    Left = 796
+    Top = 749
+  end
+  object KH7700_User_Config_Create: TMyScript
+    SQL.Strings = (
+      'CREATE TABLE `KH7700_User_Config` ('
+      '  `Position` VARCHAR(20) COLLATE cp1251_general_ci NOT NULL,'
+      '  `Pos_Str` VARCHAR(20) COLLATE cp1251_general_ci DEFAULT NULL,'
+      '  `Setup_N` INTEGER(11) DEFAULT NULL,'
+      '  PRIMARY KEY USING HASH (`Position`)'
+      ') ENGINE=MEMORY'
+      'CHARACTER SET '#39'cp1251'#39' COLLATE '#39'cp1251_general_ci'#39';')
+    Connection = CoordinatorDB
+    Left = 48
+    Top = 784
+  end
+  object KH7700_User_Config_Drop: TMyScript
+    SQL.Strings = (
+      'drop table if exists `KH7700_User_Config`;')
+    Connection = CoordinatorDB
+    Left = 192
+    Top = 784
+  end
+  object KH7700_User_Config: TMyTable
+    Connection = CoordinatorDB
+    AfterCancel = ProfileDataBeforePost
+    Left = 1032
     Top = 768
   end
 end

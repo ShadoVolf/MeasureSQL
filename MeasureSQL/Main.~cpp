@@ -9596,19 +9596,7 @@ DataModule1->spc_variant->Active=true;
       }//else
 
 //*************************************************DB PSI*****************************************************************************
-  /*    DataModule1->SQLPSI->Active=false;
-          DataModule1->SQLPSI->SQL->Clear();
-          AnsiString F2;
-  F2="Select * from psi where Measure_ID='"+Measure_ID+"'";
-          DataModule1->SQLPSI->SQL->Add(F2);
-          DataModule1->SQLPSI->Active=true;
-  DataModule1->SQLPSI->Edit();
-  DataModule1->SQLPSI->FieldByName("Bad")->AsString=counter;
-  DataModule1->SQLPSI->FieldByName("Good")->AsString=N-counter;
-  DataModule1->SQLPSI->FieldByName("Status")->AsString= "Сдано";
-  DataModule1->SQLPSI->FieldByName("transatN")->AsString=edtMachine->Text;
-         DataModule1->SQLPSI->FieldByName("File1")->AsString=NumberMForm->edtFile->Text;
-  */
+
          AnsiString StartPosition,EndPosition;
          if(DataModule1->Config->FieldByName("BeginRing")->AsFloat==0){
                   StartPosition="L"+DataModule1->Config->FieldByName("FirstPosition")->AsString;
@@ -9622,14 +9610,7 @@ DataModule1->spc_variant->Active=true;
           if(DataModule1->Config->FieldByName("EndRing")->AsFloat==1){
                   EndPosition="U"+DataModule1->Config->FieldByName("LastPosition")->AsString;
                   }
-  /*
-  DataModule1->SQLPSI->FieldByName("Position")->AsString=StartPosition+"..."+EndPosition;
-  DataModule1->SQLPSI->FieldByName("Spc1")->AsString=DataModule1->SqlSpecification->FieldByName("Name")->AsString;
-  DataModule1->SQLPSI->FieldByName("DateEnd")->AsString=stD+"."+stMn+"."+stY;
-  DataModule1->SQLPSI->FieldByName("TimeEnd")->AsString=stH+":"+stM+":"+stS;
-  DataModule1->SQLPSI->FieldByName("Operator")->AsString=DataModule1->Dostup->FieldByName("Name")->AsString;
-  DataModule1->SQLPSI->Post();
-   */
+
   Data_Measure->Insert_PSI->SQL->Clear();
   AnsiString sqlInsert="Update `psi` set `Bad`='"+FloatToStr(counter)+"',`Good`='"+FloatToStr(N-counter)+"',`Status`='Сдано',`transatN`='"+edtMachine->Text+"',`File1`='"+NumberMForm->edtFile->Text+"',`Position`='"+StartPosition+"..."+EndPosition+"',`Spc1`='"+DataModule1->SqlSpecification->FieldByName("Name")->AsString+"',`DateEnd`='"+stD+"."+stMn+"."+stY+"',`TimeEnd`='"+stH+":"+stM+":"+stS+"',`Operator`='"+DataModule1->Dostup->FieldByName("Name")->AsString+"'";
   Data_Measure->Insert_PSI->SQL->Add(sqlInsert);
@@ -9870,7 +9851,7 @@ DataModule1->spc_variant->Active=true;
                                 double k=dGx/dG;
                                 double Cp=dG/(3*STDEV_A);
                                 CPK=fabs(Cp*(1-k));
-                              
+
                                }
                                else {
                                 CPK=0;
@@ -13905,7 +13886,324 @@ DataModule1->spc_variant->Active=true;
 //***********************************************************************************************************************************************************************************************************
 
        }//For  по всем номерам KH7700
+//***********************************************************************************************************************************************************************************************************
+//********************Статистика****************************************************************************************************************************************************************************
+ //*************************************************DB PSI*****************************************************************************
 
+         AnsiString StartPosition,EndPosition;
+                  StartPosition=DataModule1->KH7700_Config->FieldByName("FirstPosition")->AsString;
+                  EndPosition=DataModule1->KH7700_Config->FieldByName("LastPosition")->AsString;
+
+
+  Data_Measure->Insert_PSI->SQL->Clear();
+  AnsiString sqlInsert="Update `psi` set `Bad`='"+FloatToStr(counter)+"',`Good`='"+FloatToStr(N-counter)+"',`Status`='Сдано',`transatN`='"+edtMachine->Text+"',`File1`='"+NumberMForm->edtFile->Text+"',`Position`='"+StartPosition+"..."+EndPosition+"',`Spc1`='"+DataModule1->SqlSpecification->FieldByName("Name")->AsString+"',`DateEnd`='"+stD+"."+stMn+"."+stY+"',`TimeEnd`='"+stH+":"+stM+":"+stS+"',`Operator`='"+DataModule1->Dostup->FieldByName("Name")->AsString+"'";
+  Data_Measure->Insert_PSI->SQL->Add(sqlInsert);
+  Data_Measure->Insert_PSI->Execute();
+
+
+            //************************************************************************************************************************************************
+    if (DataModule1->SqlSpecification->FieldByName("Stat")->AsString=="True"){
+         float Max;
+         float Min;
+         int NN;
+         float AVG;
+         float STDEV;
+         int countBad;
+         int countA;
+         float AVG_A;
+         float Max_A;
+         float Min_A;
+         float STDEV_A;
+        DataModule1->SQLPSIData->Active=false;
+        DataModule1->SQLPSIData->SQL->Clear();
+        DataModule1->SQLPSIData->SQL->Add("Select * from psidata where Measure_ID='"+Measure_ID+"' order by ID");
+        DataModule1->SQLPSIData->Active=true;
+            AnsiString Commandx="Update psidatatemp set Fn='"+DataModule1->SQLPSIData->FieldByName("Fn")->AsString+"' where Measure_ID='"+Measure_ID+"'";
+         DataModule2->Comand->SQL->Clear();
+         DataModule2->Comand->SQL->Add(Commandx);
+         DataModule2->Comand->Execute();
+        DataModule2->Statistika->Active=false;
+        DataModule2->Statistika->SQL->Clear();
+        DataModule2->Statistika->SQL->Add("Select * from psi_statistika where Measure_ID='"+Measure_ID+"'");
+        DataModule2->Statistika->Active=true;
+
+        DataModule2->Parameters->Active=true;
+
+                DataModule2->Parameters->First();
+                for (int i=0; i<DataModule2->Parameters->RecordCount; i++){
+                        if (DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_Spc_Field")->AsString)->AsString=="True"){
+                             DataModule1->SQLPSIData->First();
+                             countBad=0;
+                             countA=0;
+                              Max=DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat;
+                             Min=DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat;
+                             NN=DataModule1->SQLPSIData->RecordCount;
+                             double Sum=0;
+                                for (int j=0; j<DataModule1->SQLPSIData->RecordCount; j++){
+                                                if (Max<DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat){
+                                                if (DataModule1->SQLPSIData->FieldByName("Status2")->AsString=="Good"){
+                                                   Max=DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat;
+                                                  }
+                                                }
+                                                if (Min>DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat){
+                                                   if (DataModule1->SQLPSIData->FieldByName("Status2")->AsString=="Good"  & DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsString!=""){
+                                                        Min=DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat;
+                                                    }
+                                                }
+                                                if (DataModule1->SQLPSIData->FieldByName("Status2")->AsString=="Good" & DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsString!=""){
+                                               Sum=Sum+DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat;
+                                                  }
+                                                        if (DataModule1->SQLPSIData->FieldByName("Status2")->AsString=="Good"){
+                                                                     if (DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_max")->AsString)->AsString!="no"){
+                                                       if(DataModule2->Parameters->FieldByName("DopuskField")->AsString!="no" || DataModule2->Parameters->FieldByName("DopuskField2")->AsString!="no" ){
+                                                       double Zap=0;
+                                                       if (DataModule2->Parameters->FieldByName("DopuskField2")->AsString!="no"){
+                                                        if(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("DopuskField2")->AsString)->AsString!=0){
+                                                           Zap=DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("DopuskField2")->AsString)->AsFloat;
+                                                           if (DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat>StrToFloat(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_max")->AsString)->AsString)-Zap){
+                                                           countBad++;
+                                                         }
+                                                        }
+                                                       }
+                                                       if (DataModule2->Parameters->FieldByName("DopuskField")->AsString!="no"){
+                                                        if(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("DopuskField")->AsString)->AsFloat!=0){
+                                                          Zap=DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("DopuskField")->AsString)->AsFloat;
+                                                          if (DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat>StrToFloat(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_max")->AsString)->AsString)-(Zap*StrToFloat(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_max")->AsString)->AsString)/100)){
+                                                           countBad++;
+                                                         }
+                                                        }
+                                                        }
+                                                        }
+                                                        else {
+                                                           if (DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat>StrToFloat(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_max")->AsString)->AsString)){
+                                                           countBad++;
+                                                         }
+                                                         }
+
+
+
+                                                }
+                                                if (DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_Min")->AsString)->AsString!="no"){
+                                                        if(DataModule2->Parameters->FieldByName("DopuskField")->AsString!="no" || DataModule2->Parameters->FieldByName("DopuskField2")->AsString!="no" ){
+                                                       double Zap=0;
+                                                       if (DataModule2->Parameters->FieldByName("DopuskField2")->AsString!="no"){
+                                                        if(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("DopuskField2")->AsString)->AsFloat!=0 ){
+                                                           Zap=DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("DopuskField2")->AsString)->AsFloat;
+                                                           if (DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat>StrToFloat(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_min")->AsString)->AsString)-Zap){
+                                                           countBad++;
+                                                         }
+                                                        }
+                                                        }
+                                                         if (DataModule2->Parameters->FieldByName("DopuskField")->AsString!="no"){
+                                                        if(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("DopuskField")->AsString)->AsFloat!=0){
+                                                          Zap=DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("DopuskField")->AsString)->AsFloat;
+                                                          if (DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat<StrToFloat(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_min")->AsString)->AsString)+((Zap/100)*StrToFloat(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_min")->AsString)->AsString))){
+                                                           countBad++;
+                                                         }
+                                                        }
+                                                        }
+                                                        }
+                                                        else {
+                                                           if (DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat>StrToFloat(DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_min")->AsString)->AsString)){
+                                                           countBad++;
+                                                         }
+
+                                                        }
+
+                                                }
+
+                                          }
+                                        DataModule1->SQLPSIData->Next();
+                                }
+                              AVG=Sum/NN;
+                              DataModule1->SQLPSIData->First();
+                              double SumKV=0;
+                             for (int j=0; j<DataModule1->SQLPSIData->RecordCount; j++){
+                               if (DataModule1->SQLPSIData->FieldByName("Status2")->AsString=="Good" & DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsString!=""){
+                                SumKV=SumKV+pow((DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat-AVG),2);
+                                }
+                               DataModule1->SQLPSIData->Next();
+                             }
+                             STDEV=sqrt(SumKV/NN);
+
+                          DataModule1->SQLPSIData->First();
+                          Max_A=Min;
+                          Min_A=Max;
+                          AVG_A=0;
+                          double Sum_a=0;
+                                  for (int j=0; j<DataModule1->SQLPSIData->RecordCount; j++){
+                                     if (DataModule1->SQLPSIData->FieldByName("Status2")->AsString=="Good"){
+                                     double tabs1=fabs(DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat);
+                                     double tabs2=fabs(AVG)+3*fabs(STDEV);
+                                           if (tabs1<=tabs2){
+                                                   if (Max_A<DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat){
+                                                    Max_A=DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat;
+                                                   }
+                                                   if (Min_A>DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat & DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsString!=""){
+                                                    Min_A=DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat;
+                                                   }
+                                                   if (DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsString!=""){
+                                                 Sum_a=Sum_a+DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat;
+                                                   }
+                                           }
+                                           else {
+                                           if (DataModule1->SqlSpecification->FieldByName("Anomal")->AsString=="True" & DataModule1->SQLPSIData->FieldByName("Status")->AsString!="Брак"){
+                                              countA++;
+                                             DataModule1->SQLPSIData->Edit();
+                                             DataModule1->SQLPSIData->FieldByName("Status")->AsString="Аномал.";
+                                             DataModule1->SQLPSIData->Post();
+                                             ResultForm->ResultGrid->Cells[Nar[22]][j+1]="Аномал.";
+                                             AnsiString Command="Update psidatatemp set Status1='Аномал.' where Measure_ID='"+Measure_ID+"' and N='"+DataModule1->SQLPSIData->FieldByName("N")->AsString+"'";
+                                             DataModule2->Comand->SQL->Clear();
+                                             DataModule2->Comand->SQL->Add(Command);
+                                             DataModule2->Comand->Execute();
+                                                }
+                                                else if (DataModule1->SqlSpecification->FieldByName("AnomalR")->AsString=="True" & DataModule1->SQLPSIData->FieldByName("Status")->AsString!="Брак"){
+                                                         if (DataModule2->Parameters->FieldByName("ID")->AsString=="2" || DataModule2->Parameters->FieldByName("ID")->AsString=="12" || DataModule2->Parameters->FieldByName("ID")->AsString=="13" ){
+                                                                 countA++;
+                                                                 DataModule1->SQLPSIData->Edit();
+                                                                  DataModule1->SQLPSIData->FieldByName("Status")->AsString="Аномал.";
+                                                                 DataModule1->SQLPSIData->Post();
+                                                                  ResultForm->ResultGrid->Cells[Nar[22]][j+1]="Аномал.";
+                                                                          AnsiString Command="Update psidatatemp set Status1='Аномал.' where Measure_ID='"+Measure_ID+"' and N='"+DataModule1->SQLPSIData->FieldByName("N")->AsString+"'";
+                                                                           DataModule2->Comand->SQL->Clear();
+                                                                           DataModule2->Comand->SQL->Add(Command);
+                                                                   DataModule2->Comand->Execute();
+
+                                                         }
+                                                }
+                                             }   
+                                          }
+                                          else {
+                                              DataModule1->SQLPSIData->Edit();
+                                             DataModule1->SQLPSIData->FieldByName("Status")->AsString="Незамер.";
+                                             DataModule1->SQLPSIData->Post();
+                                             ResultForm->ResultGrid->Cells[Nar[22]][j+1]="Незамер.";
+                                              AnsiString Command="Update psidatatemp set Status1='Незамер.' where Measure_ID='"+Measure_ID+"' and N='"+DataModule1->SQLPSIData->FieldByName("N")->AsString+"'";
+                                             DataModule2->Comand->SQL->Clear();
+                                             DataModule2->Comand->SQL->Add(Command);
+                                             DataModule2->Comand->Execute();
+                                          }
+
+                                     DataModule1->SQLPSIData->Next();
+                                  }
+                            if (countA==0){
+                            AVG_A=0;
+                            }
+                            else {
+                           AVG_A=Sum_a/countA;
+                           }
+                           DataModule1->SQLPSIData->First();
+                              double SumKV_A=0;
+                             for (int j=0; j<DataModule1->SQLPSIData->RecordCount; j++){
+                              if (DataModule1->SQLPSIData->FieldByName("Status2")->AsString=="Good" & fabs(DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat)<=AVG+3*STDEV & DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsString!=""){
+                                SumKV_A=SumKV_A+pow((DataModule1->SQLPSIData->FieldByName(DataModule2->Parameters->FieldByName("Parametr_PSI_Field")->AsString)->AsFloat-AVG_A),2);
+                                }
+                               DataModule1->SQLPSIData->Next();
+                             }
+                             STDEV_A=sqrt(SumKV_A/NN);
+                             double CPK=0;
+                              AnsiString VGT=DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_max")->AsString)->AsString;
+                               AnsiString NGT=DataModule1->SqlSpecification->FieldByName(DataModule2->Parameters->FieldByName("Parametr_min")->AsString)->AsString;
+                               double VGD,NGD;
+                              if (VGT!="no"){
+                                VGD=StrToFloat(VGT);
+
+                               }
+                               else {
+                                VGD=0;
+                               }
+                               if (NGT!="no"){
+                                NGD=StrToFloat(NGT);
+
+                               }
+                               else {
+                                NGD=0;
+                               }
+                               double dG=fabs(VGD-NGD)/2;
+
+                               if (AVG_A==0){
+                                AVG_A=AVG;
+                               }
+                               if (STDEV_A==0){
+
+                                STDEV_A=STDEV;
+                               }
+
+                              if (STDEV_A!=0 & dG!=0){
+                                double dGx=fabs(((VGD+NGD)/2)-AVG_A);
+                                double k=dGx/dG;
+                                double Cp=dG/(3*STDEV_A);
+                                CPK=fabs(Cp*(1-k));
+
+                               }
+                               else {
+                                CPK=0;
+                               }
+                            DataModule2->Statistika->Append();
+                            DataModule2->Statistika->FieldByName("Measure_ID")->AsString=Measure_ID;
+                            DataModule2->Statistika->FieldByName("Parametr_ID")->AsString=DataModule2->Parameters->FieldByName("ID")->AsString;
+                            DataModule2->Statistika->FieldByName("MSK_ID")->AsString=DataModule1->SQLPSIData->FieldByName("Msk")->AsString;
+                           DataModule2->Statistika->FieldByName("Max")->AsFloat=Max;
+                           DataModule2->Statistika->FieldByName("Min")->AsFloat=Min;
+                            DataModule2->Statistika->FieldByName("AVG")->AsFloat=AVG;
+                            DataModule2->Statistika->FieldByName("STDEV")->AsFloat=STDEV;
+                            DataModule2->Statistika->FieldByName("Max_A")->AsFloat=Max_A;
+                           DataModule2->Statistika->FieldByName("Min_A")->AsFloat=Min_A;
+                            DataModule2->Statistika->FieldByName("AVG_A")->AsFloat=AVG_A;
+                            DataModule2->Statistika->FieldByName("STDEV_A")->AsFloat=STDEV_A;
+                            DataModule2->Statistika->FieldByName("Alln")->AsFloat=NN;
+                            DataModule2->Statistika->FieldByName("Badn")->AsFloat=countBad;
+                            DataModule2->Statistika->FieldByName("Goodn")->AsFloat=NN-countBad;
+                            DataModule2->Statistika->FieldByName("Anomal")->AsFloat=countA;
+                            DataModule2->Statistika->FieldByName("CPK")->AsFloat=CPK;
+                            DataModule2->Statistika->Post();
+                         }
+
+                   DataModule2->Parameters->Next();
+                }
+                 DataModule1->SQLPSIData->First();
+                         int anomal=0;
+                         int bad=0;
+                         int good=0;
+                         int nezamer=0;
+                         int all=0;
+                         for (int j=0;j<DataModule1->SQLPSIData->RecordCount; j++){
+                            all++;
+                            if (DataModule1->SQLPSIData->FieldByName("Status")->AsString=="Годен"){
+                             good++;
+                            }
+                            else if (DataModule1->SQLPSIData->FieldByName("Status")->AsString=="Брак"){
+                               bad++;
+                            }
+                            else if (DataModule1->SQLPSIData->FieldByName("Status")->AsString=="Аномал."){
+
+                               anomal++;
+                            }
+                            else if (DataModule1->SQLPSIData->FieldByName("Status")->AsString=="Незамер."){
+                             nezamer++;
+                            }
+
+                           DataModule1->SQLPSIData->Next();
+                         }
+                           int BADALL=bad+anomal+nezamer;
+
+                          AnsiString Command="Update psi set atall='"+FloatToStr(all)+"',Good='"+FloatToStr(good)+"', Bad='"+FloatToStr(BADALL)+"',Nezamer='"+FloatToStr(nezamer)+"', Anomal='"+FloatToStr(anomal)+"' where Measure_ID='"+Measure_ID+"'";
+                          DataModule2->Comand->SQL->Clear();
+                         DataModule2->Comand->SQL->Add(Command);
+                         DataModule2->Comand->Execute();
+            DataModule1->SQLPSIData->Active=false;
+            DataModule2->Statistika->Active=false;
+            ResultForm->btnJournal->Enabled=true;
+   }
+
+
+
+    DataModule1->KH7700_Temp->Active=false;
+    ledFinish->Active=true;
+    ResultForm->Show();
+
+//************************************************************************************************************************************************************************************************************
 
 }   //   KH7700
 //*******************Окончание модуля KH7700*******************************************************************************

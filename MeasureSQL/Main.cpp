@@ -7057,7 +7057,7 @@ if(DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString!="no"){
 
                                                                                        }
 
-                                                                                  if (DataModule1->SqlSpecification->FieldByName("Ftgk_Measure")->AsString=="False"){
+                                                                                  if (DataModule1->SqlSpecification->FieldByName("Ftgk_Measure")->AsString=="False" || DataModule1->SqlSpecification->FieldByName("Ftgk_Measure")->IsNull){
                                                                                         if(DataModule1->SqlSpecification->FieldByName("Ft")->AsString=="True"){
                                                                                                     ResultForm->ResultGrid->Cells[Nar[3]][i+1]=FloatToStrF(F,ffFixed,5,3);
                                                                                          }
@@ -10749,7 +10749,7 @@ Az=DataModule1->KH7700_Temp->FieldByName("TEMP")->AsFloat;
                      YZ(u)=((DataModule1->KH7700_Temp->FieldByName("FS")->AsFloat-Nominal*1E6)/Nominal);
                    }
                   if (Measure_Type=="Physical"){
-                     YZ(u)=((DataModule1->KH7700_Temp->FieldByName("FL")->AsFloat-Nominal)*1E6/Nominal);
+                     YZ(u)=((DataModule1->KH7700_Temp->FieldByName("FL")->AsFloat-Nominal*1E6)/Nominal);
                    }
               }
              else if (DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="Fs(Fr)"){
@@ -11374,7 +11374,7 @@ if(DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString!="no"){
 
                                                                                        }
 
-                                                                                  if (DataModule1->SqlSpecification->FieldByName("Ftgk_Measure")->AsString=="False"){
+                                                                      if (DataModule1->SqlSpecification->FieldByName("Ftgk_Measure")->AsString=="False" || DataModule1->SqlSpecification->FieldByName("Ftgk_Measure")->IsNull){
                                                                                         if(DataModule1->SqlSpecification->FieldByName("Ft")->AsString=="True"){
                                                                                                     ResultForm->ResultGrid->Cells[Nar[3]][i+1]=FloatToStrF(F,ffFixed,5,3);
                                                                                          }

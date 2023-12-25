@@ -685,6 +685,15 @@ DataModule1->Config->TableName="transatconfig_"+DataModule1->Dostup->FieldByName
      DataModule1->KH7700_Temp_Copy->SQL->Clear();
      DataModule1->KH7700_Temp_Copy->SQL->Add(sql_script_copy);
      DataModule1->KH7700_Temp_Copy->Execute();
+
+      DataModule1->KH7700_temp_Alter->SQL->Clear();
+      DataModule1->KH7700_temp_Alter->SQL->Add("Alter  Table `"+tableName+"` add column SetupN INT;");
+      DataModule1->KH7700_temp_Alter->Execute();
+
+      DataModule1->KH7700_temp_Alter->SQL->Clear();
+      DataModule1->KH7700_temp_Alter->SQL->Add("Update `"+tableName+"` set SetupN='1';");
+      DataModule1->KH7700_temp_Alter->Execute();
+
   //Таблица конфигурации
     AnsiString tableName_config="KH7700_config_"+DataModule1->Dostup->FieldByName("ID")->AsString;
     //Убираем таблицу если она существует.
@@ -738,7 +747,7 @@ DataModule1->Config->TableName="transatconfig_"+DataModule1->Dostup->FieldByName
     AnsiString TT;
     double FreqTemp= DataModule1->KH7700_Temp->FieldByName("FS")->AsFloat;
     FreqTemp=FreqTemp/1000000;
-    TT=FloatToStrF(FreqTemp,ffFixed,5,3);
+    TT=FloatToStrF(FreqTemp,ffFixed,8,5);
     SetupFreq[0]=StrToFloat(TT);
     PositionCount[0]=0;
         for (int i=0; i<DataModule1->KH7700_Temp->RecordCount;i++){
@@ -757,21 +766,64 @@ DataModule1->Config->TableName="transatconfig_"+DataModule1->Dostup->FieldByName
 
           DataModule1->KH7700_Temp->Next();
         }
+    //Активируем временную таблицу и ищем последнюю позицию
+     DataModule1->KH7700_User_Config_Drop->SQL->Clear();
+         DataModule1->KH7700_User_Config_Drop->SQL->Add("drop table if exists `KH7700_User_Config`");
+         DataModule1->KH7700_User_Config_Drop->Execute();
+         DataModule1->KH7700_User_Config_Create->Execute();
+
+         DataModule1->KH7700_Temp->Filtered=false;
+         DataModule1->KH7700_Temp->Filter="TEMP='"+FloatToStr(FirstTemp)+"'";
+         DataModule1->KH7700_Temp->Filtered=true;
+         DataModule1->KH7700_Temp->First();
+
+         DataModule1->KH7700_User_Config->Active=false;
+         DataModule1->KH7700_User_Config->SQL->Clear();
+         DataModule1->KH7700_User_Config->SQL->Add("Select * from `KH7700_User_Config`");
+         DataModule1->KH7700_User_Config->Active=true;
+         DataModule1->KH7700_Temp->First();
+
+         for (int i=0;i<DataModule1->KH7700_Temp->RecordCount;i++){
+            DataModule1->KH7700_User_Config->Append();
+            DataModule1->KH7700_User_Config->FieldByName("Position")->AsString=DataModule1->KH7700_Temp->FieldByName("XTALROW")->AsString;
+            AnsiString Pos=DataModule1->KH7700_Temp->FieldByName("XTALROW")->AsString;
+            AnsiString Row=Pos.SubString(0,1);
+            AnsiString Pos_N=Pos.SubString(2,Pos.Length()-1);
+            if (Pos_N.Length()==1){
+             Pos_N="00"+Pos_N;
+            }
+            else if(Pos_N.Length()==2){
+              Pos_N="0"+Pos_N;
+            }
+            DataModule1->KH7700_User_Config->FieldByName("Pos_Str")->AsString=Row+Pos_N;
+            DataModule1->KH7700_User_Config->FieldByName("Setup_N")->AsString="1";
+            DataModule1->KH7700_User_Config->Post();
+            DataModule1->KH7700_Temp->Next();
+         }
+
+        DataModule1->KH7700_User_Config->Active=false;
+         DataModule1->KH7700_User_Config->SQL->Clear();
+         DataModule1->KH7700_User_Config->SQL->Add("Select * from `KH7700_User_Config` Order by `Pos_Str`");
+         DataModule1->KH7700_User_Config->Active=true;
+         DataModule1->KH7700_User_Config->Last();
+
+
+
      //Добавляем данные в таблицу конфигурации
     DataModule1->KH7700_Config->Append();
     DataModule1->KH7700_Config->FieldByName("SetupN")->AsString= "1";
     DataModule1->KH7700_Config->FieldByName("FirstPosition")->AsString= FirstPosition[0];
-    DataModule1->KH7700_Config->FieldByName("LastPosition")->AsString= LastPosition[0];
+    DataModule1->KH7700_Config->FieldByName("LastPosition")->AsString= DataModule1->KH7700_User_Config->FieldByName("Position")->AsString;
     DataModule1->KH7700_Config->FieldByName("Freq")->AsString= SetupFreq[0];
     DataModule1->KH7700_Config->FieldByName("Number")->AsString= PositionCount[0];
     DataModule1->KH7700_Config->FieldByName("Temperature")->AsString= Y;
     DataModule1->KH7700_Config->FieldByName("TempN")->AsString= Tcount;
     DataModule1->KH7700_Config->FieldByName("FirstTemp")->AsString= FirstTemp;
     DataModule1->KH7700_Config->Post();
-     AnsiString N=IntToStr(1)+"                     "+FloatToStrF(SetupFreq[0],ffFixed,5,3)+"Мгц                "+FirstPosition[0]+"..."+LastPosition[0]+"        "+IntToStr(PositionCount[0])+"   шт.";
+     AnsiString N=IntToStr(1)+"                     "+FloatToStrF(SetupFreq[0],ffFixed,5,3)+"Мгц                "+FirstPosition[0]+"..."+DataModule1->KH7700_User_Config->FieldByName("Position")->AsString+"        "+IntToStr(PositionCount[0])+"   шт.";
      MainForm->RzCheckList1->Items->Add(N);
      MainForm->ListBox1->Items->Add(IntToStr(PositionCount[0]));
-     MainForm->ListBox2->Items->Add(FirstPosition[0]+"..."+LastPosition[0]);
+     MainForm->ListBox2->Items->Add(FirstPosition[0]+"..."+DataModule1->KH7700_User_Config->FieldByName("Position")->AsString);
      MainForm->ledFile->Active=true;
      MainForm->N23->Enabled=true;
      FileSelectForm->Hide();

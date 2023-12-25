@@ -69,6 +69,7 @@ USEFORM("SelectSpc.cpp", SelectSpcForm);
 USEFORM("Data_RQ.cpp", RQ_Data); /* TDataModule: File Type */
 USEFORM("New_Data4.cpp", New_Data); /* TDataModule: File Type */
 USEFORM("Data_MeasureModule.cpp", Data_Measure); /* TDataModule: File Type */
+USEFORM("Config_View.cpp", Form1);
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
@@ -141,6 +142,7 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
                  Application->CreateForm(__classid(TRQ_Data), &RQ_Data);
                  Application->CreateForm(__classid(TNew_Data), &New_Data);
                  Application->CreateForm(__classid(TData_Measure), &Data_Measure);
+                 Application->CreateForm(__classid(TForm1), &Form1);
                  Application->Run();
         }
         catch (Exception &exception)

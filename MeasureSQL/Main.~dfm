@@ -4,7 +4,7 @@ object MainForm: TMainForm
   BorderStyle = bsSingle
   Caption = #1048#1079#1084#1077#1088#1077#1085#1080#1077' '#1088#1077#1079#1086#1085#1072#1090#1086#1088#1086#1074' '#1053#1055#1050'-2'
   ClientHeight = 476
-  ClientWidth = 531
+  ClientWidth = 527
   Color = clBlack
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clYellow
@@ -3193,6 +3193,28 @@ object MainForm: TMainForm
     TabOrder = 19
     Version = '1.2.3.0'
     OnClick = AdvGlassButton1Click
+  end
+  object AdvGlassButton2: TAdvGlassButton
+    Left = 416
+    Top = 280
+    Width = 105
+    Height = 32
+    BackColor = 16711808
+    Caption = #1050#1086#1085#1092#1080#1075#1091#1088#1072#1094#1080#1103
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWhite
+    Font.Height = -9
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ForeColor = clWhite
+    GlowColor = 16760205
+    InnerBorderColor = clBlack
+    OuterBorderColor = clWhite
+    ParentFont = False
+    ShineColor = clWhite
+    TabOrder = 20
+    Version = '1.2.3.0'
+    OnClick = AdvGlassButton2Click
   end
   object AdvMainMenu1: TAdvMainMenu
     MenuStyler = AdvMenuOfficeStyler1

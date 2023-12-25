@@ -123,6 +123,7 @@ __published:	// IDE-managed Components
         TAdvGlassButton *AdvGlassButton1;
         TLabel *MSK_Label1;
         TLabel *MSK_Label;
+        TAdvGlassButton *AdvGlassButton2;
         void __fastcall btnCloseClick(TObject *Sender);
         void __fastcall btnFileClick(TObject *Sender);
         void __fastcall btnNumbersClick(TObject *Sender);
@@ -167,6 +168,7 @@ __published:	// IDE-managed Components
         void __fastcall selProverkaClick(TObject *Sender);
         void __fastcall N33Click(TObject *Sender);
         void __fastcall Set_Measure_SPCExecute(TObject *Sender);
+        void __fastcall AdvGlassButton2Click(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
         __fastcall TMainForm(TComponent* Owner);

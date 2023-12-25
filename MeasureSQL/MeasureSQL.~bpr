@@ -17,7 +17,7 @@
       StringFunction.obj addNorm.obj Spc_PhazeNoise.obj PhazeNoise.obj Par.obj 
       PHN.obj md5.obj md5wrapper.obj SpcMore_1.obj SpektrOLD.obj 
       Protokol_Proverke_PH.obj Protokol_Print.obj AddMskReal.obj SelectSpc.obj 
-      Data_RQ.obj New_Data4.obj Data_MeasureModule.obj"/>
+      Data_RQ.obj New_Data4.obj Data_MeasureModule.obj Config_View.obj"/>
     <RESFILES value="MeasureSQL.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
@@ -34,7 +34,8 @@
       FileLoad.dfm Protokol_Select.dfm BarCodeEnter.dfm addNorm.dfm 
       Spc_PhazeNoise.dfm PhazeNoise.dfm Par.dfm PHN.dfm SpcMore_1.dfm 
       SpektrOLD.dfm Protokol_Proverke_PH.dfm Protokol_Print.dfm AddMskReal.dfm 
-      SelectSpc.dfm Data_RQ.dfm New_Data4.dfm Data_MeasureModule.dfm"/>
+      SelectSpc.dfm Data_RQ.dfm New_Data4.dfm Data_MeasureModule.dfm 
+      Config_View.dfm"/>
     <LIBFILES value=""/>
     <LIBRARIES value="lmd70_b6.lib clinetsuiteb6.lib dacvcl60.lib mydacvcl60.lib frxe6.lib 
       TeePro8C6.lib fqb60.lib FSDB6.lib frxDB6.lib FS6.lib frx6.lib 
@@ -85,14 +86,14 @@
     <USERDEFINES value="_DEBUG"/>
     <SYSDEFINES value="NO_STRICT"/>
     <MAINSOURCE value="MeasureSQL.cpp"/>
-    <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl;D:\Borland_LIB\FasfReport\LibBCB6;D:\Borland_LIB\ESBPCS4\bcb6;&quot;D:\Borland_LIB\TMS Instrumentation Workshop v1.4.5\TMS Instrumentation Workshop v1.4.5&quot;;D:\Borland_LIB\RC4\Lib\BCB6;&quot;D:\Borland_LIB\tmssoftware\TMS Component Pack&quot;;&quot;D:\Borland_LIB\CoreLab\MyDac for CBuilder 6\Include&quot;;D:\Borland_LIB\TeeChart\Sources\Compiled\Builder6\Include;&quot;D:\Borland_LIB\Clever Internet Suite\Lib\CB6\Include&quot;"/>
-    <LIBPATH value="$(BCB)\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\Borland_LIB\FasfReport\LibBCB6;D:\Borland_LIB\ESBPCS4\bcb6;&quot;D:\Borland_LIB\TMS Instrumentation Workshop v1.4.5\TMS Instrumentation Workshop v1.4.5&quot;;D:\Borland_LIB\RC4\Lib\BCB6;&quot;D:\Borland_LIB\tmssoftware\TMS Component Pack&quot;;&quot;D:\Borland_LIB\CoreLab\MyDac for CBuilder 6\Lib&quot;;D:\Borland_LIB\TeeChart\Sources\Compiled\Builder6\Lib;D:\Borland_LIB\TeeChart\Sources\Compiled\Builder6\Lib\Obj;&quot;D:\Borland_LIB\Clever Internet Suite\Lib\CB6&quot;"/>
+    <INCLUDEPATH value="$(BCB)\Projects;$(BCB)\include;$(BCB)\include\vcl;D:\Borland_LIB\FasfReport\LibBCB6;D:\Borland_LIB\ESBPCS4\bcb6;&quot;D:\Borland_LIB\TMS Instrumentation Workshop v1.4.5\TMS Instrumentation Workshop v1.4.5&quot;;D:\Borland_LIB\RC4\Lib\BCB6;&quot;D:\Borland_LIB\tmssoftware\TMS Component Pack&quot;;&quot;D:\Borland_LIB\CoreLab\MyDac for CBuilder 6\Include&quot;;D:\Borland_LIB\TeeChart\Sources\Compiled\Builder6\Include;&quot;D:\Borland_LIB\Clever Internet Suite\Lib\CB6\Include&quot;"/>
+    <LIBPATH value="$(BCB)\Projects;$(BCB)\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\Borland_LIB\FasfReport\LibBCB6;D:\Borland_LIB\ESBPCS4\bcb6;&quot;D:\Borland_LIB\TMS Instrumentation Workshop v1.4.5\TMS Instrumentation Workshop v1.4.5&quot;;D:\Borland_LIB\RC4\Lib\BCB6;&quot;D:\Borland_LIB\tmssoftware\TMS Component Pack&quot;;&quot;D:\Borland_LIB\CoreLab\MyDac for CBuilder 6\Lib&quot;;D:\Borland_LIB\TeeChart\Sources\Compiled\Builder6\Lib;D:\Borland_LIB\TeeChart\Sources\Compiled\Builder6\Lib\Obj;&quot;D:\Borland_LIB\Clever Internet Suite\Lib\CB6&quot;"/>
     <WARNINGS value="-w-par"/>
     <OTHERFILES value=""/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-I$(BCB)\include -I$(BCB)\include\vcl -ID:\Borland_LIB\FasfReport\LibBCB6 
-      -ID:\Borland_LIB\ESBPCS4\bcb6 
+    <IDLCFLAGS value="-I$(BCB)\Projects -I$(BCB)\include -I$(BCB)\include\vcl 
+      -ID:\Borland_LIB\FasfReport\LibBCB6 -ID:\Borland_LIB\ESBPCS4\bcb6 
       -I&quot;D:\Borland_LIB\TMS Instrumentation Workshop v1.4.5\TMS Instrumentation Workshop v1.4.5&quot; 
       -ID:\Borland_LIB\RC4\Lib\BCB6 
       -I&quot;D:\Borland_LIB\tmssoftware\TMS Component Pack&quot; 
@@ -188,6 +189,7 @@
       <FILE FILENAME="Data_RQ.cpp" FORMNAME="RQ_Data" UNITNAME="Data_RQ" CONTAINERID="CCompiler" DESIGNCLASS="TDataModule" LOCALCOMMAND=""/>
       <FILE FILENAME="New_Data4.cpp" FORMNAME="New_Data" UNITNAME="New_Data4" CONTAINERID="CCompiler" DESIGNCLASS="TDataModule" LOCALCOMMAND=""/>
       <FILE FILENAME="Data_MeasureModule.cpp" FORMNAME="Data_Measure" UNITNAME="Data_MeasureModule" CONTAINERID="CCompiler" DESIGNCLASS="TDataModule" LOCALCOMMAND=""/>
+      <FILE FILENAME="Config_View.cpp" FORMNAME="Form1" UNITNAME="Config_View" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>

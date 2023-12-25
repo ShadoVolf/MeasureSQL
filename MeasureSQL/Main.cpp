@@ -42,6 +42,7 @@
 #include "Protokol_Print.h"
 #include "AddMskReal.h"
 #include "Data_MeasureModule.h"
+#include "Config_View.h"
 # include "md5wrapper.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -285,7 +286,7 @@ TnumberForm->lCount->Text=ListBox1->Items->Strings[l-1];
                     DataModule1->KH7700_Config->Next();
                 }
          DataModule1->KH7700_Temp->Filtered=false;
-         DataModule1->KH7700_Temp->Filter="TEMP='"+DataModule1->KH7700_Config->FieldByName("FirstTemp")->AsString+"'";
+         DataModule1->KH7700_Temp->Filter="TEMP='"+DataModule1->KH7700_Config->FieldByName("FirstTemp")->AsString+"' and SetupN='"+FloatToStr(l)+"'";
          DataModule1->KH7700_Temp->Filtered=true;
          DataModule1->KH7700_Temp->First();
 
@@ -298,6 +299,7 @@ TnumberForm->lCount->Text=ListBox1->Items->Strings[l-1];
          NumberMForm->gridNumbers->Cells[2][0]="Номер";
          NumberMForm->edtFirstPosition->Items->Clear();
          NumberMForm->edtEndPosition->Items->Clear();
+
          DataModule1->KH7700_User_Config_Drop->SQL->Clear();
          DataModule1->KH7700_User_Config_Drop->SQL->Add("drop table if exists `KH7700_User_Config`");
          DataModule1->KH7700_User_Config_Drop->Execute();
@@ -14801,6 +14803,12 @@ void __fastcall TMainForm::Set_Measure_SPCExecute(TObject *Sender)
 MainForm->ledSpc->Active=true;
 MainForm->SpcLabel->Caption=DataModule1->SqlSpecification->FieldByName("Name")->AsString;
 MSK_Label->Caption=NumberMForm->edtMSK->Text;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::AdvGlassButton2Click(TObject *Sender)
+{
+Config_View_Form->Visible=true;
 }
 //---------------------------------------------------------------------------
 

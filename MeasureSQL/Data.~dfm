@@ -10,9 +10,9 @@ object DataModule1: TDataModule1
     Options.Compress = True
     Options.Charset = 'cp1251'
     Options.Protocol = mpTCP
-    Username = 'root'
-    Password = 'arcanum'
-    Server = '172.16.20.30'
+    Username = 'xampp'
+    Password = '43FPa!29S8HQeAW'
+    Server = 'MES1'
     Connected = True
     ConnectDialog = MyConnectDialog1
     LoginPrompt = False
@@ -853,8 +853,8 @@ object DataModule1: TDataModule1
     SQL.Strings = (
       'drop table if exists `KH7700_User_Config`;')
     Connection = CoordinatorDB
-    Left = 192
-    Top = 784
+    Left = 200
+    Top = 776
   end
   object KH7700_User_Config: TMyTable
     Connection = CoordinatorDB
@@ -873,5 +873,10 @@ object DataModule1: TDataModule1
     DataSet = KH7700_Config
     Left = 1136
     Top = 712
+  end
+  object KH7700_temp_Alter: TMyScript
+    Connection = CoordinatorDB
+    Left = 336
+    Top = 672
   end
 end

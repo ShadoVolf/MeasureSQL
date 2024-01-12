@@ -10,9 +10,9 @@ object DataModule1: TDataModule1
     Options.Compress = True
     Options.Charset = 'cp1251'
     Options.Protocol = mpTCP
-    Username = 'root'
-    Password = 'arcanum'
-    Server = '172.16.20.30'
+    Username = 'xampp'
+    Password = '43FPa!29S8HQeAW'
+    Server = 'MES1'
     Connected = True
     ConnectDialog = MyConnectDialog1
     LoginPrompt = False

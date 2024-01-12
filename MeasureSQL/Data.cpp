@@ -45,8 +45,15 @@ AnsiString IP;
 TRegistry& regKey =*new TRegistry();
 regKey.OpenKey("SOFTWARE\\MORION\\MeasureSQL",false);
 IP=regKey.ReadString("IP");
+AnsiString Port =  regKey.ReadString("Port");
+AnsiString Login =  regKey.ReadString("Login");
+AnsiString Password =  regKey.ReadString("Password");
+
 regKey.CloseKey();
 CoordinatorDB->Server=IP;
+CoordinatorDB->Username = Login;
+CoordinatorDB->Port = StrToFloat(Port);
+CoordinatorDB->Password = Password;
 CoordinatorDB->Connected=true;
  
 

@@ -540,6 +540,7 @@ DataModule1->Config->TableName="transatconfig_"+DataModule1->Dostup->FieldByName
            int RingTemp;
            int PositionTemp;
         DataModule1->Transat_Temp->Active=true;
+        DataModule1->Transat_Temp->Filtered=false;
          DataModule1->Transat_Temp->First();
 
              T=DataModule1->Transat_Temp->FieldByName("SETPOINT")->AsFloat;

@@ -1001,8 +1001,88 @@ void __fastcall TOldForm::btnLoadClick(TObject *Sender)
 
 //---------------------------------------------------------------------------
 
-void __fastcall TOldForm::cmb_IDChange(TObject *Sender)
+
+void __fastcall TOldForm::RzCheckBox1Click(TObject *Sender)
 {
+if (btnPsi->Checked){
+ btnGood->Visible=true;
+ RadioGroup1->Visible=true;
+
+}
+else {
+    btnGood->Visible=false;
+ RadioGroup1->Visible=false;
+
+}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TOldForm::btnBarCodeClick(TObject *Sender)
+{
+numberSelect=2;
+BarCodeMskForm->Show();
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TOldForm::btnRecPsiClick(TObject *Sender)
+{
+DataModule1->Old_ID->Active=true;
+DataModule1->Old_ID->First();
+  for (int i=0; i<DataModule1->Old_ID->RecordCount; i++){
+           if (DataModule1->Old_ID->FieldByName("Measure_ID")->AsString==cmb_ID->Text){
+                  if (!DataModule1->Old_ID->FieldByName("Psi_Measure_ID")->AsString.IsEmpty() & DataModule1->Old_ID->FieldByName("Psi_Measure_ID")->AsFloat!=0){
+                      DataModule2->psiData->Active=false;
+                      DataModule2->psiData->SQL->Clear();
+                      DataModule2->psiData->SQL->Add("Select * from psidata where Measure_ID='"+DataModule1->Old_ID->FieldByName("Psi_Measure_ID")->AsString+"'");
+                      DataModule2->psiData->Active=true;
+                      DataModule2->old->Active=false;
+                      DataModule2->old->SQL->Clear();
+                      DataModule2->old->SQL->Add("Select * from old where MeasureID='"+cmb_ID->Text+"' Order by N");
+                      DataModule2->old->Active=true;
+                        if (DataModule2->psiData->RecordCount>0){
+                          DataModule2->psiData->First();
+                          DataModule2->old->First();
+                                for (int j=0; j<DataModule2->old->RecordCount; j++){
+                                       DataModule2->psiData->First();
+                                        for (int k=0; k<DataModule2->psiData->RecordCount; k++){
+                                                if (DataModule2->psiData->FieldByName("N")->AsString==DataModule2->old->FieldByName("N")->AsString){
+                                                   DataModule2->psiData->Edit();
+                                                    DataModule2->psiData->FieldByName("Old1")->AsString=DataModule2->old->FieldByName("old1")->AsString;
+                                                    DataModule2->psiData->FieldByName("Old2")->AsString=DataModule2->old->FieldByName("old2")->AsString;
+                                                    DataModule2->psiData->FieldByName("Old3")->AsString=DataModule2->old->FieldByName("old3")->AsString;
+                                                    DataModule2->psiData->Post();
+                                                }
+                                         DataModule2->psiData->Next();
+                                        }
+
+                                   DataModule2->old->Next();
+                                }
+                        }
+                        else {
+                           ShowMessage("Отсутствуют данные о замере ПСИ введите их вручную");
+                           BarCodeEnterForm->Show();
+
+                        }
+                      }
+                    else {
+                          ShowMessage("Отсутствуют данные о замере ПСИ введите их вручную");
+                          BarCodeEnterForm->Show();
+                         }
+                  break;
+               }
+
+       DataModule1->Old_ID->Next();
+  }
+
+
+
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TOldForm::cmb_IDKeyPress(TObject *Sender, char &Key)
+{
+if (Key==13){
  if (edtMeasure->Text=="[Замер 1]"){
  AnsiString sql;
     if (btnPsi->Checked){
@@ -1103,85 +1183,7 @@ for (int i=0;i<DataModule2->old->RecordCount;i++){
   }
       btnRec->Enabled=true;
       }
-
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TOldForm::RzCheckBox1Click(TObject *Sender)
-{
-if (btnPsi->Checked){
- btnGood->Visible=true;
- RadioGroup1->Visible=true;
-
-}
-else {
-    btnGood->Visible=false;
- RadioGroup1->Visible=false;
-
-}
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TOldForm::btnBarCodeClick(TObject *Sender)
-{
-numberSelect=2;
-BarCodeMskForm->Show();
-}
-//---------------------------------------------------------------------------
-
-
-void __fastcall TOldForm::btnRecPsiClick(TObject *Sender)
-{
-DataModule1->Old_ID->Active=true;
-DataModule1->Old_ID->First();
-  for (int i=0; i<DataModule1->Old_ID->RecordCount; i++){
-           if (DataModule1->Old_ID->FieldByName("Measure_ID")->AsString==cmb_ID->Text){
-                  if (!DataModule1->Old_ID->FieldByName("Psi_Measure_ID")->AsString.IsEmpty() & DataModule1->Old_ID->FieldByName("Psi_Measure_ID")->AsFloat!=0){
-                      DataModule2->psiData->Active=false;
-                      DataModule2->psiData->SQL->Clear();
-                      DataModule2->psiData->SQL->Add("Select * from psidata where Measure_ID='"+DataModule1->Old_ID->FieldByName("Psi_Measure_ID")->AsString+"'");
-                      DataModule2->psiData->Active=true;
-                      DataModule2->old->Active=false;
-                      DataModule2->old->SQL->Clear();
-                      DataModule2->old->SQL->Add("Select * from old where MeasureID='"+cmb_ID->Text+"' Order by N");
-                      DataModule2->old->Active=true;
-                        if (DataModule2->psiData->RecordCount>0){
-                          DataModule2->psiData->First();
-                          DataModule2->old->First();
-                                for (int j=0; j<DataModule2->old->RecordCount; j++){
-                                       DataModule2->psiData->First();
-                                        for (int k=0; k<DataModule2->psiData->RecordCount; k++){
-                                                if (DataModule2->psiData->FieldByName("N")->AsString==DataModule2->old->FieldByName("N")->AsString){
-                                                   DataModule2->psiData->Edit();
-                                                    DataModule2->psiData->FieldByName("Old1")->AsString=DataModule2->old->FieldByName("old1")->AsString;
-                                                    DataModule2->psiData->FieldByName("Old2")->AsString=DataModule2->old->FieldByName("old2")->AsString;
-                                                    DataModule2->psiData->FieldByName("Old3")->AsString=DataModule2->old->FieldByName("old3")->AsString;
-                                                    DataModule2->psiData->Post();
-                                                }
-                                         DataModule2->psiData->Next();
-                                        }
-
-                                   DataModule2->old->Next();
-                                }
-                        }
-                        else {
-                           ShowMessage("Отсутствуют данные о замере ПСИ введите их вручную");
-                           BarCodeEnterForm->Show();
-
-                        }
-                      }
-                    else {
-                          ShowMessage("Отсутствуют данные о замере ПСИ введите их вручную");
-                          BarCodeEnterForm->Show();
-                         }
-                  break;
-               }
-
-       DataModule1->Old_ID->Next();
-  }
-
-
-
+  }        
 }
 //---------------------------------------------------------------------------
 

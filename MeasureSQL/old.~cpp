@@ -322,6 +322,7 @@ int N_COUNT=0;
   VrProgressBar1->MaxValue=DataModule1->NumberCurrent->RecordCount-1;
 //Определение числа резонаторов
         if (MachineType=="Saunders"){       // установка Сандерс
+                 DataModule1->SQLPostProcessData->Active=true ;
                  DataModule1->SQLPostProcessData->First();
                  N_COUNT=DataModule1->SQLPostProcessData->RecordCount;
              }
@@ -416,7 +417,10 @@ int RingID;  //Выбор нижний или верхний круг установка трансат
 
                          DataModule1->SQLCrystalData->Next();
                    }
-
+               DataModule1->SQLCrystalData->Filtered=false;
+               DataModule1->SQLCrystalData->Filter="";
+               DataModule1->SQLCrystalData->RecordCount;
+   
        }
 
        else if (MachineType=="Transat"){

@@ -3190,7 +3190,7 @@ object MainForm: TMainForm
     OuterBorderColor = clWhite
     ParentFont = False
     ShineColor = clWhite
-    TabOrder = 19
+    TabOrder = 18
     Version = '1.2.3.0'
     OnClick = AdvGlassButton1Click
   end

@@ -690,6 +690,10 @@ DataModule1->Config->TableName="transatconfig_"+DataModule1->Dostup->FieldByName
       DataModule1->KH7700_temp_Alter->SQL->Add("Alter  Table `"+tableName+"` add column SetupN INT;");
       DataModule1->KH7700_temp_Alter->Execute();
 
+      DataModule1->KH7700_temp_Alter->SQL->Clear();
+      DataModule1->KH7700_temp_Alter->SQL->Add("Update `"+tableName+"` set SetupN='1';");
+      DataModule1->KH7700_temp_Alter->Execute();
+
   //Таблица конфигурации
     AnsiString tableName_config="KH7700_config_"+DataModule1->Dostup->FieldByName("ID")->AsString;
     //Убираем таблицу если она существует.

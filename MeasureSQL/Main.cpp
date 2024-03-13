@@ -990,7 +990,7 @@ double Precision=0.01;  //точность
 int M;
 int TempCount;
 int TempCountM;
-if (DataModule1->SqlSpecification->FieldByName("TCH_Approx_IST")->AsString=="True"){
+
  TempCount=DataModule1->SQLCrystalData->RecordCount;
  X.setbounds(0,TempCount);
   X1.setbounds(0,TempCount);
@@ -1028,6 +1028,7 @@ else if (DataModule1->SqlSpecification->FieldByName("TCH_Interval_Type")->AsStri
       DataModule1->SQLSetupData->First();
       int l=0;
       int l1=0;
+ if (DataModule1->SqlSpecification->FieldByName("TCH_Approx_IST")->AsString=="True"){
       for( int j=0;j<TempCount;j++){
                    if (DataModule1->SqlSpecification->FieldByName("TCH_Interval_Type")->AsString=="По интервалу замера"){
 

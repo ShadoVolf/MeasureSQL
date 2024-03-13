@@ -267,7 +267,7 @@ if (l>0){
     NumberMForm->edtFirstPosition->Repaint();
     NumberMForm->edtEndPosition->Repaint();
     }
-TnumberForm->lCount->Text=ListBox1->Items->Strings[l-1];
+TnumberForm->lCount->Text=DataModule1->Config->FieldByName("Number")->AsFloat;
 
  }
  else if (MachineType=="KH7700"){
@@ -278,6 +278,7 @@ TnumberForm->lCount->Text=ListBox1->Items->Strings[l-1];
                    }
              }
   if (l>0){
+      DataModule1->KH7700_Config->Active=true;
       DataModule1->KH7700_Config->First();
              for (int i=0;i<DataModule1->KH7700_Config->RecordCount;i++){
                         if (DataModule1->KH7700_Config->FieldByName("SetupN")->AsFloat==l){
@@ -349,7 +350,7 @@ TnumberForm->lCount->Text=ListBox1->Items->Strings[l-1];
     NumberMForm->edtEndPosition->ItemIndex=kk-1;
     NumberMForm->edtFirstPosition->Repaint();
     NumberMForm->edtEndPosition->Repaint();
-   TnumberForm->lCount->Text=ListBox1->Items->Strings[l-1];
+  TnumberForm->lCount->Text=DataModule1->KH7700_Config->FieldByName("Number")->AsFloat;
    }
  }
 
@@ -14236,7 +14237,7 @@ DataModule1->spc_variant->Active=true;
 
 
 
-    DataModule1->KH7700_Temp->Active=false;
+    //DataModule1->KH7700_Temp->Active=false;
     ledFinish->Active=true;
     ResultForm->Show();
 

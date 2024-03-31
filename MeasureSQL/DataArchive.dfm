@@ -1,6 +1,6 @@
 object ArchiveForm: TArchiveForm
-  Left = 190
-  Top = 61
+  Left = 286
+  Top = 218
   Width = 1092
   Height = 621
   Caption = #1040#1088#1093#1080#1074
@@ -32,9 +32,9 @@ object ArchiveForm: TArchiveForm
     end
     object viewDate: TRzCheckList
       Left = 1
-      Top = 161
+      Top = 144
       Width = 145
-      Height = 382
+      Height = 399
       ItemFillColor = clYellow
       ItemFocusColor = clSkyBlue
       TransparentColor = clBlack
@@ -51,21 +51,7 @@ object ArchiveForm: TArchiveForm
       Sorted = True
       TabOrder = 0
       UseGradients = False
-    end
-    object btnSortByDate: TRzButton
-      Left = 96
-      Top = 8
-      Width = 41
-      Height = 17
-      FrameColor = clLime
-      Caption = '<<'
-      HighlightColor = clMaroon
-      HotTrack = True
-      HotTrackColor = clMaroon
-      HotTrackColorType = htctComplement
-      ParentColor = True
-      TabOrder = 1
-      OnClick = btnSortByDateClick
+      OnClick = viewDateClick
     end
   end
   object MskPanel: TPanel
@@ -85,9 +71,9 @@ object ArchiveForm: TArchiveForm
     end
     object viewMSK: TRzCheckList
       Left = 1
-      Top = 161
+      Top = 144
       Width = 183
-      Height = 382
+      Height = 399
       ItemFillColor = clYellow
       ItemFocusColor = clSkyBlue
       TransparentColor = clBlack
@@ -106,21 +92,6 @@ object ArchiveForm: TArchiveForm
       UseGradients = False
       OnClick = viewMSKClick
     end
-    object btnMSK: TRzButton
-      Left = 128
-      Top = 8
-      Width = 41
-      Height = 17
-      FrameColor = clLime
-      Caption = '<<'
-      HighlightColor = clMaroon
-      HotTrack = True
-      HotTrackColor = clMaroon
-      HotTrackColorType = htctComplement
-      ParentColor = True
-      TabOrder = 1
-      OnClick = btnMSKClick
-    end
     object edtSearch: TRzEdit
       Left = 8
       Top = 32
@@ -130,7 +101,7 @@ object ArchiveForm: TArchiveForm
       FrameColor = clRed
       FrameHotColor = clRed
       FrameVisible = True
-      TabOrder = 2
+      TabOrder = 1
       OnKeyPress = edtSearchKeyPress
     end
     object btnSeacrh: TRzButton
@@ -141,7 +112,7 @@ object ArchiveForm: TArchiveForm
       Color = clBlack
       HotTrack = True
       TextShadowColor = clGradientActiveCaption
-      TabOrder = 3
+      TabOrder = 2
       OnClick = btnSeacrhClick
     end
   end
@@ -162,9 +133,9 @@ object ArchiveForm: TArchiveForm
     end
     object viewType: TRzCheckList
       Left = 1
-      Top = 161
+      Top = 144
       Width = 238
-      Height = 382
+      Height = 399
       ItemFillColor = clYellow
       ItemFocusColor = clSkyBlue
       TransparentColor = clBlack
@@ -216,9 +187,9 @@ object ArchiveForm: TArchiveForm
     end
     object viewFile: TRzCheckList
       Left = 1
-      Top = 161
+      Top = 144
       Width = 153
-      Height = 382
+      Height = 399
       ItemFillColor = clYellow
       ItemFocusColor = clSkyBlue
       TransparentColor = clBlack
@@ -236,22 +207,6 @@ object ArchiveForm: TArchiveForm
       TabOrder = 0
       UseGradients = False
       OnClick = viewFileClick
-    end
-    object RzButton3: TRzButton
-      Left = 104
-      Top = 8
-      Width = 41
-      Height = 17
-      Hint = #1042#1099#1074#1086#1076' '#1074#1089#1077#1093' '#1092#1072#1081#1083#1086#1074
-      FrameColor = clLime
-      Caption = '<<'
-      HighlightColor = clMaroon
-      HotTrack = True
-      HotTrackColor = clMaroon
-      HotTrackColorType = htctComplement
-      ParentColor = True
-      TabOrder = 1
-      OnClick = RzButton3Click
     end
   end
   object NumbersPanel: TPanel
@@ -271,9 +226,9 @@ object ArchiveForm: TArchiveForm
     end
     object viewNumbers: TRzCheckList
       Left = 1
-      Top = 161
+      Top = 144
       Width = 183
-      Height = 382
+      Height = 399
       ItemFillColor = clYellow
       ItemFocusColor = clSkyBlue
       TransparentColor = clBlack

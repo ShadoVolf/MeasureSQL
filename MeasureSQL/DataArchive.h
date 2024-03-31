@@ -39,10 +39,7 @@ __published:	// IDE-managed Components
         TMenuItem *menuMSK;
         TMenuItem *menuType;
         TMenuItem *menuFile;
-        TRzButton *btnMSK;
         TRzButton *btnType;
-        TRzButton *btnSortByDate;
-        TRzButton *RzButton3;
         TVrShadowButton *btnTable;
         TRzCheckList *viewDate;
         TVrShadowButton *btnSearch;
@@ -79,10 +76,7 @@ __published:	// IDE-managed Components
         void __fastcall menuMSKClick(TObject *Sender);
         void __fastcall menuTypeClick(TObject *Sender);
         void __fastcall menuFileClick(TObject *Sender);
-        void __fastcall btnMSKClick(TObject *Sender);
         void __fastcall btnTypeClick(TObject *Sender);
-        void __fastcall btnSortByDateClick(TObject *Sender);
-        void __fastcall RzButton3Click(TObject *Sender);
         void __fastcall viewMSKClick(TObject *Sender);
         void __fastcall viewTypeClick(TObject *Sender);
         void __fastcall btnTableClick(TObject *Sender);
@@ -102,6 +96,7 @@ __published:	// IDE-managed Components
         void __fastcall edtSearchDataKeyPress(TObject *Sender, char &Key);
         void __fastcall edtSearchTypeKeyPress(TObject *Sender, char &Key);
         void __fastcall edtSearchKeyPress(TObject *Sender, char &Key);
+        void __fastcall viewDateClick(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
         __fastcall TArchiveForm(TComponent* Owner);

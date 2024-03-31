@@ -184,44 +184,12 @@ k=archivedata->PSIData->RecordCount;
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TArchiveForm::btnMSKClick(TObject *Sender)
-{
-archivedata->PSIData->Active=false;
-archivedata->PSIData->SQL->Clear();
-archivedata->PSIData->SQL->Add("Select msk from psidata order by msk");
-archivedata->PSIData->Active=true;
-archivedata->PSIData->First();
-viewType->Clear();
-viewMSK->Clear();
-viewNumbers->Clear();
-viewFile->Clear();
-
-int k;
-AnsiString S,S1,S2;
-k=archivedata->PSIData->RecordCount;
-ProgressBar->Position=0;
-ProgressBar->Max=k-1;
-
-viewMSK->Items->Add(archivedata->PSIData->FieldByName("MSK")->AsString);
-for (int i=0;i<k;i++){
-                     S=archivedata->PSIData->FieldByName("MSK")->AsString;
-
-                     archivedata->PSIData->Next();
-                     S1=archivedata->PSIData->FieldByName("MSK")->AsString;
-                         if (S1!=S){
-                                   viewMSK->Items->Add(S);
-                                    S=S1;
-                                    }
-                  ProgressBar->StepIt();
-   }
-}
-//---------------------------------------------------------------------------
 
 void __fastcall TArchiveForm::btnTypeClick(TObject *Sender)
 {
 archivedata->PSIData->Active=false;
 archivedata->PSIData->SQL->Clear();
-archivedata->PSIData->SQL->Add("Select SPC from psidata order by SPC");
+archivedata->PSIData->SQL->Add("Select distinct `spc` from psidata order by SPC");
 archivedata->PSIData->Active=true;
 archivedata->PSIData->First();
 viewType->Clear();
@@ -238,94 +206,29 @@ for (int i=0;i<k;i++){
                      S=archivedata->PSIData->FieldByName("SPC")->AsString;
 
                      archivedata->PSIData->Next();
-                     S1=archivedata->PSIData->FieldByName("SPC")->AsString;
-                         if (S1!=S){
+                     //S1=archivedata->PSIData->FieldByName("SPC")->AsString;
+                       //  if (S1!=S){
                                    viewType->Items->Add(S);
-                                    S=S1;
-                                    }
+                         //           S=S1;
+                           //         }
                     ProgressBar->StepIt();
    }
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TArchiveForm::btnSortByDateClick(TObject *Sender)
-{
-archivedata->PSIData->Active=false;
-archivedata->PSIData->SQL->Clear();
-archivedata->PSIData->SQL->Add("Select date,dater from psidata order by dater");
-archivedata->PSIData->Active=true;
-archivedata->PSIData->First();
-viewType->Clear();
-viewMSK->Clear();
-viewNumbers->Clear();
-viewFile->Clear();
 
-int k;
-AnsiString S,S1,S2,Sd,Sm,Sy,S1d,S1m,S1y;
-k=archivedata->PSIData->RecordCount;
-ProgressBar->Position=0;
-ProgressBar->Max=k-1;
-for (int i=0;i<k;i++){
-                     S=archivedata->PSIData->FieldByName("dateR")->AsString;
-
-                     archivedata->PSIData->Next();
-                     S1=archivedata->PSIData->FieldByName("dateR")->AsString;
-
-
-                         if (S!=S1){
-                                   viewDate->Items->Add(S1);
-                                   S=S1;
-                                    }
-                                     ProgressBar->StepIt();
-
-
-   }
-
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TArchiveForm::RzButton3Click(TObject *Sender)
-{
-archivedata->PSIData->Active=false;
-archivedata->PSIData->SQL->Clear();
-archivedata->PSIData->SQL->Add("Select File from psidata order by File");
-archivedata->PSIData->Active=true;
-archivedata->PSIData->First();
-viewType->Clear();
-viewMSK->Clear();
-viewNumbers->Clear();
-viewFile->Clear();
-
-int k;
-AnsiString S,S1,S2;
-k=archivedata->PSIData->RecordCount;
-ProgressBar->Position=0;
-ProgressBar->Max=k-1;
-for (int i=0;i<k;i++){
-                     S=archivedata->PSIData->FieldByName("file")->AsString;
-
-                     archivedata->PSIData->Next();
-                     S1=archivedata->PSIData->FieldByName("file")->AsString;
-                         if (S1!=S){
-                                   viewFile->Items->Add(S);
-                                    S=S1;
-                                    }
-                      ProgressBar->StepIt();              
-   }
-}
-//---------------------------------------------------------------------------
 
 
 
 void __fastcall TArchiveForm::viewMSKClick(TObject *Sender)
 {
-AnsiString S,S1,S2,S3,S4,S5,S6,S7,s2,s4,s5,s6,S8;
+AnsiString S2,S3,S4,S5,S6,S7,s2,s4,s5,s6,S8;
 viewDate->Visible=true;
 cmb_ID->Items->Clear();
 S3=viewMSK->Items->Strings[viewMSK->ItemIndex];
 archivedata->PSIData->Active=false;
 archivedata->PSIData->SQL->Clear();
-archivedata->PSIData->SQL->Add("Select * from psidata where msk='"+S3+"' order by msk");
+archivedata->PSIData->SQL->Add("Select `File`,`Spc`,`N`,`dater`,`MSK-M`,`Measure_ID` from psidata where msk='"+S3+"' order by msk");
 archivedata->PSIData->Active=true;
 archivedata->PSIData->First();
 viewType->Clear();
@@ -392,70 +295,14 @@ for (int i=0;i<k;i++){
 
 void __fastcall TArchiveForm::viewTypeClick(TObject *Sender)
 {
-/*AnsiString S,S1,S2,S3,S4,S5,S6,s2,s4,s5,s6;
-viewDate->Visible=true;
-S3=viewType->Items->Strings[viewType->ItemIndex];
-archivedata->PSIData->Active=false;
-archivedata->PSIData->SQL->Clear();
-archivedata->PSIData->SQL->Add("Select * from psidata where spc='"+S3+"' order by msk");
-archivedata->PSIData->Active=true;
-archivedata->PSIData->First();
-viewMSK->Clear();
-viewNumbers->Clear();
-viewFile->Clear();
- viewDate->Clear();
-int k;
 
-k=archivedata->PSIData->RecordCount;
-for (int i=0;i<k;i++){
-                     S4=archivedata->PSIData->FieldByName("msk")->AsString;
-                     S5=archivedata->PSIData->FieldByName("N")->AsString;
-                              if (s4!=S4){
-                                   viewMSK->Items->Add(S4);
-                                    s4=S4;
-                                    }
-                       archivedata->PSIData->Next();
-                       viewNumbers->Items->Add(S5);
-                       }
-
-archivedata->PSIData->Active=false;
-archivedata->PSIData->SQL->Clear();
-archivedata->PSIData->SQL->Add("Select * from psidata where spc='"+S3+"' order by file");
-archivedata->PSIData->Active=true;
-archivedata->PSIData->First();
-k=archivedata->PSIData->RecordCount;
-for (int i=0;i<k;i++){
-                     S4=archivedata->PSIData->FieldByName("File")->AsString;
-                              if (s4!=S4){
-                                   viewFile->Items->Add(S4);
-                                    s4=S4;
-                                    }
-                       archivedata->PSIData->Next();
-                       }
-
-archivedata->PSIData->Active=false;
-archivedata->PSIData->SQL->Clear();
-archivedata->PSIData->SQL->Add("Select * from psidata where spc='"+S3+"' order by dater");
-archivedata->PSIData->Active=true;
-archivedata->PSIData->First();
-k=archivedata->PSIData->RecordCount;
-for (int i=0;i<k;i++){
-                     S4=archivedata->PSIData->FieldByName("Dater")->AsString;
-                              if (s4!=S4){
-                                   viewDate->Items->Add(S4);
-                                    s4=S4;
-                                    }
-                       archivedata->PSIData->Next();
-                       }
-
-  */
-  AnsiString S,S1,S2,S3,S4,S5,S6,S7,s2,s4,s5,s6;
+  AnsiString S1,S2,S3,S4,S5,S6,s2,s4,s5,s6;
   if (key!=1){
 viewDate->Visible=true;
 S3=viewType->Items->Strings[viewType->ItemIndex];
 archivedata->PSIData->Active=false;
 archivedata->PSIData->SQL->Clear();
-archivedata->PSIData->SQL->Add("Select * from psidata where Spc='"+S3+"' order by msk");
+archivedata->PSIData->SQL->Add("Select `File`,`Msk`,`N`,`dater` from psidata where Spc='"+S3+"' order by msk");
 archivedata->PSIData->Active=true;
 archivedata->PSIData->First();
 viewMSK->Clear();
@@ -474,7 +321,6 @@ ProgressBar->StepIt();
                      S4=archivedata->PSIData->FieldByName("MSK")->AsString;
                      S5=archivedata->PSIData->FieldByName("N")->AsString;
                      S6=archivedata->PSIData->FieldByName("dater")->AsString;
-                     S7=archivedata->PSIData->FieldByName("MSK-M")->AsString;
                          if (s2!=S2){
                                    viewFile->Items->Add(S2);
                                     s2=S2;
@@ -487,18 +333,7 @@ ProgressBar->StepIt();
                                    viewDate->Items->Add(S6);
                                     s6=S6;
                                     }
-                        int p=1;
-                        for (int j=0;j<edtM->Items->Count; j++){
-                             if (edtM->Items->Strings[j]==S7){
-                                 p=0;
-                                 break;
-                                 }
-                              p=1;
 
-                        }
-                        if (p==1){
-                         edtM->Items->Add(S7);
-                        }
                       archivedata->PSIData->Next();
                        viewNumbers->Items->Add(S5);
 
@@ -684,7 +519,9 @@ void __fastcall TArchiveForm::btnSeacrhClick(TObject *Sender)
 {
 archivedata->PSIData->Active=false;
 archivedata->PSIData->SQL->Clear();
-archivedata->PSIData->SQL->Add("select * from psidata where (locate('"+edtSearch->Text+"',msk)>0) order by msk");
+//AnsiString sql= "select distinct msk from psidata where (locate('"+edtSearch->Text+"',msk)>0) order by msk";
+AnsiString sql= "select distinct `msk` from psidata where `msk` REGEXP '"+edtSearch->Text+"' order by `msk`";
+archivedata->PSIData->SQL->Add(sql);
 archivedata->PSIData->Active=true;
 archivedata->PSIData->First();
 viewType->Clear();
@@ -697,19 +534,19 @@ AnsiString S,S1,S2;
 k=archivedata->PSIData->RecordCount;
 ProgressBar->Position=0;
 ProgressBar->Max=k-1;
-if (k>0){
-S=archivedata->PSIData->FieldByName("MSK")->AsString;
-viewMSK->Items->Add(S);
-}
+//if (k>0){
+//S=archivedata->PSIData->FieldByName("MSK")->AsString;
+//viewMSK->Items->Add(S);
+//}
 for (int i=0;i<k;i++){
 
 
 
-                     S1=archivedata->PSIData->FieldByName("MSK")->AsString;
-                         if (S1!=S){
+                     S=archivedata->PSIData->FieldByName("msk")->AsString;
+                        // if (S1!=S){
                                    viewMSK->Items->Add(S);
-                                    S=S1;
-                                    }
+                          //          S=S1;
+                          //          }
                         archivedata->PSIData->Next();
                   ProgressBar->StepIt();
    }
@@ -720,7 +557,7 @@ void __fastcall TArchiveForm::btnSearchTypeClick(TObject *Sender)
 {
  archivedata->PSIData->Active=false;
 archivedata->PSIData->SQL->Clear();
-archivedata->PSIData->SQL->Add("select * from psidata where (locate('"+edtSearchType->Text+"',Spc)>0) order by Spc");
+archivedata->PSIData->SQL->Add("select distinct `spc` from psidata where (locate('"+edtSearchType->Text+"',`Spc`)>0) order by `Spc`");
 archivedata->PSIData->Active=true;
 archivedata->PSIData->First();
 viewType->Clear();
@@ -733,20 +570,20 @@ AnsiString S,S1,S2;
 k=archivedata->PSIData->RecordCount;
 ProgressBar->Position=0;
 ProgressBar->Max=k-1;
-if (k>0){
+/*if (k>0){
 S=archivedata->PSIData->FieldByName("Spc")->AsString;
 viewType->Items->Add(S);
 }
-
+*/
 for (int i=0;i<k;i++){
 
 
 
-                     S1=archivedata->PSIData->FieldByName("Spc")->AsString;
-                         if (S1!=S){
+                     S=archivedata->PSIData->FieldByName("Spc")->AsString;
+                        // if (S1!=S){
                                    viewType->Items->Add(S);
-                                    S=S1;
-                                    }
+                          //          S=S1;
+                            //        }
                                     archivedata->PSIData->Next();
                   ProgressBar->StepIt();
    }
@@ -757,7 +594,7 @@ void __fastcall TArchiveForm::btnSearchDataClick(TObject *Sender)
 {
   archivedata->PSIData->Active=false;
 archivedata->PSIData->SQL->Clear();
-archivedata->PSIData->SQL->Add("select * from psidata where (locate('"+edtSearchData->Text+"',DateR)>0) order by DateR");
+archivedata->PSIData->SQL->Add("select distinct `dater` from psidata where `dater` REGEXP '"+edtSearchData->Text+"' order by DateR");
 archivedata->PSIData->Active=true;
 archivedata->PSIData->First();
 viewType->Clear();
@@ -770,19 +607,13 @@ AnsiString S,S1,S2;
 k=archivedata->PSIData->RecordCount;
 ProgressBar->Position=0;
 ProgressBar->Max=k-1;
-if (k>0){
-S=archivedata->PSIData->FieldByName("DateR")->AsString;
- viewDate->Items->Add(S);
-}
+
 
 for (int i=0;i<k;i++){
 
 
-                     S1=archivedata->PSIData->FieldByName("DateR")->AsString;
-                         if (S1!=S){
+                     S=archivedata->PSIData->FieldByName("DateR")->AsString;
                                    viewDate->Items->Add(S);
-                                    S=S1;
-                                    }
                                     archivedata->PSIData->Next();
                   ProgressBar->StepIt();
    }
@@ -791,9 +622,9 @@ for (int i=0;i<k;i++){
 
 void __fastcall TArchiveForm::btnSearchFileClick(TObject *Sender)
 {
-    archivedata->PSIData->Active=false;
+      archivedata->PSIData->Active=false;
 archivedata->PSIData->SQL->Clear();
-archivedata->PSIData->SQL->Add("select * from psidata where (locate('"+edtSearchFile->Text+"',File)>0) order by File");
+archivedata->PSIData->SQL->Add("select distinct `File` from psidata where `File` REGEXP '"+edtSearchFile->Text+"' order by File");
 archivedata->PSIData->Active=true;
 archivedata->PSIData->First();
 viewType->Clear();
@@ -802,27 +633,18 @@ viewNumbers->Clear();
 viewFile->Clear();
  viewDate->Clear();
 int k;
-AnsiString S,S1,S2;
 k=archivedata->PSIData->RecordCount;
 ProgressBar->Position=0;
-ProgressBar->Max=k-1;
-if (k>0){
-S=archivedata->PSIData->FieldByName("File")->AsString;
-viewFile->Items->Add(S);
-}
 
-for (int i=0;i<k;i++){
+        if (k>0){
+           ProgressBar->Max=k-1;
+                for (int i=0;i<k;i++){
+                       viewFile->Items->Add(archivedata->PSIData->FieldByName("File")->AsString);
+                       archivedata->PSIData->Next();
+                       ProgressBar->StepIt();
 
-
-
-                     S1=archivedata->PSIData->FieldByName("File")->AsString;
-                         if (S1!=S){
-                                   viewFile->Items->Add(S);
-                                    S=S1;
-                                    }
-                  ProgressBar->StepIt();
-                  archivedata->PSIData->Next();
-   }
+                }
+         }
 
 }
 //---------------------------------------------------------------------------
@@ -831,7 +653,7 @@ void __fastcall TArchiveForm::btnSearchNumberClick(TObject *Sender)
 {
  archivedata->PSIData->Active=false;
 archivedata->PSIData->SQL->Clear();
-archivedata->PSIData->SQL->Add("select * from psidata where (locate('"+edtSearchNumber->Text+"',N)>0) order by N");
+archivedata->PSIData->SQL->Add("select distinct `N` from psidata where (locate('"+edtSearchNumber->Text+"',`N`)>0) order by `N`");
 archivedata->PSIData->Active=true;
 archivedata->PSIData->First();
 viewType->Clear();
@@ -840,25 +662,15 @@ viewNumbers->Clear();
 viewFile->Clear();
 viewDate->Clear();
 int k;
-AnsiString S,S1,S2;
 k=archivedata->PSIData->RecordCount;
 ProgressBar->Position=0;
 ProgressBar->Max=k-1;
 key=1;
-if (k>0){
-S=archivedata->PSIData->FieldByName("N")->AsString;
- viewNumbers->Items->Add(S);
- }
+
 for (int i=0;i<k;i++){
 
-
-
-                     S1=archivedata->PSIData->FieldByName("N")->AsString;
-                         if (S1!=S){
-                                   viewNumbers->Items->Add(S);
-                                    S=S1;
-                                    }
-                   archivedata->PSIData->Next();
+                  viewNumbers->Items->Add(archivedata->PSIData->FieldByName("N")->AsString);
+                  archivedata->PSIData->Next();
                   ProgressBar->StepIt();
    }
   key=0;
@@ -869,13 +681,13 @@ void __fastcall TArchiveForm::viewNumbersClick(TObject *Sender)
 {
 if (key!=1){
 if (!chkDeleteNumbers->Checked){
-AnsiString S,S1,S2,S3,S4,S5,S6,S7,S8,s2,s4,s5,s6,s8;
+AnsiString S1,S2,S3,S4,S5,S6,S7,S8,s2,s4,s5,s6,s8;
 
 viewDate->Visible=true;
 S3=viewNumbers->Items->Strings[viewNumbers->ItemIndex];
 archivedata->PSIData->Active=false;
 archivedata->PSIData->SQL->Clear();
-archivedata->PSIData->SQL->Add("Select * from psidata where N='"+S3+"' order by DateR");
+archivedata->PSIData->SQL->Add("Select `File`,`Spc`,`Msk`,`N`,`dater` from psidata where N='"+S3+"' order by DateR");
 archivedata->PSIData->Active=true;
 archivedata->PSIData->First();
 viewType->Clear();
@@ -895,7 +707,6 @@ for (int i=0;i<k;i++){
                      S5=archivedata->PSIData->FieldByName("N")->AsString;
                      S8=archivedata->PSIData->FieldByName("MSK")->AsString;
                      S6=archivedata->PSIData->FieldByName("dater")->AsString;
-                     S7=archivedata->PSIData->FieldByName("MSK-M")->AsString;
                          if (s2!=S2){
                                    viewFile->Items->Add(S2);
                                     s2=S2;
@@ -912,18 +723,7 @@ for (int i=0;i<k;i++){
                                    viewDate->Items->Add(S6);
                                     s6=S6;
                                     }
-                        int p=1;
-                        for (int j=0;j<edtM->Items->Count; j++){
-                             if (edtM->Items->Strings[j]==S7){
-                                 p=0;
-                                 break;
-                                 }
-                              p=1;
-
-                        }
-                        if (p==1){
-                         edtM->Items->Add(S7);
-                        }
+                        
                       archivedata->PSIData->Next();
 
 
@@ -939,12 +739,12 @@ for (int i=0;i<k;i++){
 void __fastcall TArchiveForm::viewFileClick(TObject *Sender)
 {
 if (key!=1){
-AnsiString S,S1,S2,S3,S4,S5,S6,S7,s2,s4,s5,s6;
+AnsiString S,S1,S2,S3,S4,S5,S6,s2,s4,s5,s6;
 viewDate->Visible=true;
 S3=viewFile->Items->Strings[viewFile->ItemIndex];
 archivedata->PSIData->Active=false;
 archivedata->PSIData->SQL->Clear();
-archivedata->PSIData->SQL->Add("Select * from psidata where File='"+S3+"' order by msk");
+archivedata->PSIData->SQL->Add("Select `Msk`,`Spc`,`N`,`dater` from psidata where File='"+S3+"' order by msk");
 archivedata->PSIData->Active=true;
 archivedata->PSIData->First();
 viewType->Clear();
@@ -957,13 +757,12 @@ k=archivedata->PSIData->RecordCount;
 ProgressBar->Position=0;
 ProgressBar->Max=k-1;
  edtM->Items->Clear();
-for (int i=0;i<k;i++){
+        for (int i=0;i<k;i++){
                     ProgressBar->StepIt();
                      S2=archivedata->PSIData->FieldByName("MSK")->AsString;
                      S4=archivedata->PSIData->FieldByName("SPC")->AsString;
                      S5=archivedata->PSIData->FieldByName("N")->AsString;
                      S6=archivedata->PSIData->FieldByName("dater")->AsString;
-                     S7=archivedata->PSIData->FieldByName("MSK-M")->AsString;
                          if (s2!=S2){
                                    viewMSK->Items->Add(S2);
                                     s2=S2;
@@ -975,25 +774,11 @@ for (int i=0;i<k;i++){
                           if (s6!=S6){
                                    viewDate->Items->Add(S6);
                                     s6=S6;
-                                    }
-                        int p=1;
-                        for (int j=0;j<edtM->Items->Count; j++){
-                             if (edtM->Items->Strings[j]==S7){
-                                 p=0;
-                                 break;
-                                 }
-                              p=1;
-
-                        }
-                        if (p==1){
-                         edtM->Items->Add(S7);
-                        }
+                            }
                       archivedata->PSIData->Next();
                        viewNumbers->Items->Add(S5);
 
-
-
-   }
+                 }
    }
 }
 //---------------------------------------------------------------------------
@@ -1011,7 +796,7 @@ void __fastcall TArchiveForm::edtSearchNumberKeyPress(TObject *Sender,
 if (Key==13){
   archivedata->PSIData->Active=false;
 archivedata->PSIData->SQL->Clear();
-archivedata->PSIData->SQL->Add("select * from psidata where (locate('"+edtSearchNumber->Text+"',N)>0) order by N");
+archivedata->PSIData->SQL->Add("select distinct `N` from psidata where (locate('"+edtSearchNumber->Text+"',`N`)>0) order by `N`");
 archivedata->PSIData->Active=true;
 archivedata->PSIData->First();
 viewType->Clear();
@@ -1025,20 +810,11 @@ k=archivedata->PSIData->RecordCount;
 ProgressBar->Position=0;
 ProgressBar->Max=k-1;
 key=1;
-if (k>0){
-S=archivedata->PSIData->FieldByName("N")->AsString;
- viewNumbers->Items->Add(S);
- }
+
 for (int i=0;i<k;i++){
-
-
-
-                     S1=archivedata->PSIData->FieldByName("N")->AsString;
-                         if (S1!=S){
-                                   viewNumbers->Items->Add(S);
-                                    S=S1;
-                                    }
-                   archivedata->PSIData->Next();
+                  viewNumbers->Items->Add(archivedata->PSIData->FieldByName("N")->AsString);
+                  S=S1;
+                  archivedata->PSIData->Next();
                   ProgressBar->StepIt();
    }
   key=0;
@@ -1057,7 +833,7 @@ void __fastcall TArchiveForm::edtSearchFileKeyPress(TObject *Sender,
 if (Key==13){
     archivedata->PSIData->Active=false;
 archivedata->PSIData->SQL->Clear();
-archivedata->PSIData->SQL->Add("select * from psidata where (locate('"+edtSearchFile->Text+"',File)>0) order by File");
+archivedata->PSIData->SQL->Add("select distinct `File` from psidata where `File` REGEXP '"+edtSearchFile->Text+"' order by File");
 archivedata->PSIData->Active=true;
 archivedata->PSIData->First();
 viewType->Clear();
@@ -1066,32 +842,20 @@ viewNumbers->Clear();
 viewFile->Clear();
  viewDate->Clear();
 int k;
-AnsiString S,S1,S2;
 k=archivedata->PSIData->RecordCount;
 ProgressBar->Position=0;
-ProgressBar->Max=k-1;
-if (k>0){
-S=archivedata->PSIData->FieldByName("File")->AsString;
-viewFile->Items->Add(S);
+
+        if (k>0){
+           ProgressBar->Max=k-1;
+                for (int i=0;i<k;i++){
+                       viewFile->Items->Add(archivedata->PSIData->FieldByName("File")->AsString);
+                       archivedata->PSIData->Next();
+                       ProgressBar->StepIt();
+
+                }
+         }
+
 }
-
-for (int i=0;i<k;i++){
-
-
-
-                     S1=archivedata->PSIData->FieldByName("File")->AsString;
-                         if (S1!=S){
-                                   viewFile->Items->Add(S);
-                                    S=S1;
-                                    }
-                  ProgressBar->StepIt();
-                  archivedata->PSIData->Next();
-   }
-
-
-
-
-}        
 }
 //---------------------------------------------------------------------------
 
@@ -1103,7 +867,7 @@ if (Key==13){
 
    archivedata->PSIData->Active=false;
 archivedata->PSIData->SQL->Clear();
-archivedata->PSIData->SQL->Add("select * from psidata where (locate('"+edtSearchType->Text+"',Spc)>0) order by Spc");
+archivedata->PSIData->SQL->Add("select distinct `dater` from psidata where `dater` REGEXP '"+edtSearchData->Text+"' order by DateR");
 archivedata->PSIData->Active=true;
 archivedata->PSIData->First();
 viewType->Clear();
@@ -1115,20 +879,15 @@ int k;
 AnsiString S,S1,S2;
 k=archivedata->PSIData->RecordCount;
 ProgressBar->Position=0;
-ProgressBar->Max=k-1;
-
-
-for (int i=0;i<k;i++){
-                     S=archivedata->PSIData->FieldByName("Spc")->AsString;
-
-                     archivedata->PSIData->Next();
-                     S1=archivedata->PSIData->FieldByName("Spc")->AsString;
-                         if (S1!=S){
-                                   viewType->Items->Add(S);
-                                    S=S1;
-                                    }
-                  ProgressBar->StepIt();
-   }
+if (k>0){
+        ProgressBar->Max=k-1;
+           for (int i=0;i<k;i++){
+                     S=archivedata->PSIData->FieldByName("DateR")->AsString;
+                     viewDate->Items->Add(S);
+                      archivedata->PSIData->Next();
+                    ProgressBar->StepIt();
+               }
+  }
 
 
 
@@ -1143,7 +902,8 @@ void __fastcall TArchiveForm::edtSearchTypeKeyPress(TObject *Sender,
 if (Key==13){
  archivedata->PSIData->Active=false;
 archivedata->PSIData->SQL->Clear();
-archivedata->PSIData->SQL->Add("select * from psidata where (locate('"+edtSearch->Text+"',msk)>0) order by msk");
+AnsiString Sql="select distinct `spc` from psidata where (locate('"+edtSearchType->Text+"',`Spc`)>0) order by `Spc`";
+archivedata->PSIData->SQL->Add(Sql);
 archivedata->PSIData->Active=true;
 archivedata->PSIData->First();
 viewType->Clear();
@@ -1152,21 +912,19 @@ viewNumbers->Clear();
 viewFile->Clear();
  viewDate->Clear();
 int k;
-AnsiString S,S1,S2;
+AnsiString S;
 k=archivedata->PSIData->RecordCount;
 ProgressBar->Position=0;
 ProgressBar->Max=k-1;
 
 
 for (int i=0;i<k;i++){
-                     S=archivedata->PSIData->FieldByName("MSK")->AsString;
-
-                     archivedata->PSIData->Next();
-                     S1=archivedata->PSIData->FieldByName("MSK")->AsString;
-                         if (S1!=S){
-                                   viewMSK->Items->Add(S);
-                                    S=S1;
-                                    }
+                     S=archivedata->PSIData->FieldByName("Spc")->AsString;
+                        // if (S1!=S){
+                                   viewType->Items->Add(S);
+                          //          S=S1;
+                            //        }
+                   archivedata->PSIData->Next();
                   ProgressBar->StepIt();
    }
 
@@ -1184,7 +942,9 @@ void __fastcall TArchiveForm::edtSearchKeyPress(TObject *Sender, char &Key)
 if (Key==13){
  archivedata->PSIData->Active=false;
 archivedata->PSIData->SQL->Clear();
-archivedata->PSIData->SQL->Add("select * from psidata where (locate('"+edtSearch->Text+"',msk)>0) order by msk");
+//AnsiString sql= "select distinct msk from psidata where (locate('"+edtSearch->Text+"',msk)>0) order by msk";
+AnsiString sql= "select distinct `msk` from psidata where `msk` REGEXP '"+edtSearch->Text+"' order by `msk`";
+archivedata->PSIData->SQL->Add(sql);
 archivedata->PSIData->Active=true;
 archivedata->PSIData->First();
 viewType->Clear();
@@ -1197,19 +957,19 @@ AnsiString S,S1,S2;
 k=archivedata->PSIData->RecordCount;
 ProgressBar->Position=0;
 ProgressBar->Max=k-1;
-if (k>0){
-S=archivedata->PSIData->FieldByName("MSK")->AsString;
-viewMSK->Items->Add(S);
-}
+//if (k>0){
+//S=archivedata->PSIData->FieldByName("MSK")->AsString;
+//viewMSK->Items->Add(S);
+//}
 for (int i=0;i<k;i++){
 
 
 
                      S1=archivedata->PSIData->FieldByName("MSK")->AsString;
-                         if (S1!=S){
-                                   viewMSK->Items->Add(S);
-                                    S=S1;
-                                    }
+                     //    if (S1!=S){
+                                   viewMSK->Items->Add(S1);
+                       //             S=S1;
+                         //           }
                         archivedata->PSIData->Next();
                   ProgressBar->StepIt();
    }
@@ -1220,5 +980,60 @@ for (int i=0;i<k;i++){
 }
 }
 //---------------------------------------------------------------------------
+
+
+
+
+
+void __fastcall TArchiveForm::viewDateClick(TObject *Sender)
+{
+ AnsiString S1,S2,S3,S4,S5,S6,s2,s4,s5,s6;
+  if (key!=1){
+viewDate->Visible=true;
+S3=viewDate->Items->Strings[viewDate->ItemIndex];
+archivedata->PSIData->Active=false;
+archivedata->PSIData->SQL->Clear();
+archivedata->PSIData->SQL->Add("Select `File`,`Msk`,`N`,`dater`,`Spc` from psidata where `dateR`='"+S3+"' order by `dater`");
+archivedata->PSIData->Active=true;
+archivedata->PSIData->First();
+viewMSK->Clear();
+viewNumbers->Clear();
+viewFile->Clear();
+viewType->Clear();
+ //viewDate->Clear();
+int k;
+
+k=archivedata->PSIData->RecordCount;
+ProgressBar->Position=0;
+ProgressBar->Max=k-1;
+ edtM->Items->Clear();
+for (int i=0;i<k;i++){
+ProgressBar->StepIt();
+                     S2=archivedata->PSIData->FieldByName("FILE")->AsString;
+                     S4=archivedata->PSIData->FieldByName("MSK")->AsString;
+                     S5=archivedata->PSIData->FieldByName("N")->AsString;
+                     S6=archivedata->PSIData->FieldByName("Spc")->AsString;
+                         if (s2!=S2){
+                                   viewFile->Items->Add(S2);
+                                    s2=S2;
+                                    }
+                             if (s4!=S4){
+                                   viewMSK->Items->Add(S4);
+                                    s4=S4;
+                                    }
+                            if (s6!=S6){
+                                   viewType->Items->Add(S6);
+                                    s6=S6;
+                                    }
+
+                      archivedata->PSIData->Next();
+                       viewNumbers->Items->Add(S5);
+
+
+   }
+   }
+}
+//---------------------------------------------------------------------------
+
 
 

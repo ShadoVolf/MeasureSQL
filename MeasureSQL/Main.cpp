@@ -4094,11 +4094,19 @@ if(DataModule1->SqlSpecification->FieldByName("C0_C1")->AsString=="True"){
                                                                                             if (DataModule1->SQLSetupData->FieldByName("strQCStatus2")->AsString!=" Dead"){
                                                                                                         if (DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat!=0 & DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat!=1E+30){
                                                                                                                      if (DataModule1->SQLCrystalData->FieldByName("fC0")->AsFloat!=0 & DataModule1->SQLCrystalData->FieldByName("fC0")->AsFloat!=1E+30){
-                                                                                                                     DataModule1->SQLPSIData->FieldByName("C0_C1")->AsFloat=DataModule1->SQLCrystalData->FieldByName("fC0")->AsFloat/DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat;
+                                                                                                                     double C0_C1=DataModule1->SQLCrystalData->FieldByName("fC0")->AsFloat/DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat;
+                                                                                                                        if (C0_C1>0 & C0_C1<100000){
+                                                                                                                            DataModule1->SQLPSIData->FieldByName("C0_C1")->AsString=FloatToStr(C0_C1);
+                                                                                                                                               }
+                                                                                                                         else {
+
+                                                                                                                              DataModule1->SQLPSIData->FieldByName("C0_C1")->AsString="0";
+                                                                                                                         }
+
                                                                                                                      }
                                                                                                           }
                                                                                                           else{
-                                                                                                              DataModule1->SQLPSIData->FieldByName("C0_C1")->AsFloat=1;
+                                                                                                              DataModule1->SQLPSIData->FieldByName("C0_C1")->AsString="0";
                                                                                                              }
                                                                                             }
                                                                                    }
@@ -4109,7 +4117,7 @@ if(DataModule1->SqlSpecification->FieldByName("C0_C1")->AsString=="True"){
           double x,y,z;
 
                                  if(DataModule1->SqlSpecification->FieldByName("C0_C1max")->AsString!="no"){
-                                                  x=DataModule1->SqlSpecification->FieldByName("C0_C1")->AsFloat;
+                                                  x=DataModule1->SqlSpecification->FieldByName("C0_C1max")->AsFloat;
                                                              if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
                                                                                 ResultForm->ResultGrid->Cells[Nar[22]][N+2]=x;
                                                                 }

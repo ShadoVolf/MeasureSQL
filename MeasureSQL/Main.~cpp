@@ -990,7 +990,7 @@ double Precision=0.01;  //точность
 int M;
 int TempCount;
 int TempCountM;
-if (DataModule1->SqlSpecification->FieldByName("TCH_Approx_IST")->AsString=="True"){
+
  TempCount=DataModule1->SQLCrystalData->RecordCount;
  X.setbounds(0,TempCount);
   X1.setbounds(0,TempCount);
@@ -1028,6 +1028,7 @@ else if (DataModule1->SqlSpecification->FieldByName("TCH_Interval_Type")->AsStri
       DataModule1->SQLSetupData->First();
       int l=0;
       int l1=0;
+ if (DataModule1->SqlSpecification->FieldByName("TCH_Approx_IST")->AsString=="True"){
       for( int j=0;j<TempCount;j++){
                    if (DataModule1->SqlSpecification->FieldByName("TCH_Interval_Type")->AsString=="По интервалу замера"){
 
@@ -4093,11 +4094,19 @@ if(DataModule1->SqlSpecification->FieldByName("C0_C1")->AsString=="True"){
                                                                                             if (DataModule1->SQLSetupData->FieldByName("strQCStatus2")->AsString!=" Dead"){
                                                                                                         if (DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat!=0 & DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat!=1E+30){
                                                                                                                      if (DataModule1->SQLCrystalData->FieldByName("fC0")->AsFloat!=0 & DataModule1->SQLCrystalData->FieldByName("fC0")->AsFloat!=1E+30){
-                                                                                                                     DataModule1->SQLPSIData->FieldByName("C0_C1")->AsFloat=DataModule1->SQLCrystalData->FieldByName("fC0")->AsFloat/DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat;
+                                                                                                                     double C0_C1=DataModule1->SQLCrystalData->FieldByName("fC0")->AsFloat/DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat;
+                                                                                                                        if (C0_C1>0 & C0_C1<100000){
+                                                                                                                            DataModule1->SQLPSIData->FieldByName("C0_C1")->AsString=FloatToStr(C0_C1);
+                                                                                                                                               }
+                                                                                                                         else {
+
+                                                                                                                              DataModule1->SQLPSIData->FieldByName("C0_C1")->AsString="0";
+                                                                                                                         }
+
                                                                                                                      }
                                                                                                           }
                                                                                                           else{
-                                                                                                              DataModule1->SQLPSIData->FieldByName("C0_C1")->AsFloat=1;
+                                                                                                              DataModule1->SQLPSIData->FieldByName("C0_C1")->AsString="0";
                                                                                                              }
                                                                                             }
                                                                                    }

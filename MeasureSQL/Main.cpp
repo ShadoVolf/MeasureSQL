@@ -957,12 +957,39 @@ DataModule1->PsiData_temp_Table_Create->SQL->Clear();
 DataModule1->PsiData_temp_Table_Create->SQL->Add(sql_script);
 DataModule1->PsiData_temp_Table_Create->Execute();
 
-//F1="Select * from psidatatemp where psidatatemp.msk='"+NumberMForm->edtMSK->Text+"'";
 F1 = "Select * from `"+ tableName+"`";
 DataModule1->SQLPSIDataT->Active=false;
 DataModule1->SQLPSIDataT->SQL->Clear();
 DataModule1->SQLPSIDataT->SQL->Add(F1);
 DataModule1->SQLPSIDataT->Active=true;
+
+
+    //Получаем скрипт создания
+    AnsiString F3;
+DataModule1->TestTablesSQL->Active = false;
+DataModule1->TestTablesSQL->SQL->Clear();
+DataModule1->TestTablesSQL->SQL->Add("Select * from testtablessql where Name='PsiData_Table'");
+DataModule1->TestTablesSQL->Active = true;
+//Удаляем таблицу при наличии
+DataModule1->PsiData_temp_Table_Drop->SQL->Clear();
+DataModule1->PsiData_temp_Table_Drop->SQL->Add("Drop Table IF EXISTS `PsiData_Table_"+DataModule1->Dostup->FieldByName("ID")->AsString+"`");
+DataModule1->PsiData_temp_Table_Drop->Execute();
+
+AnsiString sql_script_psi=DataModule1->TestTablesSQL->FieldByName("Create")->AsString;
+DataModule1->TestTablesSQL->Active = false;
+
+AnsiString tableName_psi="PsiData_Table_"+DataModule1->Dostup->FieldByName("ID")->AsString;
+sql_script_psi=StringReplace(sql_script_psi,"psidata_table",tableName_psi,TReplaceFlags()<<rfReplaceAll);
+// Создаем временную таблицу
+DataModule1->PsiData_temp_Table_Create->SQL->Clear();
+DataModule1->PsiData_temp_Table_Create->SQL->Add(sql_script_psi);
+DataModule1->PsiData_temp_Table_Create->Execute();
+
+F3 = "Select * from `"+ tableName_psi+"`";
+DataModule1->SQLPSIData->Active=false;
+DataModule1->SQLPSIData->SQL->Clear();
+DataModule1->SQLPSIData->SQL->Add(F3);
+DataModule1->SQLPSIData->Active=true;
 
 
  for (int i=0;i<N;i++){
@@ -979,7 +1006,8 @@ DataModule1->SQLPSIDataT->Active=true;
      if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
                       DataModule1->SQLPSIData->Active=false;
                        DataModule1->SQLPSIData->SQL->Clear();
-                       DataModule1->SQLPSIData->SQL->Add("Select * from psidata where Measure_ID='"+Measure_ID+"' and N='"+DataModule1->NumberCurrent->FieldByName("SNumber")->AsString+"'");
+                      //  DataModule1->SQLPSIData->SQL->Add("Select * from psidata where Measure_ID='"+Measure_ID+"' and N='"+DataModule1->NumberCurrent->FieldByName("SNumber")->AsString+"'");
+                       DataModule1->SQLPSIData->SQL->Add("Select * from `"+tableName_psi+"` where  N='"+DataModule1->NumberCurrent->FieldByName("SNumber")->AsString+"'");
                       DataModule1->SQLPSIData->Active=true;
                       DataModule1->SQLPSIData->Append();
        }
@@ -5369,7 +5397,8 @@ if(DataModule1->SqlSpecification->FieldByName("M")->AsString=="True"){
          float STDEV_A;
         DataModule1->SQLPSIData->Active=false;
         DataModule1->SQLPSIData->SQL->Clear();
-        DataModule1->SQLPSIData->SQL->Add("Select * from psidata where Measure_ID='"+Measure_ID+"' order by ID");
+        //DataModule1->SQLPSIData->SQL->Add("Select * from psidata where Measure_ID='"+Measure_ID+"' order by ID");
+        DataModule1->SQLPSIData->SQL->Add("Select * from `"+tableName_psi+"` where Measure_ID='"+Measure_ID+"' order by ID");
         DataModule1->SQLPSIData->Active=true;
         AnsiString tableName="PsiData_Temp_Table_"+DataModule1->Dostup->FieldByName("ID")->AsString;
 
@@ -5653,13 +5682,53 @@ if(DataModule1->SqlSpecification->FieldByName("M")->AsString=="True"){
                           DataModule2->Comand->SQL->Clear();
                          DataModule2->Comand->SQL->Add(Command);
                          DataModule2->Comand->Execute();
-                         //AnsiString tableName="PsiData_Temp_Table_"+DataModule1->Dostup->FieldByName("ID")->AsString;
+
+                         //Добавляем данные в таблицу psidatatemp
                          DataModule2->Comand->SQL->Clear();
                          DataModule2->Comand->SQL->Add("insert into `psidatatemp` (`Temp`, `F`,`R`,`Rb`,`N`,`MSK`,`FL`,`Mono`,`File`,`C0`,`Cq`,`Q`,`L`,`pos`,`Status`,`ProtokolN`,`MSK-M`,`Status1`,");
                          DataModule2->Comand->SQL->Add("`Measure_ID`,`Fn`,`variant_1`,`variant_2`, `variant_3`,`SpurR`,`Spur`)");
                          DataModule2->Comand->SQL->Add("Select `Temp`, `F`,`R`,`Rb`,`N`,`MSK`,`FL`,`Mono`,`File`,`C0`,`Cq`,`Q`,`L`,`pos`,`Status`,`ProtokolN`,`MSK-M`,`Status1`, ");
                          DataModule2->Comand->SQL->Add("`Measure_ID`,`Fn`,`variant_1`,`variant_2`, `variant_3`,`SpurR`,`Spur` from `"+tableName+"`");
                          DataModule2->Comand->Execute();
+
+                         //Добавляем данные в таблицу psidata
+                         DataModule2->Comand->SQL->Clear();
+                         DataModule2->Comand->SQL->Add("insert into `psidata` (`MSK`,  `N`,  `F`,  `R`,  `C0`,  `Cq`,  `L`,  `Q`,  `Tmax`,  `Tmin`,  `TurnOver`,  `Slope`,  `Fptp`,");
+                         DataModule2->Comand->SQL->Add("`Fmax`,  `RcRb`,  `Fmin`,  `Rmax`,  `Rmin`,  `R1R2`,  `Mono`,  `F0-Fl`,  `Position`,  `Date`,  `A3`,");
+                         DataModule2->Comand->SQL->Add("`A2`,  `A1`,  `A0`,  `A4`,  `Rbmax`,  `Rsp1`,  `Rsp2`,  `Rsp3`,  `Time`,  `Spc`,  `Status`,  `Nominal`,");
+                         DataModule2->Comand->SQL->Add("`DateR`,  `File`,  `Operator`,  `Fptp_2`,  `intervalgf`,  `Fmaxm`,  `FT`,  `Spur`,  `Shum`,  `Old1`,");
+                         DataModule2->Comand->SQL->Add("`Old2`,  `Old3`,  `RR1`,  `ProtokolN`,  `Rmax-Rmin`,  `C0_C1`,  `RR2`,  `Status2`,  `MSK-M`,  `Jmax`,");
+                         DataModule2->Comand->SQL->Add("`Jmin`,  `Jptp`,  `Jt`,  `MonoT`,  `FF`,  `Old`,  `Ft1`,  `Ft2`,  `Ft3`,  `Ft4`,  `MakeDate`,  `MakeDate1`,");
+                         DataModule2->Comand->SQL->Add("`RR3`,  `PrintSelect`,  `C1_2C0`,  `Measure_ID`,  `Rtgk`,  `Ftgk`,  `RR4`,  `RR5`,  `Cn`,  `PMI`,  `MachineType`,");
+                         DataModule2->Comand->SQL->Add("`FSpur1`,  `FSpur2`,  `RSphere1`,  `RSphere2`,  `Fn`,  `variant`,  `Variant_1`,  `Variant_2`,  `Variant_3`,");
+                         DataModule2->Comand->SQL->Add("`PH_ID`,  `Machine_ID`,  `Rekv`,  `Imax`,  `Imax_T`,  `DF_Time_1_F`,  `DF_Time_2_F`,  `DF_Time_3_F`,");
+                         DataModule2->Comand->SQL->Add("`Uust_T1`,  `Uust_T2`,  `Uust_T3`,  `Iust`,  `view`,  `Shum_1`,  `Lot_Date`,  `Factory`,  `type`,");
+                         DataModule2->Comand->SQL->Add("`B5`,  `B4`,  `B3`,  `B1`,  `B0`,  `dfB`,  `D5`,  `D4`,  `D3`,  `D1r`,  `D1s`,  `Dit`,");
+                         DataModule2->Comand->SQL->Add("`G`,  `M_Type`,  `Machine_Serial`,  `Machine_Call_Date`,  `PoverKa`,  `Version`,  `Protokol_ID`,");
+                         DataModule2->Comand->SQL->Add("`Protokol_Date`,  `Proverka_PSI_ID`,  `Proverka_PH_ID`,  `Proverke_PH_Date`,  `Proverka_PH_Status`,");
+                         DataModule2->Comand->SQL->Add("`Shum_2`,  `Shum_3`,  `Shum_4`,  `PH_Analyser`,  `PH_OCS`,  `PH_Analyser_SN`,  `Filtr_Freq`,  `FSpur3`)");
+                         DataModule2->Comand->SQL->Add("SELECT `MSK`,  `N`,  `F`,  `R`,  `C0`,  `Cq`,  `L`,  `Q`,  `Tmax`,  `Tmin`,  `TurnOver`,  `Slope`,  `Fptp`,");
+                         DataModule2->Comand->SQL->Add("`Fmax`,  `RcRb`,  `Fmin`,  `Rmax`,  `Rmin`,  `R1R2`,  `Mono`,  `F0-Fl`,  `Position`,  `Date`,  `A3`,");
+                         DataModule2->Comand->SQL->Add("`A2`,  `A1`,  `A0`,  `A4`,  `Rbmax`,  `Rsp1`,  `Rsp2`,  `Rsp3`,  `Time`,  `Spc`,  `Status`,  `Nominal`,");
+                         DataModule2->Comand->SQL->Add("`DateR`,  `File`,  `Operator`,  `Fptp_2`,  `intervalgf`,  `Fmaxm`,  `FT`,  `Spur`,  `Shum`,  `Old1`,");
+                         DataModule2->Comand->SQL->Add("`Old2`,  `Old3`,  `RR1`,  `ProtokolN`,  `Rmax-Rmin`,  `C0_C1`,  `RR2`,  `Status2`,  `MSK-M`,  `Jmax`,");
+                         DataModule2->Comand->SQL->Add("`Jmin`,  `Jptp`,  `Jt`,  `MonoT`,  `FF`,  `Old`,  `Ft1`,  `Ft2`,  `Ft3`,  `Ft4`,  `MakeDate`,  `MakeDate1`,");
+                         DataModule2->Comand->SQL->Add("`RR3`,  `PrintSelect`,  `C1_2C0`,  `Measure_ID`,  `Rtgk`,  `Ftgk`,  `RR4`,  `RR5`,  `Cn`,  `PMI`,  `MachineType`,");
+                         DataModule2->Comand->SQL->Add("`FSpur1`,  `FSpur2`,  `RSphere1`,  `RSphere2`,  `Fn`,  `variant`,  `Variant_1`,  `Variant_2`,  `Variant_3`,");
+                         DataModule2->Comand->SQL->Add("`PH_ID`,  `Machine_ID`,  `Rekv`,  `Imax`,  `Imax_T`,  `DF_Time_1_F`,  `DF_Time_2_F`,  `DF_Time_3_F`,");
+                         DataModule2->Comand->SQL->Add("`Uust_T1`,  `Uust_T2`,  `Uust_T3`,  `Iust`,  `view`,  `Shum_1`,  `Lot_Date`,  `Factory`,  `type`,");
+                         DataModule2->Comand->SQL->Add("`B5`,  `B4`,  `B3`,  `B1`,  `B0`,  `dfB`,  `D5`,  `D4`,  `D3`,  `D1r`,  `D1s`,  `Dit`,");
+                         DataModule2->Comand->SQL->Add("`G`,  `M_Type`,  `Machine_Serial`,  `Machine_Call_Date`,  `PoverKa`,  `Version`,  `Protokol_ID`,");
+                         DataModule2->Comand->SQL->Add("`Protokol_Date`,  `Proverka_PSI_ID`,  `Proverka_PH_ID`,  `Proverke_PH_Date`,  `Proverka_PH_Status`,");
+                         DataModule2->Comand->SQL->Add("`Shum_2`,  `Shum_3`,  `Shum_4`,  `PH_Analyser`,  `PH_OCS`,  `PH_Analyser_SN`,  `Filtr_Freq`,  `FSpur3`");
+                         DataModule2->Comand->SQL->Add(" from `"+tableName_psi+"`");
+                         DataModule2->Comand->Execute();
+
+
+
+
+
+
 
 
             DataModule1->SQLPSIData->Active=false;
@@ -6375,11 +6444,13 @@ double counterRR3=0;
 
       DataModule1->NumberCurrent->Active=true;
       DataModule1->NumberCurrent->First();
+      /*
  //Подключаем таблицу psidata
       DataModule1->SQLPSIData->Active=false;
       DataModule1->SQLPSIData->SQL->Clear();
       DataModule1->SQLPSIData->SQL->Add("Select * from psidata where Measure_ID='"+Measure_ID+"'");
       DataModule1->SQLPSIData->Active=true;
+      */
 //Подключаем таблицу psidatatemp
              //Получаем скрипт создания
         AnsiString F1;
@@ -6407,6 +6478,34 @@ double counterRR3=0;
         DataModule1->SQLPSIDataT->SQL->Clear();
         DataModule1->SQLPSIDataT->SQL->Add(F1);
         DataModule1->SQLPSIDataT->Active=true;
+
+    //Получаем скрипт создания
+    AnsiString F3;
+DataModule1->TestTablesSQL->Active = false;
+DataModule1->TestTablesSQL->SQL->Clear();
+DataModule1->TestTablesSQL->SQL->Add("Select * from testtablessql where Name='PsiData_Table'");
+DataModule1->TestTablesSQL->Active = true;
+//Удаляем таблицу при наличии
+DataModule1->PsiData_temp_Table_Drop->SQL->Clear();
+DataModule1->PsiData_temp_Table_Drop->SQL->Add("Drop Table IF EXISTS `PsiData_Table_"+DataModule1->Dostup->FieldByName("ID")->AsString+"`");
+DataModule1->PsiData_temp_Table_Drop->Execute();
+
+AnsiString sql_script_psi=DataModule1->TestTablesSQL->FieldByName("Create")->AsString;
+DataModule1->TestTablesSQL->Active = false;
+
+AnsiString tableName_psi="PsiData_Table_"+DataModule1->Dostup->FieldByName("ID")->AsString;
+sql_script_psi=StringReplace(sql_script_psi,"psidata_table",tableName_psi,TReplaceFlags()<<rfReplaceAll);
+// Создаем временную таблицу
+DataModule1->PsiData_temp_Table_Create->SQL->Clear();
+DataModule1->PsiData_temp_Table_Create->SQL->Add(sql_script_psi);
+DataModule1->PsiData_temp_Table_Create->Execute();
+
+F3 = "Select * from `"+ tableName_psi+"`";
+DataModule1->SQLPSIData->Active=false;
+DataModule1->SQLPSIData->SQL->Clear();
+DataModule1->SQLPSIData->SQL->Add(F3);
+DataModule1->SQLPSIData->Active=true;
+
 
  //**************************************************************
 
@@ -6514,13 +6613,7 @@ double counterRR3=0;
               DataModule1->Transat_Temp_Q->Filter="SETUPNUM='"+IntToStr(l)+"' and RINGID='"+IntToStr(RingID)+"' and RINGPOS='"+IntToStr(RingPos)+"'";
               DataModule1->Transat_Temp_Q->Filtered=true;
               DataModule1->Transat_Temp_Q->First();
-        /*      AnsiString F1;
-              F1="Select * from psidatatemp where Measure_ID='"+Measure_ID+"'";
-              DataModule1->SQLPSIDataT->Active=false;
-              DataModule1->SQLPSIDataT->SQL->Clear();
-              DataModule1->SQLPSIDataT->SQL->Add(F1);
-              DataModule1->SQLPSIDataT->Active=true;
-        */
+
 //*******************************Порядковый номер******************************************************************************************************
                if(DataModule1->SqlSpecification->FieldByName("Snumber")->AsString=="True"){
                                 ResultForm->ResultGrid->Cells[Nar[2]][i+1]=DataModule1->NumberCurrent->FieldByName("SNumber")->AsString;
@@ -9770,9 +9863,10 @@ DataModule1->spc_variant->Active=true;
          float STDEV_A;
         DataModule1->SQLPSIData->Active=false;
         DataModule1->SQLPSIData->SQL->Clear();
-        DataModule1->SQLPSIData->SQL->Add("Select * from psidata where Measure_ID='"+Measure_ID+"' order by ID");
+        DataModule1->SQLPSIData->SQL->Add("Select * from `"+tableName_psi+"` where Measure_ID='"+Measure_ID+"' order by ID");
         DataModule1->SQLPSIData->Active=true;
-            AnsiString Commandx="Update psidatatemp set Fn='"+DataModule1->SQLPSIData->FieldByName("Fn")->AsString+"' where Measure_ID='"+Measure_ID+"'";
+           //AnsiString Commandx="Update psidatatemp set Fn='"+DataModule1->SQLPSIData->FieldByName("Fn")->AsString+"' where Measure_ID='"+Measure_ID+"'";
+            AnsiString Commandx="Update `"+tableName+"` set Fn='"+DataModule1->SQLPSIData->FieldByName("Fn")->AsString+"' where Measure_ID='"+Measure_ID+"'";
          DataModule2->Comand->SQL->Clear();
          DataModule2->Comand->SQL->Add(Commandx);
          DataModule2->Comand->Execute();
@@ -10056,15 +10150,49 @@ DataModule1->spc_variant->Active=true;
                          DataModule2->Comand->SQL->Add("Select `Temp`, `F`,`R`,`Rb`,`N`,`MSK`,`FL`,`Mono`,`File`,`C0`,`Cq`,`Q`,`L`,`pos`,`Status`,`ProtokolN`,`MSK-M`,`Status1`, ");
                          DataModule2->Comand->SQL->Add("`Measure_ID`,`Fn`,`variant_1`,`variant_2`, `variant_3`,`SpurR`,`Spur` from `"+tableName+"`");
                          DataModule2->Comand->Execute();
+  //Добавляем данные в таблицу psidata
+                         DataModule2->Comand->SQL->Clear();
+                         DataModule2->Comand->SQL->Add("insert into `psidata` (`MSK`,  `N`,  `F`,  `R`,  `C0`,  `Cq`,  `L`,  `Q`,  `Tmax`,  `Tmin`,  `TurnOver`,  `Slope`,  `Fptp`,");
+                         DataModule2->Comand->SQL->Add("`Fmax`,  `RcRb`,  `Fmin`,  `Rmax`,  `Rmin`,  `R1R2`,  `Mono`,  `F0-Fl`,  `Position`,  `Date`,  `A3`,");
+                         DataModule2->Comand->SQL->Add("`A2`,  `A1`,  `A0`,  `A4`,  `Rbmax`,  `Rsp1`,  `Rsp2`,  `Rsp3`,  `Time`,  `Spc`,  `Status`,  `Nominal`,");
+                         DataModule2->Comand->SQL->Add("`DateR`,  `File`,  `Operator`,  `Fptp_2`,  `intervalgf`,  `Fmaxm`,  `FT`,  `Spur`,  `Shum`,  `Old1`,");
+                         DataModule2->Comand->SQL->Add("`Old2`,  `Old3`,  `RR1`,  `ProtokolN`,  `Rmax-Rmin`,  `C0_C1`,  `RR2`,  `Status2`,  `MSK-M`,  `Jmax`,");
+                         DataModule2->Comand->SQL->Add("`Jmin`,  `Jptp`,  `Jt`,  `MonoT`,  `FF`,  `Old`,  `Ft1`,  `Ft2`,  `Ft3`,  `Ft4`,  `MakeDate`,  `MakeDate1`,");
+                         DataModule2->Comand->SQL->Add("`RR3`,  `PrintSelect`,  `C1_2C0`,  `Measure_ID`,  `Rtgk`,  `Ftgk`,  `RR4`,  `RR5`,  `Cn`,  `PMI`,  `MachineType`,");
+                         DataModule2->Comand->SQL->Add("`FSpur1`,  `FSpur2`,  `RSphere1`,  `RSphere2`,  `Fn`,  `variant`,  `Variant_1`,  `Variant_2`,  `Variant_3`,");
+                         DataModule2->Comand->SQL->Add("`PH_ID`,  `Machine_ID`,  `Rekv`,  `Imax`,  `Imax_T`,  `DF_Time_1_F`,  `DF_Time_2_F`,  `DF_Time_3_F`,");
+                         DataModule2->Comand->SQL->Add("`Uust_T1`,  `Uust_T2`,  `Uust_T3`,  `Iust`,  `view`,  `Shum_1`,  `Lot_Date`,  `Factory`,  `type`,");
+                         DataModule2->Comand->SQL->Add("`B5`,  `B4`,  `B3`,  `B1`,  `B0`,  `dfB`,  `D5`,  `D4`,  `D3`,  `D1r`,  `D1s`,  `Dit`,");
+                         DataModule2->Comand->SQL->Add("`G`,  `M_Type`,  `Machine_Serial`,  `Machine_Call_Date`,  `PoverKa`,  `Version`,  `Protokol_ID`,");
+                         DataModule2->Comand->SQL->Add("`Protokol_Date`,  `Proverka_PSI_ID`,  `Proverka_PH_ID`,  `Proverke_PH_Date`,  `Proverka_PH_Status`,");
+                         DataModule2->Comand->SQL->Add("`Shum_2`,  `Shum_3`,  `Shum_4`,  `PH_Analyser`,  `PH_OCS`,  `PH_Analyser_SN`,  `Filtr_Freq`,  `FSpur3`)");
+                         DataModule2->Comand->SQL->Add("SELECT `MSK`,  `N`,  `F`,  `R`,  `C0`,  `Cq`,  `L`,  `Q`,  `Tmax`,  `Tmin`,  `TurnOver`,  `Slope`,  `Fptp`,");
+                         DataModule2->Comand->SQL->Add("`Fmax`,  `RcRb`,  `Fmin`,  `Rmax`,  `Rmin`,  `R1R2`,  `Mono`,  `F0-Fl`,  `Position`,  `Date`,  `A3`,");
+                         DataModule2->Comand->SQL->Add("`A2`,  `A1`,  `A0`,  `A4`,  `Rbmax`,  `Rsp1`,  `Rsp2`,  `Rsp3`,  `Time`,  `Spc`,  `Status`,  `Nominal`,");
+                         DataModule2->Comand->SQL->Add("`DateR`,  `File`,  `Operator`,  `Fptp_2`,  `intervalgf`,  `Fmaxm`,  `FT`,  `Spur`,  `Shum`,  `Old1`,");
+                         DataModule2->Comand->SQL->Add("`Old2`,  `Old3`,  `RR1`,  `ProtokolN`,  `Rmax-Rmin`,  `C0_C1`,  `RR2`,  `Status2`,  `MSK-M`,  `Jmax`,");
+                         DataModule2->Comand->SQL->Add("`Jmin`,  `Jptp`,  `Jt`,  `MonoT`,  `FF`,  `Old`,  `Ft1`,  `Ft2`,  `Ft3`,  `Ft4`,  `MakeDate`,  `MakeDate1`,");
+                         DataModule2->Comand->SQL->Add("`RR3`,  `PrintSelect`,  `C1_2C0`,  `Measure_ID`,  `Rtgk`,  `Ftgk`,  `RR4`,  `RR5`,  `Cn`,  `PMI`,  `MachineType`,");
+                         DataModule2->Comand->SQL->Add("`FSpur1`,  `FSpur2`,  `RSphere1`,  `RSphere2`,  `Fn`,  `variant`,  `Variant_1`,  `Variant_2`,  `Variant_3`,");
+                         DataModule2->Comand->SQL->Add("`PH_ID`,  `Machine_ID`,  `Rekv`,  `Imax`,  `Imax_T`,  `DF_Time_1_F`,  `DF_Time_2_F`,  `DF_Time_3_F`,");
+                         DataModule2->Comand->SQL->Add("`Uust_T1`,  `Uust_T2`,  `Uust_T3`,  `Iust`,  `view`,  `Shum_1`,  `Lot_Date`,  `Factory`,  `type`,");
+                         DataModule2->Comand->SQL->Add("`B5`,  `B4`,  `B3`,  `B1`,  `B0`,  `dfB`,  `D5`,  `D4`,  `D3`,  `D1r`,  `D1s`,  `Dit`,");
+                         DataModule2->Comand->SQL->Add("`G`,  `M_Type`,  `Machine_Serial`,  `Machine_Call_Date`,  `PoverKa`,  `Version`,  `Protokol_ID`,");
+                         DataModule2->Comand->SQL->Add("`Protokol_Date`,  `Proverka_PSI_ID`,  `Proverka_PH_ID`,  `Proverke_PH_Date`,  `Proverka_PH_Status`,");
+                         DataModule2->Comand->SQL->Add("`Shum_2`,  `Shum_3`,  `Shum_4`,  `PH_Analyser`,  `PH_OCS`,  `PH_Analyser_SN`,  `Filtr_Freq`,  `FSpur3`");
+                         DataModule2->Comand->SQL->Add(" from `"+tableName_psi+"`");
+                         DataModule2->Comand->Execute();
+
+
 
  //************************************************************************************************************************************************************************************************
-            DataModule1->SQLPSIData->Active=false;
+
             DataModule2->Statistika->Active=false;
             ResultForm->btnJournal->Enabled=true;
    }
 
 
-
+    DataModule1->SQLPSIData->Active=false;
     DataModule1->Transat_Temp_Q->Active=false;
     ledFinish->Active=true;
     ResultForm->Show();
@@ -10770,6 +10898,7 @@ int counterFT,counterFt1,counterFt2,counterFt3,counterFt4;
 //Подключаем тпблицу с номерами*********************************************************************************
       DataModule1->NumberCurrent->Active=true;
       DataModule1->NumberCurrent->First();
+/*
 //Если разрешена запись в БД подключаем таблицу исходящих данных
  if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
         DataModule1->SQLPSIData->Active=false;
@@ -10777,6 +10906,7 @@ int counterFT,counterFt1,counterFt2,counterFt3,counterFt4;
         DataModule1->SQLPSIData->SQL->Add("Select * from psidata where Measure_ID='"+Measure_ID+"'");
         DataModule1->SQLPSIData->Active=true;
      }
+ */
     //Получаем скрипт создания
     AnsiString F1;
         DataModule1->TestTablesSQL->Active = false;
@@ -10804,7 +10934,32 @@ int counterFT,counterFt1,counterFt2,counterFt3,counterFt4;
         DataModule1->SQLPSIDataT->SQL->Add(F1);
         DataModule1->SQLPSIDataT->Active=true;
 
+     //Получаем скрипт создания
+    AnsiString F3;
+DataModule1->TestTablesSQL->Active = false;
+DataModule1->TestTablesSQL->SQL->Clear();
+DataModule1->TestTablesSQL->SQL->Add("Select * from testtablessql where Name='PsiData_Table'");
+DataModule1->TestTablesSQL->Active = true;
+//Удаляем таблицу при наличии
+DataModule1->PsiData_temp_Table_Drop->SQL->Clear();
+DataModule1->PsiData_temp_Table_Drop->SQL->Add("Drop Table IF EXISTS `PsiData_Table_"+DataModule1->Dostup->FieldByName("ID")->AsString+"`");
+DataModule1->PsiData_temp_Table_Drop->Execute();
 
+AnsiString sql_script_psi=DataModule1->TestTablesSQL->FieldByName("Create")->AsString;
+DataModule1->TestTablesSQL->Active = false;
+
+AnsiString tableName_psi="PsiData_Table_"+DataModule1->Dostup->FieldByName("ID")->AsString;
+sql_script_psi=StringReplace(sql_script_psi,"psidata_table",tableName_psi,TReplaceFlags()<<rfReplaceAll);
+// Создаем временную таблицу
+DataModule1->PsiData_temp_Table_Create->SQL->Clear();
+DataModule1->PsiData_temp_Table_Create->SQL->Add(sql_script_psi);
+DataModule1->PsiData_temp_Table_Create->Execute();
+
+F3 = "Select * from `"+ tableName_psi+"`";
+DataModule1->SQLPSIData->Active=false;
+DataModule1->SQLPSIData->SQL->Clear();
+DataModule1->SQLPSIData->SQL->Add(F3);
+DataModule1->SQLPSIData->Active=true;
 
         for (int i=0;i<N;i++){
                   if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
@@ -14089,7 +14244,7 @@ DataModule1->spc_variant->Active=true;
          float STDEV_A;
         DataModule1->SQLPSIData->Active=false;
         DataModule1->SQLPSIData->SQL->Clear();
-        DataModule1->SQLPSIData->SQL->Add("Select * from psidata where Measure_ID='"+Measure_ID+"' order by ID");
+        DataModule1->SQLPSIData->SQL->Add("Select * from `"+tableName_psi+"` where Measure_ID='"+Measure_ID+"' order by ID");
         DataModule1->SQLPSIData->Active=true;
             //AnsiString Commandx="Update psidatatemp set Fn='"+DataModule1->SQLPSIData->FieldByName("Fn")->AsString+"' where Measure_ID='"+Measure_ID+"'";
             AnsiString Commandx="Update `"+ tableName +"` set Fn='"+DataModule1->SQLPSIData->FieldByName("Fn")->AsString+"' where Measure_ID='"+Measure_ID+"'";
@@ -14379,12 +14534,46 @@ DataModule1->spc_variant->Active=true;
                          DataModule2->Comand->SQL->Add("`Measure_ID`,`Fn`,`variant_1`,`variant_2`, `variant_3`,`SpurR`,`Spur` from `"+tableName+"`");
                          DataModule2->Comand->Execute();
 
-            DataModule1->SQLPSIData->Active=false;
+                         //Добавляем данные в таблицу psidata
+                         DataModule2->Comand->SQL->Clear();
+                         DataModule2->Comand->SQL->Add("insert into `psidata` (`MSK`,  `N`,  `F`,  `R`,  `C0`,  `Cq`,  `L`,  `Q`,  `Tmax`,  `Tmin`,  `TurnOver`,  `Slope`,  `Fptp`,");
+                         DataModule2->Comand->SQL->Add("`Fmax`,  `RcRb`,  `Fmin`,  `Rmax`,  `Rmin`,  `R1R2`,  `Mono`,  `F0-Fl`,  `Position`,  `Date`,  `A3`,");
+                         DataModule2->Comand->SQL->Add("`A2`,  `A1`,  `A0`,  `A4`,  `Rbmax`,  `Rsp1`,  `Rsp2`,  `Rsp3`,  `Time`,  `Spc`,  `Status`,  `Nominal`,");
+                         DataModule2->Comand->SQL->Add("`DateR`,  `File`,  `Operator`,  `Fptp_2`,  `intervalgf`,  `Fmaxm`,  `FT`,  `Spur`,  `Shum`,  `Old1`,");
+                         DataModule2->Comand->SQL->Add("`Old2`,  `Old3`,  `RR1`,  `ProtokolN`,  `Rmax-Rmin`,  `C0_C1`,  `RR2`,  `Status2`,  `MSK-M`,  `Jmax`,");
+                         DataModule2->Comand->SQL->Add("`Jmin`,  `Jptp`,  `Jt`,  `MonoT`,  `FF`,  `Old`,  `Ft1`,  `Ft2`,  `Ft3`,  `Ft4`,  `MakeDate`,  `MakeDate1`,");
+                         DataModule2->Comand->SQL->Add("`RR3`,  `PrintSelect`,  `C1_2C0`,  `Measure_ID`,  `Rtgk`,  `Ftgk`,  `RR4`,  `RR5`,  `Cn`,  `PMI`,  `MachineType`,");
+                         DataModule2->Comand->SQL->Add("`FSpur1`,  `FSpur2`,  `RSphere1`,  `RSphere2`,  `Fn`,  `variant`,  `Variant_1`,  `Variant_2`,  `Variant_3`,");
+                         DataModule2->Comand->SQL->Add("`PH_ID`,  `Machine_ID`,  `Rekv`,  `Imax`,  `Imax_T`,  `DF_Time_1_F`,  `DF_Time_2_F`,  `DF_Time_3_F`,");
+                         DataModule2->Comand->SQL->Add("`Uust_T1`,  `Uust_T2`,  `Uust_T3`,  `Iust`,  `view`,  `Shum_1`,  `Lot_Date`,  `Factory`,  `type`,");
+                         DataModule2->Comand->SQL->Add("`B5`,  `B4`,  `B3`,  `B1`,  `B0`,  `dfB`,  `D5`,  `D4`,  `D3`,  `D1r`,  `D1s`,  `Dit`,");
+                         DataModule2->Comand->SQL->Add("`G`,  `M_Type`,  `Machine_Serial`,  `Machine_Call_Date`,  `PoverKa`,  `Version`,  `Protokol_ID`,");
+                         DataModule2->Comand->SQL->Add("`Protokol_Date`,  `Proverka_PSI_ID`,  `Proverka_PH_ID`,  `Proverke_PH_Date`,  `Proverka_PH_Status`,");
+                         DataModule2->Comand->SQL->Add("`Shum_2`,  `Shum_3`,  `Shum_4`,  `PH_Analyser`,  `PH_OCS`,  `PH_Analyser_SN`,  `Filtr_Freq`,  `FSpur3`)");
+                         DataModule2->Comand->SQL->Add("SELECT `MSK`,  `N`,  `F`,  `R`,  `C0`,  `Cq`,  `L`,  `Q`,  `Tmax`,  `Tmin`,  `TurnOver`,  `Slope`,  `Fptp`,");
+                         DataModule2->Comand->SQL->Add("`Fmax`,  `RcRb`,  `Fmin`,  `Rmax`,  `Rmin`,  `R1R2`,  `Mono`,  `F0-Fl`,  `Position`,  `Date`,  `A3`,");
+                         DataModule2->Comand->SQL->Add("`A2`,  `A1`,  `A0`,  `A4`,  `Rbmax`,  `Rsp1`,  `Rsp2`,  `Rsp3`,  `Time`,  `Spc`,  `Status`,  `Nominal`,");
+                         DataModule2->Comand->SQL->Add("`DateR`,  `File`,  `Operator`,  `Fptp_2`,  `intervalgf`,  `Fmaxm`,  `FT`,  `Spur`,  `Shum`,  `Old1`,");
+                         DataModule2->Comand->SQL->Add("`Old2`,  `Old3`,  `RR1`,  `ProtokolN`,  `Rmax-Rmin`,  `C0_C1`,  `RR2`,  `Status2`,  `MSK-M`,  `Jmax`,");
+                         DataModule2->Comand->SQL->Add("`Jmin`,  `Jptp`,  `Jt`,  `MonoT`,  `FF`,  `Old`,  `Ft1`,  `Ft2`,  `Ft3`,  `Ft4`,  `MakeDate`,  `MakeDate1`,");
+                         DataModule2->Comand->SQL->Add("`RR3`,  `PrintSelect`,  `C1_2C0`,  `Measure_ID`,  `Rtgk`,  `Ftgk`,  `RR4`,  `RR5`,  `Cn`,  `PMI`,  `MachineType`,");
+                         DataModule2->Comand->SQL->Add("`FSpur1`,  `FSpur2`,  `RSphere1`,  `RSphere2`,  `Fn`,  `variant`,  `Variant_1`,  `Variant_2`,  `Variant_3`,");
+                         DataModule2->Comand->SQL->Add("`PH_ID`,  `Machine_ID`,  `Rekv`,  `Imax`,  `Imax_T`,  `DF_Time_1_F`,  `DF_Time_2_F`,  `DF_Time_3_F`,");
+                         DataModule2->Comand->SQL->Add("`Uust_T1`,  `Uust_T2`,  `Uust_T3`,  `Iust`,  `view`,  `Shum_1`,  `Lot_Date`,  `Factory`,  `type`,");
+                         DataModule2->Comand->SQL->Add("`B5`,  `B4`,  `B3`,  `B1`,  `B0`,  `dfB`,  `D5`,  `D4`,  `D3`,  `D1r`,  `D1s`,  `Dit`,");
+                         DataModule2->Comand->SQL->Add("`G`,  `M_Type`,  `Machine_Serial`,  `Machine_Call_Date`,  `PoverKa`,  `Version`,  `Protokol_ID`,");
+                         DataModule2->Comand->SQL->Add("`Protokol_Date`,  `Proverka_PSI_ID`,  `Proverka_PH_ID`,  `Proverke_PH_Date`,  `Proverka_PH_Status`,");
+                         DataModule2->Comand->SQL->Add("`Shum_2`,  `Shum_3`,  `Shum_4`,  `PH_Analyser`,  `PH_OCS`,  `PH_Analyser_SN`,  `Filtr_Freq`,  `FSpur3`");
+                         DataModule2->Comand->SQL->Add(" from `"+tableName_psi+"`");
+                         DataModule2->Comand->Execute();
+
+
+            //DataModule1->SQLPSIData->Active=false;
             DataModule2->Statistika->Active=false;
             ResultForm->btnJournal->Enabled=true;
    }
 
-
+      DataModule1->SQLPSIData->Active=false;
 
     //DataModule1->KH7700_Temp->Active=false;
     ledFinish->Active=true;

@@ -165,42 +165,7 @@ if (Nomenklatura->ItemIndex==-1){
         New_Data->Update_PSI->SQL->Add(S);
         New_Data->Update_PSI->Execute();
 }
-/*DataModule1->NumbersTemp->Active=false;
-DataModule1->NumbersTemp->SQL->Clear();
-DataModule1->NumbersTemp->SQL->Add(S);
-DataModule1->NumbersTemp->Active=true;
-DataModule1->NumbersTemp->Edit();
-DataModule1->NumbersTemp->FieldByName("Spc1")->AsString=edtName->Text;
-*/
-/*if (edtNom->Text=="0"){
-                DataModule2->Nomenklatura_RK_PSI->Active=false;
-                DataModule2->Nomenklatura_RK_PSI->SQL->Clear();
-                AnsiString sqlNomenklatura="Select * from nomeklatura_rk_psi where `SpcName`='"+edtName->Text+"'";
-                DataModule2->Nomenklatura_RK_PSI->SQL->Add(sqlNomenklatura);
-                DataModule2->Nomenklatura_RK_PSI->Active=true;
-                if (DataModule2->Nomenklatura_RK_PSI->RecordCount>0){
-                   DataModule1->NumbersTemp->FieldByName("Name")->AsString=DataModule2->Nomenklatura_RK_PSI->FieldByName("NomenklaturaName")->AsString;
 
-                   DataModule2->Nomenklatura_RK->Active=false;
-                  DataModule2->Nomenklatura_RK->SQL->Clear();
-                  AnsiString sqlNomenklatura="Select * from nomeklatura_rk where `номенклатура`='"+DataModule2->Nomenklatura_RK_PSI->FieldByName("NomenklaturaID")->AsString+"'";
-                  DataModule2->Nomenklatura_RK->SQL->Add(sqlNomenklatura);
-                  DataModule2->Nomenklatura_RK->Active=true;
-
-                   Double ff=DataModule2->Nomenklatura_RK->FieldByName("Частота")->AsFloat;
-                         if (DataModule2->Nomenklatura_RK->FieldByName("Гармоника")->AsFloat>1){
-                                                              ff=ff/1000;
-                                                                }
-                          DataModule1->NumbersTemp->FieldByName("Nominal")->AsString=FloatToStr(ff);
-                }
-                else {
-                  DataModule1->NumbersTemp->FieldByName("Name")->AsString=edtName->Text;
-                  }
-          DataModule1->NumbersTemp->FieldByName("Type")->AsString=DataModule1->SqlSpecification->FieldByName("Type")->AsString;
- }
- */
-//DataModule1->NumbersTemp->Post();
-//DataModule1->NumbersTemp->Active=false;
           NumberMForm->Hide();
           Dialog1Form->Hide();
 

@@ -307,7 +307,10 @@ void __fastcall TDialog1Form::btnSaveClick(TObject *Sender)
 
     MainForm->ledSpc->Active=true;
    if (MachineType=="Transat"){
-              AnsiString sql_TR="Update `transat_temp_"+DataModule1->Dostup->FieldByName("ID")->AsString+"` set `Profile`='"+DataModule1->SqlSpecification->FieldByName("Profile")->AsString+"'";
+                DataModule1->TTS100_Alter->SQL->Clear();
+                DataModule1->TTS100_Alter->SQL->Add("ALTER TABLE `transat_temp_"+DataModule1->Dostup->FieldByName("ID")->AsString+"` ADD `Profile` VARCHAR(50) NULL;");
+                DataModule1->TTS100_Alter->Execute();
+                AnsiString sql_TR="Update `transat_temp_"+DataModule1->Dostup->FieldByName("ID")->AsString+"` set `Profile`='"+DataModule1->SqlSpecification->FieldByName("Profile")->AsString+"'";
                 New_Data->Update_Transat->SQL->Clear();
                 New_Data->Update_Transat->SQL->Add(sql_TR);
                 New_Data->Update_Transat->Execute();

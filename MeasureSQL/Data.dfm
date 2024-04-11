@@ -3,7 +3,7 @@ object DataModule1: TDataModule1
   OnCreate = DataModuleCreate
   Left = 281
   Top = 97
-  Height = 927
+  Height = 1049
   Width = 1465
   object CoordinatorDB: TMyConnection
     Database = 'coordinator'
@@ -13,6 +13,7 @@ object DataModule1: TDataModule1
     Username = 'xampp'
     Password = '43FPa!29S8HQeAW'
     Server = 'MES1'
+    Connected = True
     ConnectDialog = MyConnectDialog1
     LoginPrompt = False
     Left = 128
@@ -845,8 +846,8 @@ object DataModule1: TDataModule1
       ') ENGINE=MEMORY'
       'CHARACTER SET '#39'cp1251'#39' COLLATE '#39'cp1251_general_ci'#39';')
     Connection = CoordinatorDB
-    Left = 48
-    Top = 784
+    Left = 64
+    Top = 768
   end
   object KH7700_User_Config_Drop: TMyScript
     SQL.Strings = (
@@ -877,5 +878,17 @@ object DataModule1: TDataModule1
     Connection = CoordinatorDB
     Left = 336
     Top = 672
+  end
+  object PsiData_temp_Table_Create: TMyScript
+    Connection = CoordinatorDB
+    Left = 80
+    Top = 856
+  end
+  object PsiData_temp_Table_Drop: TMyScript
+    SQL.Strings = (
+      'drop table if exists `PsiData_Temp_Table`;')
+    Connection = CoordinatorDB
+    Left = 232
+    Top = 856
   end
 end

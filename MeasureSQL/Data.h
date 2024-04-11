@@ -144,6 +144,8 @@ __published:	// IDE-managed Components
         TMyDataSource *KH7700_Temp_Source;
         TMyDataSource *KH7700_Config_Source;
         TMyScript *KH7700_temp_Alter;
+        TMyScript *PsiData_temp_Table_Create;
+        TMyScript *PsiData_temp_Table_Drop;
         void __fastcall ProfileDataBeforePost(TDataSet *DataSet);
         void __fastcall DataModuleCreate(TObject *Sender);
 private:	// User declarations

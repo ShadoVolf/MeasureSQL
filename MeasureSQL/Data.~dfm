@@ -13,7 +13,6 @@ object DataModule1: TDataModule1
     Username = 'xampp'
     Password = '43FPa!29S8HQeAW'
     Server = 'MES1'
-    Connected = True
     ConnectDialog = MyConnectDialog1
     LoginPrompt = False
     Left = 128

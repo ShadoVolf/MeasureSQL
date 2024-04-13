@@ -105,7 +105,7 @@ void __fastcall TRecForm::edtTypeChange(TObject *Sender)
 edtSpc->Enabled=true;
 DataModule2->SqlSpec->Active=false;
 DataModule2->SqlSpec->SQL->Clear();
-DataModule2->SqlSpec->SQL->Add("Select * from  specification where NameR='"+edtType->Text+"' Order by Name");
+DataModule2->SqlSpec->SQL->Add("Select `Name` from  specification where NameR='"+edtType->Text+"' Order by Name");
 DataModule2->SqlSpec->Active=true;
 DataModule2->SqlSpec->First();
 edtSpc->Items->Clear();
@@ -127,21 +127,16 @@ VrProgressBar1->Position=0;
 
 DataModule2->psiData->Active=false;
 DataModule2->psiData->SQL->Clear();
-DataModule2->psiData->SQL->Add("Select * from psidata where Spc='"+edtSpc->Text+"' ORDER BY msk");
+DataModule2->psiData->SQL->Add("Select distinct `msk` from psidata where Spc='"+edtSpc->Text+"' ORDER BY msk");
 DataModule2->psiData->Active=true;
 DataModule2->psiData->First();
 VrProgressBar1->MaxValue=DataModule2->psiData->RecordCount;
 
 edtMsk->Items->Add(DataModule2->psiData->FieldByName("Msk")->AsString);
 for (int i=0;i<DataModule2->psiData->RecordCount;i++){
-             S=DataModule2->psiData->FieldByName("Msk")->AsString;
+           edtMsk->Items->Add(DataModule2->psiData->FieldByName("Msk")->AsString);
               DataModule2->psiData->Next();
               VrProgressBar1->Position=i+1;
-               
-           if (S!=DataModule2->psiData->FieldByName("Msk")->AsString){
-
-                      edtMsk->Items->Add(DataModule2->psiData->FieldByName("Msk")->AsString);
-             }
       }
  edtMsk->Enabled=true;
 }
@@ -388,7 +383,7 @@ void __fastcall TRecForm::cmbTypeChange(TObject *Sender)
 {
 DataModule2->SqlSpec->Active=false;
 DataModule2->SqlSpec->SQL->Clear();
-DataModule2->SqlSpec->SQL->Add("Select * from  specification where NameR='"+cmbType->Text+"' Order by Name");
+DataModule2->SqlSpec->SQL->Add("Select `Name` from  specification where NameR='"+cmbType->Text+"' Order by Name");
 DataModule2->SqlSpec->Active=true;
 DataModule2->SqlSpec->First();
 cmbSpc->Items->Clear();
@@ -430,7 +425,7 @@ DataModule2->SqlSpec->First();
 DataModule2->psiData->Active=false;
 DataModule2->psiData->SQL->Clear();
 AnsiString S;
-        S="Select * from psidata where ";
+        S="Select `N`,`MakeDate`,`MakeDate1`,`MSK-M`,`Status`,`Status2`,`Spc`,`PrintSelect` from psidata where ";
 
        if (edtMsk->ItemIndex!=-1){
        S=S+"msk='"+edtMsk->Text+"' ";
@@ -452,12 +447,12 @@ AnsiString S;
 
        }
        if (!cmb_ID->Text.IsEmpty() || cmb_ID->Text!=""){
-        S="Select * from psidata where Measure_ID='"+cmb_ID->Text+"' ";
+        S="Select `N`,`MakeDate`,`MakeDate1`,`MSK-M`,`Status`,`Status2`,`Spc`,`PrintSelect` from psidata where Measure_ID='"+cmb_ID->Text+"' ";
 
        }
         if (!cmb_Protokol_ID->Text.IsEmpty()){
 
-      S="Select * from psi_protokol_archive where Measure_Protokol_ID='"+cmb_Protokol_ID->Text+"' ";
+      S="Select `N`,`MakeDate`,`MakeDate1`,`MSK-M`,`Status`,`Status2`,`Spc`,`PrintSelect` from psi_protokol_archive where Measure_Protokol_ID='"+cmb_Protokol_ID->Text+"' ";
      }
       if (edtAn->Checked){
        S=S+"and Status2='Good' and Status!='Аномал.'";
@@ -1977,7 +1972,7 @@ DataModule2->SqlSpec->First();
 
        }
       if (cmb_ID->Text!=""){
-        S3="Select * from psidata where Measure_ID='"+cmb_ID->Text+"' ";
+        S3="Select `N`,`MakeDate`,`MakeDate1`,`ProtokolN`,`Spc`,`MSK-M`,`Status`,`Status2`,`PrintSelect`,`Measure_ID` from psidata where Measure_ID='"+cmb_ID->Text+"' ";
 
        }
        S3=S3+"ORDER BY N";
@@ -2199,5 +2194,6 @@ void __fastcall TRecForm::LotNumberChange(TObject *Sender)
  RQ_Data->LotNumbers->Active=false;
 }
 //---------------------------------------------------------------------------
+
 
 

@@ -1,10 +1,10 @@
 object RecForm: TRecForm
-  Left = 600
-  Top = 151
+  Left = 656
+  Top = 148
   BorderStyle = bsNone
   Caption = 'RecForm'
-  ClientHeight = 523
-  ClientWidth = 394
+  ClientHeight = 535
+  ClientWidth = 399
   Color = clBlack
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clLime
@@ -330,8 +330,8 @@ object RecForm: TRecForm
   object Delivery: TAdvToolPanelTab
     Left = 0
     Top = 0
-    Width = 177
-    Height = 523
+    Width = 65
+    Height = 535
     AutoDock = False
     Color = clWhite
     ColorTo = 14537936
@@ -353,8 +353,8 @@ object RecForm: TRecForm
     object AdvToolPanel1: TAdvToolPanel
       Left = 23
       Top = 0
-      Width = 154
-      Height = 523
+      Width = 0
+      Height = 0
       BackgroundTransparent = False
       BackGroundPosition = bpTopLeft
       Button3D = False
@@ -769,8 +769,8 @@ object RecForm: TRecForm
     object AdvToolPanel2: TAdvToolPanel
       Left = 23
       Top = 0
-      Width = 0
-      Height = 0
+      Width = 42
+      Height = 535
       BackgroundTransparent = False
       BackGroundPosition = bpTopLeft
       Button3D = False

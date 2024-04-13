@@ -90,35 +90,23 @@ AnsiString S,S1;
 
 DataModule2->PhazeNoise->Active=false;
 DataModule2->PhazeNoise->SQL->Clear();
-DataModule2->PhazeNoise->SQL->Add("Select * from Phaze_Noise  where Spc='"+edtSpc->Text+"' ORDER BY msk");
+DataModule2->PhazeNoise->SQL->Add("Select distinct `msk` from Phaze_Noise  where Spc='"+edtSpc->Text+"' ORDER BY msk");
 DataModule2->PhazeNoise->Active=true;
 DataModule2->PhazeNoise->First();
-edtMsk->Items->Add(DataModule2->PhazeNoise->FieldByName("Msk")->AsString);
 for (int i=0;i<DataModule2->PhazeNoise->RecordCount;i++){
-             S=DataModule2->PhazeNoise->FieldByName("Msk")->AsString;
+             edtMsk->Items->Add(DataModule2->PhazeNoise->FieldByName("Msk")->AsString);
               DataModule2->PhazeNoise->Next();
-
-           if (S!=DataModule2->PhazeNoise->FieldByName("Msk")->AsString){
-
-                      edtMsk->Items->Add(DataModule2->PhazeNoise->FieldByName("Msk")->AsString);
-             }
 
       }
  DataModule2->PhazeNoise->Active=false;
 DataModule2->PhazeNoise->SQL->Clear();
-DataModule2->PhazeNoise->SQL->Add("Select * from Phaze_Noise  where Spc='"+edtSpc->Text+"' ORDER BY MeasureID");
+DataModule2->PhazeNoise->SQL->Add("Select distinct `MeasureID` from Phaze_Noise  where Spc='"+edtSpc->Text+"' ORDER BY MeasureID");
 DataModule2->PhazeNoise->Active=true;
 DataModule2->PhazeNoise->First();
 cmb_ID->Items->Clear();
-cmb_ID->Items->Add(DataModule2->PhazeNoise->FieldByName("MeasureID")->AsString);
 for (int i=0;i<DataModule2->PhazeNoise->RecordCount;i++){
-             S=DataModule2->PhazeNoise->FieldByName("MeasureID")->AsString;
+             cmb_ID->Items->Add(DataModule2->PhazeNoise->FieldByName("MeasureID")->AsString);
               DataModule2->PhazeNoise->Next();
-
-           if (S!=DataModule2->PhazeNoise->FieldByName("MeasureID")->AsString){
-
-                      cmb_ID->Items->Add(DataModule2->PhazeNoise->FieldByName("MeasureID")->AsString);
-             }
 
       }
 
@@ -132,7 +120,7 @@ DataModule2->PhazeNoise->Active=false;
 DataModule2->PhazeNoise->SQL->Clear();
 AnsiString S3,S4;
 S3="Select * from Phaze_Noise where ";
-S4="Select * from Phaze_Noise_Data where ";
+S4="Select `N`,`Freq`,`PN` from Phaze_Noise_Data where ";
        if (edtMsk->Text!=""){
        S3=S3+"MSK='"+edtMsk->Text+"' ";
        S4=S4+"Msk='"+edtMsk->Text+"' ";
@@ -140,7 +128,7 @@ S4="Select * from Phaze_Noise_Data where ";
 
       if (cmb_ID->Text!=""){
         S3="Select * from Phaze_Noise where MeasureID='"+cmb_ID->Text+"' ";
-        S4="Select * from Phaze_Noise_Data where MeasureID='"+cmb_ID->Text+"' ";
+        S4="Select `N`,`Freq`,`PN` from Phaze_Noise_Data where MeasureID='"+cmb_ID->Text+"' ";
        }
 
        S3=S3+" and N='"+edtNumber->Text+"'"+" ORDER BY N";
@@ -1920,7 +1908,7 @@ DataModule2->PhazeNoise->Active=false;
 DataModule2->PhazeNoise->SQL->Clear();
 AnsiString S3;
 AnsiString Code=edtMeasure_ID->Text;
- S3="Select * from Phaze_Noise where ";
+ S3="Select `Spc`,`N`,`Msk`,`MeasureID` from Phaze_Noise where ";
  if (Code.SubString(0,3)=="801"){
     Code=Code.SubString(4,Code.Length()-2);
     S3=S3+"Protokol_ID='"+Code+"' ";
@@ -2001,7 +1989,7 @@ if (Key==13){
 DataModule2->PhazeNoise->Active=false;
 DataModule2->PhazeNoise->SQL->Clear();
 AnsiString S3;
- S3="Select * from Phaze_Noise where ";
+ S3="Select `N`,`Spc`,`PSI_ID`,`MeasureID` from Phaze_Noise where ";
 
        S3=S3+"MSK='"+edtMsk->Text+"' ";
 
@@ -2151,7 +2139,7 @@ if (Key==13){
 DataModule2->PhazeNoise->Active=false;
 DataModule2->PhazeNoise->SQL->Clear();
 AnsiString S3;
- S3="Select * from Phaze_Noise where ";
+ S3="Select `N`,`Spc`,`Msk`,`PSI_ID` from Phaze_Noise where ";
        if (cmb_ID->Text!=""){
        S3=S3+"MeasureID='"+cmb_ID->Text+"' ";
 
@@ -3011,5 +2999,6 @@ void __fastcall TPhazeNoiseForm::RzButton8Click(TObject *Sender)
 
 }
 //---------------------------------------------------------------------------
+
 
 

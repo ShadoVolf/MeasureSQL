@@ -221,7 +221,7 @@ object GpForm: TGpForm
       Caption = #1058#1080#1087' '#1088#1077#1079#1086#1085#1072#1090#1086#1088#1072
     end
     object Label2: TLabel
-      Left = 112
+      Left = 160
       Top = 8
       Width = 75
       Height = 13
@@ -256,7 +256,7 @@ object GpForm: TGpForm
       Caption = #1047#1072#1084#1077#1088
     end
     object Label4: TLabel
-      Left = 376
+      Left = 400
       Top = 8
       Width = 121
       Height = 13
@@ -277,7 +277,7 @@ object GpForm: TGpForm
     object edtType: TComboBox
       Left = 8
       Top = 24
-      Width = 97
+      Width = 129
       Height = 21
       Color = clWhite
       ItemHeight = 13
@@ -285,9 +285,9 @@ object GpForm: TGpForm
       OnChange = edtTypeChange
     end
     object edtSpc: TComboBox
-      Left = 112
+      Left = 160
       Top = 24
-      Width = 257
+      Width = 233
       Height = 21
       Color = clWhite
       Enabled = False
@@ -399,9 +399,9 @@ object GpForm: TGpForm
       OnClick = btnOptionsClick
     end
     object cmb_ID: TComboBox
-      Left = 376
+      Left = 400
       Top = 24
-      Width = 169
+      Width = 145
       Height = 21
       Color = clWhite
       ItemHeight = 13

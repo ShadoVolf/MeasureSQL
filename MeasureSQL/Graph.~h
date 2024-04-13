@@ -52,6 +52,7 @@ __published:	// IDE-managed Components
         TLabel *Label4;
         TRzButton *RzButton1;
         TLineSeries *Series1;
+        TAction *SetBorder;
         void __fastcall btnCloseClick(TObject *Sender);
         void __fastcall FormShow(TObject *Sender);
         void __fastcall edtTypeChange(TObject *Sender);

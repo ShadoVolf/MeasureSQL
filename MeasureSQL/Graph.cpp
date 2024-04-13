@@ -54,7 +54,7 @@ void __fastcall TGpForm::edtTypeChange(TObject *Sender)
 edtSpc->Enabled=true;
 DataModule2->SqlSpec->Active=false;
 DataModule2->SqlSpec->SQL->Clear();
-DataModule2->SqlSpec->SQL->Add("Select * from  specification where NameR='"+edtType->Text+"' order by Name");
+DataModule2->SqlSpec->SQL->Add("Select `Name` from  specification where NameR='"+edtType->Text+"' order by Name");
 DataModule2->SqlSpec->Active=true;
 DataModule2->SqlSpec->First();
 edtSpc->Items->Clear();
@@ -74,11 +74,11 @@ AnsiString S,S1;
 
 DataModule2->psiData->Active=false;
 DataModule2->psiData->SQL->Clear();
-DataModule2->psiData->SQL->Add("Select * from psidata where Spc='"+edtSpc->Text+"' ORDER BY msk");
+DataModule2->psiData->SQL->Add("Select distinct `Msk` from psidata where Spc='"+edtSpc->Text+"' ORDER BY Msk");
 DataModule2->psiData->Active=true;
 DataModule2->psiData->First();
 edtMsk->Items->Add(DataModule2->psiData->FieldByName("Msk")->AsString);
-for (int i=0;i<DataModule2->psiData->RecordCount;i++){
+/*for (int i=0;i<DataModule2->psiData->RecordCount;i++){
              S=DataModule2->psiData->FieldByName("Msk")->AsString;
               DataModule2->psiData->Next();
               
@@ -88,6 +88,11 @@ for (int i=0;i<DataModule2->psiData->RecordCount;i++){
              }
              
       }
+*/
+ for (int i=0;i<DataModule2->psiData->RecordCount;i++){
+       edtMsk->Items->Add(DataModule2->psiData->FieldByName("Msk")->AsString);
+       DataModule2->psiData->Next();
+ }
  edtMsk->Enabled=true;
 
 
@@ -108,7 +113,7 @@ AnsiString S,S1,S2,S4;
 DataModule2->psiData->Active=false;
 DataModule2->psiData->SQL->Clear();
 AnsiString S3;
- S3="Select * from psidata where ";
+ S3="Select distinct `N` from psidata where ";
        if (edtMsk->ItemIndex!=-1){
        S3=S3+"msk='"+edtMsk->Text+"' ";
 
@@ -119,7 +124,7 @@ AnsiString S3;
 
        }
       if (cmb_ID->Text!=""){
-        S3="Select * from psidata where Measure_ID='"+cmb_ID->Text+"' ";
+        S3="Select distinct `N` from psidata where Measure_ID='"+cmb_ID->Text+"' ";
 
        }
        S3=S3+"ORDER BY N";
@@ -131,8 +136,8 @@ DataModule2->psiData->Active=true;
 DataModule2->psiData->First();
  edtM->Items->Clear();
  edtNumber->Items->Clear();
- cmb_ID->Items->Clear();
-for (int i=0;i<DataModule2->psiData->RecordCount;i++){
+
+/*for (int i=0;i<DataModule2->psiData->RecordCount;i++){
 
           int u=1;
           S2=DataModule2->psiData->FieldByName("N")->AsString;
@@ -176,6 +181,30 @@ for (int i=0;i<DataModule2->psiData->RecordCount;i++){
           }
     DataModule2->psiData->Next();
       }
+ */
+ for (int i=0;i<DataModule2->psiData->RecordCount;i++){
+    edtNumber->Items->Add(DataModule2->psiData->FieldByName("N")->AsString);
+     DataModule2->psiData->Next();
+ }
+  S3="Select distinct `N` from psidata where ";
+       if (edtMsk->ItemIndex!=-1){
+       S3=S3+"msk='"+edtMsk->Text+"' ";
+
+       }
+  S3=S3+"ORDER BY N";
+
+if (cmb_ID->Text!=""){
+ cmb_ID->Items->Clear();
+DataModule2->psiData->SQL->Add(S3);
+DataModule2->psiData->Active=true;
+DataModule2->psiData->First();
+ for (int i=0;i<DataModule2->psiData->RecordCount;i++){
+    cmb_ID->Items->Add(DataModule2->psiData->FieldByName("Measure_ID")->AsString);
+     DataModule2->psiData->Next();
+ }
+
+
+}
 
   edtNumber->Enabled=true;
   edtTypeF->Enabled=true;
@@ -202,10 +231,10 @@ double X,Y;
 DataModule2->psiData->Active=false;
 DataModule2->psiData->SQL->Clear();
   if (edtM->ItemIndex==-1){
-            DataModule2->psiData->SQL->Add("Select * from psidata where msk='"+edtMsk->Text+"' and N='"+edtNumber->Text+"'");
+            DataModule2->psiData->SQL->Add("Select `N`,`F` from psidata where msk='"+edtMsk->Text+"' and N='"+edtNumber->Text+"'");
     }
    else {
-       DataModule2->psiData->SQL->Add("Select * from psidata where msk='"+edtMsk->Text+"' and N='"+edtNumber->Text+"' and `MSK-M`='"+edtM->Text+"'");
+       DataModule2->psiData->SQL->Add("Select `N`,`F` from psidata where msk='"+edtMsk->Text+"' and N='"+edtNumber->Text+"' and `MSK-M`='"+edtM->Text+"'");
 
    }
 DataModule2->psiData->Active=true;
@@ -214,10 +243,10 @@ DataModule2->psiData->First();
 DataModule2->psiDataTemp->Active=false;
 DataModule2->psiDataTemp->SQL->Clear();
   if (edtM->ItemIndex==-1){
-            DataModule2->psiDataTemp->SQL->Add("Select * from psidatatemp where msk='"+edtMsk->Text+"' and N='"+edtNumber->Text+"' ORDER BY Temp");
+            DataModule2->psiDataTemp->SQL->Add("Select `N`,`F`,`FL`,`R`,`Mono`,`Q`,`C0`,`Cq`,`Rb`,`L`,`Temp` from psidatatemp where msk='"+edtMsk->Text+"' and N='"+edtNumber->Text+"' ORDER BY Temp");
     }
    else {
-       DataModule2->psiDataTemp->SQL->Add("Select * from psidatatemp where msk='"+edtMsk->Text+"' and N='"+edtNumber->Text+"' and `MSK-M`='"+edtM->Text+"' ORDER BY Temp");
+       DataModule2->psiDataTemp->SQL->Add("Select `N`,`F`,`FL`,`R`,`Mono`,`Q`,`C0`,`Cq`,`Rb`,`L`,`Temp` from psidatatemp where msk='"+edtMsk->Text+"' and N='"+edtNumber->Text+"' and `MSK-M`='"+edtM->Text+"' ORDER BY Temp");
 
    }
 DataModule2->psiDataTemp->Active=true;
@@ -275,7 +304,12 @@ int k=DataModule2->psiDataTemp->RecordCount;
              Chart1->LeftAxis->Title->Caption="Rb,Ом";
              }
               if (edtTypeF->Text=="Rc/Rb"){
-             Y=DataModule2->psiDataTemp->FieldByName("R")->AsFloat/DataModule2->psiDataTemp->FieldByName("Rb")->AsFloat;
+              if (DataModule2->psiDataTemp->FieldByName("Rb")->AsString!=NULL){
+                     Y=DataModule2->psiDataTemp->FieldByName("R")->AsFloat/DataModule2->psiDataTemp->FieldByName("Rb")->AsFloat;
+                     }
+                 else {
+                  Y=1;
+                 }
              Chart1->LeftAxis->Title->Caption="Rc/Rb";
              }
 
@@ -307,8 +341,8 @@ DataModule2->psiData->SQL->Clear();
 AnsiString S3,S4;
 
 if (edtNumber->ItemIndex!=-1){
-S3="Select * from psidata where ";
-S4="Select * from psidatatemp where ";
+S3="Select `N` from psidata where ";
+S4="Select `Temp`,`N`,`Measure_ID` from psidatatemp where ";
        if (edtMsk->ItemIndex!=-1){
        S3=S3+"msk='"+edtMsk->Text+"' ";
        S4=S4+"msk='"+edtMsk->Text+"' ";
@@ -319,8 +353,8 @@ S4="Select * from psidatatemp where ";
         S4=S4+"and `MSK-M`='"+edtM->Text+"' ";
        }
       if (cmb_ID->Text!=""){
-        S3="Select * from psidata where Measure_ID='"+cmb_ID->Text+"' ";
-        S4="Select * from psidatatemp where Measure_ID='"+cmb_ID->Text+"' ";
+        S3="Select `N` from psidata where Measure_ID='"+cmb_ID->Text+"' ";
+        S4="Select `Temp`,`N`,`Measure_ID` from psidatatemp where Measure_ID='"+cmb_ID->Text+"' ";
        }
 
        S3=S3+" and N='"+edtNumber->Text+"'"+" ORDER BY N";
@@ -331,34 +365,19 @@ S4="Select * from psidatatemp where ";
 DataModule2->psiData->Active=true;
 DataModule2->psiData->First();
 
-DataModule2->psiDataTemp->Active=false;
-DataModule2->psiDataTemp->SQL->Clear();
-
-DataModule2->psiDataTemp->SQL->Add(S4);
-
-DataModule2->psiDataTemp->Active=true;
-DataModule2->psiDataTemp->First();
-DataModule2->psiData->RecordCount;
+        DataModule2->psiDataTemp->Active=false;
+        DataModule2->psiDataTemp->SQL->Clear();
+        DataModule2->psiDataTemp->SQL->Add(S4);
+        DataModule2->psiDataTemp->Active=true;
+        DataModule2->psiDataTemp->First();
+//DataModule2->psiData->RecordCount;
 int k=DataModule2->psiDataTemp->RecordCount;
-//OptionsGraphForm->edtA->Text=DataModule2->psiDataTemp->FieldByName("Temp")->AsString;
-//DataModule2->psiDataTemp->Last();
-//OptionsGraphForm->edtB->Text=DataModule2->psiDataTemp->FieldByName("Temp")->AsString;
-//DataModule2->psiDataTemp->First();
-/*    OptionsGraphForm->edtA->Items->Clear();
-      OptionsGraphForm->edtB->Items->Clear();
-      OptionsGraphForm->edtT->Items->Clear();
- for (int i=0; i<DataModule2->psiDataTemp->RecordCount; i++){
 
-      OptionsGraphForm->edtA->Items->Add(DataModule2->psiDataTemp->FieldByName("Temp")->AsString);
-      OptionsGraphForm->edtB->Items->Add(DataModule2->psiDataTemp->FieldByName("Temp")->AsString);
-      OptionsGraphForm->edtT->Items->Add(DataModule2->psiDataTemp->FieldByName("Temp")->AsString);
-      DataModule2->psiDataTemp->Next();
- }
- */
 DataModule2->SqlSpec->Active=false;
 DataModule2->SqlSpec->SQL->Clear();
-DataModule2->SqlSpec->SQL->Add("Select * from specification where Name='"+edtSpc->Text+"'");
+DataModule2->SqlSpec->SQL->Add("Select `Tnastr` from specification where Name='"+edtSpc->Text+"'");
 DataModule2->SqlSpec->Active=true;
+
 OptionsGraphForm->edtT->Text=DataModule2->SqlSpec->FieldByName("Tnastr")->AsString;
 
 btnMake->Enabled=true;
@@ -405,10 +424,10 @@ TLineSeries *Series1 = new TLineSeries(Chart1);
  DataModule2->psiData->Active=false;
 DataModule2->psiData->SQL->Clear();
   if (edtM->ItemIndex==-1){
-            DataModule2->psiData->SQL->Add("Select * from psidata where msk='"+edtMsk->Text+"' and N='"+edtNumber->Text+"'");
+            DataModule2->psiData->SQL->Add("Select `F`,`N` from psidata where msk='"+edtMsk->Text+"' and N='"+edtNumber->Text+"'");
     }
    else {
-       DataModule2->psiData->SQL->Add("Select * from psidata where msk='"+edtMsk->Text+"' and N='"+edtNumber->Text+"' and `MSK-M`='"+edtM->Text+"'");
+       DataModule2->psiData->SQL->Add("Select `F`,`N` from psidata where msk='"+edtMsk->Text+"' and N='"+edtNumber->Text+"' and `MSK-M`='"+edtM->Text+"'");
 
    }
 DataModule2->psiData->Active=true;
@@ -417,10 +436,10 @@ DataModule2->psiData->First();
 DataModule2->psiDataTemp->Active=false;
 DataModule2->psiDataTemp->SQL->Clear();
   if (edtM->ItemIndex==-1){
-            DataModule2->psiDataTemp->SQL->Add("Select * from psidatatemp where msk='"+edtMsk->Text+"' and N='"+edtNumber->Text+"' ORDER BY Temp");
+            DataModule2->psiDataTemp->SQL->Add("Select `F`,`FL`,`R`,`Temp`,`Mono`,`Q`,`C0`,`Cq`,`Rb`,`N` from psidatatemp where msk='"+edtMsk->Text+"' and N='"+edtNumber->Text+"' ORDER BY Temp");
     }
    else {
-       DataModule2->psiDataTemp->SQL->Add("Select * from psidatatemp where msk='"+edtMsk->Text+"' and N='"+edtNumber->Text+"' and `MSK-M`='"+edtM->Text+"' ORDER BY Temp");
+       DataModule2->psiDataTemp->SQL->Add("Select `F`,`FL`,`R`,`Temp`,`Mono`,`Q`,`C0`,`Cq`,`Rb`,`N` from psidatatemp where msk='"+edtMsk->Text+"' and N='"+edtNumber->Text+"' and `MSK-M`='"+edtM->Text+"' ORDER BY Temp");
 
    }
 DataModule2->psiDataTemp->Active=true;
@@ -605,8 +624,8 @@ DataModule2->psiData->Active=false;
 DataModule2->psiData->SQL->Clear();
 AnsiString S3,S4;
 int M=OptionsGraphForm->RzSpinEdit1->Value;
-S3="Select * from psidata where ";
-S4="Select * from psidatatemp where ";
+S3="Select `F`,`N` from psidata where ";
+S4="Select `F`,`FL`,`R`,`Temp`,`Mono`,`Q`,`C0`,`Cq`,`Rb`,`N` from psidatatemp where ";
        if (edtMsk->ItemIndex!=-1){
        S3=S3+"msk='"+edtMsk->Text+"' ";
        S4=S4+"msk='"+edtMsk->Text+"' ";
@@ -617,8 +636,8 @@ S4="Select * from psidatatemp where ";
         S4=S4+"and `MSK-M`='"+edtM->Text+"' ";
        }
       if (cmb_ID->Text!=""){
-        S3="Select * from psidata where Measure_ID='"+cmb_ID->Text+"' ";
-        S4="Select * from psidatatemp where Measure_ID='"+cmb_ID->Text+"' ";
+        S3="Select `F`,`N` from psidata where Measure_ID='"+cmb_ID->Text+"' ";
+        S4="Select `F`,`FL`,`R`,`Temp`,`Mono`,`Q`,`C0`,`Cq`,`Rb`,`N` from psidatatemp where Measure_ID='"+cmb_ID->Text+"' ";
        }
 
        S3=S3+" and N='"+edtNumber->Text+"'"+" ORDER BY N";
@@ -737,8 +756,8 @@ if (OptionsGraphForm->Polinom->Checked){
  DataModule2->psiData->Active=false;
 DataModule2->psiData->SQL->Clear();
  AnsiString S3,S4;
-S3="Select * from psidata where ";
-S4="Select * from psidatatemp where ";
+S3="Select `F`,`N` from psidata where ";
+S4="Select `F`,`FL`,`R`,`Temp`,`Mono`,`Q`,`C0`,`Cq`,`Rb`,`N` from psidatatemp where ";
        if (edtMsk->ItemIndex!=-1){
        S3=S3+"msk='"+edtMsk->Text+"' ";
        S4=S4+"msk='"+edtMsk->Text+"' ";
@@ -749,8 +768,8 @@ S4="Select * from psidatatemp where ";
         S4=S4+"and `MSK-M`='"+edtM->Text+"' ";
        }
       if (cmb_ID->Text!=""){
-        S3="Select * from psidata where Measure_ID='"+cmb_ID->Text+"' ";
-        S4="Select * from psidatatemp where Measure_ID='"+cmb_ID->Text+"' ";
+        S3="Select `F`,`N` from psidata where Measure_ID='"+cmb_ID->Text+"' ";
+        S4="Select `F`,`FL`,`R`,`Temp`,`Mono`,`Q`,`C0`,`Cq`,`Rb`,`N` from psidatatemp where Measure_ID='"+cmb_ID->Text+"' ";
        }
 
        S3=S3+" and N='"+edtNumber->Text+"'"+" ORDER BY N";
@@ -1063,14 +1082,14 @@ if (!OptionsGraphForm->AllInOne->Checked){
  DataModule2->psiData2->Active=false;
 DataModule2->psiData2->SQL->Clear();
 AnsiString S;
- S="Select * from psidata where Measure_ID='"+cmb_ID->Text+"'";
+ S="Select `F`,`N` from psidata where Measure_ID='"+cmb_ID->Text+"' LIMIT 1";
 DataModule2->psiData2->SQL->Add(S);
 DataModule2->psiData2->Active=true;
 DataModule2->psiData2->First();
 
 DataModule2->psiDataTemp3->Active=false;
 DataModule2->psiDataTemp3->SQL->Clear();
-DataModule2->psiDataTemp3->SQL->Add("Select * from psidatatemp where Measure_ID='"+cmb_ID->Text+"' and N='"+DataModule2->psiData2->FieldByName("N")->AsString+"' ORDER BY Temp");
+DataModule2->psiDataTemp3->SQL->Add("Select `Temp` from psidatatemp where Measure_ID='"+cmb_ID->Text+"' and N='"+DataModule2->psiData2->FieldByName("N")->AsString+"' ORDER BY Temp");
 DataModule2->psiDataTemp3->Active=true;
 DataModule2->psiDataTemp3->First();
 DataModule2->psiDataTemp3->RecordCount;
@@ -1088,7 +1107,7 @@ DataModule2->psiDataTemp3->First();
  }
 DataModule2->SqlSpec->Active=false;
 DataModule2->SqlSpec->SQL->Clear();
-DataModule2->SqlSpec->SQL->Add("Select * from specification where Name='"+edtSpc->Text+"'");
+DataModule2->SqlSpec->SQL->Add("Select `Tnastr` from specification where Name='"+edtSpc->Text+"'");
 DataModule2->SqlSpec->Active=true;
 OptionsGraphForm->edtT->Text=DataModule2->SqlSpec->FieldByName("Tnastr")->AsString;
 
@@ -1100,7 +1119,7 @@ OptionsGraphForm->edtT->Text=DataModule2->SqlSpec->FieldByName("Tnastr")->AsStri
   double X,Y;
 DataModule2->psiData->Active=false;
 DataModule2->psiData->SQL->Clear();
-DataModule2->psiData->SQL->Add("Select * from psidata where Measure_ID='"+cmb_ID->Text+"' and N='"+DataModule2->psiData2->FieldByName("N")->AsString+"'");
+DataModule2->psiData->SQL->Add("Select `F`,`N` from psidata where Measure_ID='"+cmb_ID->Text+"' and N='"+DataModule2->psiData2->FieldByName("N")->AsString+"'");
 
 
 DataModule2->psiData->Active=true;
@@ -1108,7 +1127,7 @@ DataModule2->psiData->First();
 
 DataModule2->psiDataTemp->Active=false;
 DataModule2->psiDataTemp->SQL->Clear();
-DataModule2->psiDataTemp->SQL->Add("Select * from psidatatemp where Measure_ID='"+cmb_ID->Text+"' and N='"+DataModule2->psiData2->FieldByName("N")->AsString+"' ORDER BY Temp");
+DataModule2->psiDataTemp->SQL->Add("Select `F`,`FL`,`R`,`Temp`,`Mono`,`Q`,`C0`,`Cq`,`Rb`,`N` from psidatatemp where Measure_ID='"+cmb_ID->Text+"' and N='"+DataModule2->psiData2->FieldByName("N")->AsString+"' ORDER BY Temp");
 DataModule2->psiDataTemp->Active=true;
 DataModule2->psiDataTemp->First();
 int k=DataModule2->psiDataTemp->RecordCount;
@@ -1194,15 +1213,7 @@ int k=DataModule2->psiDataTemp->RecordCount;
  jump.setbounds(0,k);
       double F=DataModule2->psiData->FieldByName("F")->AsFloat;
       
-    /* for (int i=0;i<k;i++){
-                 if (DataModule2->psiDataTemp->FieldByName("Temp")->AsString==OptionsGraphForm->edtT->Text){
 
-                  Fns=DataModule2->psiDataTemp->FieldByName("F")->AsFloat;
-                  Fnl=DataModule2->psiDataTemp->FieldByName("FL")->AsFloat;
-                 }
-       DataModule2->psiDataTemp->Next();
-     }
-     */
      DataModule2->psiDataTemp->First();
 
 
@@ -1366,10 +1377,10 @@ int ColorInt=0;
      Chart1->Series[0]->Free();
    }
   if (OptionsGraphForm->OnlyGood->Checked){
-  S="Select * from psidata where Measure_ID='"+cmb_ID->Text+"' and Status='Годен'";
+  S="Select `F`,`N` from psidata where Measure_ID='"+cmb_ID->Text+"' and Status='Годен'";
   }
   else {
- S="Select * from psidata where Measure_ID='"+cmb_ID->Text+"' and Status <> 'Незамер.'";
+ S="Select `F`,`N` from psidata where Measure_ID='"+cmb_ID->Text+"' and Status <> 'Незамер.'";
  }
 DataModule2->psiData2->SQL->Add(S);
 DataModule2->psiData2->Active=true;
@@ -1378,10 +1389,10 @@ DataModule2->psiData2->First();
 DataModule2->psiDataTemp3->Active=false;
 DataModule2->psiDataTemp3->SQL->Clear();
  if (OptionsGraphForm->OnlyGood->Checked){
-      DataModule2->psiDataTemp3->SQL->Add("Select * from psidatatemp where Measure_ID='"+cmb_ID->Text+"' and N='"+DataModule2->psiData2->FieldByName("N")->AsString+"' and  Status1 = 'Годен' ORDER BY Temp");
+      DataModule2->psiDataTemp3->SQL->Add("Select `F`,`FL`,`R`,`Temp`,`Mono`,`Q`,`C0`,`Cq`,`Rb`,`N` from psidatatemp where Measure_ID='"+cmb_ID->Text+"' and N='"+DataModule2->psiData2->FieldByName("N")->AsString+"' and  Status1 = 'Годен' ORDER BY Temp");
  }
  else {
-        DataModule2->psiDataTemp3->SQL->Add("Select * from psidatatemp where Measure_ID='"+cmb_ID->Text+"' and N='"+DataModule2->psiData2->FieldByName("N")->AsString+"' and  Status1 <> 'Незамер.' ORDER BY Temp");
+        DataModule2->psiDataTemp3->SQL->Add("Select `F`,`FL`,`R`,`Temp`,`Mono`,`Q`,`C0`,`Cq`,`Rb`,`N` from psidatatemp where Measure_ID='"+cmb_ID->Text+"' and N='"+DataModule2->psiData2->FieldByName("N")->AsString+"' and  Status1 <> 'Незамер.' ORDER BY Temp");
       }
 DataModule2->psiDataTemp3->Active=true;
 DataModule2->psiDataTemp3->First();
@@ -1402,7 +1413,7 @@ DataModule2->psiDataTemp3->First();
  }
 DataModule2->SqlSpec->Active=false;
 DataModule2->SqlSpec->SQL->Clear();
-DataModule2->SqlSpec->SQL->Add("Select * from specification where Name='"+edtSpc->Text+"'");
+DataModule2->SqlSpec->SQL->Add("Select `Tnastr` from specification where Name='"+edtSpc->Text+"'");
 DataModule2->SqlSpec->Active=true;
 OptionsGraphForm->edtT->Text=DataModule2->SqlSpec->FieldByName("Tnastr")->AsString;
 
@@ -1424,12 +1435,12 @@ OptionsGraphForm->edtT->Text=DataModule2->SqlSpec->FieldByName("Tnastr")->AsStri
                         AnsiString SqlMain,SqlTemp;
 
                         if (OptionsGraphForm->OnlyGood->Checked){
-                                        SqlMain="Select * from psidata where Measure_ID='"+cmb_ID->Text+"' and N='"+DataModule2->psiData2->FieldByName("N")->AsString+"' and Status='Годен'"  ;
-                                        SqlTemp="Select * from psidatatemp where Measure_ID='"+cmb_ID->Text+"' and N='"+DataModule2->psiData2->FieldByName("N")->AsString+"' and Status1='Годен' ORDER BY Temp" ;
+                                        SqlMain="Select `F`,`N` from psidata where Measure_ID='"+cmb_ID->Text+"' and N='"+DataModule2->psiData2->FieldByName("N")->AsString+"' and Status='Годен'"  ;
+                                        SqlTemp="Select `F`,`FL`,`R`,`Temp`,`Mono`,`Q`,`C0`,`Cq`,`Rb`,`N` from psidatatemp where Measure_ID='"+cmb_ID->Text+"' and N='"+DataModule2->psiData2->FieldByName("N")->AsString+"' and Status1='Годен' ORDER BY Temp" ;
                                         }
                                         else {
-                                                SqlMain="Select * from psidata where Measure_ID='"+cmb_ID->Text+"' and N='"+DataModule2->psiData2->FieldByName("N")->AsString+"' and Status <> 'Незамер.'"  ;
-                                                SqlTemp="Select * from psidatatemp where Measure_ID='"+cmb_ID->Text+"' and N='"+DataModule2->psiData2->FieldByName("N")->AsString+"' and Status1 <> 'Незамер.' ORDER BY Temp"  ;
+                                                SqlMain="Select `F`,`N` from psidata where Measure_ID='"+cmb_ID->Text+"' and N='"+DataModule2->psiData2->FieldByName("N")->AsString+"' and Status <> 'Незамер.'"  ;
+                                                SqlTemp="Select `F`,`FL`,`R`,`Temp`,`Mono`,`Q`,`C0`,`Cq`,`Rb`,`N` from psidatatemp where Measure_ID='"+cmb_ID->Text+"' and N='"+DataModule2->psiData2->FieldByName("N")->AsString+"' and Status1 <> 'Незамер.' ORDER BY Temp"  ;
                                         }
                         DataModule2->psiData->SQL->Add(SqlMain);
                         DataModule2->psiData->Active=true;
@@ -1613,17 +1624,20 @@ void __fastcall TGpForm::cmb_IDKeyPress(TObject *Sender, char &Key)
 {
 if (Key==13){
  AnsiString S,S1,S2;
-DataModule2->SqlSpec->Active=false;
-DataModule2->SqlSpec->SQL->Clear();
-DataModule2->SqlSpec->SQL->Add("Select * from  specification");
-DataModule2->SqlSpec->Active=true;
-DataModule2->SqlSpec->First();
+//Делаем запрос в таблицу psidata по номеру замера
 DataModule2->psiData->Active=false;
 DataModule2->psiData->SQL->Clear();
-DataModule2->psiData->SQL->Add("Select * from psidata where Measure_ID='"+cmb_ID->Text+"' ORDER BY N");
+DataModule2->psiData->SQL->Add("Select `Spc`,`Msk` from psidata where Measure_ID='"+cmb_ID->Text+"' LIMIT 1");
 DataModule2->psiData->Active=true;
 DataModule2->psiData->First();
 edtMsk->Text=DataModule2->psiData->FieldByName("Msk")->AsString;
+// Выбираем соотвествующую спецификацию
+DataModule2->SqlSpec->Active=false;
+DataModule2->SqlSpec->SQL->Clear();
+DataModule2->SqlSpec->SQL->Add("Select `Name`,`NameR` from  specification where `Name`='"+DataModule2->psiData->FieldByName("Spc")->AsString+"'");
+DataModule2->SqlSpec->Active=true;
+DataModule2->SqlSpec->First();
+/*
 for (int j=0;j<DataModule2->SqlSpec->RecordCount;j++){
   if (DataModule2->psiData->FieldByName("Spc")->AsString==DataModule2->SqlSpec->FieldByName("Name")->AsString){
    edtSpc->Text=DataModule2->SqlSpec->FieldByName("Name")->AsString;
@@ -1637,8 +1651,19 @@ for (int j=0;j<DataModule2->SqlSpec->RecordCount;j++){
 
   DataModule2->SqlSpec->Next();
 }
+*/
+ edtSpc->Text=DataModule2->SqlSpec->FieldByName("Name")->AsString;
+ edtType->Text=DataModule2->SqlSpec->FieldByName("NameR")->AsString;
+ //Очищаем поле выбора номеров
  edtM->Items->Clear();
  edtNumber->Items->Clear();
+ //Загружаем номера
+DataModule2->psiData->Active=false;
+DataModule2->psiData->SQL->Clear();
+DataModule2->psiData->SQL->Add("Select distinct `N` from psidata where Measure_ID='"+cmb_ID->Text+"' Order by `N`");
+DataModule2->psiData->Active=true;
+DataModule2->psiData->First();
+/*
 for (int i=0;i<DataModule2->psiData->RecordCount;i++){
 
           int u=1;
@@ -1658,12 +1683,16 @@ for (int i=0;i<DataModule2->psiData->RecordCount;i++){
 
     DataModule2->psiData->Next();
       }
+ */
+for (int i=0;i<DataModule2->psiData->RecordCount;i++){
+     edtNumber->Items->Add(DataModule2->psiData->FieldByName("N")->AsString);
+     DataModule2->psiData->Next();
+}
 
-
-AnsiString S4="Select * from psidatatemp where ";
-        S4="Select * from psidatatemp where Measure_ID='"+cmb_ID->Text+"' ";
-          AnsiString ttt=edtNumber->Items->Strings[0];
-       S4=S4+" and N='"+ttt+"'"+" ORDER BY Temp";
+AnsiString S4;
+S4="Select `Temp` from psidatatemp where Measure_ID='"+cmb_ID->Text+"' ";
+ //         AnsiString ttt=edtNumber->Items->Strings[0];
+       S4=S4+" and N='"+edtNumber->Items->Strings[0]+"'"+" ORDER BY Temp";
 
 DataModule2->psiDataTemp2->Active=false;
 DataModule2->psiDataTemp2->SQL->Clear();
@@ -1703,6 +1732,9 @@ for (int i=0; i<Chart1->SeriesCount();i++){
 }
 }
 //---------------------------------------------------------------------------
+
+
+
 
 
 

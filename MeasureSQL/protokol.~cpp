@@ -208,7 +208,7 @@ if (edtProtokol->Text=="Паспорт" || edtProtokol->Text=="Протокол ВП-РК"){
 VrProgressBar1->Position=0;
 DataModule2->psiData->Active=false;
 DataModule2->psiData->SQL->Clear();
-DataModule2->psiData->SQL->Add("Select * from psidata where msk='"+edtMsk->Text+"' ORDER BY N");
+DataModule2->psiData->SQL->Add("Select `N`,`Status`,`Status2`,`PrintSelect` from psidata where msk='"+edtMsk->Text+"' ORDER BY N");
 DataModule2->psiData->Active=true;
 DataModule2->psiData->First();
 VrProgressBar1->MaxValue=DataModule2->psiData->RecordCount;
@@ -274,7 +274,7 @@ void __fastcall TProtokolForm::RzButton2Click(TObject *Sender)
 DataModule2->psiData->Active=false;
 DataModule2->psiData->SQL->Clear();
 AnsiString search=edtMsk->Text.SubString(0,edtMsk->Text.Length());
-DataModule2->psiData->SQL->Add("select `msk` from psidata where (locate('"+search+"',msk)>0) order by msk");
+DataModule2->psiData->SQL->Add("select distinct `msk` from psidata where (locate('"+search+"',msk)>0) order by msk");
 DataModule2->psiData->Active=true;
 DataModule2->psiData->First();
 edtMsk->Clear();
@@ -388,7 +388,7 @@ AnsiString MSK,Spc;
   AnsiString Measure_ID=cmb_ID->Text;
  DataModule2->psiData->Active=false;
  DataModule2->psiData->SQL->Clear();
- AnsiString Sql="Select * from psidata where Measure_ID='"+cmb_ID->Text+"'";
+ AnsiString Sql="Select `msk`,`spc`,`Status`,`Status2`,`PrintSelect`,`N` from psidata where Measure_ID='"+cmb_ID->Text+"'";
  DataModule2->psiData->SQL->Add(Sql);
  DataModule2->psiData->Active=true;
  if (DataModule2->psiData->RecordCount>0){
@@ -487,8 +487,8 @@ AnsiString S,S1,S2,S3,S4;
 AnsiString A,B,Tnastr,LoadType;
 TStream *FStream;
 
-  S="Select SQL_NO_CACHE * from psidata where ";
-     S1="Select SQL_NO_CACHE * from psidatatemp where ";
+  S="Select SQL_NO_CACHE `F`,`N` from psidata where ";
+     S1="Select SQL_NO_CACHE `Temp`,`F`,`FL` from psidatatemp where ";
 
 
        if (edtMsk->Text!="" || !edtMsk->Text.IsEmpty()){
@@ -513,8 +513,8 @@ TStream *FStream;
        }
       if (!cmb_ID->Text.IsEmpty() || cmb_ID->Text!=""){
 
-        S="Select SQL_NO_CACHE * from psidata where Measure_ID='"+cmb_ID->Text+"' ";
-        S1="Select SQL_NO_CACHE * from psidatatemp where Measure_ID='"+cmb_ID->Text+"' ";
+        S="Select SQL_NO_CACHE `F`,`N` from psidata where Measure_ID='"+cmb_ID->Text+"' ";
+        S1="Select SQL_NO_CACHE `Temp`,`F`,`FL` from psidatatemp where Measure_ID='"+cmb_ID->Text+"' ";
 
 
        }
@@ -536,7 +536,7 @@ DataModule2->psiDataTemp4->First();
 
 DataModule2->SqlSpec->Active=false;
 DataModule2->SqlSpec->SQL->Clear();
-DataModule2->SqlSpec->SQL->Add("Select * from specification where Name='"+edtSpc->Text+"'");
+DataModule2->SqlSpec->SQL->Add("Select `Tnastr`,`LoadType` from specification where Name='"+edtSpc->Text+"'");
 DataModule2->SqlSpec->Active=true;
 Tnastr=DataModule2->SqlSpec->FieldByName("Tnastr")->AsString;
 LoadType=DataModule2->SqlSpec->FieldByName("LoadType")->AsString;
@@ -3595,7 +3595,7 @@ void __fastcall TProtokolForm::ID_ChangeExecute(TObject *Sender)
   AnsiString Measure_ID=cmb_ID->Text;
  DataModule2->psiData->Active=false;
  DataModule2->psiData->SQL->Clear();
- AnsiString Sql="Select SQL_NO_CACHE `MSK`,`Spc`,`PrintSelect`,`Status`,`N` from psidata where Measure_ID='"+cmb_ID->Text+"'";
+ AnsiString Sql="Select SQL_NO_CACHE `N`,`Msk`,`File`,`Status`,`PrintSelect`,`Spc`,`Measure_ID` from psidata where Measure_ID='"+cmb_ID->Text+"'";
  DataModule2->psiData->SQL->Add(Sql);
  DataModule2->psiData->Active=true;
  if (DataModule2->psiData->RecordCount>0){
@@ -3726,6 +3726,8 @@ Dogovor=DataModule2->Notification->FieldByName("Dogovor")->AsString;
 
 }
 //---------------------------------------------------------------------------
+
+
 
 
 

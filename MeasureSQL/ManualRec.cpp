@@ -1815,7 +1815,7 @@ AnsiString Measure_ID=cmb_ID->Text;
 
  DataModule2->psiData->Active=false;
  DataModule2->psiData->SQL->Clear();
- AnsiString Sql="Select SQL_NO_CACHE * from psidata where Measure_ID='"+cmb_ID->Text+"'";
+ AnsiString Sql="Select SQL_NO_CACHE `N`,`Msk`,`File`,`Status`,`PrintSelect`,`Spc`,`Measure_ID`,`Status2` from psidata where Measure_ID='"+cmb_ID->Text+"'";
  DataModule2->psiData->SQL->Add(Sql);
  DataModule2->psiData->Active=true;
  if (DataModule2->psiData->RecordCount>0){

@@ -208,7 +208,7 @@ if (edtProtokol->Text=="Паспорт" || edtProtokol->Text=="Протокол ВП-РК"){
 VrProgressBar1->Position=0;
 DataModule2->psiData->Active=false;
 DataModule2->psiData->SQL->Clear();
-DataModule2->psiData->SQL->Add("Select `N`,`Status`,`Status2`,`PrintSelect` from psidata where msk='"+edtMsk->Text+"' ORDER BY N");
+DataModule2->psiData->SQL->Add("Select `N`,`Status`,`Status2`,`PrintSelect`,`ProtokolN`,`Spc`,`Measure_ID` from psidata where msk='"+edtMsk->Text+"' ORDER BY N");
 DataModule2->psiData->Active=true;
 DataModule2->psiData->First();
 VrProgressBar1->MaxValue=DataModule2->psiData->RecordCount;
@@ -3595,7 +3595,7 @@ void __fastcall TProtokolForm::ID_ChangeExecute(TObject *Sender)
   AnsiString Measure_ID=cmb_ID->Text;
  DataModule2->psiData->Active=false;
  DataModule2->psiData->SQL->Clear();
- AnsiString Sql="Select SQL_NO_CACHE `MSK`,`Spc`,`PrintSelect`,`Status`,`N` from psidata where Measure_ID='"+cmb_ID->Text+"'";
+ AnsiString Sql="Select SQL_NO_CACHE `N`,`Msk`,`File`,`Status`,`PrintSelect`,`Spc`,`Measure_ID` from psidata where Measure_ID='"+cmb_ID->Text+"'";
  DataModule2->psiData->SQL->Add(Sql);
  DataModule2->psiData->Active=true;
  if (DataModule2->psiData->RecordCount>0){
@@ -3726,6 +3726,8 @@ Dogovor=DataModule2->Notification->FieldByName("Dogovor")->AsString;
 
 }
 //---------------------------------------------------------------------------
+
+
 
 
 

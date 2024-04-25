@@ -1,6 +1,6 @@
 object FileSelectForm: TFileSelectForm
-  Left = 360
-  Top = 29
+  Left = 352
+  Top = 128
   Width = 380
   Height = 706
   Caption = #1042#1099#1073#1086#1088' '#1092#1072#1081#1083#1072

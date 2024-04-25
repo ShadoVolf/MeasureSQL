@@ -208,7 +208,7 @@ if (edtProtokol->Text=="Паспорт" || edtProtokol->Text=="Протокол ВП-РК"){
 VrProgressBar1->Position=0;
 DataModule2->psiData->Active=false;
 DataModule2->psiData->SQL->Clear();
-DataModule2->psiData->SQL->Add("Select `N`,`Status`,`Status2`,`PrintSelect` from psidata where msk='"+edtMsk->Text+"' ORDER BY N");
+DataModule2->psiData->SQL->Add("Select `N`,`Status`,`Status2`,`PrintSelect`,`ProtokolN`,`Spc`,`Measure_ID` from psidata where msk='"+edtMsk->Text+"' ORDER BY N");
 DataModule2->psiData->Active=true;
 DataModule2->psiData->First();
 VrProgressBar1->MaxValue=DataModule2->psiData->RecordCount;

@@ -62,7 +62,7 @@ cbName->Items->Clear();
 DataModule1->MarkerText->First();
 
   for (int i=0; i<DataModule1->MarkerText->RecordCount; i++){
-          cbName->Items->Add(DataModule1->MarkerText->FieldByName("ResonatorName")->AsString);
+          cbName->Items->Add(DataModule1->MarkerText->FieldByName("наименование")->AsString);
           DataModule1->MarkerText->Next();
           }
 

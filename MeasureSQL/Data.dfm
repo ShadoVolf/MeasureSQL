@@ -139,7 +139,7 @@ object DataModule1: TDataModule1
   object MarkerText: TMyQuery
     Connection = CoordinatorDB
     SQL.Strings = (
-      'Select * from markertext')
+      'Select `'#1085#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077'` from nomeklatura_rk')
     Left = 784
     Top = 336
   end
@@ -890,5 +890,10 @@ object DataModule1: TDataModule1
     Connection = CoordinatorDB
     Left = 232
     Top = 856
+  end
+  object Transat_Copy: TMyQuery
+    Connection = CoordinatorDB
+    Left = 32
+    Top = 376
   end
 end

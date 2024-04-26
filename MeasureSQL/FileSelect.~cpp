@@ -487,12 +487,45 @@ S2="SELECT  nSetupFileIndex,fReferenceFrequency FROM "+SetupHeaders+" order by n
    DataModule1->CreateTransatTemp->SQL->Add(sql_script);
    DataModule1->CreateTransatTemp->Execute();
 
+   DataModule1->Transat_Temp_Q->Active=false;
+   DataModule1->Transat_Temp_Q->SQL->Clear();
+   DataModule1->Transat_Temp_Q->SQL->Add("Select * from "+tableName);
+   DataModule1->Transat_Temp_Q->Active=true;
+
+TStringList * ft = new TStringList();
+   DataModule1->Transat->Active=false;
+   DataModule1->Transat->SQL->Clear();
+        if (DataModule1->FileSelect->FieldByName("File_ID")->AsFloat>0){
+                DataModule1->Transat->SQL->Add("Select * from `transat` where File_ID='"+DataModule1->FileSelect->FieldByName("File_ID")->AsString+"'");
+        }
+        else {
+                DataModule1->Transat->SQL->Add("Select * from `transat` where FileName='"+DataModule1->FileSelect->FieldByName("FileName")->AsString+"' and Size='"+DataModule1->FileSelect->FieldByName("Size")->AsString+"' and Machine='"+bxSelect->Text+"'");
+        }
+   DataModule1->Transat->Active=true;
+   DataModule1->Transat->First();
+   DataModule1->Transat->GetFieldNames(ft);
+AnsiString ff;
+for (int j=0;j<DataModule1->Transat->RecordCount;j++){
+     DataModule1->Transat_Temp_Q->Append();
+    for (int i=0; i<ft->Count;i++){
+                ff=ft->Strings[i];
+                DataModule1->Transat_Temp_Q->FieldByName(ff)->AsString=DataModule1->Transat->FieldByName(ff)->AsString;
+
+}
+     DataModule1->Transat_Temp_Q->Post();
+     DataModule1->Transat->Next();
+   }
+
+delete ft;
+DataModule1->Transat->Active=false;
+DataModule1->Transat_Temp_Q->Active=false;
+ /*
     // опируем туда данные с основной таблицы
    AnsiString sql_script_copy="Insert into `"+tableName+"` Select * FROM `transat` WHERE `File_ID`='"+DataModule1->FileSelect->FieldByName("File_ID")->AsString+"'";
    DataModule1->TTS100_Temp_Copy->SQL->Clear();
    DataModule1->TTS100_Temp_Copy->SQL->Add(sql_script_copy);
    DataModule1->TTS100_Temp_Copy->Execute();
-
+ */
    DataModule1->Transat_Temp->TableName="transat_temp_"+DataModule1->Dostup->FieldByName("ID")->AsString;
     //”бираем таблицу если она существует
    DataModule1->DropTransatConfig->SQL->Clear();

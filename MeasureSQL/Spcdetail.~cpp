@@ -103,8 +103,10 @@ DataModule1->MarkerText->First();
              Label46->Visible=true;
               Solve_Date_edt->Items->Clear();
              DataModule1->OSM_Solve->Active=true;
+             DataModule1->OSM_Solve->First();
              for (int i=0;i<DataModule1->OSM_Solve->RecordCount;i++){
                Solve_Date_edt->Items->Add(DataModule1->OSM_Solve->FieldByName("Solve_Date")->AsString);
+              DataModule1->OSM_Solve->Next();
              }
         }
         else {

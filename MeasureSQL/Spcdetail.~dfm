@@ -311,7 +311,7 @@ object SpcDetailForm: TSpcDetailForm
     Caption = #1050#1086#1088#1087#1091#1089
   end
   object Label43: TLabel
-    Left = 328
+    Left = 320
     Top = 16
     Width = 19
     Height = 13
@@ -2015,9 +2015,9 @@ object SpcDetailForm: TSpcDetailForm
     TabOrder = 84
   end
   object edtType: TRzDBComboBox
-    Left = 360
+    Left = 344
     Top = 16
-    Width = 89
+    Width = 121
     Height = 21
     DataField = 'NameR'
     DataSource = DataModule1.SpecificationSource

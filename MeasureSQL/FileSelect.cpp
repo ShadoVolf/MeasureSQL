@@ -487,10 +487,10 @@ S2="SELECT  nSetupFileIndex,fReferenceFrequency FROM "+SetupHeaders+" order by n
    DataModule1->CreateTransatTemp->SQL->Add(sql_script);
    DataModule1->CreateTransatTemp->Execute();
 
-   DataModule1->Transat_Temp_Q->Active=false;
-   DataModule1->Transat_Temp_Q->SQL->Clear();
-   DataModule1->Transat_Temp_Q->SQL->Add("Select * from "+tableName);
-   DataModule1->Transat_Temp_Q->Active=true;
+   DataModule1->Transat_Copy->Active=false;
+   DataModule1->Transat_Copy->SQL->Clear();
+   DataModule1->Transat_Copy->SQL->Add("Select * from "+tableName);
+   DataModule1->Transat_Copy->Active=true;
 
 TStringList * ft = new TStringList();
    DataModule1->Transat->Active=false;
@@ -506,19 +506,19 @@ TStringList * ft = new TStringList();
    DataModule1->Transat->GetFieldNames(ft);
 AnsiString ff;
 for (int j=0;j<DataModule1->Transat->RecordCount;j++){
-     DataModule1->Transat_Temp_Q->Append();
+     DataModule1->Transat_Copy->Append();
     for (int i=0; i<ft->Count;i++){
                 ff=ft->Strings[i];
-                DataModule1->Transat_Temp_Q->FieldByName(ff)->AsString=DataModule1->Transat->FieldByName(ff)->AsString;
+                DataModule1->Transat_Copy->FieldByName(ff)->AsString=DataModule1->Transat->FieldByName(ff)->AsString;
 
 }
-     DataModule1->Transat_Temp_Q->Post();
+     DataModule1->Transat_Copy->Post();
      DataModule1->Transat->Next();
    }
 
 delete ft;
 DataModule1->Transat->Active=false;
-DataModule1->Transat_Temp_Q->Active=false;
+DataModule1->Transat_Copy->Active=false;
  /*
     // опируем туда данные с основной таблицы
    AnsiString sql_script_copy="Insert into `"+tableName+"` Select * FROM `transat` WHERE `File_ID`='"+DataModule1->FileSelect->FieldByName("File_ID")->AsString+"'";

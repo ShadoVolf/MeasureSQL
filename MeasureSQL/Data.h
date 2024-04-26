@@ -146,6 +146,7 @@ __published:	// IDE-managed Components
         TMyScript *KH7700_temp_Alter;
         TMyScript *PsiData_temp_Table_Create;
         TMyScript *PsiData_temp_Table_Drop;
+        TMyQuery *Transat_Copy;
         void __fastcall ProfileDataBeforePost(TDataSet *DataSet);
         void __fastcall DataModuleCreate(TObject *Sender);
 private:	// User declarations

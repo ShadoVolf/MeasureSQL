@@ -2600,4 +2600,25 @@ object SpcDetailForm: TSpcDetailForm
     Visible = False
     OnSelect = edtTypeSelect
   end
+  object RzDBCheckBox32: TRzDBCheckBox
+    Left = 160
+    Top = 744
+    Width = 25
+    Height = 17
+    DataField = 'Spur_Use'
+    DataSource = DataModule1.SpecificationSource
+    ValueChecked = 'True'
+    ValueUnchecked = 'False'
+    DisabledColor = clGreen
+    FillColor = clBlack
+    FocusColor = clBlack
+    FrameColor = clYellow
+    HighlightColor = clLime
+    HotTrack = True
+    TextHighlightColor = clLime
+    TextShadowColor = clLime
+    TabOrder = 112
+    TransparentColor = clMaroon
+    WinMaskColor = clRed
+  end
 end

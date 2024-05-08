@@ -190,6 +190,7 @@ __published:	// IDE-managed Components
         TRzDBCheckBox *RzDBCheckBox31;
         TLabel *Label46;
         TRzDBComboBox *Solve_Date_edt;
+        TRzDBCheckBox *RzDBCheckBox32;
         void __fastcall btnCloseClick(TObject *Sender);
         void __fastcall btnOptionsClick(TObject *Sender);
         void __fastcall FormShow(TObject *Sender);

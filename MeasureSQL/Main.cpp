@@ -643,7 +643,7 @@ if(DataModule1->SqlSpecification->FieldByName("C0_C1")->AsString=="True"){
 
   k=k+1;
   }
-  if(DataModule1->SqlSpecification->FieldByName("Rsp1")->AsString=="True"){
+  if(DataModule1->SqlSpecification->FieldByName("Rsp1")->AsString=="True" || DataModule1->SqlSpecification->FieldByName("Spur_Use")->AsString=="True"){
   Nar[24]=k;
   ResultForm->ResultGrid->Cells[k][0]="Spur#1";
    if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
@@ -4630,7 +4630,7 @@ if(DataModule1->SqlSpecification->FieldByName("M")->AsString=="True"){
                                }
    }
 //****************************************Spur#1********************************************************************************************************
- if(DataModule1->SqlSpecification->FieldByName("Rsp1")->AsString=="True"){
+ if(DataModule1->SqlSpecification->FieldByName("Rsp1")->AsString=="True" || DataModule1->SqlSpecification->FieldByName("Spur_Use")->AsString=="True"){
             DataModule1->SQLSetupData->First();
             double x1,x2,x3,Y1,Y2;
             Y1=0;Y2=0;
@@ -4674,7 +4674,7 @@ if(DataModule1->SqlSpecification->FieldByName("M")->AsString=="True"){
                    }
 
 
-
+                  if(DataModule1->SqlSpecification->FieldByName("Rsp1")->AsString=="True"){
                           if(DataModule1->SqlSpecification->FieldByName("Rsp1max")->AsString!="no"){
                                   x=DataModule1->SqlSpecification->FieldByName("Rsp1max")->AsFloat;
                                   if(z>x){
@@ -4692,7 +4692,7 @@ if(DataModule1->SqlSpecification->FieldByName("M")->AsString=="True"){
                                  }
                            }
 
-
+                   }
 
 
 

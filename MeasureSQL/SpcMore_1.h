@@ -83,6 +83,20 @@ __published:	// IDE-managed Components
         TLabel *Label20;
         TRzDBEdit *RzDBEdit32;
         TRzDBEdit *RzDBEdit33;
+        TRzLine *RzLine4;
+        TLabel *Label21;
+        TRzLine *RzLine1;
+        TRzDBCheckBox *RzDBCheckBox5;
+        TRzDBCheckBox *RzDBCheckBox6;
+        TRzDBCheckBox *RzDBCheckBox7;
+        TRzDBEdit *RzDBEdit34;
+        TLabel *Label22;
+        TLabel *Label23;
+        TLabel *Label24;
+        TLabel *Label25;
+        TRzDBEdit *RzDBEdit35;
+        TRzDBEdit *RzDBEdit37;
+        TRzDBEdit *RzDBEdit38;
         void __fastcall btnCloseClick(TObject *Sender);
 private:	// User declarations
 public:		// User declarations

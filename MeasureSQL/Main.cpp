@@ -11199,13 +11199,43 @@ if(DataModule1->SqlSpecification->FieldByName("Rmax")->AsString!="no"){
      }
  //*****************Проверяем значение сопротивление если оно в пределах допуска записываем данные в базу**************
  if (DataModule1->KH7700_Temp->FieldByName("C0")->AsFloat<c0hmax & DataModule1->KH7700_Temp->FieldByName("C0")->AsFloat>c0hmin){
-  DataModule1->SQLPSIDataT->FieldByName("C0")->AsString=DataModule1->KH7700_Temp->FieldByName("C0")->AsFloat;
+ double C0_L = DataModule1->KH7700_Temp->FieldByName("C0")->AsFloat;
+ //***********Коррекция при измерении с физической емкостью**********************************************************************************************************
+        if (DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="Physical" || DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="Saunders(FL)"){
+                if (DataModule1->SqlSpecification->FieldByName("physical_C0_correction")->AsString=="True"){
+                        if (DataModule1->SqlSpecification->FieldByName("AVG_C0")->AsFloat>0 &  DataModule1->SqlSpecification->FieldByName("KH7700_CL")->AsFloat>0){
+                                double Avg_C0= DataModule1->SqlSpecification->FieldByName("AVG_C0")->AsFloat;
+                                double KH_CL = DataModule1->SqlSpecification->FieldByName("KH7700_CL")->AsFloat;
+                                double CL_1 = KH_CL-5;
+                                C0_L = -C0_L*CL_1/(C0_L-CL_1);
+
+                           }
+                   }
+        }
+//***************************************************************************************************************************************
+
+  DataModule1->SQLPSIDataT->FieldByName("C0")->AsString=FloatToStr(C0_L);
   }
   else {
-   DataModule1->SQLPSIDataT->FieldByName("C0")->AsString=DataModule1->KH7700_Temp->FieldByName("C0")->AsFloat;
+    double C0_L = DataModule1->KH7700_Temp->FieldByName("C0")->AsFloat;
+ //***********Коррекция при измерении с физической емкостью**********************************************************************************************************
+        if (DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="Physical" || DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="Saunders(FL)"){
+                if (DataModule1->SqlSpecification->FieldByName("physical_C0_correction")->AsString=="True"){
+                        if (DataModule1->SqlSpecification->FieldByName("AVG_C0")->AsFloat>0 &  DataModule1->SqlSpecification->FieldByName("KH7700_CL")->AsFloat>0){
+                                double Avg_C0= DataModule1->SqlSpecification->FieldByName("AVG_C0")->AsFloat;
+                                double KH_CL = DataModule1->SqlSpecification->FieldByName("KH7700_CL")->AsFloat;
+                                double CL_1 = KH_CL-5;
+                                C0_L = -C0_L*CL_1/(C0_L-CL_1);
+
+                           }
+                   }
+        }
+//***************************************************************************************************************************************
+
+  DataModule1->SQLPSIDataT->FieldByName("C0")->AsString=FloatToStr(C0_L);
   ll=1;
  }
-//****************************************Устанавливаем порого анаомальных значений для динамической емкости**********************************
+//****************************************Устанавливаем порого аномальных значений для динамической емкости**********************************
 if(DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString!="no"){
      c1hmax=StrToFloat(DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString)*10;
    }
@@ -11220,10 +11250,48 @@ if(DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString!="no"){
      }
   //*****************Проверяем значение сопротивление если оно в пределах допуска записываем данные в базу**************
  if (DataModule1->KH7700_Temp->FieldByName("C1")->AsFloat<c1hmax & DataModule1->KH7700_Temp->FieldByName("C1")->AsFloat>c1hmin){
-      DataModule1->SQLPSIDataT->FieldByName("Cq")->AsString=DataModule1->KH7700_Temp->FieldByName("C1")->AsFloat;
+        double kkk=DataModule1->KH7700_Temp->FieldByName("C1")->AsFloat;
+ //***********Коррекция при измерении с физической емкостью**********************************************************************************************************
+        if (DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="Physical" || DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="Saunders(FL)"){
+                if (DataModule1->SqlSpecification->FieldByName("physical_C1_correction")->AsString=="True"){
+                        if (DataModule1->SqlSpecification->FieldByName("AVG_C0")->AsFloat>0 &  DataModule1->SqlSpecification->FieldByName("KH7700_CL")->AsFloat>0){
+                                double Avg_C0= DataModule1->SqlSpecification->FieldByName("AVG_C0")->AsFloat;
+                                double KH_CL = DataModule1->SqlSpecification->FieldByName("KH7700_CL")->AsFloat;
+                                //double CL_1 = KH_CL-5;
+                                double dC = (1+ Avg_C0/KH_CL)*(1+ Avg_C0/KH_CL);
+                                kkk = kkk*dC;
+
+                        }
+
+                }
+         }
+//***************************************************************************************************************************************
+
+
+
+      DataModule1->SQLPSIDataT->FieldByName("Cq")->AsString=FloatToStr(kkk);
   }
   else {
-     DataModule1->SQLPSIDataT->FieldByName("Cq")->AsString=DataModule1->KH7700_Temp->FieldByName("C1")->AsFloat;
+            double kkk=DataModule1->KH7700_Temp->FieldByName("C1")->AsFloat;
+ //***********Коррекция при измерении с физической емкостью**********************************************************************************************************
+        if (DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="Physical" || DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="Saunders(FL)"){
+                if (DataModule1->SqlSpecification->FieldByName("physical_C1_correction")->AsString=="True"){
+                        if (DataModule1->SqlSpecification->FieldByName("AVG_C0")->AsFloat>0 &  DataModule1->SqlSpecification->FieldByName("KH7700_CL")->AsFloat>0){
+                                double Avg_C0= DataModule1->SqlSpecification->FieldByName("AVG_C0")->AsFloat;
+                                double KH_CL = DataModule1->SqlSpecification->FieldByName("KH7700_CL")->AsFloat;
+                                //double CL_1 = KH_CL-5;
+                                double dC = (1+ Avg_C0/KH_CL)*(1+ Avg_C0/KH_CL);
+                                kkk = kkk*dC;
+
+                        }
+
+                }
+         }
+//***************************************************************************************************************************************
+
+
+
+      DataModule1->SQLPSIDataT->FieldByName("Cq")->AsString=FloatToStr(kkk);
   ll=1;
  }
 //*************************************Устанавливаем порого анаомальных значений для индуктивности******************************************************
@@ -11487,6 +11555,23 @@ if(DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString!="no"){
                                           if(DataModule1->SqlSpecification->FieldByName("C0")->AsString=="True"){
                                                          if (DataModule1->SqlSpecification->FieldByName("Tc0")->AsString==DataModule1->KH7700_Temp->FieldByName("TEMP")->AsString){
                                                                          C0=DataModule1->KH7700_Temp->FieldByName("C0")->AsFloat;
+//***********Коррекция при измерении с физической емкостью**********************************************************************************************************
+                                                                         if (DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="Physical" || DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="Saunders(FL)"){
+                                                                                   if (DataModule1->SqlSpecification->FieldByName("physical_C0_correction")->AsString=="True"){
+                                                                                           if (DataModule1->SqlSpecification->FieldByName("AVG_C0")->AsFloat>0 &  DataModule1->SqlSpecification->FieldByName("KH7700_CL")->AsFloat>0){
+                                                                                                 double Avg_C0= DataModule1->SqlSpecification->FieldByName("AVG_C0")->AsFloat;
+                                                                                                  double KH_CL = DataModule1->SqlSpecification->FieldByName("KH7700_CL")->AsFloat;
+                                                                                                  double CL_1 = KH_CL-5;
+                                                                                                  C0 = -C0*CL_1/(C0-CL_1);
+
+                                                                                             }
+
+                                                                                    }
+                                                                               }
+//***************************************************************************************************************************************
+
+
+
                                                                          ResultForm->ResultGrid->Cells[Nar[5]][i+1]=FloatToStrF(C0,ffFixed,5,3);
                                                                                   if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
                                                                                              DataModule1->SQLPSIData->FieldByName("C0")->AsString=C0;
@@ -11535,6 +11620,23 @@ if(DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString!="no"){
                                             if(DataModule1->SqlSpecification->FieldByName("Cq")->AsString=="True"){
                                                                  if (DataModule1->SqlSpecification->FieldByName("Tcq")->AsString==DataModule1->KH7700_Temp->FieldByName("TEMP")->AsString){
                                                                            double kkk=DataModule1->KH7700_Temp->FieldByName("C1")->AsFloat;
+ //***********Коррекция при измерении с физической емкостью**********************************************************************************************************
+                                                                         if (DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="Physical" || DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="Saunders(FL)"){
+                                                                                   if (DataModule1->SqlSpecification->FieldByName("physical_C1_correction")->AsString=="True"){
+                                                                                           if (DataModule1->SqlSpecification->FieldByName("AVG_C0")->AsFloat>0 &  DataModule1->SqlSpecification->FieldByName("KH7700_CL")->AsFloat>0){
+                                                                                                 double Avg_C0= DataModule1->SqlSpecification->FieldByName("AVG_C0")->AsFloat;
+                                                                                                  double KH_CL = DataModule1->SqlSpecification->FieldByName("KH7700_CL")->AsFloat;
+                                                                                                  //double CL_1 = KH_CL-5;
+                                                                                                  double dC = (1+ Avg_C0/KH_CL)*(1+ Avg_C0/KH_CL);
+                                                                                                  kkk = kkk*dC;
+
+                                                                                             }
+
+                                                                                    }
+                                                                               }
+//***************************************************************************************************************************************
+
+
                                                                            Cq=StrToFloat(FloatToStrF(kkk,ffFixed,5,2));
                                                                            ResultForm->ResultGrid->Cells[Nar[6]][i+1]=Cq;
                                                                           if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){

@@ -135,10 +135,23 @@ New_Data->MachineType->Active=false;
    // MainForm->ledSpc->Active=true;
 
  if (MachineType=="Transat"){
+       DataModule1->Transat_Temp_test->Active=false;
+       DataModule1->Transat_Temp_test->SQL->Clear();
+       AnsiString rrr =  "SHOW COLUMNS FROM `transat_temp_"+DataModule1->Dostup->FieldByName("ID")->AsString+"` LIKE 'Profile';";
+                  //rrr="SHOW COLUMNS FROM `transat_temp_1` LIKE 'Profile'; "  ;
+       DataModule1->Transat_Temp_test->SQL->Add(rrr);
+       DataModule1->Transat_Temp_test->Active=true;
+                    if (DataModule1->Transat_Temp_test->RecordCount==0){
+                             DataModule1->TTS100_Alter->SQL->Clear();
+                             DataModule1->TTS100_Alter->SQL->Add("ALTER TABLE `transat_temp_"+DataModule1->Dostup->FieldByName("ID")->AsString+"` ADD `Profile` VARCHAR(50) NULL;");
+                             DataModule1->TTS100_Alter->Execute();
 
-       DataModule1->TTS100_Alter->SQL->Clear();
+                      }
+
+      /* DataModule1->TTS100_Alter->SQL->Clear();
        DataModule1->TTS100_Alter->SQL->Add("ALTER TABLE `transat_temp_"+DataModule1->Dostup->FieldByName("ID")->AsString+"` ADD `Profile` VARCHAR(50) NULL;");
        DataModule1->TTS100_Alter->Execute();
+       */
        AnsiString sql_TR="Update `transat_temp_"+DataModule1->Dostup->FieldByName("ID")->AsString+"` set `Profile`='"+DataModule1->SqlSpecification->FieldByName("Profile")->AsString+"'";
        New_Data->Update_Transat->SQL->Clear();
        New_Data->Update_Transat->SQL->Add(sql_TR);

@@ -1,8 +1,8 @@
 object DataModule1: TDataModule1
   OldCreateOrder = False
   OnCreate = DataModuleCreate
-  Left = 236
-  Top = 229
+  Left = 250
+  Top = 39
   Height = 1049
   Width = 1465
   object CoordinatorDB: TMyConnection
@@ -895,5 +895,12 @@ object DataModule1: TDataModule1
     Connection = CoordinatorDB
     Left = 32
     Top = 376
+  end
+  object Transat_Temp_test: TMyQuery
+    Connection = CoordinatorDB
+    SQL.Strings = (
+      'SHOW COLUMNS FROM `transat_temp_1` LIKE '#39'Profile'#39';')
+    Left = 520
+    Top = 840
   end
 end

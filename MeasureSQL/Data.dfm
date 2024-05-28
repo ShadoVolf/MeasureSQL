@@ -819,7 +819,7 @@ object DataModule1: TDataModule1
     OrderFields = 'TEMP, XTALROW'
     Connection = CoordinatorDB
     AfterCancel = ProfileDataBeforePost
-    Left = 928
+    Left = 920
     Top = 712
   end
   object KH7700_Config: TMyTable

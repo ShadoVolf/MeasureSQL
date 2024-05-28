@@ -105,6 +105,7 @@ else if (MainForm->edtMachine->Text=="Transat1" || MainForm->edtMachine->Text=="
  RzDBGrid4->Visible=false;
  RzDBGrid5->Visible=false;
  RzDBGrid6->Visible=false;
+ DataModule1->Transat_Temp->Filtered=false;
 DataGrid->Visible=true;
 
 }
@@ -122,6 +123,7 @@ else if (MainForm->edtMachine->Text=="KH7700_TS0271" || MainForm->edtMachine->Te
  RzDBGrid2->Visible=false;
  RzDBGrid3->Visible=false;
  RzDBGrid4->Visible=false;
+ DataModule1->KH7700_Temp->Filtered=false;
  RzDBGrid5->Visible=true;
  RzDBGrid6->Visible=false;
 DataGrid->Visible=false;
@@ -167,6 +169,7 @@ RzDBGrid2->Visible=false;
 RzDBGrid3->Visible=false;
 RzDBGrid4->Visible=false;
 DataGrid->Visible=false;
+DataModule1->KH7700_Temp->Filtered=false;
 RzDBGrid5->Visible=true;
 RzDBGrid6->Visible=false;
 AdvGlassButton7->Font->Color=clGreen;
@@ -187,4 +190,5 @@ AdvGlassButton8->Font->Color=clGreen;
 AdvGlassButton7->Font->Color=clRed;
 }
 //---------------------------------------------------------------------------
+
 

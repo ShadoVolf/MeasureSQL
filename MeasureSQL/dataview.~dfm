@@ -701,7 +701,7 @@ object DataForm: TDataForm
       Height = 487
       Align = alClient
       Color = clBlack
-      DataSource = DataModule1.TransatConfigSource
+      DataSource = DataModule1.KH7700_Config_Source
       FixedColor = clBlack
       TabOrder = 6
       TitleFont.Charset = DEFAULT_CHARSET

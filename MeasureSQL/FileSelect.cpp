@@ -763,6 +763,7 @@ DataModule1->Config->TableName="transatconfig_"+DataModule1->Dostup->FieldByName
            AnsiString LastPosition[20];
            int RingTemp;
            int PositionTemp;
+    DataModule1->KH7700_Temp->Filtered=false;
     DataModule1->KH7700_Temp->Active=false;
    DataModule1->KH7700_Temp->TableName=tableName;
    DataModule1->KH7700_Temp->Active=true;

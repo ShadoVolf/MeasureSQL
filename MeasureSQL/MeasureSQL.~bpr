@@ -189,7 +189,7 @@
       <FILE FILENAME="Data_RQ.cpp" FORMNAME="RQ_Data" UNITNAME="Data_RQ" CONTAINERID="CCompiler" DESIGNCLASS="TDataModule" LOCALCOMMAND=""/>
       <FILE FILENAME="New_Data4.cpp" FORMNAME="New_Data" UNITNAME="New_Data4" CONTAINERID="CCompiler" DESIGNCLASS="TDataModule" LOCALCOMMAND=""/>
       <FILE FILENAME="Data_MeasureModule.cpp" FORMNAME="Data_Measure" UNITNAME="Data_MeasureModule" CONTAINERID="CCompiler" DESIGNCLASS="TDataModule" LOCALCOMMAND=""/>
-      <FILE FILENAME="Config_View.cpp" FORMNAME="Form1" UNITNAME="Config_View" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Config_View.cpp" FORMNAME="Config_View_Form" UNITNAME="Config_View" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>

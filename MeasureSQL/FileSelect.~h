@@ -16,6 +16,8 @@
 #include <Grids.hpp>
 #include <Menus.hpp>
 #include "RzCmboBx.hpp"
+#include "RzButton.hpp"
+#include "RzRadChk.hpp"
 
 //---------------------------------------------------------------------------
 class TFileSelectForm : public TForm
@@ -27,11 +29,13 @@ __published:	// IDE-managed Components
         TVrShadowButton *btnSet;
         TVrShadowButton *btnRefresh;
         TRzComboBox *bxSelect;
+        TRzCheckBox *chkArchive;
         void __fastcall btnCloseClick(TObject *Sender);
         void __fastcall FormShow(TObject *Sender);
         void __fastcall btnSetClick(TObject *Sender);
         void __fastcall btnRefreshClick(TObject *Sender);
         void __fastcall bxSelectChange(TObject *Sender);
+        void __fastcall chkArchiveClick(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
         __fastcall TFileSelectForm(TComponent* Owner);

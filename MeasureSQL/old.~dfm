@@ -272,7 +272,7 @@ object OldForm: TOldForm
     ParentCtl3D = False
     Sorted = True
     TabOrder = 8
-    OnChange = cmb_IDChange
+    OnKeyPress = cmb_IDKeyPress
   end
   object btnBarCode: TAdvGlassButton
     Left = 312

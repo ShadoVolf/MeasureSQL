@@ -16,6 +16,7 @@
 #include "RzGrids.hpp"
 #include "frxClass.hpp"
 #include "frxDBSet.hpp"
+#include "RzCmboBx.hpp"
 //---------------------------------------------------------------------------
 class TOldViewForm : public TForm
 {
@@ -28,6 +29,7 @@ __published:	// IDE-managed Components
         TfrxDBDataset *frxDBDataset3;
         TRzStringGrid *RSGrid;
         TfrxReport *frxReport1;
+        TRzComboBox *edtProtokol;
         void __fastcall btnCloseClick(TObject *Sender);
         void __fastcall RSGridDrawCell(TObject *Sender, int ACol, int ARow,
           TRect &Rect, TGridDrawState State);

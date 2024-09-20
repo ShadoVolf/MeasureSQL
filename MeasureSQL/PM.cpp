@@ -279,7 +279,7 @@ for (int i=0; i<DataModule2->psiData->RecordCount; i++){
                      DataModule2->psiData2->FieldByName("variant")->AsString=DataModule2->psiData->FieldByName("variant")->AsString;
 
 
-                      DataModule2->psiData2->FieldByName("Machine_Call_Date")->AsString="10.08.2023";
+                      DataModule2->psiData2->FieldByName("Machine_Call_Date")->AsString="08.08.2024";
                        DataModule2->psiData2->FieldByName("Version")->AsString=DataModule2->psiData->FieldByName("Version")->AsString;
                     if (DataModule2->psiData->FieldByName("Status")->AsString=="Аномал." || DataModule2->psiData->FieldByName("Status")->AsString=="Незамер."){
                      DataModule2->psiData2->FieldByName("Status")->AsString=DataModule2->psiData->FieldByName("Status")->AsString;

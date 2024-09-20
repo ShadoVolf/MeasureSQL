@@ -16,6 +16,8 @@
 #pragma link "RzDBGrid"
 #pragma link "RzPanel"
 #pragma link "RzCmboBx"
+#pragma link "RzButton"
+#pragma link "RzRadChk"
 #pragma resource "*.dfm"
 TFileSelectForm *FileSelectForm;
 //---------------------------------------------------------------------------
@@ -31,7 +33,16 @@ FileSelectForm->Hide();
 //---------------------------------------------------------------------------
 void __fastcall TFileSelectForm::FormShow(TObject *Sender)
 {
+DataModule1->FileSelect->Active=false;
+DataModule1->FileSelect->SQL->Clear();
+if (!chkArchive->Checked){
+        DataModule1->FileSelect->SQL->Add("Select * from saunders where `Archive`='0'");
+        }
+else {
+   DataModule1->FileSelect->SQL->Add("Select * from saunders where `Archive`='1'");
+}
 DataModule1->FileSelect->Active=true;
+DataModule1->FileSelect->Last();
 FileSelectForm->Color=OptionsForm->ColorBox1->Selected;
 FileSelectForm->Font->Name=DataModule1->Options->FieldByName("Font")->AsString;
 FileSelectForm->Font->Color=OptionsForm->ColorBox2->Selected;
@@ -45,11 +56,16 @@ FileSelectForm->Repaint();
 DataModule2->Machine->Active=true;
 DataModule2->Machine->First();
 bxSelect->Items->Clear();
-for (int i=0; i<DataModule2->Machine->RecordCount; i++){
-bxSelect->Items->Add(DataModule2->Machine->FieldByName("IP")->AsString);
-DataModule2->Machine->Next();
+bxSelect->Items->Add("Все");
 
+for (int i=0; i<DataModule2->Machine->RecordCount; i++){
+bxSelect->Items->Add(DataModule2->Machine->FieldByName("Name")->AsString);
+DataModule2->Machine->Next();
 }
+bxSelect->ItemIndex=0;
+
+
+
  DataModule2->Machine->Active=false;
 }
 //---------------------------------------------------------------------------
@@ -57,13 +73,13 @@ DataModule2->Machine->Next();
 void __fastcall TFileSelectForm::btnSetClick(TObject *Sender)
 {
 MainForm->ListBox1->Clear();
-MainForm->edtMachine->Text=bxSelect->Text;
+MainForm->edtMachine->Text=DataModule1->FileSelect->FieldByName("Machine")->AsString;
 MainForm->FileSelectShow->Text=DataModule1->FileSelect->FieldByName("FileName")->AsString;
 DataModule2->Machine->Active=true;
 DataModule2->Machine->First();
 AnsiString MachineType;
 for (int i=0; i<DataModule2->Machine->RecordCount; i++){
-  if (DataModule2->Machine->FieldByName("IP")->AsString==bxSelect->Text){
+  if (DataModule2->Machine->FieldByName("IP")->AsString==DataModule1->FileSelect->FieldByName("Machine")->AsString){
      MachineType=DataModule2->Machine->FieldByName("Type")->AsString;
      break;
   }
@@ -879,7 +895,28 @@ DataModule1->FileSelect->Active=true;
 
 void __fastcall TFileSelectForm::bxSelectChange(TObject *Sender)
 {
-AnsiString sql="Select * from saunders where machine='"+bxSelect->Text+"' order by N";
+ DataModule2->Machines_Names->Active=false;
+ DataModule2->Machines_Names->SQL->Clear();
+ DataModule2->Machines_Names->SQL->Add("Select `IP` from machines where `Name`='"+bxSelect->Text+"'");
+ DataModule2->Machines_Names->Active=true;
+ DataModule2->Machines_Names->First();
+ AnsiString sql;
+ if (bxSelect->Text!="Все"){
+        if (chkArchive->Checked){
+                  sql="Select * from saunders where machine='"+DataModule2->Machines_Names->FieldByName("IP")->AsString+"' and `Archive`='1' order by N";
+        }
+        else {
+                  sql="Select * from saunders where machine='"+DataModule2->Machines_Names->FieldByName("IP")->AsString+"' and `Archive`='0' order by N";
+        }
+ }
+  else {
+         if (chkArchive->Checked){
+                  sql="Select * from saunders where  `Archive`='1' order by N";
+        }
+        else {
+                  sql="Select * from saunders where `Archive`='0' order by N";
+        }
+       }
                                  DataModule1->FileSelect->Active=false;
                                  DataModule1->FileSelect->SQL->Clear();
                                  DataModule1->FileSelect->SQL->Add(sql);
@@ -892,4 +929,36 @@ AnsiString sql="Select * from saunders where machine='"+bxSelect->Text+"' order 
 
 
 
+
+void __fastcall TFileSelectForm::chkArchiveClick(TObject *Sender)
+{
+  DataModule2->Machines_Names->Active=false;
+ DataModule2->Machines_Names->SQL->Clear();
+ DataModule2->Machines_Names->SQL->Add("Select `IP` from machines where `Name`='"+bxSelect->Text+"'");
+ DataModule2->Machines_Names->Active=true;
+ DataModule2->Machines_Names->First();
+ AnsiString sql;
+ if (bxSelect->Text!="Все"){
+        if (chkArchive->Checked){
+                  sql="Select * from saunders where machine='"+DataModule2->Machines_Names->FieldByName("IP")->AsString+"' and `Archive`='1' order by N";
+        }
+        else {
+                  sql="Select * from saunders where machine='"+DataModule2->Machines_Names->FieldByName("IP")->AsString+"' and `Archive`='0' order by N";
+        }
+ }
+  else {
+         if (chkArchive->Checked){
+                  sql="Select * from saunders where  `Archive`='1' order by N";
+        }
+        else {
+                  sql="Select * from saunders where `Archive`='0' order by N";
+        }
+       }
+                                 DataModule1->FileSelect->Active=false;
+                                 DataModule1->FileSelect->SQL->Clear();
+                                 DataModule1->FileSelect->SQL->Add(sql);
+                                 DataModule1->FileSelect->Active=true;
+                                 DataModule1->FileSelect->Last();
+}
+//---------------------------------------------------------------------------
 

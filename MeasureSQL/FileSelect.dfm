@@ -1,7 +1,7 @@
 object FileSelectForm: TFileSelectForm
-  Left = 352
-  Top = 128
-  Width = 380
+  Left = 405
+  Top = 165
+  Width = 582
   Height = 706
   Caption = #1042#1099#1073#1086#1088' '#1092#1072#1081#1083#1072
   Color = clBlack
@@ -2605,13 +2605,13 @@ object FileSelectForm: TFileSelectForm
   object RzPanel1: TRzPanel
     Left = 0
     Top = 592
-    Width = 364
+    Width = 566
     Height = 75
     Align = alBottom
     ParentColor = True
     TabOrder = 1
     object btnClose: TVrShadowButton
-      Left = 257
+      Left = 457
       Top = 37
       Width = 97
       Height = 30
@@ -2630,7 +2630,7 @@ object FileSelectForm: TFileSelectForm
       OnClick = btnSetClick
     end
     object btnRefresh: TVrShadowButton
-      Left = 153
+      Left = 321
       Top = 38
       Width = 97
       Height = 30
@@ -2643,7 +2643,7 @@ object FileSelectForm: TFileSelectForm
       Tag = 1
       Left = 8
       Top = 8
-      Width = 97
+      Width = 233
       Height = 21
       AllowEdit = False
       Color = clBlack
@@ -2658,20 +2658,26 @@ object FileSelectForm: TFileSelectForm
       ParentCtl3D = False
       TabOrder = 0
       TabStop = False
-      Text = 'Saunders'
       OnChange = bxSelectChange
       Items.Strings = (
-        'Transat1'
-        'Transat2'
-        'Transat3'
-        'Saunders'
-        'Saunders1')
+        '')
+      ItemIndex = 0
+    end
+    object chkArchive: TRzCheckBox
+      Left = 480
+      Top = 10
+      Width = 73
+      Height = 17
+      Caption = #1040#1088#1093#1080#1074
+      State = cbUnchecked
+      TabOrder = 1
+      OnClick = chkArchiveClick
     end
   end
   object RzDBGrid1: TRzDBGrid
     Left = 0
     Top = 0
-    Width = 364
+    Width = 566
     Height = 592
     Align = alClient
     Color = clBlack
@@ -2692,18 +2698,35 @@ object FileSelectForm: TFileSelectForm
         Expanded = False
         FieldName = 'N'
         Title.Color = clNone
+        Width = 76
         Visible = True
       end
       item
         Expanded = False
         FieldName = 'FileName'
-        Width = 120
+        Title.Caption = #1048#1084#1103' '#1092#1072#1081#1083#1072
+        Width = 127
         Visible = True
       end
       item
         Expanded = False
         FieldName = 'Size'
+        Title.Caption = #1056#1072#1079#1084#1077#1088' '#1092#1072#1081#1083#1072
+        Width = 101
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Machine'
+        Title.Caption = #1059#1089#1090#1072#1085#1086#1074#1082#1072
         Width = 100
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Date'
+        Title.Caption = #1044#1072#1090#1072' '#1079#1072#1087#1080#1089#1080
+        Width = 135
         Visible = True
       end>
   end

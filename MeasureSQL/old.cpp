@@ -165,7 +165,7 @@ VrProgressBar1->Position=0;
  if (edtMeasure->Text=="[Замер 1]"){
 DataModule2->psiData->Active=false;
 DataModule2->psiData->SQL->Clear();
-DataModule2->psiData->SQL->Add("Select * from psidata where Spc='"+edtSpc->Text+"' ORDER BY msk");
+DataModule2->psiData->SQL->Add("Select `msk` from psidata where Spc='"+edtSpc->Text+"' ORDER BY msk");
 DataModule2->psiData->Active=true;
 DataModule2->psiData->First();
 VrProgressBar1->MaxValue=DataModule2->psiData->RecordCount;
@@ -774,11 +774,11 @@ VrProgressBar1->Position=0;
  if (edtMeasure->Text=="[Замер 1]"){
 DataModule2->psiData->Active=false;
 DataModule2->psiData->SQL->Clear();
-DataModule2->psiData->SQL->Add("Select * from psidata where Msk='"+edtMsk->Text+"' order by Measure_ID");
+DataModule2->psiData->SQL->Add("Select Distinct `Measure_ID` from psidata where Msk='"+edtMsk->Text+"' order by Measure_ID");
 DataModule2->psiData->Active=true;
 DataModule2->psiData->First();
 VrProgressBar1->MaxValue=DataModule2->psiData->RecordCount;
-for (int i=0;i<DataModule2->psiData->RecordCount;i++){
+/*for (int i=0;i<DataModule2->psiData->RecordCount;i++){
               int p1=1;
 
          S2=DataModule2->psiData->FieldByName("Measure_ID")->AsString;
@@ -796,6 +796,13 @@ for (int i=0;i<DataModule2->psiData->RecordCount;i++){
 
          DataModule2->psiData->Next();
       } //for
+ */
+ for (int i=0;i<DataModule2->psiData->RecordCount;i++){
+    cmb_ID->Items->Add(DataModule2->psiData->FieldByName("Measure_ID")->AsString);
+    VrProgressBar1->Position=i;
+    DataModule2->psiData->Next();
+ }
+
  }
  else {
        DataModule2->old->Active=false;

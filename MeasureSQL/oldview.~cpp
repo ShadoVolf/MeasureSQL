@@ -7,6 +7,7 @@
 #include "data1.h"
 #include "Data.h"
 #include "old.h"
+#include "ProtokolData.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "RzButton"
@@ -15,6 +16,7 @@
 #pragma link "RzGrids"
 #pragma link "frxClass"
 #pragma link "frxDBSet"
+#pragma link "RzCmboBx"
 #pragma resource "*.dfm"
 TOldViewForm *OldViewForm;
 //---------------------------------------------------------------------------
@@ -145,6 +147,17 @@ if (OldViewForm->RSGrid->Cells[ACol][ARow]=="F4-F1,"+edText){
 
 void __fastcall TOldViewForm::btnPrintClick(TObject *Sender)
 {
+
+Protokol_Data->Protokol_Types->Active=false;
+ Protokol_Data->Protokol_Types->SQL->Clear();
+        if (edtProtokol->ItemIndex==-1){
+          edtProtokol->ItemIndex=2;
+        }
+
+Protokol_Data->Protokol_Types->SQL->Add("Select * from print_protokol_types where `Name`='"+edtProtokol->Text+"'");
+ Protokol_Data->Protokol_Types->Active=true;
+ AnsiString FieldName=Protokol_Data->Protokol_Types->FieldByName("Print_Field")->AsString;
+
 DataModule2->Print->Active=false;
 DataModule2->Print->SQL->Clear();
 DataModule2->Print->SQL->Add("Select * from print_data where ID='"+DataModule2->SqlSpec->FieldByName("PrintProfile")->AsString+"'");
@@ -153,7 +166,7 @@ DataModule2->Print->Active=true;
   DataModule2->Print_Files->Active=true;
            DataModule2->Print_Files->First();
            for (int i=0; i<DataModule2->Print_Files->RecordCount; i++){
-               if (DataModule2->Print->FieldByName("Old")->AsString==DataModule2->Print_Files->FieldByName("Name")->AsString) {
+               if (DataModule2->Print->FieldByName(FieldName)->AsString==DataModule2->Print_Files->FieldByName("Name")->AsString) {
                   break;
                }
             DataModule2->Print_Files->Next();
@@ -168,5 +181,6 @@ frxReport1->PrepareReport(true);
 frxReport1->ShowPreparedReport();
 }
 //---------------------------------------------------------------------------
+
 
 

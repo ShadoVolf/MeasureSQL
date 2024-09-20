@@ -1,7 +1,7 @@
 object DataModule2: TDataModule2
   OldCreateOrder = False
-  Left = 2
-  Top = 1
+  Left = 226
+  Top = 199
   Height = 726
   Width = 1022
   object SqlSpec: TMyQuery

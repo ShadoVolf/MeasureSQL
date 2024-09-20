@@ -4,7 +4,7 @@ object OldForm: TOldForm
   BorderStyle = bsSingle
   Caption = #1056#1072#1089#1095#1077#1090' '#1091#1093#1086#1076#1086#1074'  '#1095#1072#1089#1090#1086#1090#1099
   ClientHeight = 414
-  ClientWidth = 446
+  ClientWidth = 435
   Color = clBlack
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clLime

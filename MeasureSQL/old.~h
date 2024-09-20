@@ -54,10 +54,10 @@ __published:	// IDE-managed Components
         void __fastcall btnNumbersClick(TObject *Sender);
         void __fastcall btnViewClick(TObject *Sender);
         void __fastcall btnLoadClick(TObject *Sender);
-        void __fastcall cmb_IDChange(TObject *Sender);
         void __fastcall RzCheckBox1Click(TObject *Sender);
         void __fastcall btnBarCodeClick(TObject *Sender);
         void __fastcall btnRecPsiClick(TObject *Sender);
+        void __fastcall cmb_IDKeyPress(TObject *Sender, char &Key);
 private:	// User declarations
 public:		// User declarations
         __fastcall TOldForm(TComponent* Owner);

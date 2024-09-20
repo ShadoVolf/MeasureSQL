@@ -100,6 +100,7 @@ __published:	// IDE-managed Components
         TMyQuery *Protokol_Archive_Count;
         TMyQuery *TU_Parameters;
         TMyQuery *Notification;
+        TMyQuery *Machines_Names;
         void __fastcall oldBeforePost(TDataSet *DataSet);
         void __fastcall psiData3BeforeDelete(TDataSet *DataSet);
 private:	// User declarations

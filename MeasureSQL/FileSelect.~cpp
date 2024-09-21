@@ -73,7 +73,7 @@ bxSelect->ItemIndex=0;
 void __fastcall TFileSelectForm::btnSetClick(TObject *Sender)
 {
 MainForm->ListBox1->Clear();
-MainForm->edtMachine->Text=bxSelect->Text;
+MainForm->edtMachine->Text=DataModule1->FileSelect->FieldByName("Machine")->AsString;
 MainForm->FileSelectShow->Text=DataModule1->FileSelect->FieldByName("FileName")->AsString;
 DataModule2->Machine->Active=true;
 DataModule2->Machine->First();

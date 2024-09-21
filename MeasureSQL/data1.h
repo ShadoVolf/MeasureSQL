@@ -101,6 +101,7 @@ __published:	// IDE-managed Components
         TMyQuery *TU_Parameters;
         TMyQuery *Notification;
         TMyQuery *Machines_Names;
+        TMyCommand *UpdattePsiDataMachine;
         void __fastcall oldBeforePost(TDataSet *DataSet);
         void __fastcall psiData3BeforeDelete(TDataSet *DataSet);
 private:	// User declarations

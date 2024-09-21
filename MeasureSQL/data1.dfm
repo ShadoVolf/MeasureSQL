@@ -497,8 +497,8 @@ object DataModule2: TDataModule2
   end
   object UpdatePSI: TMyCommand
     Connection = DataModule1.CoordinatorDB
-    Left = 736
-    Top = 624
+    Left = 829
+    Top = 582
   end
   object Factory: TMyQuery
     Connection = DataModule1.CoordinatorDB
@@ -634,5 +634,10 @@ object DataModule2: TDataModule2
       'select * from nominal')
     Left = 648
     Top = 168
+  end
+  object UpdattePsiDataMachine: TMyCommand
+    Connection = DataModule1.CoordinatorDB
+    Left = 917
+    Top = 582
   end
 end

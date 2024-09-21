@@ -1,0 +1,122 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "Machine_Change.h"
+#include "Dostup.h"
+#include "Main.h"
+#include "data1.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "AdvGlassButton"
+#pragma link "RzCmboBx"
+#pragma resource "*.dfm"
+TMachine_Change_Form *Machine_Change_Form;
+//---------------------------------------------------------------------------
+__fastcall TMachine_Change_Form::TMachine_Change_Form(TComponent* Owner)
+        : TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall TMachine_Change_Form::btnCloseClick(TObject *Sender)
+{
+this->Hide();
+}
+//---------------------------------------------------------------------------
+void __fastcall TMachine_Change_Form::FormShow(TObject *Sender)
+{
+//«агружаем данные на пользователей
+edtOperator->Items->Clear();
+DataModule2->OperatorLogin->Active=true;
+DataModule2->OperatorLogin->First();
+for (int i=0; i<DataModule2->OperatorLogin->RecordCount; i++){
+    edtOperator->Items->Add(DataModule2->OperatorLogin->FieldByName("Name")->AsString);
+    DataModule2->OperatorLogin->Next();
+
+   }
+ edtOperator->ItemIndex = 9;
+ DataModule2->OperatorLogin->Active=false;
+//загружаем данные на типы установок
+ DataModule2->Machine->Active=true;
+DataModule2->Machine->First();
+SN->Items->Clear();
+
+for (int i=0; i<DataModule2->Machine->RecordCount; i++){
+        SN->Items->Add(DataModule2->Machine->FieldByName("Name")->AsString);
+        DataModule2->Machine->Next();
+}
+SN->ItemIndex=4;
+ DataModule2->Machine->Active=false;
+ btnRec->Visible = false;
+}
+//---------------------------------------------------------------------------
+void __fastcall TMachine_Change_Form::cmb_IDKeyPress(TObject *Sender,
+      char &Key)
+{
+ if (Key==13)
+ {
+         btnRec->Visible = false;
+         AnsiString Measure_ID=cmb_ID->Text;
+         DataModule2->psiData->Active=false;
+         DataModule2->psiData->SQL->Clear();
+         AnsiString Sql="Select MSK, N, Measure_ID, Spc from psidata where Measure_ID='"+cmb_ID->Text+"' Limit 1";
+         DataModule2->psiData->SQL->Add(Sql);
+         DataModule2->psiData->Active=true;
+                 if (DataModule2->psiData->RecordCount>0)
+                 {
+                         DataModule2->psiData->First();
+                         edtMsk->Text=DataModule2->psiData->FieldByName("MSK")->AsString;
+                         edtSpc->Text=DataModule2->psiData->FieldByName("Spc")->AsString;
+                         btnRec->Visible = true;
+                  }
+         DataModule2->psiData->Active=false;         
+   }
+}
+//---------------------------------------------------------------------------
+void __fastcall TMachine_Change_Form::btnRecClick(TObject *Sender)
+{
+//¬ыбираем установку
+DataModule2->Machine->Active=true;
+DataModule2->Machine->First();
+AnsiString MType;
+AnsiString CallDate;
+AnsiString Poverka;
+AnsiString Serial;
+AnsiString MachineType;
+AnsiString M_ID;
+for (int i=0; i<DataModule2->Machine->RecordCount; i++)
+{
+        if (DataModule2->Machine->FieldByName("Name")->AsString == SN->Text)
+        {
+           MType =  DataModule2->Machine->FieldByName("M_Type")->AsString;
+           CallDate =  DataModule2->Machine->FieldByName("Call_Date")->AsString;
+           Poverka =  DataModule2->Machine->FieldByName("PoverKa")->AsString;
+           Serial =  DataModule2->Machine->FieldByName("Serial_N")->AsString;
+           M_ID =  DataModule2->Machine->FieldByName("ID")->AsString;
+           if (MType == "2")
+           {
+            MachineType = "CNA-300";
+           }
+           else if (MType == "1")
+           {
+            MachineType = "W-2200";
+           }
+           else if (MType == "3")
+           {
+            MachineType = "KH7700";
+           }
+           break;
+        }
+DataModule2->Machine->Next();
+}
+ DataModule2->Machine->Active=false;
+ DataModule2->UpdattePsiDataMachine->SQL->Clear();
+ DataModule2->UpdattePsiDataMachine->SQL->Add("Update psidata set `PoverKa`='"+Poverka+"', `Machine_Serial`='"+Serial+"', ");
+ DataModule2->UpdattePsiDataMachine->SQL->Add("`Machine_Call_Date`='"+CallDate+"', `M_Type`='"+MType+"', ");
+ DataModule2->UpdattePsiDataMachine->SQL->Add("`Machine_ID`='"+M_ID+"', `MachineType`='"+MachineType+"', ");
+ DataModule2->UpdattePsiDataMachine->SQL->Add("`Operator`='"+edtOperator->Text+"' where `Measure_ID`='"+cmb_ID->Text+"'");
+ DataModule2->UpdattePsiDataMachine->Execute();
+btnRec->Visible = false;
+}
+//---------------------------------------------------------------------------

@@ -11235,7 +11235,7 @@ if(DataModule1->SqlSpecification->FieldByName("Rmax")->AsString!="no"){
   DataModule1->SQLPSIDataT->FieldByName("C0")->AsString=FloatToStr(C0_L);
   ll=1;
  }
-//****************************************Устанавливаем порого анаомальных значений для динамической емкости**********************************
+//****************************************Устанавливаем порого аномальных значений для динамической емкости**********************************
 if(DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString!="no"){
      c1hmax=StrToFloat(DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString)*10;
    }
@@ -11250,10 +11250,48 @@ if(DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString!="no"){
      }
   //*****************Проверяем значение сопротивление если оно в пределах допуска записываем данные в базу**************
  if (DataModule1->KH7700_Temp->FieldByName("C1")->AsFloat<c1hmax & DataModule1->KH7700_Temp->FieldByName("C1")->AsFloat>c1hmin){
-      DataModule1->SQLPSIDataT->FieldByName("Cq")->AsString=DataModule1->KH7700_Temp->FieldByName("C1")->AsFloat;
+        double kkk=DataModule1->KH7700_Temp->FieldByName("C1")->AsFloat;
+ //***********Коррекция при измерении с физической емкостью**********************************************************************************************************
+        if (DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="Physical" || DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="Saunders(FL)"){
+                if (DataModule1->SqlSpecification->FieldByName("physical_C1_correction")->AsString=="True"){
+                        if (DataModule1->SqlSpecification->FieldByName("AVG_C0")->AsFloat>0 &  DataModule1->SqlSpecification->FieldByName("KH7700_CL")->AsFloat>0){
+                                double Avg_C0= DataModule1->SqlSpecification->FieldByName("AVG_C0")->AsFloat;
+                                double KH_CL = DataModule1->SqlSpecification->FieldByName("KH7700_CL")->AsFloat;
+                                //double CL_1 = KH_CL-5;
+                                double dC = (1+ Avg_C0/KH_CL)*(1+ Avg_C0/KH_CL);
+                                kkk = kkk*dC;
+
+                        }
+
+                }
+         }
+//***************************************************************************************************************************************
+
+
+
+      DataModule1->SQLPSIDataT->FieldByName("Cq")->AsString=FloatToStr(kkk);
   }
   else {
-     DataModule1->SQLPSIDataT->FieldByName("Cq")->AsString=DataModule1->KH7700_Temp->FieldByName("C1")->AsFloat;
+            double kkk=DataModule1->KH7700_Temp->FieldByName("C1")->AsFloat;
+ //***********Коррекция при измерении с физической емкостью**********************************************************************************************************
+        if (DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="Physical" || DataModule1->SqlSpecification->FieldByName("LoadType")->AsString=="Saunders(FL)"){
+                if (DataModule1->SqlSpecification->FieldByName("physical_C1_correction")->AsString=="True"){
+                        if (DataModule1->SqlSpecification->FieldByName("AVG_C0")->AsFloat>0 &  DataModule1->SqlSpecification->FieldByName("KH7700_CL")->AsFloat>0){
+                                double Avg_C0= DataModule1->SqlSpecification->FieldByName("AVG_C0")->AsFloat;
+                                double KH_CL = DataModule1->SqlSpecification->FieldByName("KH7700_CL")->AsFloat;
+                                //double CL_1 = KH_CL-5;
+                                double dC = (1+ Avg_C0/KH_CL)*(1+ Avg_C0/KH_CL);
+                                kkk = kkk*dC;
+
+                        }
+
+                }
+         }
+//***************************************************************************************************************************************
+
+
+
+      DataModule1->SQLPSIDataT->FieldByName("Cq")->AsString=FloatToStr(kkk);
   ll=1;
  }
 //*************************************Устанавливаем порого анаомальных значений для индуктивности******************************************************

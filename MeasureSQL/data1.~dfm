@@ -628,4 +628,11 @@ object DataModule2: TDataModule2
     Left = 1168
     Top = 288
   end
+  object Machines_Names: TMyQuery
+    Connection = DataModule1.CoordinatorDB
+    SQL.Strings = (
+      'select * from nominal')
+    Left = 648
+    Top = 168
+  end
 end

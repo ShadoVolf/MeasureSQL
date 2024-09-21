@@ -43,6 +43,7 @@
 #include "AddMskReal.h"
 #include "Data_MeasureModule.h"
 #include "Config_View.h"
+#include "Machine_Change.h"
 # include "md5wrapper.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -15311,6 +15312,12 @@ MSK_Label->Caption=NumberMForm->edtMSK->Text;
 void __fastcall TMainForm::AdvGlassButton2Click(TObject *Sender)
 {
 Config_View_Form->Visible=true;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::Change_Machine_BClick(TObject *Sender)
+{
+Machine_Change_Form-> Show();
 }
 //---------------------------------------------------------------------------
 

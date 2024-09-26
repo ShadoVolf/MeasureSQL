@@ -1,7 +1,7 @@
 object Protokol_Data: TProtokol_Data
   OldCreateOrder = False
-  Left = 716
-  Top = 185
+  Left = 739
+  Top = 40
   Height = 327
   Width = 411
   object Protokol_Types: TMyQuery

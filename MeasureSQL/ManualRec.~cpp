@@ -1179,7 +1179,7 @@ double old1min,old1max,RR2max,RR2min,RR3max,RR3min,FnastrHz,RR4max,RR5max,RR4min
                    RR1min=Protokol_Data->Spc->FieldByName("RR1min")->AsFloat;
                    }
 
-               if (DataModule2->SqlSpec->FieldByName("Rc_Rbmax")->AsString!="no"){
+               if (DataModule2->Spc->FieldByName("Rc_Rbmax")->AsString!="no"){
                    Rc_Rbmax=Protokol_Data->Spc->FieldByName("Rc_Rbmax")->AsFloat;
                    }
                 if (Protokol_Data->Spc->FieldByName("Tminmax")->AsString!="no"){
@@ -1815,7 +1815,7 @@ AnsiString Measure_ID=cmb_ID->Text;
 
  DataModule2->psiData->Active=false;
  DataModule2->psiData->SQL->Clear();
- AnsiString Sql="Select SQL_NO_CACHE `N`,`Msk`,`File`,`Status`,`PrintSelect`,`Spc`,`Measure_ID` from psidata where Measure_ID='"+cmb_ID->Text+"'";
+ AnsiString Sql="Select SQL_NO_CACHE `N`,`Msk`,`File`,`Status`,`PrintSelect`,`Spc`,`Measure_ID`,`Status2` from psidata where Measure_ID='"+cmb_ID->Text+"'";
  DataModule2->psiData->SQL->Add(Sql);
  DataModule2->psiData->Active=true;
  if (DataModule2->psiData->RecordCount>0){

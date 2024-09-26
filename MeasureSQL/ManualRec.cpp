@@ -1179,7 +1179,7 @@ double old1min,old1max,RR2max,RR2min,RR3max,RR3min,FnastrHz,RR4max,RR5max,RR4min
                    RR1min=Protokol_Data->Spc->FieldByName("RR1min")->AsFloat;
                    }
 
-               if (DataModule2->SqlSpec->FieldByName("Rc_Rbmax")->AsString!="no"){
+               if (Protokol_Data->Spc->FieldByName("Rc_Rbmax")->AsString!="no"){
                    Rc_Rbmax=Protokol_Data->Spc->FieldByName("Rc_Rbmax")->AsFloat;
                    }
                 if (Protokol_Data->Spc->FieldByName("Tminmax")->AsString!="no"){

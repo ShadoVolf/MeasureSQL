@@ -330,7 +330,7 @@ object RecForm: TRecForm
   object Delivery: TAdvToolPanelTab
     Left = 0
     Top = 0
-    Width = 65
+    Width = 185
     Height = 535
     AutoDock = False
     Color = clWhite
@@ -769,7 +769,7 @@ object RecForm: TRecForm
     object AdvToolPanel2: TAdvToolPanel
       Left = 23
       Top = 0
-      Width = 42
+      Width = 162
       Height = 535
       BackgroundTransparent = False
       BackGroundPosition = bpTopLeft

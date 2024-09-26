@@ -3273,6 +3273,10 @@ object MainForm: TMainForm
         Caption = #1055#1086#1076#1073#1086#1088' '#1087#1072#1088
         OnClick = N29Click
       end
+      object Change_Machine_B: TMenuItem
+        Caption = #1047#1072#1084#1077#1085#1072' '#1091#1089#1090#1072#1085#1086#1074#1082#1080
+        OnClick = Change_Machine_BClick
+      end
     end
     object N10: TMenuItem
       Caption = #1047#1072#1087#1080#1089#1100

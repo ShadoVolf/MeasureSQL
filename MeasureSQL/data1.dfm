@@ -246,7 +246,7 @@ object DataModule2: TDataModule2
   object Machine: TMyQuery
     Connection = DataModule1.CoordinatorDB
     SQL.Strings = (
-      'Select * from machines')
+      'Select * from machines where Function='#39'Measure'#39)
     DetailFields = 'N'
     Left = 216
     Top = 304

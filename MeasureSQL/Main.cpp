@@ -77,14 +77,13 @@
 TMainForm *MainForm;
 int numberSelect;
 AnsiString MeasureID;
+int FileSelect_index=0;
 //---------------------------------------------------------------------------
 __fastcall TMainForm::TMainForm(TComponent* Owner)
         : TForm(Owner)
 {
 }
 //---------------------------------------------------------------------------
-
-
 
 void __fastcall TMainForm::btnCloseClick(TObject *Sender)
 {
@@ -4258,6 +4257,10 @@ if(DataModule1->SqlSpecification->FieldByName("C1_2C0")->AsString=="True"){
 
                                       }
                  double x,y,z;
+                 if (C1==0){
+                  C1=1;
+                  C0=0;
+                 }
                  z=(C0/(2*C1))*10E+6;
                   if (MinC1_2C0==0){
                        MinC1_2C0=z;
@@ -15051,6 +15054,7 @@ AnsiString User=DataModule1->Dostup->FieldByName("Name")->AsString;
  ForceDirectories(DataModule1->Options->FieldByName("ExportDir")->AsString+"\\JPG");
  ForceDirectories(DataModule1->Options->FieldByName("ImportDir")->AsString);
  ForceDirectories(DataModule1->Options->FieldByName("GraphDir")->AsString);
+ FileSelect_I->Text="0";
 }
 //---------------------------------------------------------------------------
 

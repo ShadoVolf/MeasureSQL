@@ -62,8 +62,35 @@ for (int i=0; i<DataModule2->Machine->RecordCount; i++){
 bxSelect->Items->Add(DataModule2->Machine->FieldByName("Name")->AsString);
 DataModule2->Machine->Next();
 }
-bxSelect->ItemIndex=0;
 
+bxSelect->ItemIndex=StrToInt(MainForm->FileSelect_I->Text);
+DataModule2->Machines_Names->Active=false;
+ DataModule2->Machines_Names->SQL->Clear();
+ DataModule2->Machines_Names->SQL->Add("Select `IP` from machines where `Name`='"+bxSelect->Text+"'");
+ DataModule2->Machines_Names->Active=true;
+ DataModule2->Machines_Names->First();
+ AnsiString sql;
+ if (bxSelect->Text!="Все"){
+        if (chkArchive->Checked){
+                  sql="Select * from saunders where machine='"+DataModule2->Machines_Names->FieldByName("IP")->AsString+"' and `Archive`='1' order by N";
+        }
+        else {
+                  sql="Select * from saunders where machine='"+DataModule2->Machines_Names->FieldByName("IP")->AsString+"' and `Archive`='0' order by N";
+        }
+ }
+  else {
+         if (chkArchive->Checked){
+                  sql="Select * from saunders where  `Archive`='1' order by N";
+        }
+        else {
+                  sql="Select * from saunders where `Archive`='0' order by N";
+        }
+       }
+                                 DataModule1->FileSelect->Active=false;
+                                 DataModule1->FileSelect->SQL->Clear();
+                                 DataModule1->FileSelect->SQL->Add(sql);
+                                 DataModule1->FileSelect->Active=true;
+                                 DataModule1->FileSelect->Last();
 
 
  DataModule2->Machine->Active=false;
@@ -89,6 +116,28 @@ DataModule2->Machine->Next();
  DataModule2->Machine->Active=false;
 
 if (MachineType=="Saunders"){
+//Обьявлеям переменные задающие названия таблиц
+AnsiString post_process_data;
+AnsiString crystal_data;
+AnsiString setup_data;
+AnsiString configuration;
+AnsiString setup_file_headers;
+ if (chkArchive->Checked){  //Если выбрана галочка архив
+       crystal_data = "crystal data_archive";
+       post_process_data = "post process data_archive";
+       configuration  = "configuration_archive";
+       setup_data = "setup data_archive";
+       setup_file_headers = "setup file headers_archive";
+ }
+ else {     //основные таблицы
+       crystal_data = "crystal data";
+       post_process_data = "post process data";
+       configuration  = "configuration";
+       setup_data = "setup data";
+       setup_file_headers = "setup file headers";
+
+ }
+
  DataModule1->CreatePostProcessData->SQL->Clear();
 DataModule1->DropPostProcessData->SQL->Clear();
 DataModule1->DropPostProcessData->SQL->Add("Drop Table IF EXISTS `post_process_data_"+DataModule1->Dostup->FieldByName("ID")->AsString+"`");
@@ -248,10 +297,10 @@ AnsiString S,N,S1,S2,S3,s5;
 DataModule1->SqlConfiguration->Active=false;
 DataModule1->SqlConfiguration->SQL->Clear();
 if (DataModule1->FileSelect->FieldByName("File_ID")->AsFloat>0){
- DataModule1->SqlConfiguration->SQL->Add("Select * from configuration WHERE File_ID='"+DataModule1->FileSelect->FieldByName("File_ID")->AsString+"'");
+ DataModule1->SqlConfiguration->SQL->Add("Select * from "+configuration+" WHERE File_ID='"+DataModule1->FileSelect->FieldByName("File_ID")->AsString+"'");
 }
 else {
-DataModule1->SqlConfiguration->SQL->Add("Select * from configuration WHERE Name='"+DataModule1->FileSelect->FieldByName("FileName")->AsString+"' and Size='"+DataModule1->FileSelect->FieldByName("Size")->AsString+"' and Machine='"+bxSelect->Text+"'");
+DataModule1->SqlConfiguration->SQL->Add("Select * from "+configuration+" WHERE Name='"+DataModule1->FileSelect->FieldByName("FileName")->AsString+"' and Size='"+DataModule1->FileSelect->FieldByName("Size")->AsString+"' and Machine='"+bxSelect->Text+"'");
 }
 DataModule1->SqlConfiguration->Active=true;
 DataModule1->SqlConfiguration->First();
@@ -298,10 +347,10 @@ DataModule1->SQLSetupFileHeaders_1->Active=true;
 DataModule1->SqlSetupFileHeaders->Active=false;
 DataModule1->SqlSetupFileHeaders->SQL->Clear();
 if (DataModule1->FileSelect->FieldByName("File_ID")->AsFloat>0){
- DataModule1->SqlSetupFileHeaders->SQL->Add("Select * from `setup file headers` where File_ID='"+DataModule1->FileSelect->FieldByName("File_ID")->AsString+"'");
+ DataModule1->SqlSetupFileHeaders->SQL->Add("Select * from `"+setup_file_headers+"` where File_ID='"+DataModule1->FileSelect->FieldByName("File_ID")->AsString+"'");
 }
 else {
-DataModule1->SqlSetupFileHeaders->SQL->Add("Select * from `setup file headers` where Name='"+DataModule1->FileSelect->FieldByName("FileName")->AsString+"' and Size='"+DataModule1->FileSelect->FieldByName("Size")->AsString+"' and Machine='"+bxSelect->Text+"'");
+DataModule1->SqlSetupFileHeaders->SQL->Add("Select * from `"+setup_file_headers+"` where Name='"+DataModule1->FileSelect->FieldByName("FileName")->AsString+"' and Size='"+DataModule1->FileSelect->FieldByName("Size")->AsString+"' and Machine='"+bxSelect->Text+"'");
 }
 DataModule1->SqlSetupFileHeaders->Active=true;
 DataModule1->SqlSetupFileHeaders->First();
@@ -338,11 +387,11 @@ DataModule1->SQLCrystalData_1->Active=true;
 DataModule1->SQLCrystalData->Active=false;
 DataModule1->SQLCrystalData->SQL->Clear();
 if (DataModule1->FileSelect->FieldByName("File_ID")->AsFloat>0){
-DataModule1->SQLCrystalData->SQL->Add("Select * from `crystal data` where File_ID='"+DataModule1->FileSelect->FieldByName("File_ID")->AsString+"'");
+DataModule1->SQLCrystalData->SQL->Add("Select * from `"+crystal_data+"` where File_ID='"+DataModule1->FileSelect->FieldByName("File_ID")->AsString+"'");
 
 }
 else {
-DataModule1->SQLCrystalData->SQL->Add("Select * from `crystal data` where Name='"+DataModule1->FileSelect->FieldByName("FileName")->AsString+"' and Size='"+DataModule1->FileSelect->FieldByName("Size")->AsString+"' and Machine='"+bxSelect->Text+"'");
+DataModule1->SQLCrystalData->SQL->Add("Select * from `"+crystal_data+"` where Name='"+DataModule1->FileSelect->FieldByName("FileName")->AsString+"' and Size='"+DataModule1->FileSelect->FieldByName("Size")->AsString+"' and Machine='"+bxSelect->Text+"'");
 }
 DataModule1->SQLCrystalData->Active=true;
 DataModule1->SQLCrystalData->First();
@@ -379,10 +428,10 @@ DataModule1->SQLPostProcessData_1->Active=true;
 DataModule1->SQLPostProcessData->Active=false;
 DataModule1->SQLPostProcessData->SQL->Clear();
 if (DataModule1->FileSelect->FieldByName("File_ID")->AsFloat>0){
-DataModule1->SQLPostProcessData->SQL->Add("Select * from `post process data` where File_ID='"+DataModule1->FileSelect->FieldByName("File_ID")->AsString+"'");
+DataModule1->SQLPostProcessData->SQL->Add("Select * from `"+post_process_data+"` where File_ID='"+DataModule1->FileSelect->FieldByName("File_ID")->AsString+"'");
 }
 else {
-DataModule1->SQLPostProcessData->SQL->Add("Select * from `post process data` where Name='"+DataModule1->FileSelect->FieldByName("FileName")->AsString+"' and Size='"+DataModule1->FileSelect->FieldByName("Size")->AsString+"' and Machine='"+bxSelect->Text+"'");
+DataModule1->SQLPostProcessData->SQL->Add("Select * from `"+post_process_data+"` where Name='"+DataModule1->FileSelect->FieldByName("FileName")->AsString+"' and Size='"+DataModule1->FileSelect->FieldByName("Size")->AsString+"' and Machine='"+bxSelect->Text+"'");
 }
 DataModule1->SQLPostProcessData->Active=true;
 DataModule1->SQLPostProcessData->First();
@@ -419,11 +468,11 @@ DataModule1->SQLSetupData_1->Active=true;
 DataModule1->SQLSetupData->Active=false;
 DataModule1->SQLSetupData->SQL->Clear();
 if (DataModule1->FileSelect->FieldByName("File_ID")->AsFloat>0){
-DataModule1->SQLSetupData->SQL->Add("Select * from `setup data` where File_ID='"+DataModule1->FileSelect->FieldByName("File_ID")->AsString+"'");
+DataModule1->SQLSetupData->SQL->Add("Select * from `"+setup_data+"` where File_ID='"+DataModule1->FileSelect->FieldByName("File_ID")->AsString+"'");
 
 }
 else {
-DataModule1->SQLSetupData->SQL->Add("Select * from `setup data` where Name='"+DataModule1->FileSelect->FieldByName("FileName")->AsString+"' and Size='"+DataModule1->FileSelect->FieldByName("Size")->AsString+"' and Machine='"+bxSelect->Text+"'");
+DataModule1->SQLSetupData->SQL->Add("Select * from `"+setup_data+"` where Name='"+DataModule1->FileSelect->FieldByName("FileName")->AsString+"' and Size='"+DataModule1->FileSelect->FieldByName("Size")->AsString+"' and Machine='"+bxSelect->Text+"'");
 }
 DataModule1->SQLSetupData->Active=true;
 DataModule1->SQLSetupData->First();
@@ -483,6 +532,17 @@ S2="SELECT  nSetupFileIndex,fReferenceFrequency FROM "+SetupHeaders+" order by n
       FileSelectForm->Hide();
  }
  else if (MachineType=="Transat"){
+ //Обьявлеям переменные задающие названия таблиц
+AnsiString transat_table;
+
+ if (chkArchive->Checked){  //Если выбрана галочка архив
+       transat_table = "tts100_archive";
+
+ }
+ else {     //основные таблицы
+       transat_table = "transat";
+
+ }
   //Убираем таблицу если она существует
    DataModule1->DropTransatTemp->SQL->Clear();
    DataModule1->DropTransatTemp->SQL->Add("Drop Table IF EXISTS  `transat_temp_"+DataModule1->Dostup->FieldByName("ID")->AsString+"`");
@@ -512,10 +572,10 @@ TStringList * ft = new TStringList();
    DataModule1->Transat->Active=false;
    DataModule1->Transat->SQL->Clear();
         if (DataModule1->FileSelect->FieldByName("File_ID")->AsFloat>0){
-                DataModule1->Transat->SQL->Add("Select * from `transat` where File_ID='"+DataModule1->FileSelect->FieldByName("File_ID")->AsString+"'");
+                DataModule1->Transat->SQL->Add("Select * from `"+transat_table+"` where File_ID='"+DataModule1->FileSelect->FieldByName("File_ID")->AsString+"'");
         }
         else {
-                DataModule1->Transat->SQL->Add("Select * from `transat` where FileName='"+DataModule1->FileSelect->FieldByName("FileName")->AsString+"' and Size='"+DataModule1->FileSelect->FieldByName("Size")->AsString+"' and Machine='"+bxSelect->Text+"'");
+                DataModule1->Transat->SQL->Add("Select * from `"+transat_table+"` where FileName='"+DataModule1->FileSelect->FieldByName("FileName")->AsString+"' and Size='"+DataModule1->FileSelect->FieldByName("Size")->AsString+"' and Machine='"+bxSelect->Text+"'");
         }
    DataModule1->Transat->Active=true;
    DataModule1->Transat->First();
@@ -711,6 +771,16 @@ DataModule1->Config->TableName="transatconfig_"+DataModule1->Dostup->FieldByName
         
        }
   else if(MachineType=="KH7700"){
+  AnsiString KH7700_table;
+
+ if (chkArchive->Checked){  //Если выбрана галочка архив
+       KH7700_table = "kh7700_archive";
+
+ }
+ else {     //основные таблицы
+       KH7700_table = "KH7700";
+
+ }
      DataModule1->TestTablesSQL->Active=false;
      DataModule1->TestTablesSQL->SQL->Clear();
      DataModule1->TestTablesSQL->SQL->Add("Select * from TestTablesSql where `Name`='KH7700'");
@@ -731,7 +801,7 @@ DataModule1->Config->TableName="transatconfig_"+DataModule1->Dostup->FieldByName
      DataModule1->KH7700_Temp_Create->SQL->Add(sql_script);
      DataModule1->KH7700_Temp_Create->Execute();
      //Копируем туда данные с основной таблицы
-     AnsiString sql_script_copy="Insert into `"+tableName+"` Select * FROM `KH7700` WHERE `File_ID`='"+DataModule1->FileSelect->FieldByName("File_ID")->AsString+"'";
+     AnsiString sql_script_copy="Insert into `"+tableName+"` Select * FROM `"+KH7700_table+"` WHERE `File_ID`='"+DataModule1->FileSelect->FieldByName("File_ID")->AsString+"'";
      DataModule1->KH7700_Temp_Copy->SQL->Clear();
      DataModule1->KH7700_Temp_Copy->SQL->Add(sql_script_copy);
      DataModule1->KH7700_Temp_Copy->Execute();
@@ -895,6 +965,7 @@ DataModule1->FileSelect->Active=true;
 
 void __fastcall TFileSelectForm::bxSelectChange(TObject *Sender)
 {
+ MainForm->FileSelect_I->Text=bxSelect->ItemIndex;
  DataModule2->Machines_Names->Active=false;
  DataModule2->Machines_Names->SQL->Clear();
  DataModule2->Machines_Names->SQL->Add("Select `IP` from machines where `Name`='"+bxSelect->Text+"'");

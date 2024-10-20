@@ -62,8 +62,35 @@ for (int i=0; i<DataModule2->Machine->RecordCount; i++){
 bxSelect->Items->Add(DataModule2->Machine->FieldByName("Name")->AsString);
 DataModule2->Machine->Next();
 }
-bxSelect->ItemIndex=0;
 
+bxSelect->ItemIndex=StrToInt(MainForm->FileSelect_I->Text);
+DataModule2->Machines_Names->Active=false;
+ DataModule2->Machines_Names->SQL->Clear();
+ DataModule2->Machines_Names->SQL->Add("Select `IP` from machines where `Name`='"+bxSelect->Text+"'");
+ DataModule2->Machines_Names->Active=true;
+ DataModule2->Machines_Names->First();
+ AnsiString sql;
+ if (bxSelect->Text!="Все"){
+        if (chkArchive->Checked){
+                  sql="Select * from saunders where machine='"+DataModule2->Machines_Names->FieldByName("IP")->AsString+"' and `Archive`='1' order by N";
+        }
+        else {
+                  sql="Select * from saunders where machine='"+DataModule2->Machines_Names->FieldByName("IP")->AsString+"' and `Archive`='0' order by N";
+        }
+ }
+  else {
+         if (chkArchive->Checked){
+                  sql="Select * from saunders where  `Archive`='1' order by N";
+        }
+        else {
+                  sql="Select * from saunders where `Archive`='0' order by N";
+        }
+       }
+                                 DataModule1->FileSelect->Active=false;
+                                 DataModule1->FileSelect->SQL->Clear();
+                                 DataModule1->FileSelect->SQL->Add(sql);
+                                 DataModule1->FileSelect->Active=true;
+                                 DataModule1->FileSelect->Last();
 
 
  DataModule2->Machine->Active=false;
@@ -938,6 +965,7 @@ DataModule1->FileSelect->Active=true;
 
 void __fastcall TFileSelectForm::bxSelectChange(TObject *Sender)
 {
+ MainForm->FileSelect_I->Text=bxSelect->ItemIndex;
  DataModule2->Machines_Names->Active=false;
  DataModule2->Machines_Names->SQL->Clear();
  DataModule2->Machines_Names->SQL->Add("Select `IP` from machines where `Name`='"+bxSelect->Text+"'");

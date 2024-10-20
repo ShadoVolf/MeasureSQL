@@ -3039,6 +3039,7 @@ Status2="Good";
                                              DataModule1->SQLSetupData->Next();
                                             }
                                             for (int j=0; j<DataModule1->SQLCrystalData->RecordCount; j++){
+                                            DataModule1->ProfileData1->First();
                                                for (int y=0;y<DataModule1->ProfileData1->RecordCount;y++){
                                                   if (DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat==DataModule1->ProfileData1->FieldByName("Temperature")->AsFloat){
                                                             if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
@@ -3309,6 +3310,7 @@ Status2="Good";
                                              DataModule1->SQLSetupData->Next();
                                             }
                                             for (int j=0; j<DataModule1->SQLCrystalData->RecordCount; j++){
+                                            DataModule1->ProfileData1->First();
                                                for (int y=0;y<DataModule1->ProfileData1->RecordCount;y++){
                                                   if (DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat==DataModule1->ProfileData1->FieldByName("Temperature")->AsFloat){
                                                             if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
@@ -4256,6 +4258,10 @@ if(DataModule1->SqlSpecification->FieldByName("C1_2C0")->AsString=="True"){
 
                                       }
                  double x,y,z;
+                 if (C1==0){
+                  C1=1;
+                  C0=0;
+                 }
                  z=(C0/(2*C1))*10E+6;
                   if (MinC1_2C0==0){
                        MinC1_2C0=z;

@@ -984,319 +984,10 @@ object ProtokolForm: TProtokolForm
     PrintOptions.Printer = #1055#1086' '#1091#1084#1086#1083#1095#1072#1085#1080#1102
     PrintOptions.PrintOnSheet = 0
     ReportOptions.CreateDate = 39953.7254732639
-    ReportOptions.LastChange = 45462.5733016204
+    ReportOptions.LastChange = 45574.6174904167
     ScriptLanguage = 'BasicScript'
     ScriptText.Strings = (
-      'Dim count1 As Integer'
-      'Dim countR As Integer'
-      'Dim countFmax AS Integer'
-      'Dim countFmin As Integer'
-      'Dim countRmax As Integer'
-      'Dim countC0_C1 As Integer'
-      'Dim countC0 As Integer  '
-      '  '
-      'Dim temp As Integer'
-      'Dim temp1 As Integer'
-      '  '
-      'Dim countBad As Integer'
-      'Dim countBadUsl As Integer'
-      'Dim countBadAn As Integer  '
-      'Dim Rmax As Extended'
-      'Dim Rmin As Extended'
-      'Dim Fmaxmax As Extended'
-      'Dim Fmaxmin As Extended    '
-      'Dim Fminmax As Extended'
-      'Dim Fminmin As Extended'
-      'Dim Rmaxmax As Extended'
-      'Dim Rmaxmin As Extended'
-      'Dim C0_C1max As Extended'
-      'Dim C0_C1min As Extended'
-      'Dim C0max As Extended'
-      'Dim C0min As Extended    '
-      'sub MasterData1OnBeforePrint(Sender)'
-      'count1=count1+1'
-      'temp=0    '
-      'temp1=0'
-      
-        'IF <Spc."Rmax"><>"no" Then IF <PsiData."R">> StrToFloat(<Spc."Rm' +
-        'ax">) Then temp1=1'
-      
-        'IF <Spc."Rmin"><>"no" Then IF <PsiData."R">< StrToFloat(<Spc."Rm' +
-        'in">) Then temp1=1'
-      
-        'IF <Spc."Fmaxmax"><>"no" Then IF <PsiData."Fmax">> StrToFloat(<S' +
-        'pc."Fmaxmax">) Then temp1=1                         '
-      
-        'IF <Spc."Fmaxmin"><>"no" Then IF <PsiData."Fmax">< StrToFloat(<S' +
-        'pc."Fmaxmin">) Then temp1=1    '
-      
-        'IF <Spc."Fminmax"><>"no" Then IF <PsiData."Fmin">> StrToFloat(<S' +
-        'pc."Fminmax">) Then temp1=1'
-      
-        'IF <Spc."Fminmin"><>"no" Then IF <PsiData."Fmin">< StrToFloat(<S' +
-        'pc."Fminmin">) Then temp1=1'
-      
-        'IF <Spc."Rmaxmax"><>"no" Then IF <PsiData."Rmax">> StrToFloat(<S' +
-        'pc."Rmaxmax">) Then temp1=1                         '
-      
-        'IF <Spc."Rmaxmin"><>"no" Then IF <PsiData."Rmax">< StrToFloat(<S' +
-        'pc."Rmaxmin">) Then temp1=1    '
-      
-        'IF <Spc."C0_C1max"><>"no" Then IF <PsiData."C0_C1">> StrToFloat(' +
-        '<Spc."C0_C1max">) Then temp1=1                         '
-      
-        'IF <Spc."C0_C1min"><>"no" Then IF <PsiData."C0_C1">< StrToFloat(' +
-        '<Spc."C0_C1min">) Then temp1=1'
-      
-        'IF <Spc."C0max"><>"no" Then IF <PsiData."C0">> StrToFloat(<Spc."' +
-        'C0max">) Then temp1=1                         '
-      
-        'IF <Spc."C0min"><>"no" Then IF <PsiData."C0">< StrToFloat(<Spc."' +
-        'C0min">) Then temp1=1    '
-      '  '
-      
-        'IF <Spc."Fmaxmax"><>"no" Then Fmaxmax=StrToFloat(<Spc."Fmaxmax">' +
-        ')-Abs(StrToFloat(<Spc."Fmaxmax">))*StrToFloat(<Spc."DopuskFi">)/' +
-        '100'
-      
-        'IF <Spc."Fmaxmin"><>"no" Then Fmaxmin=StrToFloat(<Spc."Fmaxmin">' +
-        ')+Abs(StrToFloat(<Spc."Fmaxmin">))*StrToFloat(<Spc."DopuskFi">)/' +
-        '100'
-      
-        'IF <Spc."Fminmax"><>"no" Then Fminmax=StrToFloat(<Spc."Fminmax">' +
-        ')-Abs(StrToFloat(<Spc."Fminmax">))*StrToFloat(<Spc."DopuskFi">)/' +
-        '100'
-      
-        'IF <Spc."Fminmin"><>"no" Then Fminmin=StrToFloat(<Spc."Fminmin">' +
-        ')+Abs(StrToFloat(<Spc."Fminmin">))*StrToFloat(<Spc."DopuskFi">)/' +
-        '100    '
-      
-        'IF <Spc."Rmax"><>"no" Then Rmax=StrToFloat(<Spc."Rmax">)-StrToFl' +
-        'oat(<Spc."Rmax">)*StrToFloat(<Spc."DopuskR">)/100'
-      
-        'IF <Spc."Rmin"><>"no" Then Rmin=StrToFloat(<Spc."Rmin">)+StrToFl' +
-        'oat(<Spc."Rmin">)*StrToFloat(<Spc."DopuskR">)/100'
-      
-        'IF <Spc."Rmaxmax"><>"no" Then Rmaxmax=StrToFloat(<Spc."Rmaxmax">' +
-        ')-StrToFloat(<Spc."Rmaxmax">)*StrToFloat(<Spc."DopuskRmax">)/100'
-      
-        'IF <Spc."Rmaxmin"><>"no" Then Rmaxmin=StrToFloat(<Spc."Rmaxmin">' +
-        ')+StrToFloat(<Spc."Rmaxmin">)*StrToFloat(<Spc."DopuskRmax">)/100' +
-        '  '
-      
-        'IF <Spc."C0_C1max"><>"no" Then C0_C1max=StrToFloat(<Spc."C0_C1ma' +
-        'x">)'
-      
-        'IF <Spc."C0_C1min"><>"no" Then C0_C1min=StrToFloat(<Spc."C0_C1mi' +
-        'n">)      '
-      
-        'IF <Spc."C0max"><>"no" Then C0max=StrToFloat(<Spc."C0max">)-StrT' +
-        'oFloat(<Spc."C0max">)*StrToFloat(<Spc."DopuskC0">)/100'
-      
-        'IF <Spc."C0min"><>"no" Then C0min=StrToFloat(<Spc."C0min">)+StrT' +
-        'oFloat(<Spc."C0min">)*StrToFloat(<Spc."DopuskC0">)/100  '
-      '     '
-      'IF <Spc."Fmaxmax"><>"no" Then Memo105.Text=FloatToStr(Fmaxmax)'
-      
-        'IF <Spc."Fmaxmin"><>"no" Then Memo106.Text=FloatToStr(Fmaxmin)  ' +
-        '  '
-      'IF <Spc."Fminmin"><>"no" Then    Memo65.Text=FloatToStr(Fminmin)'
-      'IF <Spc."Fminmax"><>"no" Then    Memo64.Text=FloatToStr(Fminmax)'
-      'IF <Spc."Rmin"><>"no" Then    Memo40.Text=FloatToStr(Rmin)'
-      'IF <Spc."Rmax"><>"no" Then    Memo41.Text=FloatToStr(Rmax)  '
-      
-        'IF <Spc."Rmaxmin"><>"no" Then    Memo112.Text=FloatToStr(Rmaxmin' +
-        ')'
-      
-        'IF <Spc."Rmaxmax"><>"no" Then    Memo111.Text=FloatToStr(Rmaxmax' +
-        ')'
-      
-        'IF <Spc."C0_C1min"><>"no" Then    Memo116.Text=FloatToStr(C0_C1m' +
-        'in)'
-      
-        'IF <Spc."C0_C1max"><>"no" Then    Memo115.Text=FloatToStr(C0_C1m' +
-        'ax)    '
-      'IF <Spc."C0min"><>"no" Then    Memo114.Text=FloatToStr(C0min)'
-      'IF <Spc."C0max"><>"no" Then    Memo113.Text=FloatToStr(C0max)  '
-      ''
-      '              '
-      'IF <Spc."Rmax"><>"no" Then Memo47.Text=<Spc."Rmax">'
-      'IF <Spc."Rmin"><>"no" Then Memo48.Text=<Spc."Rmin">'
-      'IF <Spc."Fmaxmax"><>"no" Then Memo50.Text=<Spc."Fmaxmax">'
-      
-        'IF <Spc."Fmaxmin"><>"no" Then Memo51.Text=<Spc."Fmaxmin">       ' +
-        '           '
-      'IF <Spc."Fminmax"><>"no" Then Memo57.Text=<Spc."Fminmax">'
-      
-        'IF <Spc."Fminmin"><>"no" Then Memo58.Text=<Spc."Fminmin">       ' +
-        '            '
-      'IF <Spc."Rmaxmax"><>"no" Then Memo97.Text=<Spc."Rmaxmax">'
-      'IF <Spc."Rmaxmin"><>"no" Then Memo98.Text=<Spc."Rmaxmin">'
-      
-        'IF <Spc."C0_C1max"><>"no" Then Memo109.Text=<Spc."C0_C1max">    ' +
-        '        '
-      'IF <Spc."C0_C1min"><>"no" Then Memo110.Text=<Spc."C0_C1min">'
-      
-        'IF <Spc."C0max"><>"no" Then Memo103.Text=<Spc."C0max">          ' +
-        '  '
-      'IF <Spc."C0min"><>"no" Then Memo104.Text=<Spc."C0min">    '
-      '    '
-      '  '
-      ''
-      '              '
-      
-        'IF <Spc."Rmax"><>"no" Then IF <PsiData."R">>  Rmax Then countR=c' +
-        'ountR+1'
-      
-        'IF <Spc."Rmin"><>"no" Then IF <PsiData."R"><  Rmin Then countR=c' +
-        'ountR+1'
-      
-        'IF <Spc."Rmax"><>"no" Then IF <PsiData."R">>  Rmax Then temp=1  ' +
-        '           '
-      
-        'IF <Spc."Rmin"><>"no" Then IF <PsiData."R"><  Rmin Then temp=1  ' +
-        '               '
-      
-        'IF <Spc."Fmaxmax"><>"no" Then IF <PsiData."Fmax">> Fmaxmax Then ' +
-        'countFmax=countFmax+1'
-      
-        'IF <Spc."Fmaxmin"><>"no" Then IF <PsiData."Fmax">< Fmaxmin Then ' +
-        'countFmax=countFmax+1'
-      
-        'IF <Spc."Fmaxmax"><>"no" Then IF <PsiData."Fmax">> Fmaxmax Then ' +
-        'temp=1             '
-      
-        'IF <Spc."Fmaxmin"><>"no" Then IF <PsiData."Fmax">< Fmaxmin Then ' +
-        'temp=1                '
-      
-        'IF <Spc."Fminmax"><>"no" Then IF <PsiData."Fmin">> Fminmax Then ' +
-        'countFmin=countFmin+1'
-      
-        'IF <Spc."Fminmin"><>"no" Then IF <PsiData."Fmin">< Fminmin Then ' +
-        'countFmin=countFmin+1'
-      
-        'IF <Spc."Fminmax"><>"no" Then IF <PsiData."Fmin">> Fminmax Then ' +
-        'temp=1             '
-      
-        'IF <Spc."Fminmin"><>"no" Then IF <PsiData."Fmin">< Fminmin Then ' +
-        'temp=1'
-      
-        'IF <Spc."Rmaxmax"><>"no" Then IF <PsiData."Rmax">> Rmaxmax Then ' +
-        'countRmax=countRmax+1'
-      
-        'IF <Spc."Rmaxmin"><>"no" Then IF <PsiData."Rmax">< Rmaxmin Then ' +
-        'countRmax=countRmax+1'
-      
-        'IF <Spc."Rmaxmax"><>"no" Then IF <PsiData."Rmax">> Rmaxmax Then ' +
-        'temp=1             '
-      
-        'IF <Spc."Rmaxmin"><>"no" Then IF <PsiData."Rmax">< Rmaxmin Then ' +
-        'temp=1'
-      
-        'IF <Spc."C0_C1max"><>"no" Then IF <PsiData."C0_C1">> C0_C1max Th' +
-        'en countC0_C1=countC0_C1+1'
-      
-        'IF <Spc."C0_C1min"><>"no" Then IF <PsiData."C0_C1">< C0_C1min Th' +
-        'en countC0_C1=countC0_C1+1'
-      
-        'IF <Spc."C0_C1max"><>"no" Then IF <PsiData."C0_C1">> C0_C1max Th' +
-        'en temp=1             '
-      
-        'IF <Spc."C0_C1min"><>"no" Then IF <PsiData."C0_C1">< C0_C1min Th' +
-        'en temp=1'
-      
-        'IF <Spc."C0max"><>"no" Then IF <PsiData."C0">> C0max Then countC' +
-        '0=countC0+1'
-      
-        'IF <Spc."C0min"><>"no" Then IF <PsiData."C0">< C0min Then countC' +
-        '0=countC0+1'
-      
-        'IF <Spc."C0max"><>"no" Then IF <PsiData."C0">> C0max Then temp=1' +
-        '             '
-      
-        'IF <Spc."C0min"><>"no" Then IF <PsiData."C0">< C0min Then temp=1' +
-        '    '
-      ''
-      'Memo75.Text=IntToStr(countR)'
-      'Memo74.Text=IntToStr(count1-countR)'
-      'Memo77.Text=IntToStr(countFmax)'
-      'Memo76.Text=IntToStr(count1-countFmax)'
-      'Memo63.Text=IntToStr(countFmin)'
-      'Memo61.Text=IntToStr(count1-countFmin)'
-      'Memo96.Text=IntToStr(countRmax)'
-      'Memo89.Text=IntToStr(count1-countRmax)  '
-      'Memo108.Text=IntToStr(countC0_C1)'
-      'Memo107.Text=IntToStr(count1-countC0_C1)'
-      'Memo100.Text=IntToStr(countC0)'
-      'Memo99.Text=IntToStr(count1-countC0)    '
-      ''
-      '  '
-      'IF temp1=0 Then IF temp=1 THEN PsiDataStatus.Text="'#1059#1089#1083'.'#1043#1086#1076#1077#1085'"'
-      'IF temp1=1 Then IF temp=1 THEN PsiDataStatus.Text="'#1041#1088#1072#1082'"'
-      'IF temp1=0 Then IF temp=0 THEN PsiDataStatus.Text="'#1043#1086#1076#1077#1085'"'
-      ''
-      '    '
-      
-        'IF <PsiData."Status">="'#1040#1085#1086#1084#1072#1083'." THEN PsiDataStatus.Text="'#1040#1085#1086#1084#1072#1083'.' +
-        '"'
-      
-        'IF <PsiData."Status">="'#1040#1085#1086#1084#1072#1083'." THEN countBadAn=countBadAn+1    ' +
-        '          '
-      'IF <PsiData."Status2">="BAD" THEN PsiDataStatus.Text="'#1053#1077#1079#1072#1084#1077#1088'"'
-      'IF <PsiData."Status2">="BAD" THEN temp1=1'
-      'IF <PsiData."Status2">="BAD" THEN temp=1    '
-      'IF temp1=1 Then countBad=countBad+1'
-      
-        'IF temp=1 Then countBadUsl=countBadUsl+1                        ' +
-        '        '
-      'frxDBDataset2Good.Text=IntToStr(count1-countBadUsl-countBadAn)'
-      'frxDBDataset2Bad.Text=IntToStr(countBadUsl)  '
-      'Memo60.Text=IntToStr(CountBadUsl-countBad)'
-      'Memo20.Text=IntToStr(countBadAn)    '
-      'IF <PsiData."Status">="'#1040#1085#1086#1084#1072#1083'." THEN temp=1                  '
-      
-        'IF temp1=1 Then IF temp=1 Then PsiDataPosition.Color=clSilver   ' +
-        '  '
-      'IF temp1=0 Then IF temp=0 Then PsiDataPosition.Color=clNone'
-      
-        'IF temp1=0 Then IF temp=1 Then PsiDataPosition.Color=clYellow   ' +
-        ' '
-      'IF temp1=1 Then IF temp=1 Then PsiDataN.Color=clSilver     '
-      'IF temp1=0 Then IF temp=0 Then PsiDataN.Color=clNone'
-      'IF temp1=0 Then IF temp=1 Then PsiDataN.Color=clYellow    '
-      'IF temp1=1 Then IF temp=1 Then PsiDataR.Color=clSilver     '
-      'IF temp1=0 Then IF temp=0 Then PsiDataR.Color=clNone'
-      'IF temp1=0 Then IF temp=1 Then PsiDataR.Color=clYellow    '
-      'IF temp1=1 Then IF temp=1 Then PsiDataFmax.Color=clSilver     '
-      'IF temp1=0 Then IF temp=0 Then PsiDataFmax.Color=clNone'
-      'IF temp1=0 Then IF temp=1 Then PsiDataFmax.Color=clYellow    '
-      'IF temp1=1 Then IF temp=1 Then PsiDataFmin.Color=clSilver     '
-      'IF temp1=0 Then IF temp=0 Then PsiDataFmin.Color=clNone'
-      'IF temp1=0 Then IF temp=1 Then PsiDataFmin.Color=clYellow    '
-      'IF temp1=1 Then IF temp=1 Then PsiDataStatus.Color=clSilver     '
-      'IF temp1=0 Then IF temp=0 Then PsiDataStatus.Color=clNone'
-      'IF temp1=0 Then IF temp=1 Then PsiDataStatus.Color=clYellow'
-      'IF temp1=1 Then IF temp=1 Then PsiDataC0_C1.Color=clSilver     '
-      'IF temp1=0 Then IF temp=0 Then PsiDataC0_C1.Color=clNone'
-      'IF temp1=0 Then IF temp=1 Then PsiDataC0_C1.Color=clYellow'
-      'IF temp1=1 Then IF temp=1 Then PsiDataC0.Color=clSilver     '
-      'IF temp1=0 Then IF temp=0 Then PsiDataC0.Color=clNone'
-      'IF temp1=0 Then IF temp=1 Then PsiDataC0.Color=clYellow'
-      'IF temp1=1 Then IF temp=1 Then PsiDataRmax.Color=clSilver     '
-      'IF temp1=0 Then IF temp=0 Then PsiDataRmax.Color=clNone'
-      'IF temp1=0 Then IF temp=1 Then PsiDataRmax.Color=clYellow    '
-      ''
-      ''
-      'end sub'
-      'sub ReportTitle1OnBeforePrint(Sender)'
-      '     IF <PsiData."PoverKa">="True" Then'
-      '     Memo122.Text="'#1087#1086#1074#1077#1088#1082#1080'"'
-      '  END IF'
-      '  IF <PsiData."PoverKa">="False" Then      '
-      '    Memo122.Text="'#1082#1072#1083#1080#1073#1088#1086#1074#1082#1080'"         '
-      '  END IF  '
-      '  IF <PsiData."PMI">="True" THEN Memo23.Text="'#1055#1052#1048'"  '
-      'end sub    ')
+      '    ')
     Left = 152
     Top = 16
     Datasets = <
@@ -1336,31 +1027,44 @@ object ProtokolForm: TProtokolForm
       BottomMargin = 10
       Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
       object ReportTitle1: TfrxReportTitle
-        Height = 332.59864
+        Height = 1028.03216
         Top = 18.89765
         Width = 718.1107
         OnBeforePrint = 'ReportTitle1OnBeforePrint'
         object Memo1: TfrxMemoView
-          Left = 15.11812
-          Width = 222.99227
+          Left = 3.77953
+          Top = 68.03154
+          Width = 287.24428
           Height = 18.89765
           ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
           Memo.UTF8 = (
             #1056#1119#1057#1026#1056#1109#1057#8218#1056#1109#1056#1108#1056#1109#1056#187' '#1056#1105#1056#183#1056#1112#1056#181#1057#1026#1056#181#1056#1029#1056#1105#1056#8470' '#1057#1026#1056#181#1056#183#1056#1109#1056#1029#1056#176#1057#8218#1056#1109#1057#1026#1056#1109#1056#1030)
+          ParentFont = False
         end
         object Memo2: TfrxMemoView
-          Left = 83.14966
-          Top = 22.67718
-          Width = 687.87446
+          Left = 343.93723
+          Top = 68.03154
+          Width = 355.27582
           Height = 18.89765
           ShowHint = False
           DataSetName = 'frxDBDataset1'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
           Memo.UTF8 = (
-            '[PsiData."Spc"]')
+            '[Spc."Text"]')
+          ParentFont = False
         end
         object Memo3: TfrxMemoView
-          Left = 83.14966
-          Top = 49.13389
+          Left = 94.48825
+          Top = 109.60637
           Width = 158.74026
           Height = 18.89765
           ShowHint = False
@@ -1369,8 +1073,8 @@ object ProtokolForm: TProtokolForm
             '[PsiData."MSK"]')
         end
         object Memo10: TfrxMemoView
-          Left = 566.9295
-          Top = 49.13389
+          Left = 551.81138
+          Top = 109.60637
           Width = 41.57483
           Height = 18.89765
           ShowHint = False
@@ -1379,8 +1083,8 @@ object ProtokolForm: TProtokolForm
             ' '#1056#1114#1056#1110#1057#8224)
         end
         object Memo14: TfrxMemoView
-          Left = 15.11812
-          Top = 49.13389
+          Left = 11.33859
+          Top = 109.60637
           Width = 64.25201
           Height = 18.89765
           ShowHint = False
@@ -1388,74 +1092,26 @@ object ProtokolForm: TProtokolForm
             #1056#1114#1056#1038#1056#1113)
         end
         object Memo15: TfrxMemoView
-          Left = 264.5671
-          Top = 49.13389
+          Left = 283.46475
+          Top = 109.60637
           Width = 94.48825
           Height = 18.89765
           ShowHint = False
           Memo.UTF8 = (
             #1056#1116#1056#1109#1056#1112#1056#1105#1056#1029#1056#176#1056#187)
         end
-        object Memo36: TfrxMemoView
-          Left = 15.11812
-          Top = 79.37013
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          Memo.UTF8 = (
-            #1056#1119#1056#1109#1056#183#1056#1105#1057#8224#1056#1105#1056#1105)
-        end
-        object Memo37: TfrxMemoView
-          Left = 15.11812
-          Top = 151.1812
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          Memo.UTF8 = (
-            #1056#164#1056#176#1056#8470#1056#187)
-        end
-        object Memo38: TfrxMemoView
-          Left = 86.92919
-          Top = 79.37013
-          Width = 143.62214
-          Height = 18.89765
-          ShowHint = False
-          DataSetName = 'frxDBDataset2'
-          Memo.UTF8 = (
-            '[Psi."Position"]')
-        end
-        object frxDBDataset1File: TfrxMemoView
-          Left = 113.3859
-          Top = 151.1812
-          Width = 120.94496
-          Height = 18.89765
-          ShowHint = False
-          DataSetName = 'frxDBDataset1'
-          Memo.UTF8 = (
-            '[PsiData."File"]')
-        end
         object Memo90: TfrxMemoView
-          Left = 427.08689
-          Top = 75.5906
+          Left = 423.30736
+          Top = 147.40167
           Width = 143.62214
           Height = 18.89765
           ShowHint = False
           Memo.UTF8 = (
             #1056#1116#1056#176#1056#1110#1057#1026#1057#1107#1056#183#1056#1109#1057#8225#1056#1029#1056#176#1057#1039' '#1056#181#1056#1112#1056#1108#1056#1109#1057#1027#1057#8218#1057#1034)
         end
-        object frxDBDataset3Loadvalue: TfrxMemoView
-          Left = 578.26809
-          Top = 75.5906
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DataSetName = 'frxDBDataset3'
-          Memo.UTF8 = (
-            '[PsiData."Cn"]')
-        end
         object Memo91: TfrxMemoView
-          Left = 661.41775
-          Top = 75.5906
+          Left = 668.97681
+          Top = 147.40167
           Width = 30.23624
           Height = 18.89765
           ShowHint = False
@@ -1463,8 +1119,8 @@ object ProtokolForm: TProtokolForm
             #1056#1111#1056#164)
         end
         object Memo9: TfrxMemoView
-          Left = 15.11812
-          Top = 113.3859
+          Left = 11.33859
+          Top = 147.40167
           Width = 166.29932
           Height = 18.89765
           ShowHint = False
@@ -1472,8 +1128,8 @@ object ProtokolForm: TProtokolForm
             #1056#1118#1056#181#1056#1112#1056#1111#1056#181#1057#1026#1056#176#1057#8218#1057#1107#1057#1026#1056#1029#1057#8249#1056#8470' '#1056#1111#1057#1026#1056#1109#1057#8222#1056#1105#1056#187#1057#1034)
         end
         object PsiDataNominal: TfrxMemoView
-          Left = 427.08689
-          Top = 49.13389
+          Left = 423.30736
+          Top = 109.60637
           Width = 124.72449
           Height = 18.89765
           ShowHint = False
@@ -1485,31 +1141,10 @@ object ProtokolForm: TProtokolForm
           Memo.UTF8 = (
             '[PsiData."Nominal"]')
         end
-        object Memo21: TfrxMemoView
-          Left = 15.11812
-          Top = 249.44898
-          Width = 143.62214
-          Height = 18.89765
-          ShowHint = False
-          Memo.UTF8 = (
-            #1056#160#1056#181#1056#182#1056#1105#1056#1112' '#1056#1105#1056#183#1056#1112#1056#181#1057#1026#1056#181#1056#1029#1056#1105#1056#8470' ')
-        end
-        object SpcLoadType: TfrxMemoView
-          Left = 264.5671
-          Top = 253.22851
-          Width = 117.16543
-          Height = 18.89765
-          ShowHint = False
-          DataField = 'LoadType'
-          DataSet = Spc
-          DataSetName = 'Spc'
-          Memo.UTF8 = (
-            '[Spc."LoadType"]')
-        end
         object PsiDataintervalgf: TfrxMemoView
-          Left = 264.5671
-          Top = 113.3859
-          Width = 321.26005
+          Left = 226.7718
+          Top = 147.40167
+          Width = 173.85838
           Height = 18.89765
           ShowHint = False
           DataField = 'intervalgf'
@@ -1519,8 +1154,8 @@ object ProtokolForm: TProtokolForm
             '[PsiData."intervalgf"]')
         end
         object Memo4: TfrxMemoView
-          Left = 15.11812
-          Top = 188.9765
+          Left = 11.33859
+          Top = 181.41744
           Width = 143.62214
           Height = 18.89765
           ShowHint = False
@@ -1528,16 +1163,16 @@ object ProtokolForm: TProtokolForm
             #1056#1116#1056#1109#1056#1112#1056#181#1057#1026' '#1056#1111#1057#1026#1056#1109#1057#8218#1056#1109#1056#1108#1056#1109#1056#187#1056#176)
         end
         object BarCode2: TfrxBarCodeView
-          Left = 264.5671
-          Top = 188.9765
-          Width = 38
+          Left = 230.55133
+          Top = 181.41744
+          Width = 129
           Height = 18.89765
           ShowHint = False
           BarType = bcCode39Extended
           Expression = '<PsiData."Measure_ID">'
           Rotation = 0
           ShowText = False
-          Text = '0'
+          Text = '12345678'
           WideBarRatio = 2
           Zoom = 1
           Font.Charset = DEFAULT_CHARSET
@@ -1546,2438 +1181,844 @@ object ProtokolForm: TProtokolForm
           Font.Name = 'Arial'
           Font.Style = []
         end
-        object Memo5: TfrxMemoView
-          Left = 15.11812
-          Top = 222.99227
-          Width = 143.62214
+        object SpcLoadvalue: TfrxMemoView
+          Left = 578.26809
+          Top = 147.40167
+          Width = 71.81107
           Height = 18.89765
           ShowHint = False
+          DataField = 'Loadvalue'
+          DataSet = Spc
+          DataSetName = 'Spc'
           Memo.UTF8 = (
-            #1056#1038#1056#1111#1056#181#1057#8224#1056#1105#1057#8222#1056#1105#1056#1108#1056#176#1057#8224#1056#1105#1057#1039)
+            '[Spc."Loadvalue"]')
         end
-        object BarCode3: TfrxBarCodeView
-          Left = 264.5671
-          Top = 222.99227
-          Width = 77
-          Height = 18.89765
+        object Line1: TfrxLineView
+          Left = -7.55906
+          Top = 215.43321
+          Width = 721.89023
           ShowHint = False
-          BarType = bcCode39Extended
-          Expression = '<Spc."ID">'
-          Rotation = 0
-          ShowText = False
-          Text = '2062'
-          WideBarRatio = 2
-          Zoom = 1
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -12
-          Font.Name = 'Arial'
-          Font.Style = []
+          Diagonal = True
         end
-        object Memo23: TfrxMemoView
-          Left = 15.11812
-          Top = 22.67718
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo119: TfrxMemoView
-          Left = 15.11812
-          Top = 279.68522
-          Width = 634.96104
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Memo.UTF8 = (
-            
-              #1056#1032#1057#1027#1057#8218#1056#176#1056#1029#1056#1109#1056#1030#1056#1108#1056#176' [PsiData."MachineType"]       '#1056#1038#1056#181#1057#1026#1056#1105#1056#8470#1056#1029#1057#8249#1056 +
-              #8470' '#1056#1029#1056#1109#1056#1112#1056#181#1057#1026'   '#1074#8222#8211' [PsiData."Machine_Serial"]')
-          ParentFont = False
-        end
-        object Memo120: TfrxMemoView
-          Left = 15.11812
-          Top = 309.92146
+        object Picture1: TfrxPictureView
+          Left = 7.55906
+          Top = 7.55906
           Width = 41.57483
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Memo.UTF8 = (
-            #1056#8221#1056#176#1057#8218#1056#176)
-          ParentFont = False
-        end
-        object Memo121: TfrxMemoView
-          Left = 219.21274
-          Top = 309.92146
-          Width = 173.85838
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.FormatStr = 'mm.dd.yyyy'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Memo.UTF8 = (
-            '[PsiData."Machine_Call_Date"]')
-          ParentFont = False
-        end
-        object Memo122: TfrxMemoView
-          Left = 56.69295
-          Top = 309.92146
-          Width = 147.40167
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          ParentFont = False
-        end
-        object Memo123: TfrxMemoView
-          Left = 612.28386
-          Top = 3.77953
-          Width = 98.26778
-          Height = 15.11812
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -12
-          Font.Name = 'Arial'
-          Font.Style = []
-          Memo.UTF8 = (
-            'ver. [PsiData."Version"]')
-          ParentFont = False
-        end
-      end
-      object Header1: TfrxHeader
-        Height = 34.01577
-        Top = 411.96877
-        Width = 718.1107
-        object Memo16: TfrxMemoView
-          Width = 56.69295
-          Height = 34.01577
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            #1056#1116#1056#1109#1056#1112#1056#181#1057#1026)
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo18: TfrxMemoView
-          Left = 105.82684
-          Width = 64.25201
-          Height = 34.01577
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            'R,'#1056#1115#1056#1112)
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo19: TfrxMemoView
-          Left = 170.07885
-          Width = 64.25201
-          Height = 34.01577
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            'Fmax')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo24: TfrxMemoView
-          Left = 634.96104
-          Width = 83.14966
-          Height = 34.01577
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            #1056#1038#1057#8218#1056#176#1057#8218#1057#1107#1057#1027)
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Line36: TfrxLineView
-          Left = 718.1107
-          Height = 34.01577
-          ShowHint = False
-          Frame.Typ = [ftLeft]
-        end
-        object Memo62: TfrxMemoView
-          Left = 56.69295
-          Width = 49.13389
-          Height = 34.01577
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            #1056#1119#1056#1109#1056#183#1056#1105#1057#8224#1056#1105#1056#1105)
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo49: TfrxMemoView
-          Left = 234.33086
-          Width = 64.25201
-          Height = 34.01577
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            'Fmin')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo52: TfrxMemoView
-          Left = 298.58287
-          Width = 68.03154
-          Height = 34.01577
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            'Rmax,Ohm')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo56: TfrxMemoView
-          Left = 366.61441
-          Width = 71.81107
-          Height = 34.01577
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            'C0,pF')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo88: TfrxMemoView
-          Left = 438.42548
-          Width = 64.25201
-          Height = 34.01577
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            'C0_C1')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo22: TfrxMemoView
-          Left = 502.67749
-          Width = 64.25201
-          Height = 34.01577
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            'Spur, '#1056#1169#1056#8216)
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo25: TfrxMemoView
-          Left = 566.9295
-          Width = 68.03154
-          Height = 34.01577
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            'Spur F, '#1056#1114#1056#1110#1057#8224)
-          ParentFont = False
-          VAlign = vaCenter
-        end
-      end
-      object MasterData1: TfrxMasterData
-        Height = 18.89765
-        Top = 468.66172
-        Width = 718.1107
-        OnBeforePrint = 'MasterData1OnBeforePrint'
-        DataSet = PsiData
-        DataSetName = 'PsiData'
-        RowCount = 0
-        object PsiDataN: TfrxMemoView
-          Width = 56.69295
-          Height = 18.89765
-          ShowHint = False
-          DataField = 'N'
-          DataSet = PsiData
-          DataSetName = 'PsiData'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[PsiData."N"]')
-          ParentFont = False
-        end
-        object PsiDataR: TfrxMemoView
-          Left = 105.82684
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DataField = 'R'
-          DataSet = PsiData
-          DataSetName = 'PsiData'
-          DisplayFormat.FormatStr = '%2.1f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[PsiData."R"]')
-          ParentFont = False
-        end
-        object PsiDataPosition: TfrxMemoView
-          Left = 56.69295
-          Width = 49.13389
-          Height = 18.89765
-          ShowHint = False
-          DataField = 'Position'
-          DataSet = PsiData
-          DataSetName = 'PsiData'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[PsiData."Position"]')
-          ParentFont = False
-        end
-        object PsiDataStatus: TfrxMemoView
-          Left = 634.96104
-          Width = 83.14966
-          Height = 18.89765
-          ShowHint = False
-          DataSet = PsiData
-          DataSetName = 'PsiData'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-        end
-        object PsiDataFmax: TfrxMemoView
-          Left = 170.07885
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DataField = 'Fmax'
-          DataSet = PsiData
-          DataSetName = 'PsiData'
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[PsiData."Fmax"]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object PsiDataFmin: TfrxMemoView
-          Left = 234.33086
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DataField = 'Fmin'
-          DataSet = PsiData
-          DataSetName = 'PsiData'
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[PsiData."Fmin"]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object PsiDataC0: TfrxMemoView
-          Left = 366.61441
-          Width = 71.81107
-          Height = 18.89765
-          ShowHint = False
-          DataField = 'C0'
-          DataSet = PsiData
-          DataSetName = 'PsiData'
-          DisplayFormat.FormatStr = '%2.1f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[PsiData."C0"]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object PsiDataRmax: TfrxMemoView
-          Left = 298.58287
-          Width = 68.03154
-          Height = 18.89765
-          ShowHint = False
-          DataField = 'Rmax'
-          DataSet = PsiData
-          DataSetName = 'PsiData'
-          DisplayFormat.FormatStr = '%2.1f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[PsiData."Rmax"]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object PsiDataC0_C1: TfrxMemoView
-          Left = 438.42548
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DataField = 'C0_C1'
-          DataSet = PsiData
-          DataSetName = 'PsiData'
-          DisplayFormat.FormatStr = '%2.1f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[PsiData."C0_C1"]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object PsiDataRsp1: TfrxMemoView
-          Left = 502.67749
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DataField = 'Rsp1'
-          DataSet = PsiData
-          DataSetName = 'PsiData'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[PsiData."Rsp1"]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object PsiDataFSpur1: TfrxMemoView
-          Left = 566.9295
-          Width = 68.03154
-          Height = 18.89765
-          ShowHint = False
-          DataField = 'FSpur1'
-          DataSet = PsiData
-          DataSetName = 'PsiData'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[PsiData."FSpur1"]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-      end
-      object Footer1: TfrxFooter
-        Height = 249.44898
-        Top = 510.23655
-        Width = 718.1107
-        object Memo26: TfrxMemoView
-          Width = 56.69295
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            'Max')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo27: TfrxMemoView
-          Top = 18.89765
-          Width = 56.69295
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            'Min')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo28: TfrxMemoView
-          Top = 37.7953
-          Width = 56.69295
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            'Avg')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo29: TfrxMemoView
-          Top = 56.6929499999999
-          Width = 661.41775
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          Memo.UTF8 = (
-            #1056#8217#1057#1027#1056#181#1056#1110#1056#1109)
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo3: TfrxSysMemoView
-          Left = 661.41775
-          Top = 56.6929499999999
-          Width = 56.69295
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[COUNT(MasterData1)]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo4: TfrxSysMemoView
-          Left = 105.82684
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[MAX(<PsiData."R">,MasterData1)]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo5: TfrxSysMemoView
-          Left = 105.82684
-          Top = 18.89765
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[MIN(<PsiData."R">,MasterData1)]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo6: TfrxSysMemoView
-          Left = 105.82684
-          Top = 37.7953
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[AVG(<PsiData."R">,MasterData1)]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo7: TfrxSysMemoView
-          Left = 170.07885
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[MAX(<PsiData."Fmax">,MasterData1)]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo8: TfrxSysMemoView
-          Left = 170.07885
-          Top = 18.89765
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[MIN(<PsiData."Fmax">,MasterData1)]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo9: TfrxSysMemoView
-          Left = 170.07885
-          Top = 37.7953
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[AVG(<PsiData."Fmax">,MasterData1)]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Line25: TfrxLineView
-          Top = 75.5906
-          Width = 718.1107
-          ShowHint = False
-          Frame.Typ = [ftTop]
-        end
-        object Memo42: TfrxMemoView
-          Left = -3.77953
-          Top = 75.5905999999998
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            #1056#1116#1056#1109#1057#1026#1056#1112#1057#8249)
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo43: TfrxMemoView
-          Top = 105.82684
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          Memo.UTF8 = (
-            #1056#1114#1056#176#1056#1108#1057#1027#1056#1105#1056#1112#1057#1107#1056#1112)
-          ParentFont = False
-        end
-        object Memo44: TfrxMemoView
-          Top = 124.72449
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          Memo.UTF8 = (
-            #1056#1114#1056#1105#1056#1029#1056#1105#1056#1112#1057#1107#1056#1112)
-          ParentFont = False
-        end
-        object Memo70: TfrxMemoView
-          Top = 143.62214
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          Memo.UTF8 = (
-            #1056#8220#1056#1109#1056#1169#1056#1029#1057#8249#1057#8230)
-          ParentFont = False
-        end
-        object Memo71: TfrxMemoView
-          Top = 162.51979
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          Memo.UTF8 = (
-            #1056#8216#1057#1026#1056#176#1056#1108)
-          ParentFont = False
-        end
-        object frxDBDataset2Bad: TfrxMemoView
-          Left = 634.96104
-          Top = 162.51979
-          Width = 83.14966
-          Height = 18.89765
-          ShowHint = False
-          DataSetName = 'frxDBDataset2'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-        end
-        object frxDBDataset2Good: TfrxMemoView
-          Left = 634.96104
-          Top = 143.62214
-          Width = 83.14966
-          Height = 18.89765
-          ShowHint = False
-          DataSetName = 'frxDBDataset2'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-        end
-        object Memo74: TfrxMemoView
-          Left = 105.82684
-          Top = 143.62214
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo75: TfrxMemoView
-          Left = 105.82684
-          Top = 162.51979
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo76: TfrxMemoView
-          Left = 170.07885
-          Top = 143.62214
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo77: TfrxMemoView
-          Left = 170.07885
-          Top = 162.51979
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo6: TfrxMemoView
-          Top = 192.75603
-          Width = 718.1107
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          Memo.UTF8 = (
-            #1056#1116#1056#1109#1057#1026#1056#1112#1057#8249'  '#1057#1027' '#1057#8218#1056#181#1057#8230#1056#1029#1056#1109#1056#187#1056#1109#1056#1110#1056#1105#1057#8225#1056#181#1057#1027#1056#1108#1056#1105#1056#1112' '#1056#183#1056#176#1056#1111#1056#176#1057#1027#1056#1109#1056#1112)
-          ParentFont = False
-        end
-        object Memo7: TfrxMemoView
-          Top = 211.65368
-          Width = 68.03154
-          Height = 18.89765
-          ShowHint = False
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          Memo.UTF8 = (
-            #1056#1114#1056#176#1056#1108#1057#1027#1056#1105#1056#1112#1057#1107#1056#1112)
-        end
-        object Memo8: TfrxMemoView
-          Top = 230.55133
-          Width = 68.03154
-          Height = 18.89765
-          ShowHint = False
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          Memo.UTF8 = (
-            #1056#1114#1056#1105#1056#1029#1056#1105#1056#1112#1057#1107#1056#1112)
-        end
-        object Memo11: TfrxMemoView
-          Left = 68.03154
-          Top = 211.65368
-          Width = 37.7953
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          ParentFont = False
-        end
-        object Memo12: TfrxMemoView
-          Left = 68.03154
-          Top = 230.55133
-          Width = 37.7953
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          ParentFont = False
-        end
-        object Memo40: TfrxMemoView
-          Left = 105.82684
-          Top = 211.65368
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo41: TfrxMemoView
-          Left = 105.82684
-          Top = 230.55133
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo105: TfrxMemoView
-          Left = 170.07885
-          Top = 211.65368
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo106: TfrxMemoView
-          Left = 170.07885
-          Top = 230.55133
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo53: TfrxMemoView
-          Left = 634.96104
-          Top = 105.82684
-          Width = 37.7953
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -7
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            #1056#1032#1057#1027#1056#187#1056#1109#1056#1030#1056#1029#1056#1109)
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo60: TfrxMemoView
-          Left = 634.96104
-          Top = 124.72449
-          Width = 37.7953
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-        end
-        object SysMemo13: TfrxSysMemoView
-          Left = 234.33086
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[MAX(<PsiData."Fmin">,MasterData1)]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo14: TfrxSysMemoView
-          Left = 234.33086
-          Top = 18.89765
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[MIN(<PsiData."Fmin">,MasterData1)]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo15: TfrxSysMemoView
-          Left = 234.33086
-          Top = 37.7953
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[AVG(<PsiData."Fmin">,MasterData1)]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo61: TfrxMemoView
-          Left = 234.33086
-          Top = 143.62214
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo63: TfrxMemoView
-          Left = 234.33086
-          Top = 162.51979
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo64: TfrxMemoView
-          Left = 234.33086
-          Top = 211.65368
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo65: TfrxMemoView
-          Left = 234.33086
-          Top = 230.55133
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo80: TfrxMemoView
-          Left = 64.25201
-          Top = 105.82684
-          Width = 41.57483
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          ParentFont = False
-        end
-        object Memo81: TfrxMemoView
-          Left = 64.25201
-          Top = 124.72449
-          Width = 41.57483
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          ParentFont = False
-        end
-        object Memo82: TfrxMemoView
-          Left = 64.25201
-          Top = 143.62214
-          Width = 41.57483
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          ParentFont = False
-        end
-        object Memo83: TfrxMemoView
-          Left = 64.25201
-          Top = 162.51979
-          Width = 41.57483
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          ParentFont = False
-        end
-        object Memo47: TfrxMemoView
-          Left = 105.82684
-          Top = 105.82684
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo48: TfrxMemoView
-          Left = 105.82684
-          Top = 124.72449
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo50: TfrxMemoView
-          Left = 170.07885
-          Top = 105.82684
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo51: TfrxMemoView
-          Left = 170.07885
-          Top = 124.72449
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo57: TfrxMemoView
-          Left = 234.33086
-          Top = 105.82684
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo58: TfrxMemoView
-          Left = 234.33086
-          Top = 124.72449
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo93: TfrxMemoView
-          Left = 56.69295
-          Width = 49.13389
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          ParentFont = False
-        end
-        object Memo94: TfrxMemoView
-          Left = 56.69295
-          Top = 18.89765
-          Width = 49.13389
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          ParentFont = False
-        end
-        object Memo95: TfrxMemoView
-          Left = 56.69295
-          Top = 37.7953
-          Width = 49.13389
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          ParentFont = False
-        end
-        object SysMemo19: TfrxSysMemoView
-          Left = 298.58287
-          Width = 68.03154
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[MAX(<PsiData."Rmax">,MasterData1)]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo20: TfrxSysMemoView
-          Left = 298.58287
-          Top = 18.89765
-          Width = 68.03154
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[MIN(<PsiData."Rmax">,MasterData1)]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo21: TfrxSysMemoView
-          Left = 298.58287
-          Top = 37.7953
-          Width = 68.03154
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[AVG(<PsiData."Rmax">,MasterData1)]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo22: TfrxSysMemoView
-          Left = 366.61441
-          Width = 71.81107
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[MAX(<PsiData."C0">,MasterData1)]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo23: TfrxSysMemoView
-          Left = 366.61441
-          Top = 18.89765
-          Width = 71.81107
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[MIN(<PsiData."C0">,MasterData1)]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo24: TfrxSysMemoView
-          Left = 366.61441
-          Top = 37.7953
-          Width = 71.81107
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[AVG(<PsiData."C0">,MasterData1)]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo25: TfrxSysMemoView
-          Left = 438.42548
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[MAX(<PsiData."C0_C1">,MasterData1)]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo26: TfrxSysMemoView
-          Left = 438.42548
-          Top = 18.89765
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[MIN(<PsiData."C0_C1">,MasterData1)]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo27: TfrxSysMemoView
-          Left = 438.42548
-          Top = 37.7953
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[AVG(<PsiData."C0_C1">,MasterData1)]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo89: TfrxMemoView
-          Left = 298.58287
-          Top = 143.62214
-          Width = 68.03154
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo96: TfrxMemoView
-          Left = 298.58287
-          Top = 162.51979
-          Width = 68.03154
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo97: TfrxMemoView
-          Left = 298.58287
-          Top = 105.82684
-          Width = 68.03154
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo98: TfrxMemoView
-          Left = 298.58287
-          Top = 124.72449
-          Width = 68.03154
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo99: TfrxMemoView
-          Left = 366.61441
-          Top = 143.62214
-          Width = 71.81107
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo100: TfrxMemoView
-          Left = 366.61441
-          Top = 162.51979
-          Width = 71.81107
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo103: TfrxMemoView
-          Left = 366.61441
-          Top = 105.82684
-          Width = 71.81107
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo104: TfrxMemoView
-          Left = 366.61441
-          Top = 124.72449
-          Width = 71.81107
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo107: TfrxMemoView
-          Left = 438.42548
-          Top = 143.62214
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo108: TfrxMemoView
-          Left = 438.42548
-          Top = 162.51979
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo109: TfrxMemoView
-          Left = 438.42548
-          Top = 105.82684
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo110: TfrxMemoView
-          Left = 438.42548
-          Top = 124.72449
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo111: TfrxMemoView
-          Left = 298.58287
-          Top = 211.65368
-          Width = 68.03154
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo112: TfrxMemoView
-          Left = 298.58287
-          Top = 230.55133
-          Width = 68.03154
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo113: TfrxMemoView
-          Left = 366.61441
-          Top = 211.65368
-          Width = 71.81107
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo114: TfrxMemoView
-          Left = 366.61441
-          Top = 230.55133
-          Width = 71.81107
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo115: TfrxMemoView
-          Left = 438.42548
-          Top = 211.65368
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo116: TfrxMemoView
-          Left = 438.42548
-          Top = 230.55133
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo1: TfrxSysMemoView
-          Left = 634.96104
-          Width = 83.14966
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo2: TfrxSysMemoView
-          Left = 634.96104
-          Top = 18.89765
-          Width = 83.14966
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo10: TfrxSysMemoView
-          Left = 634.96104
-          Top = 37.7953
-          Width = 83.14966
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo13: TfrxMemoView
-          Left = 634.96104
-          Top = 211.65368
-          Width = 83.14966
           Height = 37.7953
           ShowHint = False
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
+          Picture.Data = {
+            09544D65746166696C6540610000010000006C0000000000000000000000B400
+            0000920000000000000000000000FA0200006D02000020454D46000001003C61
+            00004E0000000500000000000000000000000000000080120000A81A0000C800
+            000021010000000000000000000000000000400D0300E8680400460000002C00
+            000020000000454D462B014001001C000000100000000210C0DB000000005802
+            000058020000460000005C00000050000000454D462B224004000C0000000000
+            00001E4009000C00000000000000244001000C00000000000000304002001000
+            0000040000000000803F214007000C00000000000000044000000C0000000000
+            0000160000000C000000180000000A0000001000000000000000000000000900
+            000010000000B400000093000000250000000C0000000E000080250000000C00
+            00000E000080120000000C00000001000000520000007001000001000000A4FF
+            FFFF00000000000000000000000090010000000000CC04400022430061006C00
+            6900620072006900000000000000000000000000000000000000000000000000
+            00000000000000000000000000000000000000000000000000000000120094DE
+            120010000000F8E1120078DF1200E4506032F8E11200F0DE12001000000060E0
+            1200DCE112008A4F6032F8E11200F0DE12002000000080E02D31F0DE1200F8E1
+            120020000000FFFFFFFF0C95F500FBE02D31FFFFFFFFFFFF0180FFFF01802DFF
+            0180FFFFFFFF0000000000080000000800004300000001000000000000005802
+            000025000000372E9001CC0000000000000000000000FF0200E1FFAC00400900
+            0000000000009F01000000000000430061006C00690062007200000000000000
+            0000B8DF1200334E2F31282E0C3218E3120024DF1200D5322731080000000100
+            000060DF120060DF1200007625310800000088DF12000C95F500647600080000
+            0000250000000C00000001000000250000000C00000001000000250000000C00
+            000001000000180000000C000000000000025400000054000000000000009100
+            0000350000009200000001000000982287408D85874000000000E90000000100
+            00004C000000040000000000000000000000B400000093000000500000002000
+            00003600000046000000280000001C0000004744494302000000FFFFFFFFFEFF
+            FFFFB5000000930000000000000046000000902B0000842B0000454D462B2A40
+            000024000000180000000000803F00000080000000800000803F000000800000
+            0080214005000C0000000000000008400005EC2A0000E02A00000210C0DB0200
+            000002000000B82A0000D7CDC69A0000000000000B03FC026000000000008656
+            00000100090000035C1500000200E41400000000050000000B02000000000500
+            00000C02FC020B03030000001E000400000007010100E4140000430F2000CC00
+            00002701100100000000B2021302030002002800000010010000270100000100
+            0100000000007C2900000000000000000000020000000000000000000000FFFF
+            FF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFE0000000000FFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFC0000000000007FFFFFFFFFFF
+            FFFFFFFFFFFFFFFF4000FFFFFFFFFFFFFFFFFFFFFFFFFFC000000000000003FF
+            FFFFFFFFFFFFFFFFFFFFFFFF4F8AFFFFFFFFFFFFFFFFFFFFFFFFFC0000000000
+            0000007FFFFFFFFFFFFFFFFFFFFFFFFF0700FFFFFFFFFFFFFFFFFFFFFFFFE000
+            0000000000000007FFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFF
+            FFFF00000000000000000001FFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFF
+            FFFFFFFFFFFC000000000000000000003FFFFFFFFFFFFFFFFFFFFFFFFE00FFFF
+            FFFFFFFFFFFFFFFFFFC00000000000000000000007FFFFFFFFFFFFFFFFFFFFFF
+            2201FFFFFFFFFFFFFFFFFFFFFF000000000000000000000001FFFFFFFFFFFFFF
+            FFFFFFFF4601FFFFFFFFFFFFFFFFFFFFFC0000000000000000000000007FFFFF
+            FFFFFFFFFFFFFFFF6A01FFFFFFFFFFFFFFFFFFFFF00000000000000000000000
+            001FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE000000000000000
+            00000000000FFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFF80000000
+            00000000000000000003FFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFE
+            0000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFF
+            FFFFFFFC00000000000000000000000000007FFFFFFFFFFFFFFFFFFF00FFFFFF
+            FFFFFFFFFFFFFFF800000000000000000000000000001FFFFFFFFFFFFFFFFFFF
+            0000FFFFFFFFFFFFFFFFFFE000000000000000000000000000000FFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0000000000000000000000000000007FF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF80000000000000000000000000
+            000001FFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFE000000000000000000
+            00000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0000000000
+            00000000000000000000003FFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFF800
+            0000000000000000000000000000003FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFF0000000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFE00000000000000000000000000000000007FFFFFFFFFFFFFFFF
+            0000FFFFFFFFFFFFFFFFC00000000000000000000000000000000003FFFFFFFF
+            FFFFFFFF0000FFFFFFFFFFFFFFFF000000000000000000000000000000000001
+            FFFFFFFFFFFFFFFF5043FFFFFFFFFFFFFFFE0000000000000000000000000000
+            00000000FFFFFFFFFFFFFFFF2900FFFFFFFFFFFFFFFC00000000000000000000
+            00000000000000007FFFFFFFFFFFFFFFE820FFFFFFFFFFFFFFF8000000000000
+            0000000000000000000000003FFFFFFFFFFFFFFFE920FFFFFFFFFFFFFFF00000
+            000000000000000000000000000000001FFFFFFFFFFFFFFF0000FFFFFFFFFFFF
+            FFE00000000000000000000000000000000000000FFFFFFFFFFFFFFF0000FFFF
+            FFFFFFFFFFC000000000000000000000000000000000000007FFFFFFFFFFFFFF
+            0000FFFFFFFFFFFFFF8000000000000000000000000000000000000003FFFFFF
+            FFFFFFFF1200FFFFFFFFFFFFFF80000000000000000000000000000000000000
+            01FFFFFFFFFFFFFF0000FFFFFFFFFFFFFF000000000000000000000000000000
+            0000000001FFFFFFFFFFFFFF0000FFFFFFFFFFFFFE0000000000000000000000
+            000000000000000000FFFFFFFFFFFFFF0000FFFFFFFFFFFFFC00000000000000
+            000000000000000000000000007FFFFFFFFFFFFF0000FFFFFFFFFFFFF8000000
+            00000000000000000000000000000000003FFFFFFFFFFFFF0000FFFFFFFFFFFF
+            F800000000000000000000000000000000000000001FFFFFFFFFFFFF706CFFFF
+            FFFFFFFFF000000000000000000000000000000000000000001FFFFFFFFFFFFF
+            0000FFFFFFFFFFFFE000000000000000000000000000000000000000000FFFFF
+            FFFFFFFF0000FFFFFFFFFFFFC000000000000000000000000000000000000000
+            0007FFFFFFFFFFFF0000FFFFFFFFFFFFC0000000000000000000000000000000
+            000000000007FFFFFFFFFFFF0000FFFFFFFFFFFF800000000000000000000000
+            00000000000000000001FFFFFFFFFFFF0000FFFFFFFFFFFF0000000000000000
+            0000000000000000000000000001FFFFFFFFFFFF0000FFFFFFFFFFFF00000000
+            000000000000000000000000000000000000FFFFFFFFFFFF0000FFFFFFFFFFFE
+            00000000000000000000000000000000000000000000FFFFFFFFFFFF0000FFFF
+            FFFFFFFC000000000000000000000000000000000000000000007FFFFFFFFFFF
+            0000FFFFFFFFFFFC000000000000000000000000000000000000000000003FFF
+            FFFFFFFF0000FFFFFFFFFFF80000000000000000000000000000000000000000
+            00001FFFFFFFFFFF0000FFFFFFFFFFF000000000000000000000000000000000
+            0000000000001FFFFFFFFFFF4246FFFFFFFFFFF0000000000000000000000000
+            000000000000000000000FFFFFFFFFFF4631FFFFFFFFFFE00000000000000000
+            00000000000000000000000000000FFFFFFFFFFF3431FFFFFFFFFFC000000000
+            00000000000000000000000000000000000007FFFFFFFFFF0000FFFFFFFFFFC0
+            0000000000000000000000000000000000000000000007FFFFFFFFFF0000FFFF
+            FFFFFFC00000000000000000000000000000000000000000000003FFFFFFFFFF
+            0000FFFFFFFFFF800000000000000000000000000000000000000000000001FF
+            FFFFFFFF0000FFFFFFFFFF000000000000000000000000000000000000000000
+            000001FFFFFFFFFF5A00FFFFFFFFFF0000000000000000000000000000000000
+            00000000000000FFFFFFFFFF6700FFFFFFFFFE00000000000000000000000000
+            0000000000000000000000FFFFFFFFFF0000FFFFFFFFFE000000000000000000
+            0000000000000000000000000000007FFFFFFFFF0000FFFFFFFFFC0000000000
+            000000000000000000000000000000000000007FFFFFFFFF0000FFFFFFFFFC00
+            00000000000000000000000000000000000000000000003FFFFFFFFF0000FFFF
+            FFFFF80000000000000000000000000000000000000000000000001FFFFFFFFF
+            0000FFFFFFFFF00000000000000000000000000000000000000000000000001F
+            FFFFFFFF0000FFFFFFFFF0000000000000000000000000000000000000000000
+            0000000FFFFFFFFF0000FFFFFFFFF00000000000000000000000000000000000
+            000000000000000FFFFFFFFF0000FFFFFFFFE000000000000000000000000000
+            000000000000000000000007FFFFFFFF0000FFFFFFFFC0000000000000000000
+            00000000000000000000000000000007FFFFFFFF0000FFFFFFFFC00000000000
+            0000000000000000000000000000000000000003FFFFFFFF0000FFFFFFFFC000
+            000000000000000000000000000000000000000000000003FFFFFFFF0000FFFF
+            FFFF8000000000000000000000000000000000000000000000000001FFFFFFFF
+            0000FFFFFFFF0000000000000000000000000000000000000000000000000001
+            FFFFFFFF0000FFFFFFFF00000000000000000000000000000000000000000000
+            00000000FFFFFFFF0000FFFFFFFE000000000000000000000000000000000000
+            00000000000000007FFFFFFF0000FFFFFFFE0000000000000000000000000000
+            0000000000000000000000007FFFFFFFFF00FFFFFFFC00000000000000000000
+            000000000000000000000000000000007FFFFFFFFFFFFFFFFFFC000000000000
+            00000000000000000000000000000000000000003FFFFFFFFFFFFFFFFFFC0000
+            0000000000000000000000000000000000000000000000003FFFFFFF0000FFFF
+            FFF800000000000000000000000000000000000000000000000000003FFFFFFF
+            FFFFFFFFFFF00000000000000000000000000000000000000000000000000000
+            1FFFFFFF0000FFFFFFF000000000000000000000000000000000000000000000
+            000000001FFFFFFFFFFFFFFFFFF0000000000000000000000000000000000000
+            00000000000000000FFFFFFFFFFFFFFFFFF00000000000000000000000000000
+            0000000000000000000000000FFFFFFFFFFFFFFFFFE000000000000000000000
+            000000000000000000000000000000000FFFFFFFF6F6FFFFFFE0000000000000
+            00000000000000000000000000000000000000000FFFFFFFF6F6FFFFFFC00000
+            00000000000000000000000000000000000000000000000007FFFFFFF6F6FFFF
+            FFC0000000000000000000000000000000000000000000000000000007FFFFFF
+            F6F6FFFFFFC00000000000000000000000000000000000000000000000000000
+            03FFFFFFF6F6FFFFFF8000000000000000000000000000000000000000000000
+            0000000003FFFFFFF6F6FFFFFF80000000000000000000000000000000000000
+            000000000000000003FFFFFF0000FFFFFF800000000000000000000000000000
+            00000000000000000000000001FFFFFFFFFFFFFFFF0000000000000000000000
+            0000000000000000000000000000000001FFFFFFFFFFFFFFFF00000000000000
+            000000000000000000000000000000000000000000FFFFFF0000FFFFFF000000
+            00000000000000000000000000000000000000000000000000FFFFFFFFFFFFFF
+            FE00000000000000000000000000000000000000000000000000000000FFFFFF
+            0000FFFFFE000000000000000000000000000000000000000000000000000000
+            00FFFFFFFFFFFFFFFE0000000000000000000000000000000000000000000000
+            0000000000FFFFFFFFFFFFFFFE00000000000000000000000000000000000000
+            0000000000000000007FFFFFF6F6FFFFFC000000000000000000000000000000
+            000000000000000000000000007FFFFFF6F6FFFFFC0000000000000000000000
+            00000000000000000000000000000000003FFFFFF6F6FFFFFC00000000000000
+            0000000000000000000000000000000000000000003FFFFFF6F6FFFFF8000000
+            000000000000000000000000000000000000000000000000003FFFFFF6F6FFFF
+            F8000000000000000000000000000000000000000000000000000000003FFFFF
+            F6F6FFFFF8000000000000000000000000000000000000000000000000000000
+            003FFFFF0404FFFFF80000000000000000000000000000000000000000000000
+            00000000001FFFFFFFFFFFFFF000000000000000000000000000000000000000
+            0000000000000000001FFFFFFFFFFFFFF0000000000000000000000000000000
+            000000000000000000000000000FFFFF0000FFFFF00000000000000000000000
+            00000000000000000000000000000000000FFFFF0000FFFFE000000000000000
+            0000000000000000000000000000000000000000000FFFFF0000FFFFE0000000
+            000000000000001C0000000000007F000000000000000000000FFFFF0000FFFF
+            E00000000000000000001FFC0000000000007FFE00000000000000000007FFFF
+            FFFFFFFFE0000000000000000003FFFC0000000000007FFFC000000000000000
+            0007FFFFFFFFFFFFC000000000000000000FFFFC0000000000007FFFF0000000
+            000000000007FFFFF6F6FFFFC000000000000000003FFFFC0000000000007FFF
+            F8000000000000000003FFFFF6F6FFFFC00000000000000000FFFFFC00000000
+            00007FFFFE000000000000000003FFFFF6F6FFFF800000000000000003FFFFFC
+            0000000000007FFFFF800000000000000003FFFFF6F6FFFF8000000000000000
+            0FFFFFFC0000000000007FFFFFE00000000000000003FFFFF6F6FFFF80000000
+            000000003FFFFFFC0000000000007FFFFFF80000000000000001FFFFF6F6FFFF
+            80000000000000007FFFFFFC0000000000007FFFFFFC0000000000000001FFFF
+            00FFFFFF0000000000000000FFFFFFFC0000000000007FFFFFFE000000000000
+            0001FFFFFFFFFFFF0000000000000001FFFFFFFC0000000000007FFFFFFF0000
+            000000000000FFFFFFFFFFFF0000000000000007FFFFFFFC0000000000007FFF
+            FFFFC000000000000000FFFF0000FFFE000000000000000FFFFFFFFC00000000
+            00007FFFFFFFE000000000000000FFFFFFFFFFFE000000000000001FFFFFFFFC
+            0000000000007FFFFFFFF000000000000000FFFF0000FFFE000000000000003F
+            FFFFFFFC0000000000007FFFFFFFF800000000000000FFFFFFFFFFFE00000000
+            0000007FFFFFFFFC0000000000007FFFFFFFFC000000000000007FFFFFFFFFFE
+            000000000000007FFFFFFFFC0000000000007FFFFFFFFE000000000000007FFF
+            FFFFFFFC00000000000001FFFFFFFFFC0000000000007FFFFFFFFF0000000000
+            00007FFFF6F6FFFC00000000000003FFFFFFFFFC0000000000007FFFFFFFFF80
+            0000000000003FFFF6F6FFFC00000000000007FFFFFFFFFC0000000000007FFF
+            FFFFFFC00000000000003FFFF6F6FFF80000000000000FFFFFFFFFFC00000000
+            00007FFFFFFFFFE00000000000003FFFF6F6FFF80000000000001FFFFFFFFFFC
+            0000000000007FFFFFFFFFF00000000000003FFFF6F6FFF80000000000001FFF
+            FFFFFFFC0000000000007FFFFFFFFFF80000000000003FFFF6F6FFF800000000
+            00003FFFFFFFFFFC0000000000007FFFFFFFFFFC0000000000003FFF0000FFF8
+            0000000000007FFFFFFFFFFC0000000000007FFFFFFFFFFE0000000000001FFF
+            FFFFFFF8000000000000FFFFFFFFFFFC0000000000007FFFFFFFFFFE00000000
+            00001FFFFFFFFFF0000000000001FFFFFFFFFFFC0000000000007FFFFFFFFFFF
+            0000000000001FFF0000FFF0000000000001FFFFFFFFFFFC0000000000007FFF
+            FFFFFFFF8000000000001FFFFFFFFFF0000000000003FFFFFFFFFFFC00000000
+            00007FFFFFFFFFFFC000000000000FFF0000FFF0000000000007FFFFFFFFFFFC
+            0000000000007FFFFFFFFFFFC000000000000FFFFFFFFFE000000000000FFFFF
+            FFFFFFFC0000000000007FFFFFFFFFFFE000000000000FFFFFFFFFE000000000
+            001FFFFFFFFFFFFC0000000000007FFFFFFFFFFFF000000000000FFFF6F6FFE0
+            00000000001FFFFFFFFFFFFC0000000000007FFFFFFFFFFFF800000000000FFF
+            F6F6FFE000000000003FFFFFFFFFFFFC0000000000007FFFFFFFFFFFF8000000
+            00000FFFF6F6FFE000000000003FFFFFFFFFFFFC0000000000007FFFFFFFFFFF
+            FC00000000000FFFF6F6FFE000000000007FFFFFFFFFFFFC0000000000007FFF
+            FFFFFFFFFC000000000007FFF6F6FFE00000000000FFFFFFFFFFFFFC00000000
+            00007FFFFFFFFFFFFE000000000007FFF6F6FFC00000000000FFFFFFFFFFFFFC
+            0000000000007FFFFFFFFFFFFE000000000007FF0000FFC00000000001FFFFFF
+            FFFFFFFC0000000000007FFFFFFFFFFFFF000000000007FFFFFFFFC000000000
+            01FFFFFFFFFFFFFC0000000000007FFFFFFFFFFFFF800000000003FFFFFFFFC0
+            0000000003FFFFFFFFFFFFFC0000000000007FFFFFFFFFFFFF800000000003FF
+            0000FFC00000000007FFFFFFFFFFFFFC0000000000007FFFFFFFFFFFFFC00000
+            000003FF0000FF800000000007FFFFFFFFFFFFFC0000000000007FFFFFFFFFFF
+            FFC00000000003FF0000FF80000000000FFFFFFFFFFFFFFC0000000000007FFF
+            FFFFFFFFFFE00000000003FF0000FF80000000000FFFFFFFFFFFFFFC00000000
+            00007FFFFFFFFFFFFFF00000000003FFFFFFFF80000000001FFFFFFFFFFFFFFC
+            0000000000007FFFFFFFFFFFFFF00000000003FFFFFFFF80000000003FFFFFFF
+            FFFFFFFC0000000000007FFFFFFFFFFFFFF80000000003FFF6F6FF8000000000
+            3FFFFFFFFFFFFFFC0000000000007FFFFFFFFFFFFFF80000000001FFF6F6FF80
+            000000003FFFFFFFFFFFFFFC0000000000007FFFFFFFFFFFFFFC0000000001FF
+            F6F6FF80000000007FFFFFFFFFFFFFFC0000000000007FFFFFFFFFFFFFFE0000
+            000001FFF6F6FF0000000000FFFFFFFFFFFFFFFC0000000000007FFFFFFFFFFF
+            FFFE0000000001FFF6F6FF0000000000FFFFFFFFFFFFFFF80000000000001FFF
+            FFFFFFFFFFFF0000000001FFF6F6FF0000000001FFFFFFFFFFFFFF8000000000
+            000003FFFFFFFFFFFFFF0000000000FF0000FF0000000001FFFFFFFFFFFFFC00
+            000000000000007FFFFFFFFFFFFF8000000000FFFFFFFE0000000003FFFFFFFF
+            FFFFF000000000000000001FFFFFFFFFFFFF8000000000FFFFFFFE0000000003
+            FFFFFFFFFFFFC0000000000000000003FFFFFFFFFFFFC000000000FF0000FE00
+            00000007FFFFFFFFFFFF00000000000000000001FFFFFFFFFFFFC000000000FF
+            FFFFFE000000000FFFFFFFFFFFFC000000000000000000007FFFFFFFFFFFE000
+            000000FF0000FE000000000FFFFFFFFFFFF8000000000000000000003FFFFFFF
+            FFFFE000000000FFFFFFFE000000000FFFFFFFFFFFF000000000000000000000
+            1FFFFFFFFFFFF0000000007FFFFFFE000000001FFFFFFFFFFFE0000000000000
+            0000000007FFFFFFFFFFF0000000007FFFFFFC000000003FFFFFFFFFFF800000
+            000000000000000003FFFFFFFFFFF8000000007FF6F6FC000000003FFFFFFFFF
+            FF000000000000000000000001FFFFFFFFFFF8000000007FF6F6FC000000007F
+            FFFFFFFFFE000000000000000000000000FFFFFFFFFFFC000000007FF6F6FC00
+            0000007FFFFFFFFFFC0000000000000000000000007FFFFFFFFFFE000000003F
+            F6F6FC00000000FFFFFFFFFFF80000000000000000000000003FFFFFFFFFFE00
+            0000003FF6F6FC00000000FFFFFFFFFFF00000000000000000000000001FFFFF
+            FFFFFE000000003FF6F6F800000001FFFFFFFFFFE00000000000000000000000
+            000FFFFFFFFFFF000000003F0000F800000001FFFFFFFFFFC000000000000000
+            000000000007FFFFFFFFFF800000003FFFFFF800000003FFFFFFFFFFC0000000
+            00000000000000000007FFFFFFFFFF800000003FFFFFF800000003FFFFFFFFFF
+            8000000000000000000000000003FFFFFFFFFF800000003F0000F800000003FF
+            FFFFFFFF0000000000000000000000000001FFFFFFFFFFC00000003FFFFFF800
+            000007FFFFFFFFFF0000000000000000000000000001FFFFFFFFFFC00000003F
+            0000F80000000FFFFFFFFFFE0000000000000000000000000000FFFFFFFFFFE0
+            0000001FFFFFF80000000FFFFFFFFFFE0000000000000000000000000000FFFF
+            FFFFFFE00000001FFFFFF80000000FFFFFFFFFFC000000000000000000000000
+            00007FFFFFFFFFF00000001FF6F6F80000001FFFFFFFFFFC0000000000000000
+            0000000000003FFFFFFFFFF00000001FF6F6F00000001FFFFFFFFFF800000000
+            000000000000000000003FFFFFFFFFF80000001FF6F6F00000003FFFFFFFFFF8
+            00000000000000000000000000003FFFFFFFFFF80000001FF6F6F00000003FFF
+            FFFFFFF800000000000000000000000000001FFFFFFFFFF80000001FF6F6F000
+            00003FFFFFFFFFF000000000000000000000000000001FFFFFFFFFFC0000000F
+            F6F6F00000007FFFFFFFFFF000000000000000000000000000000FFFFFFFFFFC
+            0000000F0000F00000007FFFFFFFFFF000000000000000000000000000000FFF
+            FFFFFFFE0000000FFFFFF0000000FFFFFFFFFFE0000000000000000000000000
+            00000FFFFFFFFFFE0000000FFFFFE0000000FFFFFFFFFFE00000000000000000
+            0000000000000FFFFFFFFFFE0000000F0000E0000001FFFFFFFFFFE000000000
+            000000000000000000000FFFFFFFFFFF0000000F0000E0000001FFFFFFFFFFE0
+            000000000000000000000000000007FFFFFFFFFF8000000F0000E0000001FFFF
+            FFFFFFE0000000000000000000000000000007FFFFFFFFFF8000000F0000E000
+            0003FFFFFFFFFFE0000000000000000000000000000007FFFFFFFFFF8000000F
+            FFFFE0000003FFFFFFFFFFC0000000000000000000000000000007FFFFFFFFFF
+            8000000FFFFFE0000003FFFFFFFFFFC0000000000000000000000000000007FF
+            FFFFFFFFC000000FF6F6E0000007FFFFFFFFFFC0000000000000000000000000
+            000007FFFFFFFFFFC0000007F6F6E000000FFFFFFFFFFFC00000000000000000
+            00000000000007FFFFFFFFFFE0000007F6F6E000000FFFFFFFFFFFC000000000
+            0000000000000000000007FFFFFFFFFFE0000007F6F6C000000FFFFFFFFFFFC0
+            000000000000000000000000000007FFFFFFFFFFE0000007F6F6C000000FFFFF
+            FFFFFFC0000000000000000000000000000007FFFFFFFFFFF0000007F6F6C000
+            001FFFFFFFFFFFC0000000000000000000000000000007FFFFFFFFFFF0000007
+            0000C000001FFFFFFFFFFFC0000000000000000000000000000003FFFFFFFFFF
+            F0000007FFFFC000003FFFFFFFFFFFC00000000000000FF000000000000003FF
+            FFFFFFFFF8000007FFFFC000003FFFFFFFFFFFC0000000000000FFFF00000000
+            000003FFFFFFFFFFF80000070000C000003FFFFFFFFFFFC0000000000003FFFF
+            C0000000000003FFFFFFFFFFFC000007FFFFC000007FFFFFFFFFFFC000000000
+            000FFFFFE0000000000003FFFFFFFFFFFC0000070000C000007FFFFFFFFFFFC0
+            00000000001FFFFFF0000000000003FFFFFFFFFFFC000007FFFFC000007FFFFF
+            FFFFFFC000000000001FFFFFF8000000000003FFFFFFFFFFFC000007FFFFC000
+            00FFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFE000007
+            FFFFC00000FFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFF
+            FE000007F6F6800000FFFFFFFFFFFFC000000000003FFFFFF8000000000003FF
+            FFFFFFFFFF000003F6F6800001FFFFFFFFFFFFC000000000003FFFFFF8000000
+            000003FFFFFFFFFFFF000003F6F6800001FFFFFFFFFFFFC000000000003FFFFF
+            F8000000000003FFFFFFFFFFFF000003F6F6800001FFFFFFFFFFFFC000000000
+            003FFFFFF8000000000003FFFFFFFFFFFF800003F6F6800003FFFFFFFFFFFFC0
+            00000000003FFFFFF8000000000003FFFFFFFFFFFF800003F6F6800003FFFFFF
+            FFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFC0000300008000
+            03FFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFC00003
+            FFFF800007FFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFF
+            FFC00003FFFF800007FFFFFFFFFFFFC000000000003FFFFFF8000000000003FF
+            FFFFFFFFFFC000030000800007FFFFFFFFFFFFC000000000003FFFFFF8000000
+            000003FFFFFFFFFFFFE00003FFFF80000FFFFFFFFFFFFFC000000000003FFFFF
+            F8000000000003FFFFFFFFFFFFE00003000080000FFFFFFFFFFFFFC000000000
+            003FFFFFF8000000000003FFFFFFFFFFFFF00003FFFF80000FFFFFFFFFFFFFC0
+            00000000003FFFFFF8000000000003FFFFFFFFFFFFF00003FFFF80001FFFFFFF
+            FFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFF00003F6F68000
+            1FFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFF00003
+            F6F680001FFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFF
+            FFF80003F6F680003FFFFFFFFFFFFFC000000000003FFFFFF8000000000003FF
+            FFFFFFFFFFF80003F6F680003FFFFFFFFFFFFFC000000000003FFFFFF8000000
+            000003FFFFFFFFFFFFFC0003F6F680007FFFFFFFFFFFFFC000000000003FFFFF
+            F8000000000003FFFFFFFFFFFFFC0003F6F680007FFFFFFFFFFFFFC000000000
+            003FFFFFF8000000000003FFFFFFFFFFFFFC000300FF80007FFFFFFFFFFFFFC0
+            00000000003FFFFFF8000000000003FFFFFFFFFFFFFC0003FFFF80007FFFFFFF
+            FFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFE0003FFFF8000
+            FFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFE0003
+            00008000FFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFF
+            FFFF000300008000FFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FF
+            FFFFFFFFFFFF000300008001FFFFFFFFFFFFFFC000000000003FFFFFF8000000
+            000003FFFFFFFFFFFFFF000300008001FFFFFFFFFFFFFFC000000000003FFFFF
+            F8000000000003FFFFFFFFFFFFFF0003FFFF8001FFFFFFFFFFFFFFC000000000
+            003FFFFFF8000000000003FFFFFFFFFFFFFF8001FFFF8003FFFFFFFFFFFFFFC0
+            00000000003FFFFFF8000000000003FFFFFFFFFFFFFF8001F6F68003FFFFFFFF
+            FFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFFC001F6F68003
+            FFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFFC001
+            F6F68007FFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFF
+            FFFFC001F6F68007FFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FF
+            FFFFFFFFFFFFC001F6F68007FFFFFFFFFFFFFFC000000000003FFFFFF8000000
+            000003FFFFFFFFFFFFFFC001F6F68007FFFFFFFFFFFFFFC000000000003FFFFF
+            F8000000000003FFFFFFFFFFFFFFE0010000800FFFFFFFFFFFFFFFC000000000
+            003FFFFFF8000000000003FFFFFFFFFFFFFFE001FFFF800FFFFFFFFFFFFFFFC0
+            00000000003FFFFFF8000000000003FFFFFFFFFFFFFFF001FFFF801FFFFFFFFF
+            FFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFFF0010000801F
+            FFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFFF001
+            FFFF801FFFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFF
+            FFFFF0010000801FFFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FF
+            FFFFFFFFFFFFF801FFFF803FFFFFFFFFFFFFFFC000000000003FFFFFF8000000
+            000003FFFFFFFFFFFFFFF801FFFF803FFFFFFFFFFFFFFFC000000000003FFFFF
+            F8000000000003FFFFFFFFFFFFFFF801FFFF803FFFFFFFFFFFFFFFC000000000
+            003FFFFFF8000000000003FFFFFFFFFFFFFFFC01F6F6807FFFFFFFFFFFFFFFC0
+            00000000003FFFFFF8000000000003FFFFFFFFFFFFFFFC01F6F6007FFFFFFFFF
+            FFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFFFC01F6F6007F
+            FFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFFFC01
+            F6F6007FFFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFF
+            FFFFFE01F6F600FFFFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FF
+            FFFFFFFFFFFFFE01F6F600FFFFFFFFFFFFFFFFC000000000003FFFFFF8000000
+            000003FFFFFFFFFFFFFFFE01000000FFFFFFFFFFFFFFFFC000000000003FFFFF
+            F8000000000003FFFFFFFFFFFFFFFF01FFFF01FFFFFFFFFFFFFFFFC000000000
+            003FFFFFF8000000000003FFFFFFFFFFFFFFFF01FFFF01FFFFFFFFFFFFFFFFC0
+            00000000003FFFFFF8000000000003FFFFFFFFFFFFFFFF01000001FFFFFFFFFF
+            FFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFFFF01FFFF01FF
+            FFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFFFF81
+            000001FFFFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFF
+            FFFFFF81FFFF03FFFFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FF
+            FFFFFFFFFFFFFF81FFFF03FFFFFFFFFFFFFFFFC000000000003FFFFFF8000000
+            000003FFFFFFFFFFFFFFFFC1F6F603FFFFFFFFFFFFFFFFC000000000003FFFFF
+            F8000000000003FFFFFFFFFFFFFFFFC1F6F607FFFFFFFFFFFFFFFFC000000000
+            003FFFFFF8000000000003FFFFFFFFFFFFFFFFC1F6F607FFFFFFFFFFFFFFFFC0
+            00000000003FFFFFF8000000000003FFFFFFFFFFFFFFFFC1F6F607FFFFFFFFFF
+            FFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFFFFE1F6F607FF
+            FFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFFFFE1
+            F6F60FFFFFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFF
+            FFFFFFE1FF000FFFFFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FF
+            FFFFFFFFFFFFFFF1FFFF0FFFFFFFFFFFFFFFFFC000000000003FFFFFF8000000
+            000003FFFFFFFFFFFFFFFFF1FFFF1FFFFFFFFFFFFFFFFFC000000000003FFFFF
+            F8000000000003FFFFFFFFFFFFFFFFF100001FFFFFFFFFFFFFFFFFC000000000
+            003FFFFFF8000000000003FFFFFFFFFFFFFFFFF100001FFFFFFFFFFFFFFFFFC0
+            00000000003FFFFFF8000000000003FFFFFFFFFFFFFFFFF100001FFFFFFFFFFF
+            FFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFFFFF900003FFF
+            FFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFFFFF9
+            FFFF3FFFFFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFF
+            FFFFFFF9FF003FFFFFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FF
+            FFFFFFFFFFFFFFF9F6F67FFFFFFFFFFFFFFFFFC000000000003FFFFFF8000000
+            000003FFFFFFFFFFFFFFFFFDF6F67FFFFFFFFFFFFFFFFFC000000000003FFFFF
+            F8000000000003FFFFFFFFFFFFFFFFFDF6F67FFFFFFFFFFFFFFFFFC000000000
+            003FFFFFF8000000000003FFFFFFFFFFFFFFFFFDF6F67FFFFFFFFFFFFFFFFFC0
+            00000000003FFFFFF8000000000003FFFFFFFFFFFFFFFFFFF6F6FFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF6F60400
+            00002701FFFF050000000902FFFFFF000500000001020000000010000000FB02
+            D4FE9100000000009001000000020000001253796D626F6C0002040000002D01
+            000010000000FB021400090000000000BC02000000CC0102022253797374656D
+            00CC040000002D0101000400000008010000050000000A020000000004000000
+            02010100040000002E01180005000000090200000000040000002D0100000700
+            000021050100D2009D02F701040000002D010100030000000000084001082400
+            0000180000000210C0DB01000000030000000000000000000000000000001B40
+            000040000000340000000100000002000000000000000000000000C042440000
+            3F44030000007FAA6A3F00ABAABEA8EA344300ABAABE7FAA6A3FFFBF12432100
+            000008000000620000000C000000010000002100000008000000620000000C00
+            000001000000110000000C000000080000000A00000010000000000000000000
+            000009000000100000000B030000FC0200000C00000010000000010000000000
+            00000B00000010000000B4000000930000002100000008000000250000000C00
+            000007000080250000000C00000000000080160000000C000000000000001800
+            00000C00000000000000190000000C000000FFFFFF00140000000C0000000D00
+            0000520000007001000002000000A4FFFFFF0000000000000000000000009001
+            0000000000CC07400022430061006C0069006200720069000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000A42421891900B0019625F27700000000D5CD
+            63010100B001750800000300000004BE120016DF2631F6FF00001CBE12000800
+            00000000000020BE120088552831D355283138BE1200505428317C243D002A1D
+            1EBE64CB1200C6C3273100003D0005000000B43D0000E097807CF0C327310000
+            0000304B5F0600003D00000021891000900100003D000080240400000000D4C4
+            12004DC527310800000001000000008024048FC5273101000000000000000000
+            000038191E000000000000000000000000000000000000000000000000000000
+            00000000000095000000C0821B00DCBE12005E5AF377DCBE12007024F277D4C7
+            2000A4242189C0821B006476000800000000250000000C000000020000000A00
+            000010000000000000000000000009000000100000000B030000FC0200002100
+            000008000000150000000C0000000100000051000000FC290000010000000100
+            00007B0000008400000002000000030000000000000000000000100100002701
+            00005000000030000000800000007C290000000000002000CC0013020000B202
+            000028000000100100002701000001000100000000007C290000000000000000
+            0000020000000000000000000000FFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            E0000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFF
+            FFFFFFFC0000000000007FFFFFFFFFFFFFFFFFFFFFFFFFFF4000FFFFFFFFFFFF
+            FFFFFFFFFFFFFFC000000000000003FFFFFFFFFFFFFFFFFFFFFFFFFF4F8AFFFF
+            FFFFFFFFFFFFFFFFFFFFFC00000000000000007FFFFFFFFFFFFFFFFFFFFFFFFF
+            0700FFFFFFFFFFFFFFFFFFFFFFFFE0000000000000000007FFFFFFFFFFFFFFFF
+            FFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFF00000000000000000001FFFFFFFF
+            FFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFC00000000000000000000
+            3FFFFFFFFFFFFFFFFFFFFFFFFE00FFFFFFFFFFFFFFFFFFFFFFC0000000000000
+            0000000007FFFFFFFFFFFFFFFFFFFFFF2201FFFFFFFFFFFFFFFFFFFFFF000000
+            000000000000000001FFFFFFFFFFFFFFFFFFFFFF4601FFFFFFFFFFFFFFFFFFFF
+            FC0000000000000000000000007FFFFFFFFFFFFFFFFFFFFF6A01FFFFFFFFFFFF
+            FFFFFFFFF00000000000000000000000001FFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFE00000000000000000000000000FFFFFFFFFFFFFFFFFFFFF
+            FF00FFFFFFFFFFFFFFFFFFFF8000000000000000000000000003FFFFFFFFFFFF
+            FFFFFFFF00FFFFFFFFFFFFFFFFFFFFFE0000000000000000000000000000FFFF
+            FFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFC000000000000000000000000
+            00007FFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFF80000000000000000
+            0000000000001FFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFE000000000
+            000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0
+            000000000000000000000000000007FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFF80000000000000000000000000000001FFFFFFFFFFFFFFFFFF0000FFFF
+            FFFFFFFFFFFFFE00000000000000000000000000000000FFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFC000000000000000000000000000000003FFFFFFFFF
+            FFFFFFFF0000FFFFFFFFFFFFFFFFF8000000000000000000000000000000003F
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000000000000000000
+            0000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE0000000000000000000
+            0000000000000007FFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFC00000000000
+            000000000000000000000003FFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFF0000
+            00000000000000000000000000000001FFFFFFFFFFFFFFFF5043FFFFFFFFFFFF
+            FFFE000000000000000000000000000000000000FFFFFFFFFFFFFFFF2900FFFF
+            FFFFFFFFFFFC0000000000000000000000000000000000007FFFFFFFFFFFFFFF
+            E820FFFFFFFFFFFFFFF80000000000000000000000000000000000003FFFFFFF
+            FFFFFFFFE920FFFFFFFFFFFFFFF0000000000000000000000000000000000000
+            1FFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFE00000000000000000000000000000
+            000000000FFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFC000000000000000000000
+            000000000000000007FFFFFFFFFFFFFF0000FFFFFFFFFFFFFF80000000000000
+            00000000000000000000000003FFFFFFFFFFFFFF1200FFFFFFFFFFFFFF800000
+            0000000000000000000000000000000001FFFFFFFFFFFFFF0000FFFFFFFFFFFF
+            FF0000000000000000000000000000000000000001FFFFFFFFFFFFFF0000FFFF
+            FFFFFFFFFE0000000000000000000000000000000000000000FFFFFFFFFFFFFF
+            0000FFFFFFFFFFFFFC00000000000000000000000000000000000000007FFFFF
+            FFFFFFFF0000FFFFFFFFFFFFF800000000000000000000000000000000000000
+            003FFFFFFFFFFFFF0000FFFFFFFFFFFFF8000000000000000000000000000000
+            00000000001FFFFFFFFFFFFF706CFFFFFFFFFFFFF00000000000000000000000
+            0000000000000000001FFFFFFFFFFFFF0000FFFFFFFFFFFFE000000000000000
+            000000000000000000000000000FFFFFFFFFFFFF0000FFFFFFFFFFFFC0000000
+            000000000000000000000000000000000007FFFFFFFFFFFF0000FFFFFFFFFFFF
+            C0000000000000000000000000000000000000000007FFFFFFFFFFFF0000FFFF
+            FFFFFFFF80000000000000000000000000000000000000000001FFFFFFFFFFFF
+            0000FFFFFFFFFFFF00000000000000000000000000000000000000000001FFFF
+            FFFFFFFF0000FFFFFFFFFFFF0000000000000000000000000000000000000000
+            0000FFFFFFFFFFFF0000FFFFFFFFFFFE00000000000000000000000000000000
+            000000000000FFFFFFFFFFFF0000FFFFFFFFFFFC000000000000000000000000
+            000000000000000000007FFFFFFFFFFF0000FFFFFFFFFFFC0000000000000000
+            00000000000000000000000000003FFFFFFFFFFF0000FFFFFFFFFFF800000000
+            0000000000000000000000000000000000001FFFFFFFFFFF0000FFFFFFFFFFF0
+            000000000000000000000000000000000000000000001FFFFFFFFFFF4246FFFF
+            FFFFFFF0000000000000000000000000000000000000000000000FFFFFFFFFFF
+            4631FFFFFFFFFFE0000000000000000000000000000000000000000000000FFF
+            FFFFFFFF3431FFFFFFFFFFC00000000000000000000000000000000000000000
+            000007FFFFFFFFFF0000FFFFFFFFFFC000000000000000000000000000000000
+            00000000000007FFFFFFFFFF0000FFFFFFFFFFC0000000000000000000000000
+            0000000000000000000003FFFFFFFFFF0000FFFFFFFFFF800000000000000000
+            000000000000000000000000000001FFFFFFFFFF0000FFFFFFFFFF0000000000
+            00000000000000000000000000000000000001FFFFFFFFFF5A00FFFFFFFFFF00
+            0000000000000000000000000000000000000000000000FFFFFFFFFF6700FFFF
+            FFFFFE000000000000000000000000000000000000000000000000FFFFFFFFFF
+            0000FFFFFFFFFE0000000000000000000000000000000000000000000000007F
+            FFFFFFFF0000FFFFFFFFFC000000000000000000000000000000000000000000
+            0000007FFFFFFFFF0000FFFFFFFFFC0000000000000000000000000000000000
+            000000000000003FFFFFFFFF0000FFFFFFFFF800000000000000000000000000
+            00000000000000000000001FFFFFFFFF0000FFFFFFFFF0000000000000000000
+            0000000000000000000000000000001FFFFFFFFF0000FFFFFFFFF00000000000
+            000000000000000000000000000000000000000FFFFFFFFF0000FFFFFFFFF000
+            00000000000000000000000000000000000000000000000FFFFFFFFF0000FFFF
+            FFFFE000000000000000000000000000000000000000000000000007FFFFFFFF
+            0000FFFFFFFFC000000000000000000000000000000000000000000000000007
+            FFFFFFFF0000FFFFFFFFC0000000000000000000000000000000000000000000
+            00000003FFFFFFFF0000FFFFFFFFC00000000000000000000000000000000000
+            0000000000000003FFFFFFFF0000FFFFFFFF8000000000000000000000000000
+            000000000000000000000001FFFFFFFF0000FFFFFFFF00000000000000000000
+            00000000000000000000000000000001FFFFFFFF0000FFFFFFFF000000000000
+            0000000000000000000000000000000000000000FFFFFFFF0000FFFFFFFE0000
+            0000000000000000000000000000000000000000000000007FFFFFFF0000FFFF
+            FFFE00000000000000000000000000000000000000000000000000007FFFFFFF
+            FF00FFFFFFFC0000000000000000000000000000000000000000000000000000
+            7FFFFFFFFFFFFFFFFFFC00000000000000000000000000000000000000000000
+            000000003FFFFFFFFFFFFFFFFFFC000000000000000000000000000000000000
+            00000000000000003FFFFFFF0000FFFFFFF80000000000000000000000000000
+            0000000000000000000000003FFFFFFFFFFFFFFFFFF000000000000000000000
+            000000000000000000000000000000001FFFFFFF0000FFFFFFF0000000000000
+            00000000000000000000000000000000000000001FFFFFFFFFFFFFFFFFF00000
+            0000000000000000000000000000000000000000000000000FFFFFFFFFFFFFFF
+            FFF000000000000000000000000000000000000000000000000000000FFFFFFF
+            FFFFFFFFFFE00000000000000000000000000000000000000000000000000000
+            0FFFFFFFF6F6FFFFFFE000000000000000000000000000000000000000000000
+            000000000FFFFFFFF6F6FFFFFFC0000000000000000000000000000000000000
+            000000000000000007FFFFFFF6F6FFFFFFC00000000000000000000000000000
+            00000000000000000000000007FFFFFFF6F6FFFFFFC000000000000000000000
+            0000000000000000000000000000000003FFFFFFF6F6FFFFFF80000000000000
+            000000000000000000000000000000000000000003FFFFFFF6F6FFFFFF800000
+            00000000000000000000000000000000000000000000000003FFFFFF0000FFFF
+            FF80000000000000000000000000000000000000000000000000000001FFFFFF
+            FFFFFFFFFF000000000000000000000000000000000000000000000000000000
+            01FFFFFFFFFFFFFFFF0000000000000000000000000000000000000000000000
+            0000000000FFFFFF0000FFFFFF00000000000000000000000000000000000000
+            000000000000000000FFFFFFFFFFFFFFFE000000000000000000000000000000
+            00000000000000000000000000FFFFFF0000FFFFFE0000000000000000000000
+            0000000000000000000000000000000000FFFFFFFFFFFFFFFE00000000000000
+            000000000000000000000000000000000000000000FFFFFFFFFFFFFFFE000000
+            000000000000000000000000000000000000000000000000007FFFFFF6F6FFFF
+            FC000000000000000000000000000000000000000000000000000000007FFFFF
+            F6F6FFFFFC000000000000000000000000000000000000000000000000000000
+            003FFFFFF6F6FFFFFC0000000000000000000000000000000000000000000000
+            00000000003FFFFFF6F6FFFFF800000000000000000000000000000000000000
+            0000000000000000003FFFFFF6F6FFFFF8000000000000000000000000000000
+            000000000000000000000000003FFFFFF6F6FFFFF80000000000000000000000
+            00000000000000000000000000000000003FFFFF0404FFFFF800000000000000
+            0000000000000000000000000000000000000000001FFFFFFFFFFFFFF0000000
+            000000000000000000000000000000000000000000000000001FFFFFFFFFFFFF
+            F0000000000000000000000000000000000000000000000000000000000FFFFF
+            0000FFFFF0000000000000000000000000000000000000000000000000000000
+            000FFFFF0000FFFFE00000000000000000000000000000000000000000000000
+            00000000000FFFFF0000FFFFE0000000000000000000001C0000000000007F00
+            0000000000000000000FFFFF0000FFFFE00000000000000000001FFC00000000
+            00007FFE00000000000000000007FFFFFFFFFFFFE0000000000000000003FFFC
+            0000000000007FFFC0000000000000000007FFFFFFFFFFFFC000000000000000
+            000FFFFC0000000000007FFFF0000000000000000007FFFFF6F6FFFFC0000000
+            00000000003FFFFC0000000000007FFFF8000000000000000003FFFFF6F6FFFF
+            C00000000000000000FFFFFC0000000000007FFFFE000000000000000003FFFF
+            F6F6FFFF800000000000000003FFFFFC0000000000007FFFFF80000000000000
+            0003FFFFF6F6FFFF80000000000000000FFFFFFC0000000000007FFFFFE00000
+            000000000003FFFFF6F6FFFF80000000000000003FFFFFFC0000000000007FFF
+            FFF80000000000000001FFFFF6F6FFFF80000000000000007FFFFFFC00000000
+            00007FFFFFFC0000000000000001FFFF00FFFFFF0000000000000000FFFFFFFC
+            0000000000007FFFFFFE0000000000000001FFFFFFFFFFFF0000000000000001
+            FFFFFFFC0000000000007FFFFFFF0000000000000000FFFFFFFFFFFF00000000
+            00000007FFFFFFFC0000000000007FFFFFFFC000000000000000FFFF0000FFFE
+            000000000000000FFFFFFFFC0000000000007FFFFFFFE000000000000000FFFF
+            FFFFFFFE000000000000001FFFFFFFFC0000000000007FFFFFFFF00000000000
+            0000FFFF0000FFFE000000000000003FFFFFFFFC0000000000007FFFFFFFF800
+            000000000000FFFFFFFFFFFE000000000000007FFFFFFFFC0000000000007FFF
+            FFFFFC000000000000007FFFFFFFFFFE000000000000007FFFFFFFFC00000000
+            00007FFFFFFFFE000000000000007FFFFFFFFFFC00000000000001FFFFFFFFFC
+            0000000000007FFFFFFFFF000000000000007FFFF6F6FFFC00000000000003FF
+            FFFFFFFC0000000000007FFFFFFFFF800000000000003FFFF6F6FFFC00000000
+            000007FFFFFFFFFC0000000000007FFFFFFFFFC00000000000003FFFF6F6FFF8
+            0000000000000FFFFFFFFFFC0000000000007FFFFFFFFFE00000000000003FFF
+            F6F6FFF80000000000001FFFFFFFFFFC0000000000007FFFFFFFFFF000000000
+            00003FFFF6F6FFF80000000000001FFFFFFFFFFC0000000000007FFFFFFFFFF8
+            0000000000003FFFF6F6FFF80000000000003FFFFFFFFFFC0000000000007FFF
+            FFFFFFFC0000000000003FFF0000FFF80000000000007FFFFFFFFFFC00000000
+            00007FFFFFFFFFFE0000000000001FFFFFFFFFF8000000000000FFFFFFFFFFFC
+            0000000000007FFFFFFFFFFE0000000000001FFFFFFFFFF0000000000001FFFF
+            FFFFFFFC0000000000007FFFFFFFFFFF0000000000001FFF0000FFF000000000
+            0001FFFFFFFFFFFC0000000000007FFFFFFFFFFF8000000000001FFFFFFFFFF0
+            000000000003FFFFFFFFFFFC0000000000007FFFFFFFFFFFC000000000000FFF
+            0000FFF0000000000007FFFFFFFFFFFC0000000000007FFFFFFFFFFFC0000000
+            00000FFFFFFFFFE000000000000FFFFFFFFFFFFC0000000000007FFFFFFFFFFF
+            E000000000000FFFFFFFFFE000000000001FFFFFFFFFFFFC0000000000007FFF
+            FFFFFFFFF000000000000FFFF6F6FFE000000000001FFFFFFFFFFFFC00000000
+            00007FFFFFFFFFFFF800000000000FFFF6F6FFE000000000003FFFFFFFFFFFFC
+            0000000000007FFFFFFFFFFFF800000000000FFFF6F6FFE000000000003FFFFF
+            FFFFFFFC0000000000007FFFFFFFFFFFFC00000000000FFFF6F6FFE000000000
+            007FFFFFFFFFFFFC0000000000007FFFFFFFFFFFFC000000000007FFF6F6FFE0
+            0000000000FFFFFFFFFFFFFC0000000000007FFFFFFFFFFFFE000000000007FF
+            F6F6FFC00000000000FFFFFFFFFFFFFC0000000000007FFFFFFFFFFFFE000000
+            000007FF0000FFC00000000001FFFFFFFFFFFFFC0000000000007FFFFFFFFFFF
+            FF000000000007FFFFFFFFC00000000001FFFFFFFFFFFFFC0000000000007FFF
+            FFFFFFFFFF800000000003FFFFFFFFC00000000003FFFFFFFFFFFFFC00000000
+            00007FFFFFFFFFFFFF800000000003FF0000FFC00000000007FFFFFFFFFFFFFC
+            0000000000007FFFFFFFFFFFFFC00000000003FF0000FF800000000007FFFFFF
+            FFFFFFFC0000000000007FFFFFFFFFFFFFC00000000003FF0000FF8000000000
+            0FFFFFFFFFFFFFFC0000000000007FFFFFFFFFFFFFE00000000003FF0000FF80
+            000000000FFFFFFFFFFFFFFC0000000000007FFFFFFFFFFFFFF00000000003FF
+            FFFFFF80000000001FFFFFFFFFFFFFFC0000000000007FFFFFFFFFFFFFF00000
+            000003FFFFFFFF80000000003FFFFFFFFFFFFFFC0000000000007FFFFFFFFFFF
+            FFF80000000003FFF6F6FF80000000003FFFFFFFFFFFFFFC0000000000007FFF
+            FFFFFFFFFFF80000000001FFF6F6FF80000000003FFFFFFFFFFFFFFC00000000
+            00007FFFFFFFFFFFFFFC0000000001FFF6F6FF80000000007FFFFFFFFFFFFFFC
+            0000000000007FFFFFFFFFFFFFFE0000000001FFF6F6FF0000000000FFFFFFFF
+            FFFFFFFC0000000000007FFFFFFFFFFFFFFE0000000001FFF6F6FF0000000000
+            FFFFFFFFFFFFFFF80000000000001FFFFFFFFFFFFFFF0000000001FFF6F6FF00
+            00000001FFFFFFFFFFFFFF8000000000000003FFFFFFFFFFFFFF0000000000FF
+            0000FF0000000001FFFFFFFFFFFFFC00000000000000007FFFFFFFFFFFFF8000
+            000000FFFFFFFE0000000003FFFFFFFFFFFFF000000000000000001FFFFFFFFF
+            FFFF8000000000FFFFFFFE0000000003FFFFFFFFFFFFC0000000000000000003
+            FFFFFFFFFFFFC000000000FF0000FE0000000007FFFFFFFFFFFF000000000000
+            00000001FFFFFFFFFFFFC000000000FFFFFFFE000000000FFFFFFFFFFFFC0000
+            00000000000000007FFFFFFFFFFFE000000000FF0000FE000000000FFFFFFFFF
+            FFF8000000000000000000003FFFFFFFFFFFE000000000FFFFFFFE000000000F
+            FFFFFFFFFFF0000000000000000000001FFFFFFFFFFFF0000000007FFFFFFE00
+            0000001FFFFFFFFFFFE00000000000000000000007FFFFFFFFFFF0000000007F
+            FFFFFC000000003FFFFFFFFFFF800000000000000000000003FFFFFFFFFFF800
+            0000007FF6F6FC000000003FFFFFFFFFFF000000000000000000000001FFFFFF
+            FFFFF8000000007FF6F6FC000000007FFFFFFFFFFE0000000000000000000000
+            00FFFFFFFFFFFC000000007FF6F6FC000000007FFFFFFFFFFC00000000000000
+            00000000007FFFFFFFFFFE000000003FF6F6FC00000000FFFFFFFFFFF8000000
+            0000000000000000003FFFFFFFFFFE000000003FF6F6FC00000000FFFFFFFFFF
+            F00000000000000000000000001FFFFFFFFFFE000000003FF6F6F800000001FF
+            FFFFFFFFE00000000000000000000000000FFFFFFFFFFF000000003F0000F800
+            000001FFFFFFFFFFC000000000000000000000000007FFFFFFFFFF800000003F
+            FFFFF800000003FFFFFFFFFFC000000000000000000000000007FFFFFFFFFF80
+            0000003FFFFFF800000003FFFFFFFFFF8000000000000000000000000003FFFF
+            FFFFFF800000003F0000F800000003FFFFFFFFFF000000000000000000000000
+            0001FFFFFFFFFFC00000003FFFFFF800000007FFFFFFFFFF0000000000000000
+            000000000001FFFFFFFFFFC00000003F0000F80000000FFFFFFFFFFE00000000
+            00000000000000000000FFFFFFFFFFE00000001FFFFFF80000000FFFFFFFFFFE
+            0000000000000000000000000000FFFFFFFFFFE00000001FFFFFF80000000FFF
+            FFFFFFFC00000000000000000000000000007FFFFFFFFFF00000001FF6F6F800
+            00001FFFFFFFFFFC00000000000000000000000000003FFFFFFFFFF00000001F
+            F6F6F00000001FFFFFFFFFF800000000000000000000000000003FFFFFFFFFF8
+            0000001FF6F6F00000003FFFFFFFFFF800000000000000000000000000003FFF
+            FFFFFFF80000001FF6F6F00000003FFFFFFFFFF8000000000000000000000000
+            00001FFFFFFFFFF80000001FF6F6F00000003FFFFFFFFFF00000000000000000
+            0000000000001FFFFFFFFFFC0000000FF6F6F00000007FFFFFFFFFF000000000
+            000000000000000000000FFFFFFFFFFC0000000F0000F00000007FFFFFFFFFF0
+            00000000000000000000000000000FFFFFFFFFFE0000000FFFFFF0000000FFFF
+            FFFFFFE000000000000000000000000000000FFFFFFFFFFE0000000FFFFFE000
+            0000FFFFFFFFFFE000000000000000000000000000000FFFFFFFFFFE0000000F
+            0000E0000001FFFFFFFFFFE000000000000000000000000000000FFFFFFFFFFF
+            0000000F0000E0000001FFFFFFFFFFE0000000000000000000000000000007FF
+            FFFFFFFF8000000F0000E0000001FFFFFFFFFFE0000000000000000000000000
+            000007FFFFFFFFFF8000000F0000E0000003FFFFFFFFFFE00000000000000000
+            00000000000007FFFFFFFFFF8000000FFFFFE0000003FFFFFFFFFFC000000000
+            0000000000000000000007FFFFFFFFFF8000000FFFFFE0000003FFFFFFFFFFC0
+            000000000000000000000000000007FFFFFFFFFFC000000FF6F6E0000007FFFF
+            FFFFFFC0000000000000000000000000000007FFFFFFFFFFC0000007F6F6E000
+            000FFFFFFFFFFFC0000000000000000000000000000007FFFFFFFFFFE0000007
+            F6F6E000000FFFFFFFFFFFC0000000000000000000000000000007FFFFFFFFFF
+            E0000007F6F6C000000FFFFFFFFFFFC0000000000000000000000000000007FF
+            FFFFFFFFE0000007F6F6C000000FFFFFFFFFFFC0000000000000000000000000
+            000007FFFFFFFFFFF0000007F6F6C000001FFFFFFFFFFFC00000000000000000
+            00000000000007FFFFFFFFFFF00000070000C000001FFFFFFFFFFFC000000000
+            0000000000000000000003FFFFFFFFFFF0000007FFFFC000003FFFFFFFFFFFC0
+            0000000000000FF000000000000003FFFFFFFFFFF8000007FFFFC000003FFFFF
+            FFFFFFC0000000000000FFFF00000000000003FFFFFFFFFFF80000070000C000
+            003FFFFFFFFFFFC0000000000003FFFFC0000000000003FFFFFFFFFFFC000007
+            FFFFC000007FFFFFFFFFFFC000000000000FFFFFE0000000000003FFFFFFFFFF
+            FC0000070000C000007FFFFFFFFFFFC000000000001FFFFFF0000000000003FF
+            FFFFFFFFFC000007FFFFC000007FFFFFFFFFFFC000000000001FFFFFF8000000
+            000003FFFFFFFFFFFC000007FFFFC00000FFFFFFFFFFFFC000000000003FFFFF
+            F8000000000003FFFFFFFFFFFE000007FFFFC00000FFFFFFFFFFFFC000000000
+            003FFFFFF8000000000003FFFFFFFFFFFE000007F6F6800000FFFFFFFFFFFFC0
+            00000000003FFFFFF8000000000003FFFFFFFFFFFF000003F6F6800001FFFFFF
+            FFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFF000003F6F68000
+            01FFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFF000003
+            F6F6800001FFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFF
+            FF800003F6F6800003FFFFFFFFFFFFC000000000003FFFFFF8000000000003FF
+            FFFFFFFFFF800003F6F6800003FFFFFFFFFFFFC000000000003FFFFFF8000000
+            000003FFFFFFFFFFFFC000030000800003FFFFFFFFFFFFC000000000003FFFFF
+            F8000000000003FFFFFFFFFFFFC00003FFFF800007FFFFFFFFFFFFC000000000
+            003FFFFFF8000000000003FFFFFFFFFFFFC00003FFFF800007FFFFFFFFFFFFC0
+            00000000003FFFFFF8000000000003FFFFFFFFFFFFC000030000800007FFFFFF
+            FFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFE00003FFFF8000
+            0FFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFE00003
+            000080000FFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFF
+            FFF00003FFFF80000FFFFFFFFFFFFFC000000000003FFFFFF8000000000003FF
+            FFFFFFFFFFF00003FFFF80001FFFFFFFFFFFFFC000000000003FFFFFF8000000
+            000003FFFFFFFFFFFFF00003F6F680001FFFFFFFFFFFFFC000000000003FFFFF
+            F8000000000003FFFFFFFFFFFFF00003F6F680001FFFFFFFFFFFFFC000000000
+            003FFFFFF8000000000003FFFFFFFFFFFFF80003F6F680003FFFFFFFFFFFFFC0
+            00000000003FFFFFF8000000000003FFFFFFFFFFFFF80003F6F680003FFFFFFF
+            FFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFC0003F6F68000
+            7FFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFC0003
+            F6F680007FFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFF
+            FFFC000300FF80007FFFFFFFFFFFFFC000000000003FFFFFF8000000000003FF
+            FFFFFFFFFFFC0003FFFF80007FFFFFFFFFFFFFC000000000003FFFFFF8000000
+            000003FFFFFFFFFFFFFE0003FFFF8000FFFFFFFFFFFFFFC000000000003FFFFF
+            F8000000000003FFFFFFFFFFFFFE000300008000FFFFFFFFFFFFFFC000000000
+            003FFFFFF8000000000003FFFFFFFFFFFFFF000300008000FFFFFFFFFFFFFFC0
+            00000000003FFFFFF8000000000003FFFFFFFFFFFFFF000300008001FFFFFFFF
+            FFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFF000300008001
+            FFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFF0003
+            FFFF8001FFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFF
+            FFFF8001FFFF8003FFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FF
+            FFFFFFFFFFFF8001F6F68003FFFFFFFFFFFFFFC000000000003FFFFFF8000000
+            000003FFFFFFFFFFFFFFC001F6F68003FFFFFFFFFFFFFFC000000000003FFFFF
+            F8000000000003FFFFFFFFFFFFFFC001F6F68007FFFFFFFFFFFFFFC000000000
+            003FFFFFF8000000000003FFFFFFFFFFFFFFC001F6F68007FFFFFFFFFFFFFFC0
+            00000000003FFFFFF8000000000003FFFFFFFFFFFFFFC001F6F68007FFFFFFFF
+            FFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFFC001F6F68007
+            FFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFFE001
+            0000800FFFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFF
+            FFFFE001FFFF800FFFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FF
+            FFFFFFFFFFFFF001FFFF801FFFFFFFFFFFFFFFC000000000003FFFFFF8000000
+            000003FFFFFFFFFFFFFFF0010000801FFFFFFFFFFFFFFFC000000000003FFFFF
+            F8000000000003FFFFFFFFFFFFFFF001FFFF801FFFFFFFFFFFFFFFC000000000
+            003FFFFFF8000000000003FFFFFFFFFFFFFFF0010000801FFFFFFFFFFFFFFFC0
+            00000000003FFFFFF8000000000003FFFFFFFFFFFFFFF801FFFF803FFFFFFFFF
+            FFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFFF801FFFF803F
+            FFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFFF801
+            FFFF803FFFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFF
+            FFFFFC01F6F6807FFFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FF
+            FFFFFFFFFFFFFC01F6F6007FFFFFFFFFFFFFFFC000000000003FFFFFF8000000
+            000003FFFFFFFFFFFFFFFC01F6F6007FFFFFFFFFFFFFFFC000000000003FFFFF
+            F8000000000003FFFFFFFFFFFFFFFC01F6F6007FFFFFFFFFFFFFFFC000000000
+            003FFFFFF8000000000003FFFFFFFFFFFFFFFE01F6F600FFFFFFFFFFFFFFFFC0
+            00000000003FFFFFF8000000000003FFFFFFFFFFFFFFFE01F6F600FFFFFFFFFF
+            FFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFFFE01000000FF
+            FFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFFFF01
+            FFFF01FFFFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFF
+            FFFFFF01FFFF01FFFFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FF
+            FFFFFFFFFFFFFF01000001FFFFFFFFFFFFFFFFC000000000003FFFFFF8000000
+            000003FFFFFFFFFFFFFFFF01FFFF01FFFFFFFFFFFFFFFFC000000000003FFFFF
+            F8000000000003FFFFFFFFFFFFFFFF81000001FFFFFFFFFFFFFFFFC000000000
+            003FFFFFF8000000000003FFFFFFFFFFFFFFFF81FFFF03FFFFFFFFFFFFFFFFC0
+            00000000003FFFFFF8000000000003FFFFFFFFFFFFFFFF81FFFF03FFFFFFFFFF
+            FFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFFFFC1F6F603FF
+            FFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFFFFC1
+            F6F607FFFFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFF
+            FFFFFFC1F6F607FFFFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FF
+            FFFFFFFFFFFFFFC1F6F607FFFFFFFFFFFFFFFFC000000000003FFFFFF8000000
+            000003FFFFFFFFFFFFFFFFE1F6F607FFFFFFFFFFFFFFFFC000000000003FFFFF
+            F8000000000003FFFFFFFFFFFFFFFFE1F6F60FFFFFFFFFFFFFFFFFC000000000
+            003FFFFFF8000000000003FFFFFFFFFFFFFFFFE1FF000FFFFFFFFFFFFFFFFFC0
+            00000000003FFFFFF8000000000003FFFFFFFFFFFFFFFFF1FFFF0FFFFFFFFFFF
+            FFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFFFFF1FFFF1FFF
+            FFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFFFFF1
+            00001FFFFFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFF
+            FFFFFFF100001FFFFFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FF
+            FFFFFFFFFFFFFFF100001FFFFFFFFFFFFFFFFFC000000000003FFFFFF8000000
+            000003FFFFFFFFFFFFFFFFF900003FFFFFFFFFFFFFFFFFC000000000003FFFFF
+            F8000000000003FFFFFFFFFFFFFFFFF9FFFF3FFFFFFFFFFFFFFFFFC000000000
+            003FFFFFF8000000000003FFFFFFFFFFFFFFFFF9FF003FFFFFFFFFFFFFFFFFC0
+            00000000003FFFFFF8000000000003FFFFFFFFFFFFFFFFF9F6F67FFFFFFFFFFF
+            FFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFFFFFDF6F67FFF
+            FFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFFFFFFFFFD
+            F6F67FFFFFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FFFFFFFFFF
+            FFFFFFFDF6F67FFFFFFFFFFFFFFFFFC000000000003FFFFFF8000000000003FF
+            FFFFFFFFFFFFFFFFF6F6FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFF6F6220000000C000000FFFFFFFF180000000C00
+            0000FFFFFF00190000000C00000000000000520000007001000003000000D4FE
+            FFFF910000000000000000000000900100000000000207000012530079006D00
+            62006F006C000000000000000000000000000000000000000000000000000000
+            00000000000000000000000000000000000000000000000000000000917C4006
+            150000901C0000001500400615005CBD1200B29E917C4006150000901C000030
+            00000000150000901C00000000000000000000C01C00000000001000EF060000
+            000000C01C00F08F1C000000000000000000000000002CBE12007909917C4009
+            917C080615005D00917CD0B91C0024901C0008901C0000000000000000000090
+            1C00D6B1F1779FB1F177A4242189020000000300000013020000B20200000000
+            000000000000100100002701000054901C0024901C00000000000000CC003000
+            00007C290000D0290000D0B91C0024901C003400910300901C00B00C2F040000
+            00000000000000901C00D0290000000015000000000000000000647600080000
+            0000250000000C00000003000000520000007001000004000000140000000900
+            00000000000000000000BC020000000000CC0702022253007900730074006500
+            6D00000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000917C4006150000901C0000001500400615005CBD1200B29E
+            917C4006150000901C00003000000000150000901C00000000000000000000C0
+            1C00000000001000EF060000000000C01C00F08F1C0000000000000000000000
+            00002CBE12007909917C4009917C080615005D00917C00001C0024901C000890
+            1C00000000000000000000901C00D6B1F1779FB1F177A4242189020000000300
+            000013020000B20200000000000000000000100100000000000054901C002490
+            1C00000000000000CC00300000007C290000D0290000D0B91C0024901C003400
+            910300901C00B00C2F04000000000000000000901C0064760008000000002500
+            00000C00000004000000120000000C00000001000000160000000C0000001800
+            0000180000000C00000000000000250000000C00000003000000540000005400
+            00007500000047000000A00000008D00000001000000EDCC793FA49A503FF701
+            00009D020000010000004C000000000000000000000000000000FFFFFFFFFFFF
+            FFFF50000000D2F00000BE000000250000000C00000004000000250000000C00
+            000007000080250000000C00000000000080300000000C0000000F0000802500
+            00000C000000010000004B000000100000000000000005000000280000000C00
+            000003000000280000000C00000004000000250000000C000000000000802500
+            00000C00000007000080220000000C000000FFFFFFFF250000000C0000000D00
+            0080280000000C00000002000000220000000C000000FFFFFFFF220000000C00
+            0000FFFFFFFF460000007000000064000000454D462B2C400000240000001800
+            00006B9C6C3E00000080000000804B23453E7FAA6A3F00ABAABE2A4000002400
+            0000180000000000803F00000080000000800000803F00000080000000802140
+            07000C00000000000000044000000C0000000000000046000000140000000800
+            00004744494303000000250000000C0000000E000080250000000C0000000E00
+            0080460000003400000028000000454D462B2A40000024000000180000000000
+            803F00000080000000800000803F000000800000008021000000080000006200
+            00000C000000010000004C000000640000000100000000000000B40000009200
+            00000100000000000000B4000000930000002900AA0000000000000000000000
+            803F00000000000000000000803F000000000000000000000000000000000000
+            0000000000000000000000000000220000000C000000FFFFFFFF460000001C00
+            000010000000454D462B024000000C000000000000000E000000140000000000
+            00001000000014000000}
+          HightQuality = False
+          Transparent = False
+          TransparentColor = clWhite
         end
-        object Memo17: TfrxMemoView
-          Left = 672.75634
-          Top = 105.82684
-          Width = 45.35436
-          Height = 18.89765
+        object Memo5: TfrxMemoView
+          Left = 64.25201
+          Top = 7.55906
+          Width = 219.21274
+          Height = 37.7953
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -8
+          Font.Height = -27
           Font.Name = 'Arial'
           Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
           Memo.UTF8 = (
-            #1056#1106#1056#1029#1056#1109#1056#1112#1056#176#1056#187#1057#1034#1056#1029#1056#1109)
+            #1056#1106#1056#1115' "'#1056#1114#1056#1109#1057#1026#1056#1105#1056#1109#1056#1029'"')
           ParentFont = False
-          VAlign = vaCenter
         end
-        object Memo20: TfrxMemoView
-          Left = 672.75634
-          Top = 124.72449
-          Width = 45.35436
-          Height = 18.89765
+        object SysMemo1: TfrxSysMemoView
+          Left = 574.48856
+          Top = 7.55906
+          Width = 132.28355
+          Height = 30.23624
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -13
+          Font.Height = -21
           Font.Name = 'Arial'
           Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-        end
-        object SysMemo11: TfrxSysMemoView
-          Left = 502.67749
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo12: TfrxSysMemoView
-          Left = 502.67749
-          Top = 18.89765
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo16: TfrxSysMemoView
-          Left = 502.67749
-          Top = 37.7953
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo17: TfrxSysMemoView
-          Left = 566.9295
-          Width = 68.03154
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo18: TfrxSysMemoView
-          Left = 566.9295
-          Top = 18.89765
-          Width = 68.03154
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo28: TfrxSysMemoView
-          Left = 566.9295
-          Top = 37.7953
-          Width = 68.03154
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo39: TfrxMemoView
-          Left = 502.67749
-          Top = 143.62214
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo45: TfrxMemoView
-          Left = 502.67749
-          Top = 162.51979
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo46: TfrxMemoView
-          Left = 502.67749
-          Top = 105.82684
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo54: TfrxMemoView
-          Left = 502.67749
-          Top = 124.72449
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo55: TfrxMemoView
-          Left = 566.9295
-          Top = 143.62214
-          Width = 68.03154
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo59: TfrxMemoView
-          Left = 566.9295
-          Top = 162.51979
-          Width = 68.03154
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo72: TfrxMemoView
-          Left = 566.9295
-          Top = 105.82684
-          Width = 68.03154
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo73: TfrxMemoView
-          Left = 566.9295
-          Top = 124.72449
-          Width = 68.03154
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo78: TfrxMemoView
-          Left = 502.67749
-          Top = 211.65368
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo79: TfrxMemoView
-          Left = 502.67749
-          Top = 230.55133
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo84: TfrxMemoView
-          Left = 566.9295
-          Top = 211.65368
-          Width = 68.03154
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo85: TfrxMemoView
-          Left = 566.9295
-          Top = 230.55133
-          Width = 68.03154
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-      end
-      object PageFooter1: TfrxPageFooter
-        Height = 22.67718
-        Top = 820.15801
-        Width = 718.1107
-        object Memo30: TfrxMemoView
-          Left = 86.92919
-          Top = 3.77953000000002
-          Width = 37.7953
-          Height = 15.11812
-          ShowHint = False
           Memo.UTF8 = (
-            '[Page#]')
-        end
-        object Memo31: TfrxMemoView
-          Left = 264.5671
-          Top = 3.77953000000002
-          Width = 79.37013
-          Height = 15.11812
-          ShowHint = False
-          Memo.UTF8 = (
-            '[Date]')
-        end
-        object Memo32: TfrxMemoView
-          Left = 7.55906
-          Top = 3.77953000000002
-          Width = 68.03154
-          Height = 15.11812
-          ShowHint = False
-          Memo.UTF8 = (
-            #1056#1038#1057#8218#1057#1026#1056#176#1056#1029#1056#1105#1057#8224#1056#176)
-        end
-        object Memo33: TfrxMemoView
-          Left = 132.28355
-          Top = 3.77953000000002
-          Width = 22.67718
-          Height = 15.11812
-          ShowHint = False
-          Memo.UTF8 = (
-            #1056#1105#1056#183)
-        end
-        object Memo34: TfrxMemoView
-          Left = 162.51979
-          Top = 3.77953000000002
-          Width = 30.23624
-          Height = 15.11812
-          ShowHint = False
-          Memo.UTF8 = (
-            '[TotalPages#]')
-        end
-        object Memo35: TfrxMemoView
-          Left = 411.96877
-          Top = 3.77953000000002
-          Width = 60.47248
-          Height = 15.11812
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[Time]')
+            '[DATE]')
           ParentFont = False
-        end
-        object Memo66: TfrxMemoView
-          Left = 211.65368
-          Top = 3.77953000000002
-          Width = 37.7953
-          Height = 15.11812
-          ShowHint = False
-          Memo.UTF8 = (
-            #1056#8221#1056#176#1057#8218#1056#176)
-        end
-        object Memo67: TfrxMemoView
-          Left = 362.83488
-          Top = 3.77953000000002
-          Width = 49.13389
-          Height = 15.11812
-          ShowHint = False
-          Memo.UTF8 = (
-            #1056#8217#1057#1026#1056#181#1056#1112#1057#1039)
-        end
-        object Memo68: TfrxMemoView
-          Left = 476.22078
-          Top = 3.77953000000002
-          Width = 68.03154
-          Height = 15.11812
-          ShowHint = False
-          Memo.UTF8 = (
-            #1056#8217#1057#8249#1056#1111#1056#1109#1056#187#1056#1029#1056#1105#1056#187)
-        end
-        object Memo69: TfrxMemoView
-          Left = 555.59091
-          Top = 3.77953000000002
-          Width = 154.96073
-          Height = 18.89765
-          ShowHint = False
-          DataSetName = 'frxDBDataset4'
-          Memo.UTF8 = (
-            '[PsiData."Operator"]')
         end
       end
     end

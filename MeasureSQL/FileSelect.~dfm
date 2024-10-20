@@ -2684,6 +2684,7 @@ object FileSelectForm: TFileSelectForm
     DataSource = DataModule1.FileSelectSource
     FixedColor = clWindowText
     ParentColor = True
+    ReadOnly = True
     TabOrder = 0
     TitleFont.Charset = DEFAULT_CHARSET
     TitleFont.Color = clLime

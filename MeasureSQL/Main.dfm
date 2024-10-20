@@ -4,7 +4,7 @@ object MainForm: TMainForm
   BorderStyle = bsSingle
   Caption = #1048#1079#1084#1077#1088#1077#1085#1080#1077' '#1088#1077#1079#1086#1085#1072#1090#1086#1088#1086#1074' '#1053#1055#1050'-2'
   ClientHeight = 476
-  ClientWidth = 527
+  ClientWidth = 529
   Color = clBlack
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clYellow
@@ -3215,6 +3215,14 @@ object MainForm: TMainForm
     TabOrder = 20
     Version = '1.2.3.0'
     OnClick = AdvGlassButton2Click
+  end
+  object FileSelect_I: TEdit
+    Left = 736
+    Top = 96
+    Width = 121
+    Height = 21
+    TabOrder = 21
+    Text = 'FileSelect_I'
   end
   object AdvMainMenu1: TAdvMainMenu
     MenuStyler = AdvMenuOfficeStyler1

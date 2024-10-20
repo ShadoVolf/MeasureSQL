@@ -125,6 +125,7 @@ __published:	// IDE-managed Components
         TLabel *MSK_Label;
         TAdvGlassButton *AdvGlassButton2;
         TMenuItem *Change_Machine_B;
+        TEdit *FileSelect_I;
         void __fastcall btnCloseClick(TObject *Sender);
         void __fastcall btnFileClick(TObject *Sender);
         void __fastcall btnNumbersClick(TObject *Sender);

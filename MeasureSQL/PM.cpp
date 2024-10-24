@@ -13,6 +13,7 @@
 #include "PMDetail.h"
 #include "protokol.h"
 #include "PassportNumbers.h"
+#include <cmath>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "RzButton"
@@ -411,11 +412,41 @@ for (int i=0; i<DataModule2->psiData->RecordCount; i++){
                    DataModule2->psiData2->FieldByName("RR4")->AsFloat=temp;
                    temp=DataModule2->psiData->FieldByName("RR5")->AsFloat+(DataModule2->psiData->FieldByName("RR5")->AsFloat*rr*hhh);
                    DataModule2->psiData2->FieldByName("RR5")->AsFloat=temp;
+                   //Получаем наименование типа резонатора
+                   DataModule2->SqlSpecTemp->Active=false;
+                   DataModule2->SqlSpecTemp->SQL->Clear();
+                   DataModule2->SqlSpecTemp->SQL->Add("Select `NameR` from `specification` where `Name`='"+DataModule2->psiData->FieldByName("Spc")->AsString+"'");
+                   DataModule2->SqlSpecTemp->Active=true;
+                   DataModule2->SqlSpecTemp->First();
 
 
                    DataModule2->psiDataTemp->First();
 
                       for (int l=0;l<DataModule2->psiDataTemp->RecordCount; l++){
+                      bool app = false;
+                      //Если перемер на резонаторы типа РК526 то темепратуры добавляем только кратные 10
+                        if (DataModule2->SqlSpecTemp->FieldByName("NameR")->AsString=="РК526")
+                        {
+                                 int iNumber = static_cast<int>(floor(DataModule2->psiDataTemp->FieldByName("Temp")->AsFloat));
+                                 if (iNumber % 10 == 0)
+                                        {
+                                          app = true;
+                                         } else {
+
+                                                  app = false;
+                                         }
+
+                                 if (DataModule2->psiDataTemp->FieldByName("Temp")->AsFloat == 25)
+                                 {
+                                  app = true;
+                                  }
+
+                        } else {
+                         app = true;
+
+                        }
+                        if (app)
+                        {
                            DataModule2->psiDataTemp2->Append();
                            DataModule2->psiDataTemp2->FieldByName("Temp")->AsString=DataModule2->psiDataTemp->FieldByName("Temp")->AsString;
                            DataModule2->psiDataTemp2->FieldByName("Status")->AsString=DataModule2->psiDataTemp->FieldByName("Status")->AsString;
@@ -488,8 +519,9 @@ for (int i=0; i<DataModule2->psiData->RecordCount; i++){
                            temp=DataModule2->psiDataTemp->FieldByName("L")->AsFloat+(DataModule2->psiDataTemp->FieldByName("L")->AsFloat*rr*hhh);
                            DataModule2->psiDataTemp2->FieldByName("L")->AsFloat=temp;
                            DataModule2->psiDataTemp2->Post();
-                           DataModule2->psiDataTemp->Next();
 
+                         }//app
+                         DataModule2->psiDataTemp->Next();
                           } //for
                             DataModule2->psiDataTemp2->Active=false;
                             DataModule2->psiDataTemp2->SQL->Clear();
@@ -663,6 +695,7 @@ for (int i=0; i<DataModule2->psiData->RecordCount; i++){
                                }
                              DataModule2->psiDataTemp2->Next();
                           }
+
                          DataModule2->psiData2->FieldByName("Mono")->AsFloat=Mono;
                           DataModule2->psiData2->FieldByName("Fn")->AsFloat=nom;
                         DataModule2->psiData2->FieldByName("Fmax")->AsFloat=FFmax;
@@ -672,6 +705,7 @@ for (int i=0; i<DataModule2->psiData->RecordCount; i++){
                          DataModule2->psiData2->FieldByName("Rmax")->AsFloat=Rmax;
                           DataModule2->psiData2->FieldByName("Rmin")->AsFloat=Rmin;
                            DataModule2->psiData2->FieldByName("RcRb")->AsFloat=RcRbmax;
+
                           if (R==0){
 
                           DataModule2->psiData2->FieldByName("Status")->AsString="Незамер." ;
@@ -691,12 +725,14 @@ for (int i=0; i<DataModule2->psiData->RecordCount; i++){
                         else {
                           DataModule2->psiData2->FieldByName("Fmaxm")->AsFloat=FFmin;
                         }
+
                          DataModule2->psiData2->Post();
                          Command1->SQL->Clear();
                          Command1->SQL->Add("Update psidatatemp set Fn='"+FloatToStr(nom)+"' where Measure_ID='"+Measure_ID+"' and N='"+DataModule2->psiData->FieldByName("N")->AsString+"'");
                          Command1->Execute();
                  break;
                  }
+               //}//**************************************************************
 
            }
            VrProgressBar1->Position=i+1;

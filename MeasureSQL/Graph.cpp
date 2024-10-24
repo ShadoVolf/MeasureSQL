@@ -1082,7 +1082,8 @@ if (!OptionsGraphForm->AllInOne->Checked){
  DataModule2->psiData2->Active=false;
 DataModule2->psiData2->SQL->Clear();
 AnsiString S;
- S="Select `F`,`N` from psidata where Measure_ID='"+cmb_ID->Text+"' LIMIT 1";
+ //S="Select `F`,`N` from psidata where Measure_ID='"+cmb_ID->Text+"' LIMIT 1";
+ S="Select `F`,`N` from psidata where Measure_ID='"+cmb_ID->Text+"'";
 DataModule2->psiData2->SQL->Add(S);
 DataModule2->psiData2->Active=true;
 DataModule2->psiData2->First();
@@ -1338,14 +1339,15 @@ int k=DataModule2->psiDataTemp->RecordCount;
 
 
 
-         DataModule2->psiDataTemp->Next();
   }
 
 
   //Series2->Visible=true;
    //Series1->Visible=true;
  //Chart1->Print();
- Chart1->SaveToBitmapFile(DataModule1->Options->FieldByName("GraphDir")->AsString+"\\"+DataModule2->psiData2->FieldByName("N")->AsString+".bmp");
+        AnsiString tr= DataModule1->Options->FieldByName("GraphDir")->AsString;
+        Chart1->SaveToBitmapFile(DataModule1->Options->FieldByName("GraphDir")->AsString+"\\"+DataModule2->psiData2->FieldByName("N")->AsString+".bmp");
+        DataModule2->psiDataTemp->Next();
  DataModule2->psiData2->Next();
 }
  }

@@ -113,7 +113,7 @@ AnsiString S,S1,S2,S4;
 DataModule2->psiData->Active=false;
 DataModule2->psiData->SQL->Clear();
 AnsiString S3;
- S3="Select * from psidata where ";
+ S3="Select distinct `N` from psidata where ";
        if (edtMsk->ItemIndex!=-1){
        S3=S3+"msk='"+edtMsk->Text+"' ";
 
@@ -124,7 +124,7 @@ AnsiString S3;
 
        }
       if (cmb_ID->Text!=""){
-        S3="Select * from psidata where Measure_ID='"+cmb_ID->Text+"' ";
+        S3="Select distinct `N` from psidata where Measure_ID='"+cmb_ID->Text+"' ";
 
        }
        S3=S3+"ORDER BY N";
@@ -136,8 +136,8 @@ DataModule2->psiData->Active=true;
 DataModule2->psiData->First();
  edtM->Items->Clear();
  edtNumber->Items->Clear();
- cmb_ID->Items->Clear();
-for (int i=0;i<DataModule2->psiData->RecordCount;i++){
+
+/*for (int i=0;i<DataModule2->psiData->RecordCount;i++){
 
           int u=1;
           S2=DataModule2->psiData->FieldByName("N")->AsString;
@@ -181,6 +181,30 @@ for (int i=0;i<DataModule2->psiData->RecordCount;i++){
           }
     DataModule2->psiData->Next();
       }
+ */
+ for (int i=0;i<DataModule2->psiData->RecordCount;i++){
+    edtNumber->Items->Add(DataModule2->psiData->FieldByName("N")->AsString);
+     DataModule2->psiData->Next();
+ }
+  S3="Select distinct `N` from psidata where ";
+       if (edtMsk->ItemIndex!=-1){
+       S3=S3+"msk='"+edtMsk->Text+"' ";
+
+       }
+  S3=S3+"ORDER BY N";
+
+if (cmb_ID->Text!=""){
+ cmb_ID->Items->Clear();
+DataModule2->psiData->SQL->Add(S3);
+DataModule2->psiData->Active=true;
+DataModule2->psiData->First();
+ for (int i=0;i<DataModule2->psiData->RecordCount;i++){
+    cmb_ID->Items->Add(DataModule2->psiData->FieldByName("Measure_ID")->AsString);
+     DataModule2->psiData->Next();
+ }
+
+
+}
 
   edtNumber->Enabled=true;
   edtTypeF->Enabled=true;
@@ -1313,7 +1337,8 @@ int k=DataModule2->psiDataTemp->RecordCount;
   }
 
 
-
+         AnsiString tr= DataModule1->Options->FieldByName("GraphDir")->AsString;
+         Chart1->SaveToBitmapFile(DataModule1->Options->FieldByName("GraphDir")->AsString+"\\"+DataModule2->psiData2->FieldByName("N")->AsString+".bmp");
          DataModule2->psiDataTemp->Next();
   }
 
@@ -1321,7 +1346,7 @@ int k=DataModule2->psiDataTemp->RecordCount;
   //Series2->Visible=true;
    //Series1->Visible=true;
  //Chart1->Print();
- Chart1->SaveToBitmapFile(DataModule1->Options->FieldByName("GraphDir")->AsString+"\\"+DataModule2->psiData2->FieldByName("N")->AsString+".bmp");
+
  DataModule2->psiData2->Next();
 }
  }

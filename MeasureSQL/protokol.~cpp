@@ -1405,6 +1405,8 @@ DataModule2->Protokol_Archive->Append();
                      DataModule2->Protokol_Archive->FieldByName("N")->AsString=DataModule2->psiData->FieldByName("N")->AsString;
                      DataModule2->Protokol_Archive->FieldByName("File")->AsString=DataModule2->psiData->FieldByName("File")->AsString;
                      DataModule2->Protokol_Archive->FieldByName("F")->AsFloat=DataModule2->psiData->FieldByName("F")->AsFloat;
+                     DataModule2->Protokol_Archive->FieldByName("FL_Num")->AsFloat=DataModule2->psiData->FieldByName("FL_Num")->AsFloat;
+                     DataModule2->Protokol_Archive->FieldByName("FL_Num_Virtual")->AsFloat=DataModule2->psiData->FieldByName("FL_Num_Virtual")->AsFloat;
                      DataModule2->Protokol_Archive->FieldByName("C0")->AsFloat=DataModule2->psiData->FieldByName("C0")->AsFloat;
                      DataModule2->Protokol_Archive->FieldByName("Cq")->AsFloat=DataModule2->psiData->FieldByName("Cq")->AsFloat;
                      DataModule2->Protokol_Archive->FieldByName("Q")->AsFloat=DataModule2->psiData->FieldByName("Q")->AsFloat;
@@ -1439,6 +1441,7 @@ DataModule2->Protokol_Archive->Append();
                      DataModule2->Protokol_Archive->FieldByName("Fmax")->AsFloat=DataModule2->psiData->FieldByName("Fmax")->AsFloat;
                      DataModule2->Protokol_Archive->FieldByName("Fmin")->AsFloat=DataModule2->psiData->FieldByName("Fmin")->AsFloat;
                      DataModule2->Protokol_Archive->FieldByName("PH_ID")->AsFloat=DataModule2->psiData->FieldByName("PH_ID")->AsFloat;
+
                      DataModule2->Protokol_Archive->FieldByName("Date")->AsString=Now().DateString();
                      DataModule2->Protokol_Archive->FieldByName("Fmaxm")->AsFloat=DataModule2->psiData->FieldByName("Fmaxm")->AsFloat;
                      DataModule2->Protokol_Archive->FieldByName("Spc")->AsString=DataModule2->psiData->FieldByName("Spc")->AsString;
@@ -1494,7 +1497,7 @@ void __fastcall TProtokolForm::InsertLianozExecute(TObject *Sender)
                      DataModule2->Lianoz->FieldByName("Customer")->AsString=CustomerName;
                      DataModule2->Lianoz->FieldByName("Dogovor")->AsString=Dogovor;
                      DataModule2->Lianoz->FieldByName("N")->AsString=DataModule2->psiData->FieldByName("N")->AsString;
-                     DataModule2->Lianoz->FieldByName("F")->AsFloat=DataModule2->psiData->FieldByName("F")->AsFloat;
+
                      DataModule2->Lianoz->FieldByName("C0")->AsFloat=DataModule2->psiData->FieldByName("C0")->AsFloat;
                      DataModule2->Lianoz->FieldByName("Cq")->AsFloat=DataModule2->psiData->FieldByName("Cq")->AsFloat;
                      DataModule2->Lianoz->FieldByName("Q")->AsFloat=DataModule2->psiData->FieldByName("Q")->AsFloat;
@@ -1521,6 +1524,14 @@ void __fastcall TProtokolForm::InsertLianozExecute(TObject *Sender)
                       }
                       else {
                      DataModule2->Lianoz->FieldByName("Fptp")->AsFloat=DataModule2->psiData->FieldByName("Fptp")->AsFloat;
+                     }
+                     if(DataModule2->SqlSpec->FieldByName("FL_Num")->AsString == "True"){
+                       DataModule2->Lianoz->FieldByName("F")->AsFloat=DataModule2->psiData->FieldByName("FL_Num")->AsFloat;
+
+                     }
+                     else {
+
+                      DataModule2->Lianoz->FieldByName("F")->AsFloat=DataModule2->psiData->FieldByName("F")->AsFloat;
                      }
                      DataModule2->Lianoz->FieldByName("L")->AsFloat=DataModule2->psiData->FieldByName("L")->AsFloat;
                      DataModule2->Lianoz->FieldByName("Rc_Rb")->AsFloat=DataModule2->psiData->FieldByName("RcRb")->AsFloat;

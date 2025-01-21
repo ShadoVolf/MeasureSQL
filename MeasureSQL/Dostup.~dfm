@@ -1,8 +1,8 @@
 object DostupForm: TDostupForm
-  Left = 510
-  Top = 223
+  Left = 593
+  Top = 487
   BorderStyle = bsSingle
-  Caption = #1044#1086#1089#1090#1091#1087
+  Caption = 'pyinstaller '
   ClientHeight = 339
   ClientWidth = 252
   Color = clBlack

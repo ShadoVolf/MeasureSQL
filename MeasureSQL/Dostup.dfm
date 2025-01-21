@@ -2,7 +2,7 @@ object DostupForm: TDostupForm
   Left = 593
   Top = 487
   BorderStyle = bsSingle
-  Caption = #1044#1086#1089#1090#1091#1087
+  Caption = #1052#1086#1088#1080#1086#1085
   ClientHeight = 339
   ClientWidth = 252
   Color = clBlack

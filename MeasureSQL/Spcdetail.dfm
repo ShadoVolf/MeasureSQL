@@ -4,7 +4,7 @@ object SpcDetailForm: TSpcDetailForm
   BorderStyle = bsSingle
   Caption = #1057#1087#1077#1094#1080#1092#1080#1082#1072#1094#1080#1103
   ClientHeight = 874
-  ClientWidth = 706
+  ClientWidth = 788
   Color = clBlack
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clLime
@@ -45,7 +45,7 @@ object SpcDetailForm: TSpcDetailForm
     Caption = #1055#1077#1095#1072#1090#1100
   end
   object Label6: TLabel
-    Left = 576
+    Left = 688
     Top = 184
     Width = 67
     Height = 13
@@ -242,14 +242,14 @@ object SpcDetailForm: TSpcDetailForm
   end
   object Label8: TLabel
     Left = 368
-    Top = 64
+    Top = 48
     Width = 53
     Height = 13
     Caption = #1052#1086#1097#1085#1086#1089#1090#1100
   end
   object Label9: TLabel
-    Left = 624
-    Top = 64
+    Left = 544
+    Top = 56
     Width = 17
     Height = 13
     Caption = 'uW'
@@ -269,49 +269,49 @@ object SpcDetailForm: TSpcDetailForm
     Caption = #1056#1077#1078#1080#1084' '#1080#1079#1084#1077#1088#1077#1085#1080#1103
   end
   object Label12: TLabel
-    Left = 368
-    Top = 128
+    Left = 512
+    Top = 120
     Width = 94
     Height = 13
     Caption = #1047#1085#1072#1095#1077#1085#1080#1077' '#1077#1084#1082#1086#1089#1090#1080
   end
   object Label13: TLabel
-    Left = 624
-    Top = 128
+    Left = 736
+    Top = 120
     Width = 12
     Height = 13
     Caption = 'pF'
   end
   object Label38: TLabel
-    Left = 368
-    Top = 96
+    Left = 592
+    Top = 56
     Width = 15
     Height = 13
     Caption = #1058#1059
   end
   object Label39: TLabel
-    Left = 368
-    Top = 152
+    Left = 360
+    Top = 80
     Width = 46
     Height = 13
     Caption = #1053#1086#1084#1080#1085#1072#1083
   end
   object Label40: TLabel
-    Left = 624
-    Top = 152
+    Left = 528
+    Top = 88
     Width = 20
     Height = 13
     Caption = #1052#1075#1094
   end
   object Label42: TLabel
-    Left = 8
-    Top = 144
+    Left = 568
+    Top = 80
     Width = 36
     Height = 13
     Caption = #1050#1086#1088#1087#1091#1089
   end
   object Label43: TLabel
-    Left = 320
+    Left = 408
     Top = 16
     Width = 19
     Height = 13
@@ -328,7 +328,7 @@ object SpcDetailForm: TSpcDetailForm
   object RzLine2: TRzLine
     Left = -134
     Top = 816
-    Width = 857
+    Width = 927
     Height = 20
     LineColor = clMaroon
     LineWidth = 4
@@ -381,7 +381,7 @@ object SpcDetailForm: TSpcDetailForm
     Caption = #1042#1055
   end
   object Label46: TLabel
-    Left = 472
+    Left = 576
     Top = 16
     Width = 59
     Height = 13
@@ -1562,9 +1562,9 @@ object SpcDetailForm: TSpcDetailForm
     TabOrder = 60
   end
   object RzDBEdit37: TRzDBEdit
-    Left = 576
+    Left = 544
     Top = 648
-    Width = 97
+    Width = 105
     Height = 21
     DataSource = DataModule1.SpecificationSource
     DataField = 'RbT'
@@ -1599,9 +1599,9 @@ object SpcDetailForm: TSpcDetailForm
     TabOrder = 62
   end
   object RzDBEdit39: TRzDBEdit
-    Left = 560
+    Left = 544
     Top = 672
-    Width = 57
+    Width = 105
     Height = 21
     DataSource = DataModule1.SpecificationSource
     DataField = 'TbBegin'
@@ -1618,9 +1618,9 @@ object SpcDetailForm: TSpcDetailForm
     TabOrder = 63
   end
   object RzDBEdit40: TRzDBEdit
-    Left = 624
+    Left = 680
     Top = 672
-    Width = 49
+    Width = 105
     Height = 21
     DataSource = DataModule1.SpecificationSource
     DataField = 'TbEnd'
@@ -1637,9 +1637,9 @@ object SpcDetailForm: TSpcDetailForm
     TabOrder = 64
   end
   object RzDBEdit41: TRzDBEdit
-    Left = 576
+    Left = 544
     Top = 696
-    Width = 97
+    Width = 105
     Height = 21
     DataSource = DataModule1.SpecificationSource
     DataField = 'Tft'
@@ -1764,9 +1764,9 @@ object SpcDetailForm: TSpcDetailForm
     TabOrder = 71
   end
   object RzDBEdit51: TRzDBEdit
-    Left = 584
+    Left = 544
     Top = 744
-    Width = 97
+    Width = 105
     Height = 21
     DataSource = DataModule1.SpecificationSource
     DataField = 'Rsp1tBegin'
@@ -1783,9 +1783,9 @@ object SpcDetailForm: TSpcDetailForm
     TabOrder = 72
   end
   object RzDBEdit52: TRzDBEdit
-    Left = 584
+    Left = 544
     Top = 768
-    Width = 97
+    Width = 105
     Height = 21
     DataSource = DataModule1.SpecificationSource
     DataField = 'Rsp2tBegin'
@@ -1802,9 +1802,9 @@ object SpcDetailForm: TSpcDetailForm
     TabOrder = 73
   end
   object RzDBEdit53: TRzDBEdit
-    Left = 584
+    Left = 544
     Top = 792
-    Width = 97
+    Width = 105
     Height = 21
     DataSource = DataModule1.SpecificationSource
     DataField = 'Rsp3tBegin'
@@ -1823,7 +1823,7 @@ object SpcDetailForm: TSpcDetailForm
   object RzDBEdit54: TRzDBEdit
     Left = 544
     Top = 456
-    Width = 57
+    Width = 113
     Height = 21
     DataSource = DataModule1.SpecificationSource
     DataField = 'TmBegin'
@@ -1840,9 +1840,9 @@ object SpcDetailForm: TSpcDetailForm
     TabOrder = 75
   end
   object RzDBEdit55: TRzDBEdit
-    Left = 616
+    Left = 680
     Top = 456
-    Width = 65
+    Width = 105
     Height = 21
     DataSource = DataModule1.SpecificationSource
     DataField = 'TmEnd'
@@ -1859,9 +1859,9 @@ object SpcDetailForm: TSpcDetailForm
     TabOrder = 76
   end
   object RzDBEdit56: TRzDBEdit
-    Left = 576
+    Left = 544
     Top = 432
-    Width = 97
+    Width = 113
     Height = 21
     DataSource = DataModule1.SpecificationSource
     DataField = 'Tnakl'
@@ -1878,7 +1878,7 @@ object SpcDetailForm: TSpcDetailForm
     TabOrder = 77
   end
   object RzDBEdit57: TRzDBEdit
-    Left = 568
+    Left = 680
     Top = 216
     Width = 97
     Height = 21
@@ -1897,7 +1897,7 @@ object SpcDetailForm: TSpcDetailForm
     TabOrder = 78
   end
   object RzDBEdit58: TRzDBEdit
-    Left = 568
+    Left = 680
     Top = 240
     Width = 97
     Height = 21
@@ -1916,7 +1916,7 @@ object SpcDetailForm: TSpcDetailForm
     TabOrder = 79
   end
   object RzDBEdit59: TRzDBEdit
-    Left = 568
+    Left = 680
     Top = 264
     Width = 97
     Height = 21
@@ -1935,7 +1935,7 @@ object SpcDetailForm: TSpcDetailForm
     TabOrder = 80
   end
   object RzDBEdit60: TRzDBEdit
-    Left = 568
+    Left = 680
     Top = 288
     Width = 97
     Height = 21
@@ -1954,7 +1954,7 @@ object SpcDetailForm: TSpcDetailForm
     TabOrder = 81
   end
   object RzDBEdit61: TRzDBEdit
-    Left = 568
+    Left = 680
     Top = 312
     Width = 97
     Height = 21
@@ -1973,7 +1973,7 @@ object SpcDetailForm: TSpcDetailForm
     TabOrder = 82
   end
   object RzDBEdit62: TRzDBEdit
-    Left = 568
+    Left = 680
     Top = 336
     Width = 97
     Height = 21
@@ -2015,7 +2015,7 @@ object SpcDetailForm: TSpcDetailForm
     TabOrder = 84
   end
   object edtType: TRzDBComboBox
-    Left = 344
+    Left = 440
     Top = 16
     Width = 121
     Height = 21
@@ -2111,8 +2111,8 @@ object SpcDetailForm: TSpcDetailForm
     TabOrder = 88
   end
   object edtTu: TRzDBComboBox
-    Left = 456
-    Top = 96
+    Left = 616
+    Top = 48
     Width = 161
     Height = 21
     DataField = 'TU'
@@ -2134,8 +2134,8 @@ object SpcDetailForm: TSpcDetailForm
     TabOrder = 89
   end
   object RzDBEdit63: TRzDBEdit
-    Left = 520
-    Top = 64
+    Left = 432
+    Top = 48
     Width = 97
     Height = 21
     DataSource = DataModule1.SpecificationSource
@@ -2153,8 +2153,8 @@ object SpcDetailForm: TSpcDetailForm
     TabOrder = 90
   end
   object RzDBEdit64: TRzDBEdit
-    Left = 512
-    Top = 128
+    Left = 616
+    Top = 112
     Width = 105
     Height = 21
     DataSource = DataModule1.SpecificationSource
@@ -2172,8 +2172,8 @@ object SpcDetailForm: TSpcDetailForm
     TabOrder = 91
   end
   object RzDBComboBox7: TRzDBComboBox
-    Left = 512
-    Top = 152
+    Left = 416
+    Top = 80
     Width = 105
     Height = 21
     DataField = 'Nominal'
@@ -2195,8 +2195,8 @@ object SpcDetailForm: TSpcDetailForm
     TabOrder = 92
   end
   object edtKorpus: TRzDBComboBox
-    Left = 192
-    Top = 144
+    Left = 616
+    Top = 80
     Width = 153
     Height = 21
     DataField = 'Type'
@@ -2282,7 +2282,7 @@ object SpcDetailForm: TSpcDetailForm
     WinMaskColor = clRed
   end
   object btnClose: TAdvGlassButton
-    Left = 624
+    Left = 704
     Top = 832
     Width = 75
     Height = 32
@@ -2419,7 +2419,7 @@ object SpcDetailForm: TSpcDetailForm
   object RzDBEdit43: TRzDBEdit
     Left = 544
     Top = 384
-    Width = 57
+    Width = 113
     Height = 21
     DataSource = DataModule1.SpecificationSource
     DataField = 'IT_Temp_A'
@@ -2436,9 +2436,9 @@ object SpcDetailForm: TSpcDetailForm
     TabOrder = 103
   end
   object RzDBEdit44: TRzDBEdit
-    Left = 616
+    Left = 680
     Top = 384
-    Width = 65
+    Width = 105
     Height = 21
     DataSource = DataModule1.SpecificationSource
     DataField = 'IT_Temp_B'
@@ -2457,7 +2457,7 @@ object SpcDetailForm: TSpcDetailForm
   object RzDBEdit48: TRzDBEdit
     Left = 544
     Top = 544
-    Width = 57
+    Width = 105
     Height = 21
     DataSource = DataModule1.SpecificationSource
     DataField = 'TCH_Temp_A'
@@ -2474,9 +2474,9 @@ object SpcDetailForm: TSpcDetailForm
     TabOrder = 105
   end
   object RzDBEdit65: TRzDBEdit
-    Left = 616
+    Left = 680
     Top = 544
-    Width = 65
+    Width = 105
     Height = 21
     DataSource = DataModule1.SpecificationSource
     DataField = 'TCH_Temp_B'
@@ -2514,9 +2514,9 @@ object SpcDetailForm: TSpcDetailForm
     WinMaskColor = clRed
   end
   object RzDBEdit66: TRzDBEdit
-    Left = 616
+    Left = 680
     Top = 512
-    Width = 57
+    Width = 105
     Height = 21
     DataSource = DataModule1.SpecificationSource
     DataField = 'TintValue'
@@ -2575,7 +2575,7 @@ object SpcDetailForm: TSpcDetailForm
     WinMaskColor = clRed
   end
   object Solve_Date_edt: TRzDBComboBox
-    Left = 544
+    Left = 648
     Top = 16
     Width = 129
     Height = 21
@@ -2620,5 +2620,31 @@ object SpcDetailForm: TSpcDetailForm
     TabOrder = 112
     TransparentColor = clMaroon
     WinMaskColor = clRed
+  end
+  object RzDBComboBox1: TRzDBComboBox
+    Left = 320
+    Top = 16
+    Width = 73
+    Height = 21
+    DataField = 'Spc_Code'
+    DataSource = DataModule1.SpecificationSource
+    Color = clBlack
+    Ctl3D = False
+    DisabledColor = clMoneyGreen
+    FlatButtonColor = clBlack
+    FlatButtons = True
+    FocusColor = clNavy
+    FrameColor = clYellow
+    FrameHotColor = clSilver
+    FrameHotTrack = True
+    FrameVisible = True
+    ItemHeight = 13
+    ParentColor = True
+    ParentCtl3D = False
+    ReadOnlyColor = clGrayText
+    Sorted = True
+    TabOrder = 113
+    OnChange = edtTypeChange
+    OnSelect = edtTypeSelect
   end
 end

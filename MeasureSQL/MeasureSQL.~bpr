@@ -17,7 +17,8 @@
       StringFunction.obj addNorm.obj Spc_PhazeNoise.obj PhazeNoise.obj Par.obj 
       PHN.obj md5.obj md5wrapper.obj SpcMore_1.obj SpektrOLD.obj 
       Protokol_Proverke_PH.obj Protokol_Print.obj AddMskReal.obj SelectSpc.obj 
-      Data_RQ.obj New_Data4.obj Data_MeasureModule.obj Config_View.obj"/>
+      Data_RQ.obj New_Data4.obj Data_MeasureModule.obj Config_View.obj 
+      Machine_Change.obj"/>
     <RESFILES value="MeasureSQL.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
@@ -35,7 +36,7 @@
       Spc_PhazeNoise.dfm PhazeNoise.dfm Par.dfm PHN.dfm SpcMore_1.dfm 
       SpektrOLD.dfm Protokol_Proverke_PH.dfm Protokol_Print.dfm AddMskReal.dfm 
       SelectSpc.dfm Data_RQ.dfm New_Data4.dfm Data_MeasureModule.dfm 
-      Config_View.dfm"/>
+      Config_View.dfm Machine_Change.dfm"/>
     <LIBFILES value=""/>
     <LIBRARIES value="lmd70_b6.lib clinetsuiteb6.lib dacvcl60.lib mydacvcl60.lib frxe6.lib 
       TeePro8C6.lib fqb60.lib FSDB6.lib frxDB6.lib FS6.lib frx6.lib 
@@ -190,6 +191,7 @@
       <FILE FILENAME="New_Data4.cpp" FORMNAME="New_Data" UNITNAME="New_Data4" CONTAINERID="CCompiler" DESIGNCLASS="TDataModule" LOCALCOMMAND=""/>
       <FILE FILENAME="Data_MeasureModule.cpp" FORMNAME="Data_Measure" UNITNAME="Data_MeasureModule" CONTAINERID="CCompiler" DESIGNCLASS="TDataModule" LOCALCOMMAND=""/>
       <FILE FILENAME="Config_View.cpp" FORMNAME="Config_View_Form" UNITNAME="Config_View" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Machine_Change.cpp" FORMNAME="Machine_Change_Form" UNITNAME="Machine_Change" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>

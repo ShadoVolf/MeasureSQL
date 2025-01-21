@@ -1,7 +1,7 @@
 object DataModule2: TDataModule2
   OldCreateOrder = False
-  Left = 226
-  Top = 199
+  Left = 570
+  Top = 196
   Height = 726
   Width = 1022
   object SqlSpec: TMyQuery
@@ -53,7 +53,7 @@ object DataModule2: TDataModule2
   object Lianoz: TMyQuery
     Connection = DataModule1.CoordinatorDB
     SQL.Strings = (
-      'Select * from lianoz_new_')
+      'Select * from lianoz_new_1')
     RefreshOptions = [roAfterInsert, roAfterUpdate, roBeforeEdit]
     AutoCalcFields = False
     Options.FullRefresh = True
@@ -246,7 +246,7 @@ object DataModule2: TDataModule2
   object Machine: TMyQuery
     Connection = DataModule1.CoordinatorDB
     SQL.Strings = (
-      'Select * from machines')
+      'Select * from machines where Function='#39'Measure'#39)
     DetailFields = 'N'
     Left = 216
     Top = 304
@@ -639,5 +639,12 @@ object DataModule2: TDataModule2
     Connection = DataModule1.CoordinatorDB
     Left = 917
     Top = 582
+  end
+  object Peremer_Nom: TMyQuery
+    Connection = DataModule1.CoordinatorDB
+    SQL.Strings = (
+      'select * from peremer_nomenklature')
+    Left = 296
+    Top = 152
   end
 end

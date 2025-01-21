@@ -422,10 +422,29 @@ for (int i=0; i<DataModule2->psiData->RecordCount; i++){
 
                    DataModule2->psiDataTemp->First();
 
+                   //Выбираем заданные типы спецификация таблица peremer_nomenklature
+                   DataModule2->Peremer_Nom->Active=true;
+                   bool Type = false;
+                   DataModule2->Peremer_Nom->First();
+                   for (int ll=0; ll<DataModule2->Peremer_Nom->RecordCount;ll++)
+                   {
+                      if (DataModule2->Peremer_Nom->FieldByName("Type")->AsString==DataModule2->SqlSpecTemp->FieldByName("NameR")->AsString)
+                      {
+
+                       Type=true;
+                       break;
+                      }
+                      else {
+                       Type=false;
+                      }
+                      DataModule2->Peremer_Nom->Next();
+                   }
+
+
                       for (int l=0;l<DataModule2->psiDataTemp->RecordCount; l++){
                       bool app = false;
                       //Если перемер на резонаторы типа РК526 то темепратуры добавляем только кратные 10
-                        if (DataModule2->SqlSpecTemp->FieldByName("NameR")->AsString=="РК526")
+                        if (Type)
                         {
                                  int iNumber = static_cast<int>(floor(DataModule2->psiDataTemp->FieldByName("Temp")->AsFloat));
                                  if (iNumber % 10 == 0)
@@ -436,7 +455,7 @@ for (int i=0; i<DataModule2->psiData->RecordCount; i++){
                                                   app = false;
                                          }
 
-                                 if (DataModule2->psiDataTemp->FieldByName("Temp")->AsFloat == 25)
+                                 if (DataModule2->psiDataTemp->FieldByName("Temp")->AsFloat == 25 || DataModule2->psiDataTemp->FieldByName("Temp")->AsFloat == 85)
                                  {
                                   app = true;
                                   }

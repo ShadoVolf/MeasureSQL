@@ -1184,4 +1184,48 @@ object SpcMore1: TSpcMore1
     ReadOnlyColor = clSilver
     TabOrder = 47
   end
+  object RzDBCheckBox8: TRzDBCheckBox
+    Left = 568
+    Top = 341
+    Width = 281
+    Height = 17
+    DataField = 'FL_Num'
+    DataSource = DataModule1.SpecificationSource
+    ValueChecked = 'True'
+    ValueUnchecked = 'False'
+    Caption = 'FL '#1088#1072#1089#1095#1077#1090#1085#1086#1077
+    DisabledColor = clGreen
+    FillColor = clBlack
+    FocusColor = clBlack
+    FrameColor = clYellow
+    HighlightColor = clLime
+    HotTrack = True
+    TextHighlightColor = clLime
+    TextShadowColor = clLime
+    TabOrder = 48
+    TransparentColor = clMaroon
+    WinMaskColor = clRed
+  end
+  object RzDBCheckBox9: TRzDBCheckBox
+    Left = 568
+    Top = 365
+    Width = 281
+    Height = 17
+    DataField = 'FL_Num_Virt'
+    DataSource = DataModule1.SpecificationSource
+    ValueChecked = 'True'
+    ValueUnchecked = 'False'
+    Caption = 'FL '#1088#1072#1089#1095#1077#1090#1085#1086#1077' '#1082#1086#1088#1088#1077#1082#1094#1080#1103
+    DisabledColor = clGreen
+    FillColor = clBlack
+    FocusColor = clBlack
+    FrameColor = clYellow
+    HighlightColor = clLime
+    HotTrack = True
+    TextHighlightColor = clLime
+    TextShadowColor = clLime
+    TabOrder = 49
+    TransparentColor = clMaroon
+    WinMaskColor = clRed
+  end
 end

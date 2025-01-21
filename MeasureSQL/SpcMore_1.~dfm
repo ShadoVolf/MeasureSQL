@@ -711,7 +711,6 @@ object SpcMore1: TSpcMore1
     Height = 21
     DataSource = DataModule1.SpecificationSource
     DataField = 'Uust_3_T'
-    Alignment = taRightJustify
     Color = clBlack
     DisabledColor = clBlack
     FocusColor = clRed
@@ -1052,7 +1051,7 @@ object SpcMore1: TSpcMore1
     Top = 253
     Width = 281
     Height = 17
-    DataField = 'Imax'
+    DataField = 'physical_R_Correction'
     DataSource = DataModule1.SpecificationSource
     ValueChecked = 'True'
     ValueUnchecked = 'False'
@@ -1074,7 +1073,7 @@ object SpcMore1: TSpcMore1
     Top = 285
     Width = 281
     Height = 17
-    DataField = 'Imax'
+    DataField = 'physical_C0_correction'
     DataSource = DataModule1.SpecificationSource
     ValueChecked = 'True'
     ValueUnchecked = 'False'
@@ -1096,7 +1095,7 @@ object SpcMore1: TSpcMore1
     Top = 317
     Width = 281
     Height = 17
-    DataField = 'Imax'
+    DataField = 'physical_C1_correction'
     DataSource = DataModule1.SpecificationSource
     ValueChecked = 'True'
     ValueUnchecked = 'False'
@@ -1119,7 +1118,7 @@ object SpcMore1: TSpcMore1
     Width = 97
     Height = 21
     DataSource = DataModule1.SpecificationSource
-    DataField = 'Imaxmax'
+    DataField = 'AVG_C0'
     Color = clBlack
     DisabledColor = clBlack
     FocusColor = clNavy
@@ -1137,7 +1136,7 @@ object SpcMore1: TSpcMore1
     Width = 97
     Height = 21
     DataSource = DataModule1.SpecificationSource
-    DataField = 'Imaxmax'
+    DataField = 'W2200_CL'
     Color = clBlack
     DisabledColor = clBlack
     FocusColor = clNavy
@@ -1155,7 +1154,7 @@ object SpcMore1: TSpcMore1
     Width = 97
     Height = 21
     DataSource = DataModule1.SpecificationSource
-    DataField = 'Imaxmax'
+    DataField = 'KH7700_CL'
     Color = clBlack
     DisabledColor = clBlack
     FocusColor = clNavy
@@ -1173,7 +1172,7 @@ object SpcMore1: TSpcMore1
     Width = 97
     Height = 21
     DataSource = DataModule1.SpecificationSource
-    DataField = 'Imaxmax'
+    DataField = 'TTS100_CL'
     Color = clBlack
     DisabledColor = clBlack
     FocusColor = clNavy

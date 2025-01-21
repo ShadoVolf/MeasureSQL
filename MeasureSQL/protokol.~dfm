@@ -984,21 +984,19 @@ object ProtokolForm: TProtokolForm
     PrintOptions.Printer = #1055#1086' '#1091#1084#1086#1083#1095#1072#1085#1080#1102
     PrintOptions.PrintOnSheet = 0
     ReportOptions.CreateDate = 39953.7254732639
-    ReportOptions.LastChange = 45588.7322877083
+    ReportOptions.LastChange = 45672.6460935648
     ScriptLanguage = 'BasicScript'
     ScriptText.Strings = (
       
         'Dim countf As Longint                                           ' +
         '                    '
       'Dim count1 As Integer'
-      'Dim countRmax As Integer'
-      'Dim countR As Integer    '
+      'Dim countR As Integer'
       'Dim countFmax AS Integer'
       'Dim countFmin As Integer'
-      'Dim countC0 As Integer'
-      'Dim countCq As Integer'
-      'Dim countQ As Integer    '
-      'Dim countRsp1 As Integer  '
+      'Dim countRR2 As Integer'
+      'Dim countRR3 As Integer'
+      'Dim countRmax As Integer  '
       '  '
       'Dim temp As Integer'
       'Dim temp1 As Integer'
@@ -1008,44 +1006,89 @@ object ProtokolForm: TProtokolForm
       'Dim countBadAn As Integer    '
       'Dim Fmax As Extended'
       'Dim Fmin As Extended'
-      'Dim Rmaxmax As Extended'
-      'Dim Rmaxmin As Extended'
+      'Dim Rmax As Extended'
+      'Dim Rmin As Extended'
       'Dim Fmaxmax As Extended'
       'Dim Fmaxmin As Extended    '
       'Dim Fminmax As Extended'
       'Dim Fminmin As Extended'
-      'Dim C0max As Extended'
-      'Dim C0min As Extended'
-      'Dim Cqmax As Extended'
-      'Dim Cqmin As Extended'
-      'Dim Rmax As Extended'
-      'Dim Rmin As Extended'
-      'Dim Qmax As Extended'
-      'Dim Qmin As Extended'
-      'Dim Rsp1max As Extended'
-      'Dim Rsp1min As Extended    '
+      'Dim RR2max As Extended'
+      'Dim RR2min As Extended'
+      'Dim RR3max As Extended'
+      'Dim RR3min As Extended'
+      'sub ReportTitle1OnBeforePrint(Sender)'
+      '    IF <PsiData."PMI">="True" THEN Memo23.Text="'#1055#1052#1048'"'
+      
+        '  IF <Spc."LoadType">="Saunders (FR+FL)" THEN Memo52.Text="EqRea' +
+        'ct"'
+      '  IF <Spc."LoadType">="Saunders(FR)" THEN Memo52.Text="Series"'
+      '  IF <Spc."LoadType">="Saunders(FL)" THEN Memo52.Text="Physical"'
+      '  IF <Spc."LoadType">="EqReact" THEN Memo52.Text="EqReact"'
+      '  IF <Spc."LoadType">="Series" THEN Memo52.Text="Series"'
+      '  IF <Spc."LoadType">="Physical" THEN Memo52.Text="Physical"'
+      '  IF <Spc."Ftgk_Measure">="True" THEN Memo103.Text="'#1058#1043#1050'"'
+      '     IF <PsiData."PoverKa">="True" Then'
+      '     Memo113.Text="'#1087#1086#1074#1077#1088#1082#1080'"'
+      '  END IF'
+      '  IF <PsiData."PoverKa">="False" Then      '
+      '    Memo113.Text="'#1082#1072#1083#1080#1073#1088#1086#1074#1082#1080'"         '
+      '  END IF      '
+      '  end sub'
       'sub MasterData1OnBeforePrint(Sender)'
+      'Memo89.Text=""'
+      'Memo96.Text=""'
+      'Memo97.Text=""'
+      'Memo98.Text=""'
+      'Memo99.Text=""'
+      'Memo100.Text=""'
+      'PsiDataF.Color=clNone'
+      'PsiDataR.Color=clNone'
+      'PsiDataFmax.Color=clNone'
+      'PsiDataFmin.Color=clNone'
+      'PsiDataRR2.Color=clNone'
+      'PsiDataRR3.Color=clNone    '
       'count1=count1+1'
       'temp=0    '
       'temp1=0                '
       
         'IF <Spc."Ft">="True" Then IF <Spc."Fmax"><>"no" Then  IF <PsiDat' +
-        'a."F">> StrToFloat(<Spc."Fmax">) Then temp1=1'
+        'a."FL_Num">> StrToFloat(<Spc."Fmax">) Then temp1=1'
       
         'IF <Spc."Ft">="True" Then IF <Spc."Fmin"><>"no" Then  IF <PsiDat' +
-        'a."F">< StrToFloat(<Spc."Fmin">) Then temp1=1'
+        'a."FL_Num">< StrToFloat(<Spc."Fmin">) Then temp1=1'
       
-        'IF <Spc."Rmaxmax"><>"no" Then IF <PsiData."Rmax">> StrToFloat(<S' +
-        'pc."Rmaxmax">) Then temp1=1'
+        'IF <Spc."Ft">="True" Then IF <Spc."Fmax"><>"no" Then  IF <PsiDat' +
+        'a."FL_Num">> StrToFloat(<Spc."Fmax">) Then PsiDataF.Color=clYell' +
+        'ow'
       
-        'IF <Spc."Rmaxmin"><>"no" Then IF <PsiData."Rmax">< StrToFloat(<S' +
-        'pc."Rmaxmin">) Then temp1=1'
+        'IF <Spc."Ft">="True" Then IF <Spc."Fmin"><>"no" Then  IF <PsiDat' +
+        'a."FL_Num">< StrToFloat(<Spc."Fmin">) Then PsiDataF.Color=clYell' +
+        'ow    '
+      
+        'IF <Spc."Rmax"><>"no" Then IF <PsiData."R">> StrToFloat(<Spc."Rm' +
+        'ax">) Then temp1=1'
+      
+        'IF <Spc."Rmin"><>"no" Then IF <PsiData."R">< StrToFloat(<Spc."Rm' +
+        'in">) Then temp1=1'
+      
+        'IF <Spc."Rmax"><>"no" Then IF <PsiData."R">> StrToFloat(<Spc."Rm' +
+        'ax">) Then PsiDataR.Color=clYellow'
+      
+        'IF <Spc."Rmin"><>"no" Then IF <PsiData."R">< StrToFloat(<Spc."Rm' +
+        'in">) Then PsiDataR.Color=clYellow    '
       
         'IF <Spc."Fmaxmax"><>"no" Then IF <PsiData."Fmax">> StrToFloat(<S' +
         'pc."Fmaxmax">) Then temp1=1                         '
       
         'IF <Spc."Fmaxmin"><>"no" Then IF <PsiData."Fmax">< StrToFloat(<S' +
-        'pc."Fmaxmin">) Then temp1=1    '
+        'pc."Fmaxmin">) Then temp1=1'
+      
+        'IF <Spc."Fmaxmax"><>"no" Then IF <PsiData."Fmax">> StrToFloat(<S' +
+        'pc."Fmaxmax">) Then PsiDataFmax.Color=clYellow                  ' +
+        '       '
+      
+        'IF <Spc."Fmaxmin"><>"no" Then IF <PsiData."Fmax">< StrToFloat(<S' +
+        'pc."Fmaxmin">) Then PsiDataFmax.Color=clYellow    '
       
         'IF <Spc."Fminmax"><>"no" Then IF <PsiData."Fmin">> StrToFloat(<S' +
         'pc."Fminmax">) Then temp1=1'
@@ -1053,96 +1096,76 @@ object ProtokolForm: TProtokolForm
         'IF <Spc."Fminmin"><>"no" Then IF <PsiData."Fmin">< StrToFloat(<S' +
         'pc."Fminmin">) Then temp1=1'
       
-        'IF <Spc."C0max"><>"no" Then IF <PsiData."C0">> StrToFloat(<Spc."' +
-        'C0max">) Then temp1=1                         '
+        'IF <Spc."Fminmax"><>"no" Then IF <PsiData."Fmin">> StrToFloat(<S' +
+        'pc."Fminmax">) Then PsiDataFmin.Color=clYellow'
       
-        'IF <Spc."C0min"><>"no" Then IF <PsiData."C0">< StrToFloat(<Spc."' +
-        'C0min">) Then temp1=1'
+        'IF <Spc."Fminmin"><>"no" Then IF <PsiData."Fmin">< StrToFloat(<S' +
+        'pc."Fminmin">) Then PsiDataFmin.Color=clYellow    '
       
-        'IF <Spc."Cqmax"><>"no" Then IF <PsiData."Cq">> StrToFloat(<Spc."' +
-        'Cqmax">) Then temp1=1                         '
+        'IF <Spc."RR2max"><>"no" Then IF <PsiData."RR2">> StrToFloat(<Spc' +
+        '."RR2max">) Then temp1=1                         '
       
-        'IF <Spc."Cqmin"><>"no" Then IF <PsiData."Cq">< StrToFloat(<Spc."' +
-        'Cqmin">) Then temp1=1'
+        'IF <Spc."RR2min"><>"no" Then IF <PsiData."RR2">< StrToFloat(<Spc' +
+        '."RR2min">) Then temp1=1'
       
-        'IF <Spc."Rmax"><>"no" Then IF <PsiData."R">> StrToFloat(<Spc."Rm' +
-        'ax">) Then temp1=1                         '
+        'IF <Spc."RR2max"><>"no" Then IF <PsiData."RR2">> StrToFloat(<Spc' +
+        '."RR2max">) Then PsiDataRR2.Color=clYellow                      ' +
+        '   '
       
-        'IF <Spc."Rmin"><>"no" Then IF <PsiData."R">< StrToFloat(<Spc."Rm' +
-        'in">) Then temp1=1'
+        'IF <Spc."RR2min"><>"no" Then IF <PsiData."RR2">< StrToFloat(<Spc' +
+        '."RR2min">) Then PsiDataRR2.Color=clYellow    '
       
-        'IF <Spc."Qmax"><>"no" Then IF <PsiData."Q">> StrToFloat(<Spc."Qm' +
-        'ax">) Then temp1=1                         '
+        'IF <Spc."RR3max"><>"no" Then IF <PsiData."RR3">> StrToFloat(<Spc' +
+        '."RR3max">) Then temp1=1                         '
       
-        'IF <Spc."Qmin"><>"no" Then IF <PsiData."Q">< StrToFloat(<Spc."Qm' +
-        'in">) Then temp1=1'
+        'IF <Spc."RR3min"><>"no" Then IF <PsiData."RR3">< StrToFloat(<Spc' +
+        '."RR3min">) Then temp1=1'
       
-        'IF <Spc."Rsp1max"><>"no" Then IF <PsiData."Spur">> StrToFloat(<S' +
-        'pc."Rsp1max">) Then temp1=1                         '
+        'IF <Spc."RR3max"><>"no" Then IF <PsiData."RR3">> StrToFloat(<Spc' +
+        '."RR3max">) Then PsiDataRR3.Color=clYellow                      ' +
+        '   '
       
-        'IF <Spc."Rsp1min"><>"no" Then IF <PsiData."Spur">< StrToFloat(<S' +
-        'pc."Rsp1min">) Then temp1=1    '
+        'IF <Spc."RR3min"><>"no" Then IF <PsiData."RR3">< StrToFloat(<Spc' +
+        '."RR3min">) Then PsiDataRR3.Color=clYellow    '
       '  '
       
         'IF <Spc."Fmaxmax"><>"no" Then Fmaxmax=StrToFloat(<Spc."Fmaxmax">' +
-        ')-Abs(StrToFloat(<Spc."Fmaxmax">))*StrToFloat(<Spc."DopuskFi">)/' +
-        '100'
+        ')-StrToFloat(<Spc."DopuskFi_Real">)'
       
         'IF <Spc."Fmaxmin"><>"no" Then Fmaxmin=StrToFloat(<Spc."Fmaxmin">' +
-        ')+Abs(StrToFloat(<Spc."Fmaxmin">))*StrToFloat(<Spc."DopuskFi">)/' +
-        '100'
+        ')+StrToFloat(<Spc."DopuskFi_Real">)'
       
         'IF <Spc."Fminmax"><>"no" Then Fminmax=StrToFloat(<Spc."Fminmax">' +
-        ')-Abs(StrToFloat(<Spc."Fminmax">))*StrToFloat(<Spc."DopuskFi">)/' +
-        '100'
+        ')-StrToFloat(<Spc."DopuskFi_Real">)'
       
         'IF <Spc."Fminmin"><>"no" Then Fminmin=StrToFloat(<Spc."Fminmin">' +
-        ')+Abs(StrToFloat(<Spc."Fminmin">))*StrToFloat(<Spc."DopuskFi">)/' +
-        '100    '
-      
-        'IF <Spc."Rmaxmax"><>"no" Then Rmaxmax=StrToFloat(<Spc."Rmaxmax">' +
-        ')-StrToFloat(<Spc."Rmaxmax">)*StrToFloat(<Spc."DopuskR">)/100'
-      
-        'IF <Spc."Rmaxmin"><>"no" Then Rmaxmin=StrToFloat(<Spc."Rmaxmin">' +
-        ')+StrToFloat(<Spc."Rmaxmin">)*StrToFloat(<Spc."DopuskR">)/100'
-      
-        'IF <Spc."C0max"><>"no" Then C0max=StrToFloat(<Spc."C0max">)-StrT' +
-        'oFloat(<Spc."C0max">)*StrToFloat(<Spc."DopuskC0">)/100'
-      
-        'IF <Spc."C0min"><>"no" Then C0min=StrToFloat(<Spc."C0min">)+StrT' +
-        'oFloat(<Spc."C0min">)*StrToFloat(<Spc."DopuskC0">)/100    '
-      
-        'IF <Spc."Cqmax"><>"no" Then Cqmax=StrToFloat(<Spc."Cqmax">)-StrT' +
-        'oFloat(<Spc."Cqmax">)*StrToFloat(<Spc."DopuskCq">)/100'
-      
-        'IF <Spc."Cqmin"><>"no" Then Cqmin=StrToFloat(<Spc."Cqmin">)+StrT' +
-        'oFloat(<Spc."Cqmin">)*StrToFloat(<Spc."DopuskCq">)/100  '
-      
-        'IF <Spc."Ft">="True" Then IF <Spc."Fmax"><>"no" Then Fmax=StrToF' +
-        'loat(<Spc."Fmax">)-StrToFloat(<Spc."Fmax">)*StrToFloat(<Spc."Dop' +
-        'uskF_P">)/100  '
-      
-        'IF <Spc."Ft">="True" Then IF <Spc."Fmin"><>"no" Then Fmin=StrToF' +
-        'loat(<Spc."Fmin">)+StrToFloat(<Spc."Fmin">)*StrToFloat(<Spc."Dop' +
-        'uskF_P">)/100'
+        ')+StrToFloat(<Spc."DopuskFi_Real">)    '
       
         'IF <Spc."Rmax"><>"no" Then Rmax=StrToFloat(<Spc."Rmax">)-StrToFl' +
         'oat(<Spc."Rmax">)*StrToFloat(<Spc."DopuskR">)/100'
       
         'IF <Spc."Rmin"><>"no" Then Rmin=StrToFloat(<Spc."Rmin">)+StrToFl' +
-        'oat(<Spc."Rmin">)*StrToFloat(<Spc."DopuskR">)/100  '
+        'oat(<Spc."Rmin">)*StrToFloat(<Spc."DopuskR">)/100    '
       
-        'IF <Spc."Qmax"><>"no" Then Qmax=StrToFloat(<Spc."Qmax">)-StrToFl' +
-        'oat(<Spc."Qmax">)*StrToFloat(<Spc."DopuskQ">)/100'
+        'IF <Spc."RR2max"><>"no" Then RR2max=StrToFloat(<Spc."RR2max">)-S' +
+        'trToFloat(<Spc."RR2max">)*StrToFloat(<Spc."DopuskRR">)/100'
       
-        'IF <Spc."Qmin"><>"no" Then Qmin=StrToFloat(<Spc."Qmin">)+StrToFl' +
-        'oat(<Spc."Qmin">)*StrToFloat(<Spc."DopuskQ">)/100'
+        'IF <Spc."RR2min"><>"no" Then RR2min=StrToFloat(<Spc."RR2min">)+S' +
+        'trToFloat(<Spc."RR2min">)*StrToFloat(<Spc."DopuskRR">)/100    '
       
-        'IF <Spc."Rsp1max"><>"no" Then Rsp1max=StrToFloat(<Spc."Rsp1max">' +
-        ')-StrToFloat(<Spc."DopuskSR">)'
+        'IF <Spc."RR3max"><>"no" Then RR3max=StrToFloat(<Spc."RR3max">)-S' +
+        'trToFloat(<Spc."RR3max">)*StrToFloat(<Spc."DopuskRR">)/100'
       
-        'IF <Spc."Rsp1min"><>"no" Then Rsp1min=StrToFloat(<Spc."Rsp1min">' +
-        ')+StrToFloat(<Spc."DopuskSR">)    '
+        'IF <Spc."RR3min"><>"no" Then RR3min=StrToFloat(<Spc."RR3min">)+S' +
+        'trToFloat(<Spc."RR3min">)*StrToFloat(<Spc."DopuskRR">)/100  '
+      
+        'IF <Spc."Ft">="True" Then IF <Spc."Fmax"><>"no" Then Fmax=StrToF' +
+        'loat(<Spc."Fmax">)-StrToFloat(<Spc."DopuskF">)    '
+      
+        'IF <Spc."Ft">="True" Then IF <Spc."Fmin"><>"no" Then Fmin=StrToF' +
+        'loat(<Spc."Fmin">)+StrToFloat(<Spc."DopuskF">)  '
+      ''
+      '    '
       ''
       'IF <Spc."Fmaxmax"><>"no" Then Memo105.Text=FloatToStr(Fmaxmax)'
       
@@ -1150,26 +1173,15 @@ object ProtokolForm: TProtokolForm
         '  '
       'IF <Spc."Fminmin"><>"no" Then    Memo65.Text=FloatToStr(Fminmin)'
       'IF <Spc."Fminmax"><>"no" Then    Memo64.Text=FloatToStr(Fminmax)'
-      'IF <Spc."C0min"><>"no" Then    Memo55.Text=FloatToStr(C0min)'
-      'IF <Spc."C0max"><>"no" Then    Memo54.Text=FloatToStr(C0max)'
-      'IF <Spc."Cqmin"><>"no" Then    Memo102.Text=FloatToStr(Cqmin)'
-      'IF <Spc."Cqmax"><>"no" Then    Memo101.Text=FloatToStr(Cqmax)'
+      'IF <Spc."RR2min"><>"no" Then    Memo55.Text=FloatToStr(RR2min)'
+      'IF <Spc."RR2max"><>"no" Then    Memo54.Text=FloatToStr(RR2max)'
+      'IF <Spc."RR3min"><>"no" Then    Memo102.Text=FloatToStr(RR3min)'
+      'IF <Spc."RR3max"><>"no" Then    Memo101.Text=FloatToStr(RR3max)'
       'IF <Spc."Fmin"><>"no" Then    Memo39.Text=FloatToStr(Fmin)'
       'IF <Spc."Fmax"><>"no" Then    Memo13.Text=FloatToStr(Fmax)'
-      'IF <Spc."Rmaxmin"><>"no" Then    Memo40.Text=FloatToStr(Rmaxmin)'
-      
-        'IF <Spc."Rmaxmax"><>"no" Then    Memo41.Text=FloatToStr(Rmaxmax)' +
-        '  '
-      'IF <Spc."Rmin"><>"no" Then    Memo98.Text=FloatToStr(Rmin)'
-      'IF <Spc."Rmax"><>"no" Then    Memo97.Text=FloatToStr(Rmax)'
-      'IF <Spc."Qmin"><>"no" Then    Memo109.Text=FloatToStr(Qmin)'
-      'IF <Spc."Qmax"><>"no" Then    Memo108.Text=FloatToStr(Qmax)'
-      
-        'IF <Spc."Rsp1min"><>"no" Then    Memo119.Text=FloatToStr(Rsp1min' +
-        ')'
-      
-        'IF <Spc."Rsp1max"><>"no" Then    Memo118.Text=FloatToStr(Rsp1max' +
-        ')    '
+      'IF <Spc."Rmin"><>"no" Then    Memo40.Text=FloatToStr(Rmin)'
+      'IF <Spc."Rmax"><>"no" Then    Memo41.Text=FloatToStr(Rmax)  '
+      '  '
       ''
       ''
       
@@ -1178,8 +1190,8 @@ object ProtokolForm: TProtokolForm
       
         'IF <Spc."Ft">="True" Then IF <Spc."Fmin"><>"no" Then Memo46.Text' +
         '=<Spc."Fmin">              '
-      'IF <Spc."Rmaxmax"><>"no" Then Memo47.Text=<Spc."Rmaxmax">'
-      'IF <Spc."Rmaxmin"><>"no" Then Memo48.Text=<Spc."Rmaxmin">'
+      'IF <Spc."Rmax"><>"no" Then Memo47.Text=<Spc."Rmax">'
+      'IF <Spc."Rmin"><>"no" Then Memo48.Text=<Spc."Rmin">    '
       'IF <Spc."Fmaxmax"><>"no" Then Memo50.Text=<Spc."Fmaxmax">'
       
         'IF <Spc."Fmaxmin"><>"no" Then Memo51.Text=<Spc."Fmaxmin">       ' +
@@ -1188,47 +1200,50 @@ object ProtokolForm: TProtokolForm
       
         'IF <Spc."Fminmin"><>"no" Then Memo58.Text=<Spc."Fminmin">       ' +
         '            '
-      'IF <Spc."C0max"><>"no" Then Memo59.Text=<Spc."C0max">'
+      'IF <Spc."RR2max"><>"no" Then Memo59.Text=<Spc."RR2max">'
       
-        'IF <Spc."C0min"><>"no" Then Memo84.Text=<Spc."C0min">           ' +
-        '        '
+        'IF <Spc."RR2min"><>"no" Then Memo84.Text=<Spc."RR2min">         ' +
+        '          '
       
-        'IF <Spc."Cqmax"><>"no" Then Memo85.Text=<Spc."Cqmax">           ' +
-        ' '
-      'IF <Spc."Cqmin"><>"no" Then Memo92.Text=<Spc."Cqmin">  '
-      'IF <Spc."Rmax"><>"no" Then Memo89.Text=<Spc."Rmax">            '
-      'IF <Spc."Rmin"><>"no" Then Memo96.Text=<Spc."Rmin">'
-      'IF <Spc."Qmax"><>"no" Then Memo110.Text=<Spc."Qmax">            '
-      'IF <Spc."Qmin"><>"no" Then Memo111.Text=<Spc."Qmin">'
-      
-        'IF <Spc."Rsp1max"><>"no" Then Memo114.Text=<Spc."Rsp1max">      ' +
-        '      '
-      'IF <Spc."Rsp1min"><>"no" Then Memo115.Text=<Spc."Rsp1min">    '
+        'IF <Spc."RR3max"><>"no" Then Memo85.Text=<Spc."RR3max">         ' +
+        '   '
+      'IF <Spc."RR3min"><>"no" Then Memo92.Text=<Spc."RR3min">  '
+      '    '
       '  '
       
         'IF <Spc."Ft">="True" Then IF <Spc."Fmax"><>"no" Then  IF <PsiDat' +
-        'a."F">> Fmax Then countf=countf+1'
+        'a."FL_Num">> Fmax Then countf=countf+1'
       
         'IF <Spc."Ft">="True" Then IF <Spc."Fmin"><>"no" Then IF <PsiData' +
-        '."F"><  Fmin Then countf=countf+1'
+        '."FL_Num"><  Fmin Then countf=countf+1'
       
         'IF <Spc."Ft">="True" Then IF <Spc."Fmax"><>"no" Then  IF <PsiDat' +
-        'a."F">> Fmax Then temp=1             '
+        'a."FL_Num">> Fmax Then temp=1             '
       
         'IF <Spc."Ft">="True" Then IF <Spc."Fmin"><>"no" Then IF <PsiData' +
-        '."F"><  Fmin Then temp=1              '
+        '."FL_Num"><  Fmin Then temp=1'
       
-        'IF <Spc."Rmaxmax"><>"no" Then IF <PsiData."Rmax">>  Rmaxmax Then' +
-        ' countRmax=countRmax+1'
+        'IF <Spc."Ft">="True" Then IF <Spc."Fmax"><>"no" Then  IF <PsiDat' +
+        'a."FL_Num">> Fmax Then PsiDataF.Color=clSilver             '
       
-        'IF <Spc."Rmaxmin"><>"no" Then IF <PsiData."Rmax"><  Rmaxmin Then' +
-        ' countRmax=countRmax+1'
+        'IF <Spc."Ft">="True" Then IF <Spc."Fmin"><>"no" Then IF <PsiData' +
+        '."F"><  Fmin Then PsiDataF.Color=clSilver    '
       
-        'IF <Spc."Rmaxmax"><>"no" Then IF <PsiData."Rmax">>  Rmaxmax Then' +
-        ' temp=1             '
+        'IF <Spc."Rmax"><>"no" Then IF <PsiData."R">>  Rmax Then countR=c' +
+        'ountR+1'
       
-        'IF <Spc."Rmaxmin"><>"no" Then IF <PsiData."Rmax"><  Rmaxmin Then' +
-        ' temp=1                 '
+        'IF <Spc."Rmin"><>"no" Then IF <PsiData."R"><  Rmin Then countR=c' +
+        'ountR+1'
+      
+        'IF <Spc."Rmax"><>"no" Then IF <PsiData."R">>  Rmax Then temp=1  ' +
+        '           '
+      'IF <Spc."Rmin"><>"no" Then IF <PsiData."R"><  Rmin Then temp=1'
+      
+        'IF <Spc."Rmax"><>"no" Then IF <PsiData."R">>  Rmax Then PsiDataR' +
+        '.Color=clSilver             '
+      
+        'IF <Spc."Rmin"><>"no" Then IF <PsiData."R"><  Rmin Then PsiDataR' +
+        '.Color=clSilver    '
       
         'IF <Spc."Fmaxmax"><>"no" Then IF <PsiData."Fmax">> Fmaxmax Then ' +
         'countFmax=countFmax+1'
@@ -1240,7 +1255,13 @@ object ProtokolForm: TProtokolForm
         'temp=1             '
       
         'IF <Spc."Fmaxmin"><>"no" Then IF <PsiData."Fmax">< Fmaxmin Then ' +
-        'temp=1                '
+        'temp=1'
+      
+        'IF <Spc."Fmaxmax"><>"no" Then IF <PsiData."Fmax">> Fmaxmax Then ' +
+        'PsiDataFmax.Color=clSilver             '
+      
+        'IF <Spc."Fmaxmin"><>"no" Then IF <PsiData."Fmax">< Fmaxmin Then ' +
+        'PsiDataFmax.Color=clSilver    '
       
         'IF <Spc."Fminmax"><>"no" Then IF <PsiData."Fmin">> Fminmax Then ' +
         'countFmin=countFmin+1'
@@ -1254,81 +1275,63 @@ object ProtokolForm: TProtokolForm
         'IF <Spc."Fminmin"><>"no" Then IF <PsiData."Fmin">< Fminmin Then ' +
         'temp=1'
       
-        'IF <Spc."C0max"><>"no" Then IF <PsiData."C0">> C0max Then countC' +
-        '0=countC0+1'
+        'IF <Spc."Fminmax"><>"no" Then IF <PsiData."Fmin">> Fminmax Then ' +
+        'PsiDataFmin.Color=clSilver             '
       
-        'IF <Spc."C0min"><>"no" Then IF <PsiData."C0">< C0min Then countC' +
-        '0=countC0+1'
+        'IF <Spc."Fminmin"><>"no" Then IF <PsiData."Fmin">< Fminmin Then ' +
+        'PsiDataFmin.Color=clSilver    '
       
-        'IF <Spc."C0max"><>"no" Then IF <PsiData."C0">> C0max Then temp=1' +
-        '             '
+        'IF <Spc."RR2max"><>"no" Then IF <PsiData."RR2">> RR2max Then cou' +
+        'ntRR2=countRR2+1'
       
-        'IF <Spc."C0min"><>"no" Then IF <PsiData."C0">< C0min Then temp=1' +
-        '    '
+        'IF <Spc."RR2min"><>"no" Then IF <PsiData."RR2">< RR2min Then cou' +
+        'ntRR2=countRR2+1'
       
-        'IF <Spc."Cqmax"><>"no" Then IF <PsiData."Cq">> Cqmax Then countC' +
-        'q=countCq+1'
+        'IF <Spc."RR2max"><>"no" Then IF <PsiData."RR2">> RR2max Then tem' +
+        'p=1             '
       
-        'IF <Spc."Cqmin"><>"no" Then IF <PsiData."Cq">< Cqmin Then countC' +
-        'q=countCq+1'
+        'IF <Spc."RR2min"><>"no" Then IF <PsiData."RR2">< RR2min Then tem' +
+        'p=1'
       
-        'IF <Spc."Cqmax"><>"no" Then IF <PsiData."Cq">> Cqmax Then temp=1' +
-        '             '
+        'IF <Spc."RR2max"><>"no" Then IF <PsiData."RR2">> RR2max Then Psi' +
+        'DataRR2.Color=clSilver             '
       
-        'IF <Spc."Cqmin"><>"no" Then IF <PsiData."Cq">< Cqmin Then temp=1' +
-        '                 '
+        'IF <Spc."RR2min"><>"no" Then IF <PsiData."RR2">< RR2min Then Psi' +
+        'DataRR2.Color=clSilver    '
       
-        'IF <Spc."Rmax"><>"no" Then IF <PsiData."R">> Rmax Then countR=co' +
-        'untR+1'
+        'IF <Spc."RR3max"><>"no" Then IF <PsiData."RR3">> RR3max Then cou' +
+        'ntRR3=countRR3+1'
       
-        'IF <Spc."Rmin"><>"no" Then IF <PsiData."R">< Rmin Then countR=co' +
-        'untR+1'
+        'IF <Spc."RR3min"><>"no" Then IF <PsiData."RR3">< RR3min Then cou' +
+        'ntRR3=countRR3+1'
       
-        'IF <Spc."Rmax"><>"no" Then IF <PsiData."R">> Rmax Then temp=1   ' +
-        '          '
-      'IF <Spc."Rmin"><>"no" Then IF <PsiData."R">< Rmin Then temp=1'
+        'IF <Spc."RR3max"><>"no" Then IF <PsiData."RR3">> RR3max Then tem' +
+        'p=1             '
       
-        'IF <Spc."Qmax"><>"no" Then IF <PsiData."Q">> Qmax Then countQ=co' +
-        'untQ+1'
+        'IF <Spc."RR3min"><>"no" Then IF <PsiData."RR3">< RR3min Then tem' +
+        'p=1'
       
-        'IF <Spc."Qmin"><>"no" Then IF <PsiData."Q">< Qmin Then countQ=co' +
-        'untQ+1'
+        'IF <Spc."RR3max"><>"no" Then IF <PsiData."RR3">> RR3max Then Psi' +
+        'DataRR3.Color=clSilver             '
       
-        'IF <Spc."Qmax"><>"no" Then IF <PsiData."Q">> Qmax Then temp=1   ' +
-        '          '
-      'IF <Spc."Qmin"><>"no" Then IF <PsiData."Q">< Qmin Then temp=1'
-      ''
-      
-        'IF <Spc."Rsp1max"><>"no" Then IF <PsiData."Spur">> Rsp1max Then ' +
-        'countRsp1=countRsp1+1'
-      
-        'IF <Spc."Rsp1min"><>"no" Then IF <PsiData."Spur">< Rsp1min Then ' +
-        'countRsp1=countRsp1+1'
-      
-        'IF <Spc."Rsp1max"><>"no" Then IF <PsiData."Spur">> Rsp1max Then ' +
-        'temp=1             '
-      
-        'IF <Spc."Rsp1min"><>"no" Then IF <PsiData."Spur">< Rsp1min Then ' +
-        'temp=1    '
+        'IF <Spc."RR3min"><>"no" Then IF <PsiData."RR3">< RR3min Then Psi' +
+        'DataRR3.Color=clSilver    '
+      '                '
       '    '
       'Memo73.Text=IntToStr(countf)'
       'Memo72.Text=IntToStr(count1-countf)'
-      'Memo75.Text=IntToStr(countRmax)'
-      'Memo74.Text=IntToStr(count1-countRmax)'
+      'Memo75.Text=IntToStr(countR)'
+      'Memo74.Text=IntToStr(count1-countR)'
       'Memo77.Text=IntToStr(countFmax)'
       'Memo76.Text=IntToStr(count1-countFmax)'
       'Memo63.Text=IntToStr(countFmin)'
       'Memo61.Text=IntToStr(count1-countFmin)    '
-      'Memo79.Text=IntToStr(countC0)'
-      'Memo78.Text=IntToStr(count1-countC0)'
-      'Memo87.Text=IntToStr(countCq)'
-      'Memo86.Text=IntToStr(count1-countCq)'
-      'Memo88.Text=IntToStr(countR)'
-      'Memo56.Text=IntToStr(count1-countR)'
-      'Memo107.Text=IntToStr(countQ)'
-      'Memo104.Text=IntToStr(count1-countQ)    '
-      'Memo117.Text=IntToStr(countQ)'
-      'Memo116.Text=IntToStr(count1-countQ)  '
+      'Memo79.Text=IntToStr(countRR2)'
+      'Memo78.Text=IntToStr(count1-countRR2)'
+      'Memo87.Text=IntToStr(countRR3)'
+      'Memo86.Text=IntToStr(count1-countRR3)'
+      ''
+      ''
       '  '
       'IF temp1=0 Then IF temp=1 THEN PsiDataStatus.Text="'#1059#1089#1083'.'#1043#1086#1076#1077#1085'"'
       'IF temp1=1 Then IF temp=1 THEN PsiDataStatus.Text="'#1041#1088#1072#1082'"'
@@ -1338,9 +1341,8 @@ object ProtokolForm: TProtokolForm
       
         'IF <PsiData."Status">="'#1040#1085#1086#1084#1072#1083'." THEN PsiDataStatus.Text="'#1040#1085#1086#1084#1072#1083'.' +
         '"'
-      
-        'IF <PsiData."Status">="'#1040#1085#1086#1084#1072#1083'." THEN countBadAn=countBadAn+1    ' +
-        '          '
+      'IF <PsiData."Status">="'#1040#1085#1086#1084#1072#1083'." THEN countBadAn=countBadAn+1'
+      'IF <PsiData."Status">="'#1040#1085#1086#1084#1072#1083'." THEN temp=0    '
       'IF <PsiData."Status2">="BAD" THEN PsiDataStatus.Text="'#1053#1077#1079#1072#1084#1077#1088'"'
       'IF <PsiData."Status2">="BAD" THEN temp1=1'
       'IF <PsiData."Status2">="BAD" THEN temp=1    '
@@ -1351,15 +1353,9 @@ object ProtokolForm: TProtokolForm
       'frxDBDataset2Good.Text=IntToStr(count1-countBadUsl-countBadAn)'
       'frxDBDataset2Bad.Text=IntToStr(countBadUsl)  '
       'Memo60.Text=IntToStr(CountBadUsl-countBad)'
-      'Memo100.Text=IntToStr(countBadAn)    '
+      'Memo88.Text=IntToStr(countBadAn)    '
       'IF <PsiData."Status">="'#1040#1085#1086#1084#1072#1083'." THEN temp=1    '
-      
-        'IF temp1=1 Then IF temp=1 Then PsiDataF.Color=clSilver          ' +
-        '                    '
-      'IF temp1=0 Then IF temp=0 Then PsiDataF.Color=clNone'
-      
-        'IF temp1=0 Then IF temp=1 Then PsiDataF.Color=clYellow          ' +
-        '      '
+      '                '
       
         'IF temp1=1 Then IF temp=1 Then PsiDataPosition.Color=clSilver   ' +
         '  '
@@ -1370,46 +1366,15 @@ object ProtokolForm: TProtokolForm
       'IF temp1=1 Then IF temp=1 Then PsiDataN.Color=clSilver     '
       'IF temp1=0 Then IF temp=0 Then PsiDataN.Color=clNone'
       'IF temp1=0 Then IF temp=1 Then PsiDataN.Color=clYellow    '
-      'IF temp1=1 Then IF temp=1 Then PsiDataRmax.Color=clSilver     '
-      'IF temp1=0 Then IF temp=0 Then PsiDataRmax.Color=clNone'
-      'IF temp1=0 Then IF temp=1 Then PsiDataRmax.Color=clYellow    '
-      'IF temp1=1 Then IF temp=1 Then PsiDataFmax.Color=clSilver     '
-      'IF temp1=0 Then IF temp=0 Then PsiDataFmax.Color=clNone'
-      'IF temp1=0 Then IF temp=1 Then PsiDataFmax.Color=clYellow    '
-      'IF temp1=1 Then IF temp=1 Then PsiDataFmin.Color=clSilver     '
-      'IF temp1=0 Then IF temp=0 Then PsiDataFmin.Color=clNone'
-      'IF temp1=0 Then IF temp=1 Then PsiDataFmin.Color=clYellow    '
-      'IF temp1=1 Then IF temp=1 Then PsiDataC0.Color=clSilver     '
-      'IF temp1=0 Then IF temp=0 Then PsiDataC0.Color=clNone'
-      'IF temp1=0 Then IF temp=1 Then PsiDataC0.Color=clYellow    '
       'IF temp1=1 Then IF temp=1 Then PsiDataStatus.Color=clSilver     '
       'IF temp1=0 Then IF temp=0 Then PsiDataStatus.Color=clNone'
       'IF temp1=0 Then IF temp=1 Then PsiDataStatus.Color=clYellow    '
-      'IF temp1=1 Then IF temp=1 Then PsiDataCq.Color=clSilver     '
-      'IF temp1=0 Then IF temp=0 Then PsiDataCq.Color=clNone'
-      'IF temp1=0 Then IF temp=1 Then PsiDataCq.Color=clYellow'
-      'IF temp1=1 Then IF temp=1 Then PsiDataR.Color=clSilver     '
-      'IF temp1=0 Then IF temp=0 Then PsiDataR.Color=clNone'
-      'IF temp1=0 Then IF temp=1 Then PsiDataR.Color=clYellow'
-      'IF temp1=1 Then IF temp=1 Then PsiDataQ.Color=clSilver     '
-      'IF temp1=0 Then IF temp=0 Then PsiDataQ.Color=clNone'
-      'IF temp1=0 Then IF temp=1 Then PsiDataQ.Color=clYellow'
-      ''
-      'IF temp1=1 Then IF temp=1 Then PsiDataSpur.Color=clSilver     '
-      'IF temp1=0 Then IF temp=0 Then PsiDataSpur.Color=clNone'
-      'IF temp1=0 Then IF temp=1 Then PsiDataSpur.Color=clYellow    '
       ''
       ''
-      'end sub'
-      'sub ReportTitle1OnBeforePrint(Sender)'
-      '       IF <PsiData."PoverKa">="True" Then'
-      '     Memo123.Text="'#1087#1086#1074#1077#1088#1082#1080'"'
-      '  END IF'
-      '  IF <PsiData."PoverKa">="False" Then      '
-      '    Memo123.Text="'#1082#1072#1083#1080#1073#1088#1086#1074#1082#1080'"         '
-      '  END IF  '
-      '  IF <PsiData."PMI">="True" THEN Memo23.Text="'#1055#1052#1048'"  '
-      'end sub    ')
+      ''
+      ''
+      ''
+      'end sub  ')
     Left = 152
     Top = 16
     Datasets = <
@@ -1449,7 +1414,7 @@ object ProtokolForm: TProtokolForm
       BottomMargin = 10
       Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
       object ReportTitle1: TfrxReportTitle
-        Height = 332.59864
+        Height = 328.81911
         Top = 18.89765
         Width = 718.1107
         OnBeforePrint = 'ReportTitle1OnBeforePrint'
@@ -1460,16 +1425,6 @@ object ProtokolForm: TProtokolForm
           ShowHint = False
           Memo.UTF8 = (
             #1056#1119#1057#1026#1056#1109#1057#8218#1056#1109#1056#1108#1056#1109#1056#187' '#1056#1105#1056#183#1056#1112#1056#181#1057#1026#1056#181#1056#1029#1056#1105#1056#8470' '#1057#1026#1056#181#1056#183#1056#1109#1056#1029#1056#176#1057#8218#1056#1109#1057#1026#1056#1109#1056#1030)
-        end
-        object Memo2: TfrxMemoView
-          Left = 83.14966
-          Top = 22.67718
-          Width = 627.40198
-          Height = 18.89765
-          ShowHint = False
-          DataSetName = 'frxDBDataset1'
-          Memo.UTF8 = (
-            '[PsiData."Spc"]')
         end
         object Memo3: TfrxMemoView
           Left = 83.14966
@@ -1564,7 +1519,7 @@ object ProtokolForm: TProtokolForm
           ShowHint = False
           DataSetName = 'frxDBDataset3'
           Memo.UTF8 = (
-            '[Spc."Loadvalue"]')
+            '[PsiData."Cn"]')
         end
         object Memo91: TfrxMemoView
           Left = 661.41775
@@ -1606,30 +1561,6 @@ object ProtokolForm: TProtokolForm
           ShowHint = False
           Memo.UTF8 = (
             #1056#160#1056#181#1056#182#1056#1105#1056#1112' '#1056#1105#1056#183#1056#1112#1056#181#1057#1026#1056#181#1056#1029#1056#1105#1056#8470' ')
-        end
-        object SpcLoadType: TfrxMemoView
-          Left = 264.5671
-          Top = 249.44898
-          Width = 158.74026
-          Height = 18.89765
-          ShowHint = False
-          DataField = 'LoadType'
-          DataSet = Spc
-          DataSetName = 'Spc'
-          Memo.UTF8 = (
-            '[Spc."LoadType"]')
-        end
-        object PsiDataintervalgf: TfrxMemoView
-          Left = 264.5671
-          Top = 113.3859
-          Width = 321.26005
-          Height = 18.89765
-          ShowHint = False
-          DataField = 'intervalgf'
-          DataSet = PsiData
-          DataSetName = 'PsiData'
-          Memo.UTF8 = (
-            '[PsiData."intervalgf"]')
         end
         object Memo4: TfrxMemoView
           Left = 15.11812
@@ -1689,8 +1620,8 @@ object ProtokolForm: TProtokolForm
         end
         object Memo23: TfrxMemoView
           Left = 15.11812
-          Top = 26.45671
-          Width = 60.47248
+          Top = 22.67718
+          Width = 64.25201
           Height = 18.89765
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -1702,9 +1633,41 @@ object ProtokolForm: TProtokolForm
           ParentFont = False
           VAlign = vaCenter
         end
-        object Memo120: TfrxMemoView
+        object Memo52: TfrxMemoView
+          Left = 264.5671
+          Top = 249.44898
+          Width = 132.28355
+          Height = 22.67718
+          ShowHint = False
+        end
+        object PsiDataintervalgf: TfrxMemoView
+          Left = 264.5671
+          Top = 113.3859
+          Width = 162.51979
+          Height = 18.89765
+          ShowHint = False
+          DataField = 'intervalgf'
+          DataSet = PsiData
+          DataSetName = 'PsiData'
+          Memo.UTF8 = (
+            '[PsiData."intervalgf"]')
+        end
+        object Memo103: TfrxMemoView
+          Left = 612.28386
+          Top = 7.55906
+          Width = 94.48825
+          Height = 18.89765
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -16
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Memo110: TfrxMemoView
           Left = 15.11812
-          Top = 275.90569
+          Top = 272.12616
           Width = 634.96104
           Height = 18.89765
           ShowHint = False
@@ -1719,7 +1682,7 @@ object ProtokolForm: TProtokolForm
               #8470' '#1056#1029#1056#1109#1056#1112#1056#181#1057#1026'   '#1074#8222#8211' [PsiData."Machine_Serial"]')
           ParentFont = False
         end
-        object Memo121: TfrxMemoView
+        object Memo111: TfrxMemoView
           Left = 15.11812
           Top = 306.14193
           Width = 41.57483
@@ -1734,7 +1697,7 @@ object ProtokolForm: TProtokolForm
             #1056#8221#1056#176#1057#8218#1056#176)
           ParentFont = False
         end
-        object Memo122: TfrxMemoView
+        object Memo112: TfrxMemoView
           Left = 219.21274
           Top = 306.14193
           Width = 173.85838
@@ -1750,7 +1713,7 @@ object ProtokolForm: TProtokolForm
             '[PsiData."Machine_Call_Date"]')
           ParentFont = False
         end
-        object Memo123: TfrxMemoView
+        object Memo113: TfrxMemoView
           Left = 56.69295
           Top = 306.14193
           Width = 147.40167
@@ -1763,10 +1726,10 @@ object ProtokolForm: TProtokolForm
           Font.Style = []
           ParentFont = False
         end
-        object Memo124: TfrxMemoView
+        object Memo114: TfrxMemoView
           Left = 612.28386
-          Top = 3.77953
-          Width = 98.26778
+          Top = 34.01577
+          Width = 102.04731
           Height = 15.11812
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -1778,10 +1741,22 @@ object ProtokolForm: TProtokolForm
             'ver. [PsiData."Version"]')
           ParentFont = False
         end
+        object Memo2: TfrxMemoView
+          Left = 86.92919
+          Top = 22.67718
+          Width = 400.63018
+          Height = 18.89765
+          ShowHint = False
+          DataField = 'Text'
+          DataSet = Spc
+          DataSetName = 'Spc'
+          Memo.UTF8 = (
+            '[Spc."Text"]')
+        end
       end
       object Header1: TfrxHeader
         Height = 34.01577
-        Top = 411.96877
+        Top = 408.18924
         Width = 718.1107
         object Memo16: TfrxMemoView
           Width = 64.25201
@@ -1801,12 +1776,12 @@ object ProtokolForm: TProtokolForm
         end
         object Memo17: TfrxMemoView
           Left = 124.72449
-          Width = 49.13389
+          Width = 83.14966
           Height = 34.01577
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -8
+          Font.Height = -13
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
@@ -1817,30 +1792,30 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo18: TfrxMemoView
-          Left = 173.85838
-          Width = 41.57483
+          Left = 207.87415
+          Width = 79.37013
           Height = 34.01577
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -8
+          Font.Height = -13
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           HAlign = haCenter
           Memo.UTF8 = (
-            'Rmax')
+            #1056#1038#1056#1109#1056#1111#1057#1026#1056#1109#1057#8218#1056#1105#1056#1030#1056#187#1056#181#1056#1029#1056#1105#1056#181)
           ParentFont = False
           VAlign = vaCenter
         end
         object Memo19: TfrxMemoView
-          Left = 343.93723
+          Left = 287.24428
           Width = 60.47248
           Height = 34.01577
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -8
+          Font.Height = -13
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
@@ -1851,47 +1826,47 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo20: TfrxMemoView
-          Left = 461.10266
-          Width = 60.47248
-          Height = 34.01577
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -8
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            'C0,'#1056#1111#1056#164)
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo22: TfrxMemoView
-          Left = 521.57514
-          Width = 64.25201
-          Height = 34.01577
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -8
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            'Cq,'#1057#8222#1056#164)
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo24: TfrxMemoView
-          Left = 646.29963
+          Left = 419.52783
           Width = 71.81107
           Height = 34.01577
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -8
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haCenter
+          Memo.UTF8 = (
+            'Rmax/R25')
+          ParentFont = False
+          VAlign = vaCenter
+        end
+        object Memo22: TfrxMemoView
+          Left = 491.3389
+          Width = 75.5906
+          Height = 34.01577
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haCenter
+          Memo.UTF8 = (
+            'R25/Rmin')
+          ParentFont = False
+          VAlign = vaCenter
+        end
+        object Memo24: TfrxMemoView
+          Left = 566.9295
+          Width = 151.1812
+          Height = 34.01577
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
@@ -1925,13 +1900,13 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo49: TfrxMemoView
-          Left = 404.40971
-          Width = 56.69295
+          Left = 347.71676
+          Width = 71.81107
           Height = 34.01577
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -8
+          Font.Height = -13
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
@@ -1941,62 +1916,10 @@ object ProtokolForm: TProtokolForm
           ParentFont = False
           VAlign = vaCenter
         end
-        object Memo52: TfrxMemoView
-          Left = 272.12616
-          Width = 71.81107
-          Height = 34.01577
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -8
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            'R, Ohm'
-            '[Spc."Tpar"]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo103: TfrxMemoView
-          Left = 215.43321
-          Width = 56.69295
-          Height = 34.01577
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -8
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            'Q,x1000')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo112: TfrxMemoView
-          Left = 585.82715
-          Width = 60.47248
-          Height = 34.01577
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -8
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            #1056#1116#1056#181#1056#182#1056#181#1056#187#1056#176#1057#8218#1056#181#1056#187#1057#1034#1056#1029#1057#8249#1056#181' '#1057#1026#1056#181#1056#183#1056#1109#1056#1029#1056#176#1056#1029#1057#1027#1057#8249', '#1056#1169#1056#8216)
-          ParentFont = False
-          VAlign = vaCenter
-        end
       end
       object MasterData1: TfrxMasterData
         Height = 18.89765
-        Top = 468.66172
+        Top = 464.88219
         Width = 718.1107
         OnBeforePrint = 'MasterData1OnBeforePrint'
         DataSet = PsiData
@@ -2020,15 +1943,15 @@ object ProtokolForm: TProtokolForm
             '[PsiData."N"]')
           ParentFont = False
         end
-        object PsiDataF: TfrxMemoView
-          Left = 124.72449
-          Width = 49.13389
+        object PsiDataR: TfrxMemoView
+          Left = 207.87415
+          Width = 79.37013
           Height = 18.89765
           ShowHint = False
-          DataField = 'F'
+          DataField = 'R'
           DataSet = PsiData
           DataSetName = 'PsiData'
-          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.FormatStr = '%2.1f'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -2038,7 +1961,7 @@ object ProtokolForm: TProtokolForm
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           HAlign = haCenter
           Memo.UTF8 = (
-            '[PsiData."F"]')
+            '[PsiData."R"]')
           ParentFont = False
         end
         object PsiDataPosition: TfrxMemoView
@@ -2061,8 +1984,8 @@ object ProtokolForm: TProtokolForm
           ParentFont = False
         end
         object PsiDataStatus: TfrxMemoView
-          Left = 646.29963
-          Width = 71.81107
+          Left = 566.9295
+          Width = 151.1812
           Height = 18.89765
           ShowHint = False
           DataSet = PsiData
@@ -2077,7 +2000,7 @@ object ProtokolForm: TProtokolForm
           ParentFont = False
         end
         object PsiDataFmax: TfrxMemoView
-          Left = 343.93723
+          Left = 287.24428
           Width = 60.47248
           Height = 18.89765
           ShowHint = False
@@ -2099,8 +2022,8 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object PsiDataFmin: TfrxMemoView
-          Left = 404.40971
-          Width = 56.69295
+          Left = 347.71676
+          Width = 71.81107
           Height = 18.89765
           ShowHint = False
           DataField = 'Fmin'
@@ -2120,78 +2043,12 @@ object ProtokolForm: TProtokolForm
           ParentFont = False
           VAlign = vaCenter
         end
-        object PsiDataRmax: TfrxMemoView
-          Left = 173.85838
-          Width = 41.57483
-          Height = 18.89765
-          ShowHint = False
-          DataField = 'Rmax'
-          DataSet = PsiData
-          DataSetName = 'PsiData'
-          DisplayFormat.FormatStr = '%2.1f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[PsiData."Rmax"]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object PsiDataC0: TfrxMemoView
-          Left = 461.10266
-          Width = 60.47248
-          Height = 18.89765
-          ShowHint = False
-          DataField = 'C0'
-          DataSet = PsiData
-          DataSetName = 'PsiData'
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[PsiData."C0"]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object PsiDataCq: TfrxMemoView
-          Left = 521.57514
-          Width = 64.25201
-          Height = 18.89765
-          ShowHint = False
-          DataField = 'Cq'
-          DataSet = PsiData
-          DataSetName = 'PsiData'
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[PsiData."Cq"]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object PsiDataR: TfrxMemoView
-          Left = 272.12616
+        object PsiDataRR2: TfrxMemoView
+          Left = 419.52783
           Width = 71.81107
           Height = 18.89765
           ShowHint = False
-          DataField = 'R'
+          DataField = 'RR2'
           DataSet = PsiData
           DataSetName = 'PsiData'
           DisplayFormat.FormatStr = '%2.1f'
@@ -2204,38 +2061,16 @@ object ProtokolForm: TProtokolForm
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           HAlign = haCenter
           Memo.UTF8 = (
-            '[PsiData."R"]')
+            '[PsiData."RR2"]')
           ParentFont = False
           VAlign = vaCenter
         end
-        object PsiDataQ: TfrxMemoView
-          Left = 215.43321
-          Width = 56.69295
+        object PsiDataRR3: TfrxMemoView
+          Left = 491.3389
+          Width = 75.5906
           Height = 18.89765
           ShowHint = False
-          DataField = 'Q'
-          DataSet = PsiData
-          DataSetName = 'PsiData'
-          DisplayFormat.FormatStr = '%2.0f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[PsiData."Q"]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object PsiDataSpur: TfrxMemoView
-          Left = 585.82715
-          Width = 60.47248
-          Height = 18.89765
-          ShowHint = False
-          DataField = 'Spur'
+          DataField = 'RR3'
           DataSet = PsiData
           DataSetName = 'PsiData'
           DisplayFormat.FormatStr = '%2.1f'
@@ -2248,18 +2083,118 @@ object ProtokolForm: TProtokolForm
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           HAlign = haCenter
           Memo.UTF8 = (
-            '[PsiData."Spur"]')
+            '[PsiData."RR3"]')
+          ParentFont = False
+          VAlign = vaCenter
+        end
+        object Memo89: TfrxMemoView
+          Left = 170.07885
+          Width = 37.7953
+          Height = 18.89765
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -8
+          Font.Name = 'Arial'
+          Font.Style = []
+          HAlign = haRight
+          ParentFont = False
+        end
+        object Memo96: TfrxMemoView
+          Left = 249.44898
+          Width = 37.7953
+          Height = 18.89765
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -8
+          Font.Name = 'Arial'
+          Font.Style = []
+          HAlign = haRight
+          ParentFont = False
+        end
+        object Memo97: TfrxMemoView
+          Left = 309.92146
+          Width = 37.7953
+          Height = 18.89765
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -8
+          Font.Name = 'Arial'
+          Font.Style = []
+          HAlign = haRight
+          ParentFont = False
+        end
+        object Memo98: TfrxMemoView
+          Left = 381.73253
+          Width = 37.7953
+          Height = 18.89765
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -8
+          Font.Name = 'Arial'
+          Font.Style = []
+          HAlign = haRight
+          ParentFont = False
+        end
+        object Memo99: TfrxMemoView
+          Left = 453.5436
+          Width = 37.7953
+          Height = 18.89765
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -8
+          Font.Name = 'Arial'
+          Font.Style = []
+          HAlign = haRight
+          ParentFont = False
+        end
+        object Memo100: TfrxMemoView
+          Left = 529.1342
+          Width = 37.7953
+          Height = 18.89765
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -8
+          Font.Name = 'Arial'
+          Font.Style = []
+          HAlign = haRight
+          ParentFont = False
+        end
+        object PsiDataFL_Num: TfrxMemoView
+          Left = 124.72449
+          Width = 83.14966
+          Height = 18.89765
+          ShowHint = False
+          DataField = 'FL_Num'
+          DataSet = PsiData
+          DataSetName = 'PsiData'
+          DisplayFormat.FormatStr = '%2.1f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haCenter
+          Memo.UTF8 = (
+            '[PsiData."FL_Num"]')
           ParentFont = False
           VAlign = vaCenter
         end
       end
       object Footer1: TfrxFooter
         Height = 249.44898
-        Top = 510.23655
+        Top = 506.45702
         Width = 718.1107
         object Memo25: TfrxMemoView
           Left = 124.72449
-          Width = 49.13389
+          Width = 83.14966
           Height = 18.89765
           ShowHint = False
           DisplayFormat.DecimalSeparator = ','
@@ -2273,7 +2208,7 @@ object ProtokolForm: TProtokolForm
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           HAlign = haCenter
           Memo.UTF8 = (
-            '[MAX(<PsiData."F">,MasterData1)]')
+            '[MAX(<PsiData."FL_Num">,MasterData1)]')
           ParentFont = False
           VAlign = vaCenter
         end
@@ -2346,7 +2281,7 @@ object ProtokolForm: TProtokolForm
         object SysMemo1: TfrxSysMemoView
           Left = 124.72449
           Top = 18.89765
-          Width = 49.13389
+          Width = 83.14966
           Height = 18.89765
           ShowHint = False
           DisplayFormat.DecimalSeparator = ','
@@ -2359,13 +2294,13 @@ object ProtokolForm: TProtokolForm
           Font.Style = []
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           Memo.UTF8 = (
-            '[MIN(<PsiData."F">,MasterData1)]')
+            '[MIN(<PsiData."FL_Num">,MasterData1)]')
           ParentFont = False
         end
         object SysMemo2: TfrxSysMemoView
           Left = 124.72449
           Top = 37.7953
-          Width = 49.13389
+          Width = 83.14966
           Height = 18.89765
           ShowHint = False
           DisplayFormat.DecimalSeparator = ','
@@ -2379,7 +2314,7 @@ object ProtokolForm: TProtokolForm
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           HAlign = haCenter
           Memo.UTF8 = (
-            '[AVG(<PsiData."F">,MasterData1)]')
+            '[AVG(<PsiData."FL_Num">,MasterData1)]')
           ParentFont = False
           VAlign = vaCenter
         end
@@ -2402,8 +2337,8 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object SysMemo4: TfrxSysMemoView
-          Left = 173.85838
-          Width = 41.57483
+          Left = 207.87415
+          Width = 79.37013
           Height = 18.89765
           ShowHint = False
           DisplayFormat.DecimalSeparator = ','
@@ -2417,14 +2352,14 @@ object ProtokolForm: TProtokolForm
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           HAlign = haCenter
           Memo.UTF8 = (
-            '[MAX(<PsiData."Rmax">,MasterData1)]')
+            '[MAX(<PsiData."R">,MasterData1)]')
           ParentFont = False
           VAlign = vaCenter
         end
         object SysMemo5: TfrxSysMemoView
-          Left = 173.85838
+          Left = 207.87415
           Top = 18.89765
-          Width = 41.57483
+          Width = 79.37013
           Height = 18.89765
           ShowHint = False
           DisplayFormat.DecimalSeparator = ','
@@ -2438,14 +2373,14 @@ object ProtokolForm: TProtokolForm
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           HAlign = haCenter
           Memo.UTF8 = (
-            '[MIN(<PsiData."Rmax">,MasterData1)]')
+            '[MIN(<PsiData."R">,MasterData1)]')
           ParentFont = False
           VAlign = vaCenter
         end
         object SysMemo6: TfrxSysMemoView
-          Left = 173.85838
+          Left = 207.87415
           Top = 37.7953
-          Width = 41.57483
+          Width = 79.37013
           Height = 18.89765
           ShowHint = False
           DisplayFormat.DecimalSeparator = ','
@@ -2459,12 +2394,12 @@ object ProtokolForm: TProtokolForm
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           HAlign = haCenter
           Memo.UTF8 = (
-            '[AVG(<PsiData."Rmax">,MasterData1)]')
+            '[AVG(<PsiData."R">,MasterData1)]')
           ParentFont = False
           VAlign = vaCenter
         end
         object SysMemo7: TfrxSysMemoView
-          Left = 343.93723
+          Left = 287.24428
           Width = 60.47248
           Height = 18.89765
           ShowHint = False
@@ -2484,7 +2419,7 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object SysMemo8: TfrxSysMemoView
-          Left = 343.93723
+          Left = 287.24428
           Top = 18.89765
           Width = 60.47248
           Height = 18.89765
@@ -2505,7 +2440,7 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object SysMemo9: TfrxSysMemoView
-          Left = 343.93723
+          Left = 287.24428
           Top = 37.7953
           Width = 60.47248
           Height = 18.89765
@@ -2526,8 +2461,8 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object SysMemo10: TfrxSysMemoView
-          Left = 461.10266
-          Width = 60.47248
+          Left = 419.52783
+          Width = 71.81107
           Height = 18.89765
           ShowHint = False
           DisplayFormat.DecimalSeparator = ','
@@ -2541,14 +2476,14 @@ object ProtokolForm: TProtokolForm
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           HAlign = haCenter
           Memo.UTF8 = (
-            '[MAX(<PsiData."C0">,MasterData1)]')
+            '[MAX(<PsiData."RR2">,MasterData1)]')
           ParentFont = False
           VAlign = vaCenter
         end
         object SysMemo11: TfrxSysMemoView
-          Left = 461.10266
+          Left = 419.52783
           Top = 18.89765
-          Width = 60.47248
+          Width = 71.81107
           Height = 18.89765
           ShowHint = False
           DisplayFormat.DecimalSeparator = ','
@@ -2562,14 +2497,14 @@ object ProtokolForm: TProtokolForm
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           HAlign = haCenter
           Memo.UTF8 = (
-            '[MIN(<PsiData."C0">,MasterData1)]')
+            '[MIN(<PsiData."RR2">,MasterData1)]')
           ParentFont = False
           VAlign = vaCenter
         end
         object SysMemo12: TfrxSysMemoView
-          Left = 461.10266
+          Left = 419.52783
           Top = 37.7953
-          Width = 60.47248
+          Width = 71.81107
           Height = 18.89765
           ShowHint = False
           DisplayFormat.DecimalSeparator = ','
@@ -2583,13 +2518,13 @@ object ProtokolForm: TProtokolForm
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           HAlign = haCenter
           Memo.UTF8 = (
-            '[AVG(<PsiData."C0">,MasterData1)]')
+            '[AVG(<PsiData."RR2">,MasterData1)]')
           ParentFont = False
           VAlign = vaCenter
         end
         object SysMemo16: TfrxSysMemoView
-          Left = 521.57514
-          Width = 64.25201
+          Left = 491.3389
+          Width = 75.5906
           Height = 18.89765
           ShowHint = False
           DisplayFormat.DecimalSeparator = ','
@@ -2603,14 +2538,14 @@ object ProtokolForm: TProtokolForm
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           HAlign = haCenter
           Memo.UTF8 = (
-            '[MAX(<PsiData."Cq">,MasterData1)]')
+            '[MAX(<PsiData."RR3">,MasterData1)]')
           ParentFont = False
           VAlign = vaCenter
         end
         object SysMemo17: TfrxSysMemoView
-          Left = 521.57514
+          Left = 491.3389
           Top = 18.89765
-          Width = 64.25201
+          Width = 75.5906
           Height = 18.89765
           ShowHint = False
           DisplayFormat.DecimalSeparator = ','
@@ -2624,14 +2559,14 @@ object ProtokolForm: TProtokolForm
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           HAlign = haCenter
           Memo.UTF8 = (
-            '[MIN(<PsiData."Cq">,MasterData1)]')
+            '[MIN(<PsiData."RR3">,MasterData1)]')
           ParentFont = False
           VAlign = vaCenter
         end
         object SysMemo18: TfrxSysMemoView
-          Left = 521.57514
+          Left = 491.3389
           Top = 37.7953
-          Width = 64.25201
+          Width = 75.5906
           Height = 18.89765
           ShowHint = False
           DisplayFormat.FormatStr = '%2.2f'
@@ -2644,19 +2579,19 @@ object ProtokolForm: TProtokolForm
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           HAlign = haCenter
           Memo.UTF8 = (
-            '[AVG(<PsiData."Cq">,MasterData1)]')
+            '[AVG(<PsiData."RR3">,MasterData1)]')
           ParentFont = False
           VAlign = vaCenter
         end
         object Line25: TfrxLineView
-          Top = 75.5905999999997
+          Top = 75.5905999999998
           Width = 718.1107
           ShowHint = False
           Frame.Typ = [ftTop]
         end
         object Memo42: TfrxMemoView
           Left = -3.77953
-          Top = 75.5905999999997
+          Top = 75.5905999999998
           Width = 64.25201
           Height = 18.89765
           ShowHint = False
@@ -2732,9 +2667,9 @@ object ProtokolForm: TProtokolForm
           ParentFont = False
         end
         object frxDBDataset2Bad: TfrxMemoView
-          Left = 646.29963
+          Left = 566.9295
           Top = 162.51979
-          Width = 71.81107
+          Width = 151.1812
           Height = 18.89765
           ShowHint = False
           DataSetName = 'frxDBDataset2'
@@ -2748,9 +2683,9 @@ object ProtokolForm: TProtokolForm
           ParentFont = False
         end
         object frxDBDataset2Good: TfrxMemoView
-          Left = 646.29963
+          Left = 566.9295
           Top = 143.62214
-          Width = 71.81107
+          Width = 151.1812
           Height = 18.89765
           ShowHint = False
           DataSetName = 'frxDBDataset2'
@@ -2766,7 +2701,7 @@ object ProtokolForm: TProtokolForm
         object Memo72: TfrxMemoView
           Left = 124.72449
           Top = 143.62214
-          Width = 49.13389
+          Width = 83.14966
           Height = 18.89765
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -2782,7 +2717,7 @@ object ProtokolForm: TProtokolForm
         object Memo73: TfrxMemoView
           Left = 124.72449
           Top = 162.51979
-          Width = 49.13389
+          Width = 83.14966
           Height = 18.89765
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -2796,9 +2731,9 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo74: TfrxMemoView
-          Left = 173.85838
+          Left = 207.87415
           Top = 143.62214
-          Width = 41.57483
+          Width = 79.37013
           Height = 18.89765
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -2812,9 +2747,9 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo75: TfrxMemoView
-          Left = 173.85838
+          Left = 207.87415
           Top = 162.51979
-          Width = 41.57483
+          Width = 79.37013
           Height = 18.89765
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -2828,7 +2763,7 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo76: TfrxMemoView
-          Left = 343.93723
+          Left = 287.24428
           Top = 143.62214
           Width = 60.47248
           Height = 18.89765
@@ -2844,7 +2779,7 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo77: TfrxMemoView
-          Left = 343.93723
+          Left = 287.24428
           Top = 162.51979
           Width = 60.47248
           Height = 18.89765
@@ -2860,9 +2795,9 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo78: TfrxMemoView
-          Left = 461.10266
+          Left = 415.7483
           Top = 143.62214
-          Width = 60.47248
+          Width = 75.5906
           Height = 18.89765
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -2876,9 +2811,9 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo79: TfrxMemoView
-          Left = 461.10266
+          Left = 415.7483
           Top = 162.51979
-          Width = 60.47248
+          Width = 75.5906
           Height = 18.89765
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -2892,9 +2827,9 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo86: TfrxMemoView
-          Left = 521.57514
+          Left = 491.3389
           Top = 143.62214
-          Width = 64.25201
+          Width = 75.5906
           Height = 18.89765
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -2908,9 +2843,9 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo87: TfrxMemoView
-          Left = 521.57514
+          Left = 491.3389
           Top = 162.51979
-          Width = 64.25201
+          Width = 75.5906
           Height = 18.89765
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -2987,7 +2922,7 @@ object ProtokolForm: TProtokolForm
         object Memo13: TfrxMemoView
           Left = 124.72449
           Top = 211.65368
-          Width = 49.13389
+          Width = 83.14966
           Height = 18.89765
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -3003,7 +2938,7 @@ object ProtokolForm: TProtokolForm
         object Memo39: TfrxMemoView
           Left = 124.72449
           Top = 230.55133
-          Width = 49.13389
+          Width = 83.14966
           Height = 18.89765
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -3017,9 +2952,9 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo40: TfrxMemoView
-          Left = 173.85838
+          Left = 207.87415
           Top = 211.65368
-          Width = 41.57483
+          Width = 79.37013
           Height = 18.89765
           ShowHint = False
           DisplayFormat.FormatStr = '%2.2f'
@@ -3035,9 +2970,9 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo41: TfrxMemoView
-          Left = 173.85838
+          Left = 207.87415
           Top = 230.55133
-          Width = 41.57483
+          Width = 79.37013
           Height = 18.89765
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -3051,9 +2986,9 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo54: TfrxMemoView
-          Left = 461.10266
+          Left = 419.52783
           Top = 211.65368
-          Width = 60.47248
+          Width = 71.81107
           Height = 18.89765
           ShowHint = False
           DisplayFormat.FormatStr = '%2.2f'
@@ -3069,9 +3004,9 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo55: TfrxMemoView
-          Left = 461.10266
+          Left = 419.52783
           Top = 230.55133
-          Width = 60.47248
+          Width = 71.81107
           Height = 18.89765
           ShowHint = False
           DisplayFormat.FormatStr = '%2.2f'
@@ -3087,9 +3022,9 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo101: TfrxMemoView
-          Left = 521.57514
+          Left = 491.3389
           Top = 211.65368
-          Width = 64.25201
+          Width = 75.5906
           Height = 18.89765
           ShowHint = False
           DisplayFormat.FormatStr = '%2.2f'
@@ -3105,9 +3040,9 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo102: TfrxMemoView
-          Left = 521.57514
+          Left = 491.3389
           Top = 230.55133
-          Width = 64.25201
+          Width = 75.5906
           Height = 18.89765
           ShowHint = False
           DisplayFormat.FormatStr = '%2.2f'
@@ -3123,7 +3058,7 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo105: TfrxMemoView
-          Left = 343.93723
+          Left = 287.24428
           Top = 211.65368
           Width = 60.47248
           Height = 18.89765
@@ -3141,7 +3076,7 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo106: TfrxMemoView
-          Left = 343.93723
+          Left = 287.24428
           Top = 230.55133
           Width = 60.47248
           Height = 18.89765
@@ -3159,14 +3094,14 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo53: TfrxMemoView
-          Left = 646.29963
+          Left = 566.9295
           Top = 105.82684
-          Width = 37.7953
+          Width = 79.37013
           Height = 18.89765
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -8
+          Font.Height = -13
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
@@ -3174,12 +3109,12 @@ object ProtokolForm: TProtokolForm
           Memo.UTF8 = (
             #1056#1032#1057#1027#1056#187#1056#1109#1056#1030#1056#1029#1056#1109)
           ParentFont = False
-          VAlign = vaCenter
+          VAlign = vaBottom
         end
         object Memo60: TfrxMemoView
-          Left = 646.29963
+          Left = 566.9295
           Top = 124.72449
-          Width = 37.7953
+          Width = 79.37013
           Height = 18.89765
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -3192,8 +3127,8 @@ object ProtokolForm: TProtokolForm
           ParentFont = False
         end
         object SysMemo13: TfrxSysMemoView
-          Left = 404.40971
-          Width = 56.69295
+          Left = 347.71676
+          Width = 71.81107
           Height = 18.89765
           ShowHint = False
           DisplayFormat.DecimalSeparator = ','
@@ -3212,9 +3147,9 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object SysMemo14: TfrxSysMemoView
-          Left = 404.40971
+          Left = 347.71676
           Top = 18.89765
-          Width = 56.69295
+          Width = 71.81107
           Height = 18.89765
           ShowHint = False
           DisplayFormat.DecimalSeparator = ','
@@ -3233,9 +3168,9 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object SysMemo15: TfrxSysMemoView
-          Left = 404.40971
+          Left = 347.71676
           Top = 37.7953
-          Width = 56.69295
+          Width = 71.81107
           Height = 18.89765
           ShowHint = False
           DisplayFormat.DecimalSeparator = ','
@@ -3254,9 +3189,9 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo61: TfrxMemoView
-          Left = 404.40971
+          Left = 347.71676
           Top = 143.62214
-          Width = 56.69295
+          Width = 68.03154
           Height = 18.89765
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -3270,9 +3205,9 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo63: TfrxMemoView
-          Left = 404.40971
+          Left = 347.71676
           Top = 162.51979
-          Width = 56.69295
+          Width = 68.03154
           Height = 18.89765
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -3286,9 +3221,9 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo64: TfrxMemoView
-          Left = 404.40971
+          Left = 347.71676
           Top = 211.65368
-          Width = 56.69295
+          Width = 71.81107
           Height = 18.89765
           ShowHint = False
           DisplayFormat.FormatStr = '%2.2f'
@@ -3304,9 +3239,9 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo65: TfrxMemoView
-          Left = 404.40971
+          Left = 347.71676
           Top = 230.55133
-          Width = 56.69295
+          Width = 71.81107
           Height = 18.89765
           ShowHint = False
           DisplayFormat.FormatStr = '%2.2f'
@@ -3380,7 +3315,7 @@ object ProtokolForm: TProtokolForm
         object Memo45: TfrxMemoView
           Left = 124.72449
           Top = 105.82684
-          Width = 49.13389
+          Width = 83.14966
           Height = 18.89765
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -3396,7 +3331,7 @@ object ProtokolForm: TProtokolForm
         object Memo46: TfrxMemoView
           Left = 124.72449
           Top = 124.72449
-          Width = 49.13389
+          Width = 83.14966
           Height = 18.89765
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -3410,9 +3345,9 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo47: TfrxMemoView
-          Left = 173.85838
+          Left = 207.87415
           Top = 105.82684
-          Width = 41.57483
+          Width = 79.37013
           Height = 18.89765
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -3426,9 +3361,9 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo48: TfrxMemoView
-          Left = 173.85838
+          Left = 207.87415
           Top = 124.72449
-          Width = 41.57483
+          Width = 79.37013
           Height = 18.89765
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -3442,7 +3377,7 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo50: TfrxMemoView
-          Left = 343.93723
+          Left = 287.24428
           Top = 105.82684
           Width = 60.47248
           Height = 18.89765
@@ -3458,7 +3393,7 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo51: TfrxMemoView
-          Left = 343.93723
+          Left = 287.24428
           Top = 124.72449
           Width = 60.47248
           Height = 18.89765
@@ -3474,9 +3409,9 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo57: TfrxMemoView
-          Left = 404.40971
+          Left = 347.71676
           Top = 105.82684
-          Width = 56.69295
+          Width = 68.03154
           Height = 18.89765
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -3490,9 +3425,9 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo58: TfrxMemoView
-          Left = 404.40971
+          Left = 347.71676
           Top = 124.72449
-          Width = 56.69295
+          Width = 68.03154
           Height = 18.89765
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -3506,9 +3441,9 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo59: TfrxMemoView
-          Left = 461.10266
+          Left = 415.7483
           Top = 105.82684
-          Width = 60.47248
+          Width = 75.5906
           Height = 18.89765
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -3522,9 +3457,9 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo84: TfrxMemoView
-          Left = 461.10266
+          Left = 415.7483
           Top = 124.72449
-          Width = 60.47248
+          Width = 75.5906
           Height = 18.89765
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -3538,9 +3473,9 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo85: TfrxMemoView
-          Left = 521.57514
+          Left = 491.3389
           Top = 105.82684
-          Width = 64.25201
+          Width = 75.5906
           Height = 18.89765
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -3554,9 +3489,9 @@ object ProtokolForm: TProtokolForm
           VAlign = vaCenter
         end
         object Memo92: TfrxMemoView
-          Left = 521.57514
+          Left = 491.3389
           Top = 124.72449
-          Width = 64.25201
+          Width = 75.5906
           Height = 18.89765
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -3610,102 +3545,8 @@ object ProtokolForm: TProtokolForm
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           ParentFont = False
         end
-        object SysMemo19: TfrxSysMemoView
-          Left = 272.12616
-          Width = 71.81107
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[MAX(<PsiData."R">,MasterData1)]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo20: TfrxSysMemoView
-          Left = 272.12616
-          Top = 18.89765
-          Width = 71.81107
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[MIN(<PsiData."R">,MasterData1)]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo21: TfrxSysMemoView
-          Left = 272.12616
-          Top = 37.7953
-          Width = 71.81107
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[AVG(<PsiData."R">,MasterData1)]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
         object Memo56: TfrxMemoView
-          Left = 272.12616
-          Top = 143.62214
-          Width = 71.81107
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo88: TfrxMemoView
-          Left = 272.12616
-          Top = 162.51979
-          Width = 71.81107
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo89: TfrxMemoView
-          Left = 272.12616
+          Left = 646.29963
           Top = 105.82684
           Width = 71.81107
           Height = 18.89765
@@ -3713,74 +3554,6 @@ object ProtokolForm: TProtokolForm
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
           Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo96: TfrxMemoView
-          Left = 272.12616
-          Top = 124.72449
-          Width = 71.81107
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo97: TfrxMemoView
-          Left = 272.12616
-          Top = 211.65368
-          Width = 71.81107
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo98: TfrxMemoView
-          Left = 272.12616
-          Top = 230.55133
-          Width = 71.81107
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo99: TfrxMemoView
-          Left = 684.09493
-          Top = 105.82684
-          Width = 34.01577
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -8
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
@@ -3788,280 +3561,12 @@ object ProtokolForm: TProtokolForm
           Memo.UTF8 = (
             #1056#1106#1056#1029#1056#1109#1056#1112#1056#176#1056#187)
           ParentFont = False
-          VAlign = vaCenter
+          VAlign = vaBottom
         end
-        object Memo100: TfrxMemoView
-          Left = 684.09493
-          Top = 124.72449
-          Width = 34.01577
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-        end
-        object SysMemo22: TfrxSysMemoView
-          Left = 215.43321
-          Width = 56.69295
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[MAX(<PsiData."Q">,MasterData1)]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo23: TfrxSysMemoView
-          Left = 215.43321
-          Top = 18.89765
-          Width = 56.69295
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[MIN(<PsiData."Q">,MasterData1)]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo24: TfrxSysMemoView
-          Left = 215.43321
-          Top = 37.7953
-          Width = 56.69295
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[AVG(<PsiData."Q">,MasterData1)]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo104: TfrxMemoView
-          Left = 215.43321
-          Top = 143.62214
-          Width = 56.69295
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo107: TfrxMemoView
-          Left = 215.43321
-          Top = 162.51979
-          Width = 56.69295
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo108: TfrxMemoView
-          Left = 215.43321
-          Top = 211.65368
-          Width = 56.69295
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo109: TfrxMemoView
-          Left = 215.43321
-          Top = 230.55133
-          Width = 56.69295
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo110: TfrxMemoView
-          Left = 215.43321
-          Top = 105.82684
-          Width = 56.69295
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo111: TfrxMemoView
-          Left = 215.43321
-          Top = 124.72449
-          Width = 56.69295
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo25: TfrxSysMemoView
-          Left = 585.82715
-          Width = 60.47248
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[MAX(<PsiData."Cq">,MasterData1)]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo26: TfrxSysMemoView
-          Left = 585.82715
-          Top = 18.89765
-          Width = 60.47248
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[MIN(<PsiData."Cq">,MasterData1)]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object SysMemo27: TfrxSysMemoView
-          Left = 585.82715
-          Top = 37.7953
-          Width = 60.47248
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[AVG(<PsiData."Cq">,MasterData1)]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo113: TfrxMemoView
+        object Memo88: TfrxMemoView
           Left = 646.29963
-          Width = 71.81107
-          Height = 56.69295
-          ShowHint = False
-          DataSet = PsiData
-          DataSetName = 'PsiData'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-        end
-        object Memo114: TfrxMemoView
-          Left = 585.82715
-          Top = 105.82684
-          Width = 60.47248
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo115: TfrxMemoView
-          Left = 585.82715
           Top = 124.72449
-          Width = 60.47248
+          Width = 71.81107
           Height = 18.89765
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -4072,80 +3577,11 @@ object ProtokolForm: TProtokolForm
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           HAlign = haCenter
           ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo116: TfrxMemoView
-          Left = 585.82715
-          Top = 143.62214
-          Width = 60.47248
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo117: TfrxMemoView
-          Left = 585.82715
-          Top = 162.51979
-          Width = 60.47248
-          Height = 18.89765
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo118: TfrxMemoView
-          Left = 585.82715
-          Top = 211.65368
-          Width = 60.47248
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo119: TfrxMemoView
-          Left = 585.82715
-          Top = 230.55133
-          Width = 60.47248
-          Height = 18.89765
-          ShowHint = False
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsItalic]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          ParentFont = False
-          VAlign = vaCenter
         end
       end
       object PageFooter1: TfrxPageFooter
         Height = 22.67718
-        Top = 820.15801
+        Top = 816.37848
         Width = 718.1107
         object Memo30: TfrxMemoView
           Left = 86.92919
@@ -4699,7 +4135,18 @@ object ProtokolForm: TProtokolForm
       'Mono_Approx_Type=Mono_Approx_Type'
       'Generator_Type=Generator_Type'
       'Solve_Date=Solve_Date'
-      'Dopusk_M=Dopusk_M')
+      'Dopusk_M=Dopusk_M'
+      'Spur_Use=Spur_Use'
+      'AVG_C0=AVG_C0'
+      'W2200_CL=W2200_CL'
+      'KH7700_CL=KH7700_CL'
+      'TTS100_CL=TTS100_CL'
+      'physical_R_Correction=physical_R_Correction'
+      'physical_C0_correction=physical_C0_correction'
+      'physical_C1_correction=physical_C1_correction'
+      'Spc_Code=Spc_Code'
+      'FL_Num=FL_Num'
+      'FL_Num_Virt=FL_Num_Virt')
     DataSet = DataModule2.SqlSpec
     BCDToCurrency = False
     Left = 232
@@ -4895,7 +4342,10 @@ object ProtokolForm: TProtokolForm
       'PH_OCS=PH_OCS'
       'PH_Analyser_SN=PH_Analyser_SN'
       'Filtr_Freq=Filtr_Freq'
-      'FSpur3=FSpur3')
+      'FSpur3=FSpur3'
+      'FL_Num=FL_Num'
+      'FL_Num_Virtual=FL_Num_Virtual'
+      'REF_F=REF_F')
     DataSource = DataModule2.psiDataSource
     BCDToCurrency = False
     Left = 296

@@ -95,7 +95,6 @@ __published:	// IDE-managed Components
         TLabel *Label24;
         TLabel *Label25;
         TRzDBEdit *RzDBEdit35;
-        TRzDBEdit *RzDBEdit36;
         TRzDBEdit *RzDBEdit37;
         TRzDBEdit *RzDBEdit38;
         void __fastcall btnCloseClick(TObject *Sender);

@@ -92,6 +92,44 @@ New_Data->MachineType->Active=true;
 MachineType=New_Data->MachineType->FieldByName("Type")->AsString;
 New_Data->MachineType->Active=false;
 
+
+DataModule1->SqlSpecification->First();
+     for (int i=0; i<DataModule1->SqlSpecification->RecordCount;i++){
+          if (edtSpcV->Text==DataModule1->SqlSpecification->FieldByName("Name")->AsString){
+                MainForm->ActionList1->Actions[0]->Execute();
+                break;
+          }
+            DataModule1->SqlSpecification->Next();
+     }
+  if (MachineType=="Transat"){
+       DataModule1->Transat_Temp_test->Active=false;
+       DataModule1->Transat_Temp_test->SQL->Clear();
+       AnsiString rrr =  "SHOW COLUMNS FROM `transat_temp_"+DataModule1->Dostup->FieldByName("ID")->AsString+"` LIKE 'Profile';";
+                  //rrr="SHOW COLUMNS FROM `transat_temp_1` LIKE 'Profile'; "  ;
+       DataModule1->Transat_Temp_test->SQL->Add(rrr);
+       DataModule1->Transat_Temp_test->Active=true;
+                    if (DataModule1->Transat_Temp_test->RecordCount==0){
+                             DataModule1->TTS100_Alter->SQL->Clear();
+                             DataModule1->TTS100_Alter->SQL->Add("ALTER TABLE `transat_temp_"+DataModule1->Dostup->FieldByName("ID")->AsString+"` ADD `Profile` VARCHAR(50) NULL;");
+                             DataModule1->TTS100_Alter->Execute();
+
+                      }
+
+      /* DataModule1->TTS100_Alter->SQL->Clear();
+       DataModule1->TTS100_Alter->SQL->Add("ALTER TABLE `transat_temp_"+DataModule1->Dostup->FieldByName("ID")->AsString+"` ADD `Profile` VARCHAR(50) NULL;");
+       DataModule1->TTS100_Alter->Execute();
+       */
+       AnsiString sql_TR="Update `transat_temp_"+DataModule1->Dostup->FieldByName("ID")->AsString+"` set `Profile`='"+DataModule1->SqlSpecification->FieldByName("Profile")->AsString+"'";
+       New_Data->Update_Transat->SQL->Clear();
+       New_Data->Update_Transat->SQL->Add(sql_TR);
+       New_Data->Update_Transat->Execute();
+
+                            
+
+        }
+       AnsiString S;
+       AnsiString Measure_ID=MainForm->Edit1->Text;
+   /*
 DataModule1->SqlSpecification->First();
      for (int i=0; i<DataModule1->SqlSpecification->RecordCount;i++){
           if (edtSpcV->Text==DataModule1->SqlSpecification->FieldByName("Name")->AsString){
@@ -109,17 +147,8 @@ DataModule1->SqlSpecification->First();
      }
 AnsiString S;
 AnsiString Measure_ID=MainForm->Edit1->Text;
+*/
         if (numberSelect==1){
-                      /*  S="SELECT * from psi WHERE Measure_ID='"+Measure_ID+"'";
-                        DataModule1->NumbersTemp->Active=false;
-                        DataModule1->NumbersTemp->SQL->Clear();
-                        DataModule1->NumbersTemp->SQL->Add(S);
-                        DataModule1->NumbersTemp->Active=true;
-                        DataModule1->NumbersTemp->Edit();
-                        DataModule1->NumbersTemp->FieldByName("Spc1")->AsString=edtSpcV->Text;
-                        DataModule1->NumbersTemp->Post();
-                        DataModule1->NumbersTemp->Active=false;
-                        */
                         S="Update `psi` set `Spc1`='"+edtSpcV->Text+"' where `Measure_ID`='"+Measure_ID+"'";
                         New_Data->Update_PSI->SQL->Clear();
                         New_Data->Update_PSI->SQL->Add(S);

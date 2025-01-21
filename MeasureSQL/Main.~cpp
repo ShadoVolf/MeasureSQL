@@ -77,14 +77,13 @@
 TMainForm *MainForm;
 int numberSelect;
 AnsiString MeasureID;
+int FileSelect_index=0;
 //---------------------------------------------------------------------------
 __fastcall TMainForm::TMainForm(TComponent* Owner)
         : TForm(Owner)
 {
 }
 //---------------------------------------------------------------------------
-
-
 
 void __fastcall TMainForm::btnCloseClick(TObject *Sender)
 {
@@ -991,6 +990,8 @@ DataModule1->SQLPSIData->Active=false;
 DataModule1->SQLPSIData->SQL->Clear();
 DataModule1->SQLPSIData->SQL->Add(F3);
 DataModule1->SQLPSIData->Active=true;
+double ref_f=0;
+
 
 
  for (int i=0;i<N;i++){
@@ -1014,6 +1015,9 @@ DataModule1->SQLPSIData->Active=true;
        }
 
 
+//ѕолучаем значение номинальной частоты из файла измерени€
+DataModule1->SQLPSIData->FieldByName("REF_F")->AsString = DataModule1->SqlSetupFileHeaders->FieldByName("fReferenceFrequency")->AsString;
+ref_f = DataModule1->SqlSetupFileHeaders->FieldByName("fReferenceFrequency")->AsFloat;
 
 Nt=DataModule1->SQLCrystalData->RecordCount;
 DataModule1->SQLPSIData->FieldByName("intervalgf")->AsString=DataModule1->SqlSpecification->FieldByName("Profile")->AsString;
@@ -2100,6 +2104,14 @@ if(DataModule1->SqlSpecification->FieldByName("Rmn")->AsString=="True"){
                                             }
 
         }
+        if (m2<=0)
+        {
+        m2 = 1;
+        }
+        if (m1<=0)
+        {
+         m1 = 0;
+        }
         SEdit1->AsFloat=m1/m2;
         ResultForm->ResultGrid->Cells[Nar[16]][i+1]=SEdit1->Text;
                 if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
@@ -2188,7 +2200,23 @@ Status2="Good";
                                                                      DataModule1->SQLPSIDataT->FieldByName("Mono")->AsString=DataModule1->SQLCrystalData->FieldByName("fErrorPPM")->AsString;
                                                                      DataModule1->SQLPSIDataT->FieldByName("pos")->AsString=ResultForm->ResultGrid->Cells[Nar[1]][i+1];
                                                                      DataModule1->SQLPSIDataT->FieldByName("Temp")->AsString=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsString;
+
                                                                      DataModule1->SQLPSIDataT->FieldByName("Status")->AsString="Pass";
+                                                                     if (DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat ==  DataModule1->SqlSpecification->FieldByName("Tnastr")->AsFloat){
+                                                                         if (DataModule1->SqlSpecification->FieldByName("FL_Num")->AsString == "True")
+                                                                         {
+                                                                          double F_N = ref_f+ (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat*ref_f)/1000000;
+                                                                          double C1_1 = DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat;
+                                                                          double C0_1 = DataModule1->SQLCrystalData->FieldByName("fC0")->AsFloat;
+                                                                          double CL_1 = DataModule1->SqlSpecification->FieldByName("LoadValue")->AsFloat*1E-12;
+                                                                          double FL_N = F_N*sqrt(1+C1_1/(C0_1+CL_1));
+                                                                          double FL_N_ppm = ((FL_N -ref_f)/ref_f)*1000000;
+                                                                          DataModule1->SQLPSIData->FieldByName("FL_Num")->AsString = FloatToStr(FL_N_ppm);
+                                                                         }
+
+                                                                     }
+
+
                                                               }    //else1 }
                                                                     if (DataModule1->SQLSetupData->FieldByName("strQCStatus2")->AsString==" Dead"){   //if2 {
                                                                                      DataModule1->SQLPSIDataT->FieldByName("FL")->AsString=0;
@@ -2254,6 +2282,19 @@ Status2="Good";
                                                                      DataModule1->SQLPSIDataT->FieldByName("pos")->AsString=ResultForm->ResultGrid->Cells[Nar[1]][i+1];
                                                                      DataModule1->SQLPSIDataT->FieldByName("Temp")->AsString=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsString;
                                                                      DataModule1->SQLPSIDataT->FieldByName("Status")->AsString="Pass";
+                                                                       if (DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat ==  DataModule1->SqlSpecification->FieldByName("Tnastr")->AsFloat){
+                                                                         if (DataModule1->SqlSpecification->FieldByName("FL_Num")->AsString == "True")
+                                                                         {
+                                                                          double F_N = ref_f+ (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat*ref_f)/1000000;
+                                                                          double C1_1 = DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat;
+                                                                          double C0_1 = DataModule1->SQLCrystalData->FieldByName("fC0")->AsFloat;
+                                                                          double CL_1 = DataModule1->SqlSpecification->FieldByName("LoadValue")->AsFloat*1E-12;
+                                                                          double FL_N = F_N*sqrt(1+C1_1/(C0_1+CL_1));
+                                                                          double FL_N_ppm = ((FL_N -ref_f)/ref_f)*1000000;
+                                                                          DataModule1->SQLPSIData->FieldByName("FL_Num")->AsString = FloatToStr(FL_N_ppm);
+                                                                         }
+
+                                                                     }
                                                               }    //else 4}
                                                                     if (DataModule1->SQLSetupData->FieldByName("strQCStatus2")->AsString==" Dead"){      //if7{
                                                                                      DataModule1->SQLPSIDataT->FieldByName("FL")->AsString=0;
@@ -2323,6 +2364,7 @@ Status2="Good";
                                                   if (DataModule1->SqlSpecification->FieldByName("Tint")->AsString=="False"){ //30{
                                                        Totn=DataModule1->SqlSpecification->FieldByName("Tnastr")->AsFloat;
                                                        if(DataModule1->SqlSpecification->FieldByName("Tnastr")->AsFloat==DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat){ //29{
+                                                                   if (DataModule1->SqlSpecification->FieldByName("FL_Num")->AsString != "True") {
                                                                     if (Measure_Type=="Saunders (FR+FL)" | Measure_Type=="Saunders(FL)"){  //if 10{
                                                                        SEdit1->AsFloat=DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat;
 
@@ -2331,7 +2373,17 @@ Status2="Good";
                                                                        SEdit1->AsFloat=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat;
 
                                                                         }   //if11}
+                                                                     }
+                                                                     else {
+                                                                         double F_N = ref_f+ (DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat*ref_f)/1000000;
+                                                                          double C1_1 = DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat;
+                                                                          double C0_1 = DataModule1->SQLCrystalData->FieldByName("fC0")->AsFloat;
+                                                                          double CL_1 = DataModule1->SqlSpecification->FieldByName("LoadValue")->AsFloat*1E-12;
+                                                                          double FL_N = F_N*sqrt(1+C1_1/(C0_1+CL_1));
+                                                                          double FL_N_ppm = ((FL_N -ref_f)/ref_f)*1000000;
+                                                                        SEdit1->AsFloat=FL_N_ppm;
 
+                                                                     }
                                                                    if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){   //if 12{
                                                                                if (Measure_Type=="Saunders (FR+FL)" || Measure_Type=="Saunders(FL)"){  //if 13{
                                                                                   if (DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat<100000){  //if 14{
@@ -5713,7 +5765,7 @@ if(DataModule1->SqlSpecification->FieldByName("M")->AsString=="True"){
                          DataModule2->Comand->SQL->Add("`B5`,  `B4`,  `B3`,  `B1`,  `B0`,  `dfB`,  `D5`,  `D4`,  `D3`,  `D1r`,  `D1s`,  `Dit`,");
                          DataModule2->Comand->SQL->Add("`G`,  `M_Type`,  `Machine_Serial`,  `Machine_Call_Date`,  `PoverKa`,  `Version`,  `Protokol_ID`,");
                          DataModule2->Comand->SQL->Add("`Protokol_Date`,  `Proverka_PSI_ID`,  `Proverka_PH_ID`,  `Proverke_PH_Date`,  `Proverka_PH_Status`,");
-                         DataModule2->Comand->SQL->Add("`Shum_2`,  `Shum_3`,  `Shum_4`,  `PH_Analyser`,  `PH_OCS`,  `PH_Analyser_SN`,  `Filtr_Freq`,  `FSpur3`)");
+                         DataModule2->Comand->SQL->Add("`Shum_2`,  `Shum_3`,  `Shum_4`,  `PH_Analyser`,  `PH_OCS`,  `PH_Analyser_SN`,  `Filtr_Freq`,  `FSpur3`,`FL_Num` ,`FL_Num_Virtual`,`REF_F`)");
                          DataModule2->Comand->SQL->Add("SELECT `MSK`,  `N`,  `F`,  `R`,  `C0`,  `Cq`,  `L`,  `Q`,  `Tmax`,  `Tmin`,  `TurnOver`,  `Slope`,  `Fptp`,");
                          DataModule2->Comand->SQL->Add("`Fmax`,  `RcRb`,  `Fmin`,  `Rmax`,  `Rmin`,  `R1R2`,  `Mono`,  `F0-Fl`,  `Position`,  `Date`,  `A3`,");
                          DataModule2->Comand->SQL->Add("`A2`,  `A1`,  `A0`,  `A4`,  `Rbmax`,  `Rsp1`,  `Rsp2`,  `Rsp3`,  `Time`,  `Spc`,  `Status`,  `Nominal`,");
@@ -5727,7 +5779,7 @@ if(DataModule1->SqlSpecification->FieldByName("M")->AsString=="True"){
                          DataModule2->Comand->SQL->Add("`B5`,  `B4`,  `B3`,  `B1`,  `B0`,  `dfB`,  `D5`,  `D4`,  `D3`,  `D1r`,  `D1s`,  `Dit`,");
                          DataModule2->Comand->SQL->Add("`G`,  `M_Type`,  `Machine_Serial`,  `Machine_Call_Date`,  `PoverKa`,  `Version`,  `Protokol_ID`,");
                          DataModule2->Comand->SQL->Add("`Protokol_Date`,  `Proverka_PSI_ID`,  `Proverka_PH_ID`,  `Proverke_PH_Date`,  `Proverka_PH_Status`,");
-                         DataModule2->Comand->SQL->Add("`Shum_2`,  `Shum_3`,  `Shum_4`,  `PH_Analyser`,  `PH_OCS`,  `PH_Analyser_SN`,  `Filtr_Freq`,  `FSpur3`");
+                         DataModule2->Comand->SQL->Add("`Shum_2`,  `Shum_3`,  `Shum_4`,  `PH_Analyser`,  `PH_OCS`,  `PH_Analyser_SN`,  `Filtr_Freq`,  `FSpur3`, `FL_Num`, `FL_Num_Virtual`,  `REF_F`");
                          DataModule2->Comand->SQL->Add(" from `"+tableName_psi+"`");
                          DataModule2->Comand->Execute();
 
@@ -7213,7 +7265,21 @@ if(DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString!="no"){
                                                       Totn=DataModule1->SqlSpecification->FieldByName("TintValue")->AsFloat;
                                                    }
                                                    if (Totn==DataModule1->Transat_Temp_Q->FieldByName("SETPOINT")->AsString){
-                                                             Fs=DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat;
+                                                           Fs=DataModule1->Transat_Temp_Q->FieldByName("F0_MHZ")->AsFloat;
+
+                                                       if(DataModule1->SqlSpecification->FieldByName("FL_Num")->AsString == "True")
+                                                       {
+                                                         
+                                                         double CL_2 = DataModule1->SqlSpecification->FieldByName("LoadValue")->AsFloat*1E-12;
+                                                         double C0_1 = DataModule1->Transat_Temp_Q->FieldByName("C0_PF")->AsFloat*1E-12;
+                                                         double C1_1 = DataModule1->Transat_Temp_Q->FieldByName("C1_FF")->AsFloat*1E-15;
+                                                         double F_L_NUM = Fs*sqrt(1+(C1_1/(C0_1 + CL_2)));
+                                                         double F_L_Num_ppm =  ((F_L_NUM - Nominal)/Nominal)*1E+6;
+                                                         DataModule1->SQLPSIData->FieldByName("FL_Num")->AsString = FloatToStr(F_L_Num_ppm);
+
+                                                       }
+
+
                                                              FL=DataModule1->Transat_Temp_Q->FieldByName("FL_MHZ")->AsFloat;
                                                              F0L=DataModule1->Transat_Temp_Q->FieldByName("F0L_MHZ")->AsFloat;
                                                               if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
@@ -8273,7 +8339,7 @@ if (DataModule1->SqlSpecification->FieldByName("Tmax")->AsString=="True" ||  Dat
 
                                                                                     }
                                                                                if (DataModule1->SqlSpecification->FieldByName("DopuskFi_Real")->AsFloat>0){
-                                                                                     if(Fmax>DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsFloat+DataModule1->SqlSpecification->FieldByName("DopuskFi_Real")->AsFloat){
+                                                                                     if(Fmax<DataModule1->SqlSpecification->FieldByName("Fmaxmin")->AsFloat+DataModule1->SqlSpecification->FieldByName("DopuskFi_Real")->AsFloat){
                                                                                            if (status!=1){
                                                                                              status=2;
                                                                                            }
@@ -10172,7 +10238,7 @@ DataModule1->spc_variant->Active=true;
                          DataModule2->Comand->SQL->Add("`B5`,  `B4`,  `B3`,  `B1`,  `B0`,  `dfB`,  `D5`,  `D4`,  `D3`,  `D1r`,  `D1s`,  `Dit`,");
                          DataModule2->Comand->SQL->Add("`G`,  `M_Type`,  `Machine_Serial`,  `Machine_Call_Date`,  `PoverKa`,  `Version`,  `Protokol_ID`,");
                          DataModule2->Comand->SQL->Add("`Protokol_Date`,  `Proverka_PSI_ID`,  `Proverka_PH_ID`,  `Proverke_PH_Date`,  `Proverka_PH_Status`,");
-                         DataModule2->Comand->SQL->Add("`Shum_2`,  `Shum_3`,  `Shum_4`,  `PH_Analyser`,  `PH_OCS`,  `PH_Analyser_SN`,  `Filtr_Freq`,  `FSpur3`)");
+                         DataModule2->Comand->SQL->Add("`Shum_2`,  `Shum_3`,  `Shum_4`,  `PH_Analyser`,  `PH_OCS`,  `PH_Analyser_SN`,  `Filtr_Freq`,  `FSpur3`,`FL_Num`)");
                          DataModule2->Comand->SQL->Add("SELECT `MSK`,  `N`,  `F`,  `R`,  `C0`,  `Cq`,  `L`,  `Q`,  `Tmax`,  `Tmin`,  `TurnOver`,  `Slope`,  `Fptp`,");
                          DataModule2->Comand->SQL->Add("`Fmax`,  `RcRb`,  `Fmin`,  `Rmax`,  `Rmin`,  `R1R2`,  `Mono`,  `F0-Fl`,  `Position`,  `Date`,  `A3`,");
                          DataModule2->Comand->SQL->Add("`A2`,  `A1`,  `A0`,  `A4`,  `Rbmax`,  `Rsp1`,  `Rsp2`,  `Rsp3`,  `Time`,  `Spc`,  `Status`,  `Nominal`,");
@@ -10186,7 +10252,7 @@ DataModule1->spc_variant->Active=true;
                          DataModule2->Comand->SQL->Add("`B5`,  `B4`,  `B3`,  `B1`,  `B0`,  `dfB`,  `D5`,  `D4`,  `D3`,  `D1r`,  `D1s`,  `Dit`,");
                          DataModule2->Comand->SQL->Add("`G`,  `M_Type`,  `Machine_Serial`,  `Machine_Call_Date`,  `PoverKa`,  `Version`,  `Protokol_ID`,");
                          DataModule2->Comand->SQL->Add("`Protokol_Date`,  `Proverka_PSI_ID`,  `Proverka_PH_ID`,  `Proverke_PH_Date`,  `Proverka_PH_Status`,");
-                         DataModule2->Comand->SQL->Add("`Shum_2`,  `Shum_3`,  `Shum_4`,  `PH_Analyser`,  `PH_OCS`,  `PH_Analyser_SN`,  `Filtr_Freq`,  `FSpur3`");
+                         DataModule2->Comand->SQL->Add("`Shum_2`,  `Shum_3`,  `Shum_4`,  `PH_Analyser`,  `PH_OCS`,  `PH_Analyser_SN`,  `Filtr_Freq`,  `FSpur3`, `FL_Num`");
                          DataModule2->Comand->SQL->Add(" from `"+tableName_psi+"`");
                          DataModule2->Comand->Execute();
 
@@ -11776,7 +11842,18 @@ if(DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString!="no"){
                                                       Totn=DataModule1->SqlSpecification->FieldByName("TintValue")->AsFloat;
                                                    }
                                                    if (Totn==DataModule1->KH7700_Temp->FieldByName("TEMP")->AsString){
+
                                                              Fs=DataModule1->KH7700_Temp->FieldByName("FS")->AsFloat;
+                                                         if (DataModule1->SqlSpecification->FieldByName("FL_Num")->AsString=="True")
+                                                         {
+                                                            double CL_1 = DataModule1->SqlSpecification->FieldByName("LoadValue")->AsFloat*1E-12;
+                                                            double C0_1 = DataModule1->KH7700_Temp->FieldByName("C0")->AsFloat*1E-12;
+                                                            double C1_1 = DataModule1->KH7700_Temp->FieldByName("C1")->AsFloat*1E-15;
+                                                            double FL_Num = Fs*sqrt(1 + (C1_1/(C0_1 + CL_1)));
+                                                            double FL_Num_ppm = ((FL_Num - Nominal*1E+6)/Nominal);
+                                                            DataModule1->SQLPSIData->FieldByName("FL_Num")->AsString = FloatToStr(FL_Num_ppm);
+
+                                                         }
                                                              FL=DataModule1->KH7700_Temp->FieldByName("FL")->AsFloat;
                                                              F0L=DataModule1->KH7700_Temp->FieldByName("FL")->AsFloat;
                                                               if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){
@@ -14719,7 +14796,7 @@ DataModule1->spc_variant->Active=true;
                          DataModule2->Comand->SQL->Add("`B5`,  `B4`,  `B3`,  `B1`,  `B0`,  `dfB`,  `D5`,  `D4`,  `D3`,  `D1r`,  `D1s`,  `Dit`,");
                          DataModule2->Comand->SQL->Add("`G`,  `M_Type`,  `Machine_Serial`,  `Machine_Call_Date`,  `PoverKa`,  `Version`,  `Protokol_ID`,");
                          DataModule2->Comand->SQL->Add("`Protokol_Date`,  `Proverka_PSI_ID`,  `Proverka_PH_ID`,  `Proverke_PH_Date`,  `Proverka_PH_Status`,");
-                         DataModule2->Comand->SQL->Add("`Shum_2`,  `Shum_3`,  `Shum_4`,  `PH_Analyser`,  `PH_OCS`,  `PH_Analyser_SN`,  `Filtr_Freq`,  `FSpur3`)");
+                         DataModule2->Comand->SQL->Add("`Shum_2`,  `Shum_3`,  `Shum_4`,  `PH_Analyser`,  `PH_OCS`,  `PH_Analyser_SN`,  `Filtr_Freq`,  `FSpur3`, `FL_Num`)");
                          DataModule2->Comand->SQL->Add("SELECT `MSK`,  `N`,  `F`,  `R`,  `C0`,  `Cq`,  `L`,  `Q`,  `Tmax`,  `Tmin`,  `TurnOver`,  `Slope`,  `Fptp`,");
                          DataModule2->Comand->SQL->Add("`Fmax`,  `RcRb`,  `Fmin`,  `Rmax`,  `Rmin`,  `R1R2`,  `Mono`,  `F0-Fl`,  `Position`,  `Date`,  `A3`,");
                          DataModule2->Comand->SQL->Add("`A2`,  `A1`,  `A0`,  `A4`,  `Rbmax`,  `Rsp1`,  `Rsp2`,  `Rsp3`,  `Time`,  `Spc`,  `Status`,  `Nominal`,");
@@ -14733,7 +14810,7 @@ DataModule1->spc_variant->Active=true;
                          DataModule2->Comand->SQL->Add("`B5`,  `B4`,  `B3`,  `B1`,  `B0`,  `dfB`,  `D5`,  `D4`,  `D3`,  `D1r`,  `D1s`,  `Dit`,");
                          DataModule2->Comand->SQL->Add("`G`,  `M_Type`,  `Machine_Serial`,  `Machine_Call_Date`,  `PoverKa`,  `Version`,  `Protokol_ID`,");
                          DataModule2->Comand->SQL->Add("`Protokol_Date`,  `Proverka_PSI_ID`,  `Proverka_PH_ID`,  `Proverke_PH_Date`,  `Proverka_PH_Status`,");
-                         DataModule2->Comand->SQL->Add("`Shum_2`,  `Shum_3`,  `Shum_4`,  `PH_Analyser`,  `PH_OCS`,  `PH_Analyser_SN`,  `Filtr_Freq`,  `FSpur3`");
+                         DataModule2->Comand->SQL->Add("`Shum_2`,  `Shum_3`,  `Shum_4`,  `PH_Analyser`,  `PH_OCS`,  `PH_Analyser_SN`,  `Filtr_Freq`,  `FSpur3`, `FL_Num`");
                          DataModule2->Comand->SQL->Add(" from `"+tableName_psi+"`");
                          DataModule2->Comand->Execute();
 
@@ -15055,6 +15132,7 @@ AnsiString User=DataModule1->Dostup->FieldByName("Name")->AsString;
  ForceDirectories(DataModule1->Options->FieldByName("ExportDir")->AsString+"\\JPG");
  ForceDirectories(DataModule1->Options->FieldByName("ImportDir")->AsString);
  ForceDirectories(DataModule1->Options->FieldByName("GraphDir")->AsString);
+ FileSelect_I->Text="0";
 }
 //---------------------------------------------------------------------------
 

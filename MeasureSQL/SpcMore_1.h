@@ -97,6 +97,8 @@ __published:	// IDE-managed Components
         TRzDBEdit *RzDBEdit35;
         TRzDBEdit *RzDBEdit37;
         TRzDBEdit *RzDBEdit38;
+        TRzDBCheckBox *RzDBCheckBox8;
+        TRzDBCheckBox *RzDBCheckBox9;
         void __fastcall btnCloseClick(TObject *Sender);
 private:	// User declarations
 public:		// User declarations

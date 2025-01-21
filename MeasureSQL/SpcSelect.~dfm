@@ -1,6 +1,6 @@
 object SpcSelectForm: TSpcSelectForm
-  Left = 686
-  Top = 563
+  Left = 489
+  Top = 361
   BorderStyle = bsSingle
   Caption = #1042#1072#1088#1080#1072#1085#1090' '#1089#1087#1077#1094#1080#1092#1080#1082#1072#1094#1080#1080
   ClientHeight = 145

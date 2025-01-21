@@ -1,14 +1,15 @@
 object DataModule2: TDataModule2
   OldCreateOrder = False
-  Left = 226
-  Top = 199
-  Height = 726
-  Width = 1022
+  Left = 570
+  Top = 196
+  Height = 746
+  Width = 1084
   object SqlSpec: TMyQuery
     Connection = DataModule1.CoordinatorDB
     SQL.Strings = (
-      'select * from specification where ID='#39'15678'#39)
+      'select * from specification where ID='#39'15542'#39)
     AutoCalcFields = False
+    Active = True
     Left = 88
     Top = 104
   end
@@ -53,7 +54,7 @@ object DataModule2: TDataModule2
   object Lianoz: TMyQuery
     Connection = DataModule1.CoordinatorDB
     SQL.Strings = (
-      'Select * from lianoz_new_')
+      'Select * from lianoz_new_1')
     RefreshOptions = [roAfterInsert, roAfterUpdate, roBeforeEdit]
     AutoCalcFields = False
     Options.FullRefresh = True
@@ -271,7 +272,7 @@ object DataModule2: TDataModule2
       'Select * from nomeklatura_rk_psi')
     MasterSource = DataModule1.CrystalDataSource
     DetailFields = 'N'
-    Left = 576
+    Left = 592
     Top = 304
   end
   object Nomenklatura_RK: TMyQuery
@@ -504,8 +505,8 @@ object DataModule2: TDataModule2
     Connection = DataModule1.CoordinatorDB
     SQL.Strings = (
       'select SQL_NO_CACHE * from Factory_name')
-    Left = 672
-    Top = 240
+    Left = 648
+    Top = 224
   end
   object psiDataTemp4: TMyQuery
     Connection = DataModule1.CoordinatorDB
@@ -639,5 +640,12 @@ object DataModule2: TDataModule2
     Connection = DataModule1.CoordinatorDB
     Left = 917
     Top = 582
+  end
+  object Peremer_Nom: TMyQuery
+    Connection = DataModule1.CoordinatorDB
+    SQL.Strings = (
+      'select * from peremer_nomenklature')
+    Left = 296
+    Top = 152
   end
 end

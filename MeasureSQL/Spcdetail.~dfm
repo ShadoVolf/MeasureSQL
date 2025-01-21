@@ -4,7 +4,7 @@ object SpcDetailForm: TSpcDetailForm
   BorderStyle = bsSingle
   Caption = #1057#1087#1077#1094#1080#1092#1080#1082#1072#1094#1080#1103
   ClientHeight = 874
-  ClientWidth = 706
+  ClientWidth = 788
   Color = clBlack
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clLime
@@ -311,7 +311,7 @@ object SpcDetailForm: TSpcDetailForm
     Caption = #1050#1086#1088#1087#1091#1089
   end
   object Label43: TLabel
-    Left = 320
+    Left = 408
     Top = 16
     Width = 19
     Height = 13
@@ -328,7 +328,7 @@ object SpcDetailForm: TSpcDetailForm
   object RzLine2: TRzLine
     Left = -134
     Top = 816
-    Width = 857
+    Width = 927
     Height = 20
     LineColor = clMaroon
     LineWidth = 4
@@ -381,7 +381,7 @@ object SpcDetailForm: TSpcDetailForm
     Caption = #1042#1055
   end
   object Label46: TLabel
-    Left = 472
+    Left = 576
     Top = 16
     Width = 59
     Height = 13
@@ -2015,7 +2015,7 @@ object SpcDetailForm: TSpcDetailForm
     TabOrder = 84
   end
   object edtType: TRzDBComboBox
-    Left = 344
+    Left = 440
     Top = 16
     Width = 121
     Height = 21
@@ -2282,7 +2282,7 @@ object SpcDetailForm: TSpcDetailForm
     WinMaskColor = clRed
   end
   object btnClose: TAdvGlassButton
-    Left = 624
+    Left = 704
     Top = 832
     Width = 75
     Height = 32
@@ -2575,7 +2575,7 @@ object SpcDetailForm: TSpcDetailForm
     WinMaskColor = clRed
   end
   object Solve_Date_edt: TRzDBComboBox
-    Left = 544
+    Left = 648
     Top = 16
     Width = 129
     Height = 21
@@ -2598,6 +2598,53 @@ object SpcDetailForm: TSpcDetailForm
     Sorted = True
     TabOrder = 111
     Visible = False
+    OnSelect = edtTypeSelect
+  end
+  object RzDBCheckBox32: TRzDBCheckBox
+    Left = 160
+    Top = 744
+    Width = 25
+    Height = 17
+    DataField = 'Spur_Use'
+    DataSource = DataModule1.SpecificationSource
+    ValueChecked = 'True'
+    ValueUnchecked = 'False'
+    DisabledColor = clGreen
+    FillColor = clBlack
+    FocusColor = clBlack
+    FrameColor = clYellow
+    HighlightColor = clLime
+    HotTrack = True
+    TextHighlightColor = clLime
+    TextShadowColor = clLime
+    TabOrder = 112
+    TransparentColor = clMaroon
+    WinMaskColor = clRed
+  end
+  object RzDBComboBox1: TRzDBComboBox
+    Left = 320
+    Top = 16
+    Width = 73
+    Height = 21
+    DataField = 'NameR'
+    DataSource = DataModule1.SpecificationSource
+    Color = clBlack
+    Ctl3D = False
+    DisabledColor = clMoneyGreen
+    FlatButtonColor = clBlack
+    FlatButtons = True
+    FocusColor = clNavy
+    FrameColor = clYellow
+    FrameHotColor = clSilver
+    FrameHotTrack = True
+    FrameVisible = True
+    ItemHeight = 13
+    ParentColor = True
+    ParentCtl3D = False
+    ReadOnlyColor = clGrayText
+    Sorted = True
+    TabOrder = 113
+    OnChange = edtTypeChange
     OnSelect = edtTypeSelect
   end
 end

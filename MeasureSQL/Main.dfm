@@ -3212,7 +3212,7 @@ object MainForm: TMainForm
     OuterBorderColor = clWhite
     ParentFont = False
     ShineColor = clWhite
-    TabOrder = 20
+    TabOrder = 19
     Version = '1.2.3.0'
     OnClick = AdvGlassButton2Click
   end

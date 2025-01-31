@@ -984,7 +984,7 @@ object ProtokolForm: TProtokolForm
     PrintOptions.Printer = #1055#1086' '#1091#1084#1086#1083#1095#1072#1085#1080#1102
     PrintOptions.PrintOnSheet = 0
     ReportOptions.CreateDate = 39953.7254732639
-    ReportOptions.LastChange = 45672.6460935648
+    ReportOptions.LastChange = 45667.5988042593
     ScriptLanguage = 'BasicScript'
     ScriptText.Strings = (
       
@@ -1052,18 +1052,17 @@ object ProtokolForm: TProtokolForm
       'temp1=0                '
       
         'IF <Spc."Ft">="True" Then IF <Spc."Fmax"><>"no" Then  IF <PsiDat' +
-        'a."FL_Num">> StrToFloat(<Spc."Fmax">) Then temp1=1'
+        'a."F">> StrToFloat(<Spc."Fmax">) Then temp1=1'
       
         'IF <Spc."Ft">="True" Then IF <Spc."Fmin"><>"no" Then  IF <PsiDat' +
-        'a."FL_Num">< StrToFloat(<Spc."Fmin">) Then temp1=1'
+        'a."F">< StrToFloat(<Spc."Fmin">) Then temp1=1'
       
         'IF <Spc."Ft">="True" Then IF <Spc."Fmax"><>"no" Then  IF <PsiDat' +
-        'a."FL_Num">> StrToFloat(<Spc."Fmax">) Then PsiDataF.Color=clYell' +
-        'ow'
+        'a."F">> StrToFloat(<Spc."Fmax">) Then PsiDataF.Color=clYellow'
       
         'IF <Spc."Ft">="True" Then IF <Spc."Fmin"><>"no" Then  IF <PsiDat' +
-        'a."FL_Num">< StrToFloat(<Spc."Fmin">) Then PsiDataF.Color=clYell' +
-        'ow    '
+        'a."F">< StrToFloat(<Spc."Fmin">) Then PsiDataF.Color=clYellow   ' +
+        ' '
       
         'IF <Spc."Rmax"><>"no" Then IF <PsiData."R">> StrToFloat(<Spc."Rm' +
         'ax">) Then temp1=1'
@@ -1212,19 +1211,19 @@ object ProtokolForm: TProtokolForm
       '  '
       
         'IF <Spc."Ft">="True" Then IF <Spc."Fmax"><>"no" Then  IF <PsiDat' +
-        'a."FL_Num">> Fmax Then countf=countf+1'
+        'a."F">> Fmax Then countf=countf+1'
       
         'IF <Spc."Ft">="True" Then IF <Spc."Fmin"><>"no" Then IF <PsiData' +
-        '."FL_Num"><  Fmin Then countf=countf+1'
+        '."F"><  Fmin Then countf=countf+1'
       
         'IF <Spc."Ft">="True" Then IF <Spc."Fmax"><>"no" Then  IF <PsiDat' +
-        'a."FL_Num">> Fmax Then temp=1             '
+        'a."F">> Fmax Then temp=1             '
       
         'IF <Spc."Ft">="True" Then IF <Spc."Fmin"><>"no" Then IF <PsiData' +
-        '."FL_Num"><  Fmin Then temp=1'
+        '."F"><  Fmin Then temp=1'
       
         'IF <Spc."Ft">="True" Then IF <Spc."Fmax"><>"no" Then  IF <PsiDat' +
-        'a."FL_Num">> Fmax Then PsiDataF.Color=clSilver             '
+        'a."F">> Fmax Then PsiDataF.Color=clSilver             '
       
         'IF <Spc."Ft">="True" Then IF <Spc."Fmin"><>"no" Then IF <PsiData' +
         '."F"><  Fmin Then PsiDataF.Color=clSilver    '
@@ -1261,7 +1260,8 @@ object ProtokolForm: TProtokolForm
         'PsiDataFmax.Color=clSilver             '
       
         'IF <Spc."Fmaxmin"><>"no" Then IF <PsiData."Fmax">< Fmaxmin Then ' +
-        'PsiDataFmax.Color=clSilver    '
+        'PsiDataFmax.Color=clSilver'
+      '  '
       
         'IF <Spc."Fminmax"><>"no" Then IF <PsiData."Fmin">> Fminmax Then ' +
         'countFmin=countFmin+1'
@@ -1279,7 +1279,8 @@ object ProtokolForm: TProtokolForm
         'PsiDataFmin.Color=clSilver             '
       
         'IF <Spc."Fminmin"><>"no" Then IF <PsiData."Fmin">< Fminmin Then ' +
-        'PsiDataFmin.Color=clSilver    '
+        'PsiDataFmin.Color=clSilver'
+      '  '
       
         'IF <Spc."RR2max"><>"no" Then IF <PsiData."RR2">> RR2max Then cou' +
         'ntRR2=countRR2+1'
@@ -1943,6 +1944,27 @@ object ProtokolForm: TProtokolForm
             '[PsiData."N"]')
           ParentFont = False
         end
+        object PsiDataF: TfrxMemoView
+          Left = 124.72449
+          Width = 83.14966
+          Height = 18.89765
+          ShowHint = False
+          DataField = 'F'
+          DataSet = PsiData
+          DataSetName = 'PsiData'
+          DisplayFormat.FormatStr = '%2.1f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haCenter
+          Memo.UTF8 = (
+            '[PsiData."F"]')
+          ParentFont = False
+        end
         object PsiDataR: TfrxMemoView
           Left = 207.87415
           Width = 79.37013
@@ -2165,28 +2187,6 @@ object ProtokolForm: TProtokolForm
           HAlign = haRight
           ParentFont = False
         end
-        object PsiDataFL_Num: TfrxMemoView
-          Left = 124.72449
-          Width = 83.14966
-          Height = 18.89765
-          ShowHint = False
-          DataField = 'FL_Num'
-          DataSet = PsiData
-          DataSetName = 'PsiData'
-          DisplayFormat.FormatStr = '%2.1f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[PsiData."FL_Num"]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
       end
       object Footer1: TfrxFooter
         Height = 249.44898
@@ -2208,7 +2208,7 @@ object ProtokolForm: TProtokolForm
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           HAlign = haCenter
           Memo.UTF8 = (
-            '[MAX(<PsiData."FL_Num">,MasterData1)]')
+            '[MAX(<PsiData."F">,MasterData1)]')
           ParentFont = False
           VAlign = vaCenter
         end
@@ -2294,7 +2294,7 @@ object ProtokolForm: TProtokolForm
           Font.Style = []
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           Memo.UTF8 = (
-            '[MIN(<PsiData."FL_Num">,MasterData1)]')
+            '[MIN(<PsiData."F">,MasterData1)]')
           ParentFont = False
         end
         object SysMemo2: TfrxSysMemoView
@@ -2314,7 +2314,7 @@ object ProtokolForm: TProtokolForm
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           HAlign = haCenter
           Memo.UTF8 = (
-            '[AVG(<PsiData."FL_Num">,MasterData1)]')
+            '[AVG(<PsiData."F">,MasterData1)]')
           ParentFont = False
           VAlign = vaCenter
         end

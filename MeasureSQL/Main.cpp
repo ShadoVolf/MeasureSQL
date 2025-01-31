@@ -2167,6 +2167,8 @@ Status2="Good";
  //ТЧХ и точность настройки******************************************************************************
 
                         double FFd;
+                        double MonoZ;
+                        double X1Z,Y1Z;
                         DataModule1->SQLSetupData->First();
                         DataModule1->SQLCrystalData->First();
                                              for(int j=0;j<Nt;j++){   //for1{
@@ -2192,12 +2194,28 @@ Status2="Good";
                                                                                      Status2="BAD";
                                                                                      }  //if1}
                                                               else {   //else1 {
+                                                                     //Расчет монотонности
+
+                                                                     if (DataModule1->SqlSpecification->FieldByName("TCH_Approx_IST")->AsString=="True" & DataModule1->SqlSpecification->FieldByName("Mono_Approx_Type")->AsString=="False"){
+                                                                        if (Measure_Type=="Saunders(FR)" || Measure_Type=="Saunders (FR+FL)"){
+                                                                         if (TempCount>=M+1){
+                                                                                  MonotonP1(X1,Y1,A,B,MonoZ,TempCountM,W,M,DataModule1->SQLSetupData->FieldByName("fSetTemperature")->AsFloat,DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat);
+                                                                                 DataModule1->SQLPSIDataT->FieldByName("Mono")->AsString=FloatToStrF(MonoZ,ffFixed,5,3);
+                                                                           }
+                                                                         }
+                                                                       }
+                                                                      else {
+
+                                                                        DataModule1->SQLPSIDataT->FieldByName("Mono")->AsString=DataModule1->SQLCrystalData->FieldByName("fErrorPPM")->AsString;
+                                                                      }
+                                                                     //**************************************************************************************************
                                                                      DataModule1->SQLPSIDataT->FieldByName("F")->AsString=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsString;
+
                                                                      DataModule1->SQLPSIDataT->FieldByName("R")->AsString=DataModule1->SQLCrystalData->FieldByName("fRr")->AsString;
                                                                      DataModule1->SQLPSIDataT->FieldByName("C0")->AsString=DataModule1->SQLCrystalData->FieldByName("fC0")->AsString;
                                                                      DataModule1->SQLPSIDataT->FieldByName("Cq")->AsString=DataModule1->SQLCrystalData->FieldByName("fC1")->AsString;
                                                                      DataModule1->SQLPSIDataT->FieldByName("L")->AsString=DataModule1->SQLCrystalData->FieldByName("fL")->AsString;
-                                                                     DataModule1->SQLPSIDataT->FieldByName("Mono")->AsString=DataModule1->SQLCrystalData->FieldByName("fErrorPPM")->AsString;
+                                                                     //DataModule1->SQLPSIDataT->FieldByName("Mono")->AsString=DataModule1->SQLCrystalData->FieldByName("fErrorPPM")->AsString;
                                                                      DataModule1->SQLPSIDataT->FieldByName("pos")->AsString=ResultForm->ResultGrid->Cells[Nar[1]][i+1];
                                                                      DataModule1->SQLPSIDataT->FieldByName("Temp")->AsString=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsString;
 
@@ -2229,6 +2247,26 @@ Status2="Good";
                                                                            }   //if2}
 
                                                                         else {   //else 2 {
+
+
+                                                                                      //Расчет монотонности
+
+                                                                                        if (DataModule1->SqlSpecification->FieldByName("TCH_Approx_IST")->AsString=="True" & DataModule1->SqlSpecification->FieldByName("Mono_Approx_Type")->AsString=="False")
+                                                                                        {
+                                                                                                if (Measure_Type=="Saunders(FL)")
+                                                                                                {
+                                                                                                        if (TempCount>=M+1)
+                                                                                                              {
+                                                                                                                 MonotonP1(X1,Y1,A,B,MonoZ,TempCountM,W,M,DataModule1->SQLSetupData->FieldByName("fSetTemperature")->AsFloat,DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat);
+                                                                                                                 DataModule1->SQLPSIDataT->FieldByName("Mono")->AsString=FloatToStrF(MonoZ,ffFixed,5,3);
+                                                                                                                }
+                                                                                                 }
+                                                                                         }
+                                                                                         else {
+
+                                                                                                 DataModule1->SQLPSIDataT->FieldByName("Mono")->AsString=DataModule1->SQLCrystalData->FieldByName("fErrorPPM")->AsString;
+                                                                                                }
+                                                                                       //*************************************************************************************************
                                                                                      DataModule1->SQLPSIDataT->FieldByName("FL")->AsString=DataModule1->SQLSetupData->FieldByName("fValue1")->AsString;
                                                                                      DataModule1->SQLPSIDataT->FieldByName("Rb")->AsString=DataModule1->SQLSetupData->FieldByName("fValue3")->AsString;
                                                                                      DataModule1->SQLPSIDataT->FieldByName("Q")->AsString=DataModule1->SQLSetupData->FieldByName("fValue2")->AsString;
@@ -2273,12 +2311,28 @@ Status2="Good";
                                                                                      Status2="BAD";
                                                                                      }   //if 6}
                                                               else {  //else4{
+                                                                       //Расчет монотонности
+
+                                                                     if (DataModule1->SqlSpecification->FieldByName("TCH_Approx_IST")->AsString=="True" & DataModule1->SqlSpecification->FieldByName("Mono_Approx_Type")->AsString=="False"){
+                                                                        if (Measure_Type=="Saunders(FR)" || Measure_Type=="Saunders (FR+FL)"){
+                                                                         if (TempCount>=M+1){
+                                                                                  MonotonP1(X1,Y1,A,B,MonoZ,TempCountM,W,M,DataModule1->SQLSetupData->FieldByName("fSetTemperature")->AsFloat,DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsFloat);
+                                                                                 DataModule1->SQLPSIDataT->FieldByName("Mono")->AsString=FloatToStrF(MonoZ,ffFixed,5,3);
+
+                                                                           }
+                                                                         }
+                                                                       }
+                                                                      else {
+
+                                                                        DataModule1->SQLPSIDataT->FieldByName("Mono")->AsString=DataModule1->SQLCrystalData->FieldByName("fErrorPPM")->AsString;
+                                                                      }
+                                                                     //**************************************************************************************************
                                                                      DataModule1->SQLPSIDataT->FieldByName("F")->AsString=DataModule1->SQLCrystalData->FieldByName("fFrequencyPPM")->AsString;
                                                                      DataModule1->SQLPSIDataT->FieldByName("R")->AsString=DataModule1->SQLCrystalData->FieldByName("fRr")->AsString;
                                                                      DataModule1->SQLPSIDataT->FieldByName("C0")->AsString=DataModule1->SQLCrystalData->FieldByName("fC0")->AsString;
                                                                      DataModule1->SQLPSIDataT->FieldByName("Cq")->AsString=DataModule1->SQLCrystalData->FieldByName("fC1")->AsString;
                                                                      DataModule1->SQLPSIDataT->FieldByName("L")->AsString=DataModule1->SQLCrystalData->FieldByName("fL")->AsString;
-                                                                     DataModule1->SQLPSIDataT->FieldByName("Mono")->AsString=DataModule1->SQLCrystalData->FieldByName("fErrorPPM")->AsString;
+                                                                     //DataModule1->SQLPSIDataT->FieldByName("Mono")->AsString=DataModule1->SQLCrystalData->FieldByName("fErrorPPM")->AsString;
                                                                      DataModule1->SQLPSIDataT->FieldByName("pos")->AsString=ResultForm->ResultGrid->Cells[Nar[1]][i+1];
                                                                      DataModule1->SQLPSIDataT->FieldByName("Temp")->AsString=DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsString;
                                                                      DataModule1->SQLPSIDataT->FieldByName("Status")->AsString="Pass";
@@ -2323,6 +2377,26 @@ Status2="Good";
                                                                            }  //if7}
 
                                                                         else {    //else 5{
+
+
+                                                                                      //Расчет монотонности
+
+                                                                                        if (DataModule1->SqlSpecification->FieldByName("TCH_Approx_IST")->AsString=="True" & DataModule1->SqlSpecification->FieldByName("Mono_Approx_Type")->AsString=="False")
+                                                                                        {
+                                                                                                if (Measure_Type=="Saunders(FL)")
+                                                                                                {
+                                                                                                        if (TempCount>=M+1)
+                                                                                                              {
+                                                                                                                 MonotonP1(X1,Y1,A,B,MonoZ,TempCountM,W,M,DataModule1->SQLSetupData->FieldByName("fSetTemperature")->AsFloat,DataModule1->SQLSetupData->FieldByName("fValue1")->AsFloat);
+                                                                                                                 DataModule1->SQLPSIDataT->FieldByName("Mono")->AsString=FloatToStrF(MonoZ,ffFixed,5,3);
+                                                                                                                }
+                                                                                                 }
+                                                                                         }
+                                                                                         else {
+
+                                                                                                 DataModule1->SQLPSIDataT->FieldByName("Mono")->AsString=DataModule1->SQLCrystalData->FieldByName("fErrorPPM")->AsString;
+                                                                                                }
+                                                                                       //*************************************************************************************************
                                                                                      DataModule1->SQLPSIDataT->FieldByName("FL")->AsString=DataModule1->SQLSetupData->FieldByName("fValue1")->AsString;
                                                                                      DataModule1->SQLPSIDataT->FieldByName("Rb")->AsString=DataModule1->SQLSetupData->FieldByName("fValue3")->AsString;
                                                                                      DataModule1->SQLPSIDataT->FieldByName("Q")->AsString=DataModule1->SQLSetupData->FieldByName("fValue2")->AsString;
@@ -2530,7 +2604,7 @@ Status2="Good";
                                                                    }
                                                         Totn=DataModule1->SqlSpecification->FieldByName("TintValue")->AsFloat;
                                                         if(Totn==DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat){ //29{
-                                                                  
+
 
                                                                    if(DataModule1->SqlSpecification->FieldByName("TCHType")->AsString=="по замеру"){   //if 12{
                                                                                if (Measure_Type=="Saunders (FR+FL)" || Measure_Type=="Saunders(FL)"){  //if 13{
@@ -4660,6 +4734,12 @@ if(DataModule1->SqlSpecification->FieldByName("M")->AsString=="True"){
 
          if (TempCount>=M+1){
           MonotonP(X1,Y1,A,B,Mono,TempCountM,W,M,mono1,MonoT);
+                for (int hh=0; hh< TempCountM; hh++){
+                double gg =mono1(hh);
+                double X1gg = X1(hh);
+                double Y1gg =  Y1(hh);
+                
+                }
           }
           SEdit1->AsFloat=Mono;
           Y2=Mono;

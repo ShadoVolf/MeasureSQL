@@ -1,10 +1,10 @@
 object RecForm: TRecForm
-  Left = 656
+  Left = 670
   Top = 148
   BorderStyle = bsNone
   Caption = 'RecForm'
-  ClientHeight = 535
-  ClientWidth = 399
+  ClientHeight = 592
+  ClientWidth = 402
   Color = clBlack
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clLime
@@ -17,8 +17,8 @@ object RecForm: TRecForm
   PixelsPerInch = 96
   TextHeight = 13
   object Label6: TLabel
-    Left = 256
-    Top = 16
+    Left = 48
+    Top = 232
     Width = 45
     Height = 13
     Caption = #1050#1086#1076' '#1052#1057#1050
@@ -31,29 +31,29 @@ object RecForm: TRecForm
     Caption = #1055#1072#1088#1072#1084#1077#1090#1088#1099
   end
   object Label2: TLabel
-    Left = 160
-    Top = 232
+    Left = 168
+    Top = 296
     Width = 75
     Height = 13
     Caption = #1057#1087#1077#1094#1080#1092#1080#1082#1072#1094#1080#1103
   end
   object Label1: TLabel
-    Left = 40
-    Top = 232
+    Left = 48
+    Top = 296
     Width = 81
     Height = 13
     Caption = #1058#1080#1087' '#1088#1077#1079#1086#1085#1072#1090#1086#1088#1072
   end
   object Label3: TLabel
-    Left = 48
-    Top = 288
+    Left = 56
+    Top = 352
     Width = 23
     Height = 13
     Caption = #1052#1057#1050
   end
   object Label7: TLabel
-    Left = 40
-    Top = 360
+    Left = 48
+    Top = 424
     Width = 121
     Height = 13
     Caption = #1048#1076#1077#1085#1090#1080#1092#1080#1082#1072#1090#1086#1088' '#1079#1072#1084#1077#1088#1072
@@ -61,8 +61,8 @@ object RecForm: TRecForm
     ParentColor = False
   end
   object VrProgressBar1: TVrProgressBar
-    Left = 32
-    Top = 447
+    Left = 40
+    Top = 511
     Width = 345
     Height = 16
     Bevel.InnerShadow = clBtnShadow
@@ -80,15 +80,15 @@ object RecForm: TRecForm
     EndColor = clRed
   end
   object Label11: TLabel
-    Left = 224
-    Top = 360
+    Left = 232
+    Top = 424
     Width = 136
     Height = 13
     Caption = #1048#1076#1077#1085#1090#1080#1092#1080#1082#1072#1090#1086#1088' '#1087#1088#1086#1090#1086#1082#1086#1083#1072
   end
   object btnRec: TAdvGlassButton
     Left = 32
-    Top = 472
+    Top = 552
     Width = 100
     Height = 33
     BackColor = clLime
@@ -109,8 +109,8 @@ object RecForm: TRecForm
     OnClick = btnRecClick
   end
   object edtMsk: TRzComboBox
-    Left = 40
-    Top = 312
+    Left = 48
+    Top = 376
     Width = 249
     Height = 21
     Color = clBlack
@@ -129,8 +129,8 @@ object RecForm: TRecForm
     OnKeyPress = edtMskKeyPress
   end
   object cmb_ID: TRzComboBox
-    Left = 40
-    Top = 384
+    Left = 48
+    Top = 448
     Width = 169
     Height = 21
     Color = clBlack
@@ -151,8 +151,8 @@ object RecForm: TRecForm
   object listParameters: TRzCheckList
     Left = 32
     Top = 24
-    Width = 193
-    Height = 177
+    Width = 361
+    Height = 201
     Color = clNone
     FrameColor = clYellow
     FrameVisible = True
@@ -161,8 +161,8 @@ object RecForm: TRecForm
     TabOrder = 0
   end
   object btnGood: TRzCheckBox
-    Left = 40
-    Top = 424
+    Left = 48
+    Top = 488
     Width = 115
     Height = 17
     Caption = #1058#1086#1083#1100#1082#1086' '#1075#1086#1076#1085#1099#1077
@@ -177,8 +177,8 @@ object RecForm: TRecForm
     TabOrder = 1
   end
   object btnClose: TAdvGlassButton
-    Left = 280
-    Top = 472
+    Left = 288
+    Top = 552
     Width = 100
     Height = 32
     BackColor = clRed
@@ -199,8 +199,8 @@ object RecForm: TRecForm
     OnClick = btnCloseClick
   end
   object edtAn3: TRzCheckBox
-    Left = 256
-    Top = 424
+    Left = 264
+    Top = 488
     Width = 115
     Height = 17
     Caption = #1041#1077#1079' '#1072#1085#1086#1084#1072#1083#1100#1085#1099#1093
@@ -214,8 +214,8 @@ object RecForm: TRecForm
     TabOrder = 5
   end
   object RzEdit2: TRzEdit
-    Left = 232
-    Top = 40
+    Left = 48
+    Top = 264
     Width = 145
     Height = 21
     Color = clBlack
@@ -225,8 +225,8 @@ object RecForm: TRecForm
     TabOrder = 6
   end
   object AdvGlassButton2: TAdvGlassButton
-    Left = 304
-    Top = 304
+    Left = 312
+    Top = 368
     Width = 76
     Height = 32
     BackColor = clTeal
@@ -247,8 +247,8 @@ object RecForm: TRecForm
     OnClick = RzButton2Click
   end
   object edtSpc: TRzComboBox
-    Left = 160
-    Top = 256
+    Left = 168
+    Top = 320
     Width = 225
     Height = 21
     Color = clBlack
@@ -267,8 +267,8 @@ object RecForm: TRecForm
     OnChange = edtSpcChange
   end
   object edtType: TRzComboBox
-    Left = 40
-    Top = 256
+    Left = 48
+    Top = 320
     Width = 105
     Height = 21
     Color = clBlack
@@ -287,8 +287,8 @@ object RecForm: TRecForm
     OnChange = edtTypeChange
   end
   object cmb_Protokol_ID: TRzComboBox
-    Left = 216
-    Top = 384
+    Left = 224
+    Top = 448
     Width = 169
     Height = 21
     Color = clBlack
@@ -308,8 +308,8 @@ object RecForm: TRecForm
     OnChange = cmb_Protokol_IDChange
   end
   object edtM: TRzComboBox
-    Left = 200
-    Top = 280
+    Left = 208
+    Top = 344
     Width = 75
     Height = 21
     Color = clBlack
@@ -330,8 +330,8 @@ object RecForm: TRecForm
   object Delivery: TAdvToolPanelTab
     Left = 0
     Top = 0
-    Width = 185
-    Height = 535
+    Width = 177
+    Height = 592
     AutoDock = False
     Color = clWhite
     ColorTo = 14537936
@@ -769,8 +769,8 @@ object RecForm: TRecForm
     object AdvToolPanel2: TAdvToolPanel
       Left = 23
       Top = 0
-      Width = 162
-      Height = 535
+      Width = 154
+      Height = 592
       BackgroundTransparent = False
       BackGroundPosition = bpTopLeft
       Button3D = False
@@ -888,7 +888,7 @@ object RecForm: TRecForm
         OnClick = btnNumbers2Click
       end
       object viewNumber2: TRzCheckList
-        Left = 9
+        Left = -7
         Top = 280
         Width = 136
         Height = 177
@@ -898,12 +898,18 @@ object RecForm: TRecForm
         OnChange = viewNumberChange
         Align = alCustom
         Color = 15855846
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
         FrameColor = clLime
         FrameHotColor = clRed
         FrameHotTrack = True
         FrameVisible = True
         ItemHeight = 17
         ParentColor = True
+        ParentFont = False
         Sorted = True
         TabOrder = 3
         UseGradients = False
@@ -983,7 +989,13 @@ object RecForm: TRecForm
         Width = 136
         Height = 21
         Color = clCream
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
         ItemHeight = 13
+        ParentFont = False
         TabOrder = 7
         OnChange = cmbTypeChange
       end
@@ -993,7 +1005,13 @@ object RecForm: TRecForm
         Width = 136
         Height = 21
         Color = clCream
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
         ItemHeight = 13
+        ParentFont = False
         TabOrder = 8
       end
       object TEdit
@@ -1001,6 +1019,12 @@ object RecForm: TRecForm
         Top = 152
         Width = 121
         Height = 21
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
         TabOrder = 9
       end
     end

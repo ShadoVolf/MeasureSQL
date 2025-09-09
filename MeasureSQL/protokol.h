@@ -137,6 +137,14 @@ __published:	// IDE-managed Components
         TAction *SpcChangeLot;
         TfrxDBDataset *TU_Parameters;
         TAction *GetCustomer;
+        TRzComboBox *ZakazData_Combo;
+        TLabel *Label15;
+        TLabel *Label16;
+        TLabel *Costumer_label;
+        TLabel *Label18;
+        TLabel *Count_label;
+        TLabel *Label20;
+        TLabel *Dogovor_label;
         void __fastcall btnCloseClick(TObject *Sender);
         void __fastcall FormShow(TObject *Sender);
         void __fastcall edtTypeChange(TObject *Sender);
@@ -183,6 +191,7 @@ __published:	// IDE-managed Components
         void __fastcall LotChangeExecute(TObject *Sender);
         void __fastcall SpcChangeLotExecute(TObject *Sender);
         void __fastcall GetCustomerExecute(TObject *Sender);
+        void __fastcall ZakazData_ComboChange(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
         __fastcall TProtokolForm(TComponent* Owner);

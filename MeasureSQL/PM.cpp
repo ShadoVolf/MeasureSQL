@@ -179,7 +179,7 @@ DataModule2->Protokol_Measure_ID->Active=true;
  AnsiString Measure_ID=DataModule1->MeasureID->FieldByName("MeasureID")->AsString;
      S="Select * from psidata where ";
      S1="Select * from psidatatemp where ";
-       if (edtMsk->ItemIndex!=-1){
+       if (!edtMsk->Text.IsEmpty()){
        S=S+"msk='"+edtMsk->Text+"' ";
        S1=S1+"msk='"+edtMsk->Text+"' ";
        }
@@ -280,7 +280,7 @@ for (int i=0; i<DataModule2->psiData->RecordCount; i++){
                      DataModule2->psiData2->FieldByName("variant")->AsString=DataModule2->psiData->FieldByName("variant")->AsString;
 
 
-                      DataModule2->psiData2->FieldByName("Machine_Call_Date")->AsString="08.08.2024";
+                      DataModule2->psiData2->FieldByName("Machine_Call_Date")->AsString="05.08.2025";
                        DataModule2->psiData2->FieldByName("Version")->AsString=DataModule2->psiData->FieldByName("Version")->AsString;
                     if (DataModule2->psiData->FieldByName("Status")->AsString=="Аномал." || DataModule2->psiData->FieldByName("Status")->AsString=="Незамер."){
                      DataModule2->psiData2->FieldByName("Status")->AsString=DataModule2->psiData->FieldByName("Status")->AsString;
@@ -326,6 +326,11 @@ for (int i=0; i<DataModule2->psiData->RecordCount; i++){
                    if (kk-50==0){
                       hhh=0;
                    }
+                   temp=DataModule2->psiData->FieldByName("FL_Num")->AsFloat+(DataModule2->psiData->FieldByName("FL_Num")->AsFloat*rr*hhh);
+                   DataModule2->psiData2->FieldByName("FL_Num")->AsFloat=temp;
+                   randomize();
+                   kk=random(100);
+                   rr=kk/5000;
                    temp=DataModule2->psiData->FieldByName("F")->AsFloat+(DataModule2->psiData->FieldByName("F")->AsFloat*rr*hhh);
                    DataModule2->psiData2->FieldByName("F")->AsFloat=temp;
                    randomize();
@@ -459,6 +464,11 @@ for (int i=0; i<DataModule2->psiData->RecordCount; i++){
                                  {
                                   app = true;
                                   }
+                                 if (l == 0 || l == DataModule2->psiDataTemp->RecordCount-1)
+                                 {
+                                 app = true;
+
+                                 }
 
                         } else {
                          app = true;
@@ -4510,7 +4520,7 @@ for (int i=0;i<DataModule2->psiData->RecordCount;i++){
           }
       }
 int k=0;
-  cmb_ID->ItemIndex=0;
+ //cmb_ID->ItemIndex=0;
  for (int i=0;i<DataModule2->SqlSpec->RecordCount;i++){
 
         if (DataModule2->SqlSpec->FieldByName("Name")->AsString==DataModule2->psiData->FieldByName("Spc")->AsString){
@@ -4673,5 +4683,6 @@ SN->Text=DataModule2->psiData->FieldByName("Machine_Serial")->AsString;
   }
 }
 //---------------------------------------------------------------------------
+
 
 

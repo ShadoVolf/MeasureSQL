@@ -4,7 +4,7 @@ object DataModule1: TDataModule1
   Left = 250
   Top = 39
   Height = 1049
-  Width = 1465
+  Width = 1473
   object CoordinatorDB: TMyConnection
     Database = 'coordinator'
     Options.Compress = True

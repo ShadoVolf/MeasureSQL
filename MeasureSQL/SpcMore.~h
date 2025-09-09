@@ -172,6 +172,8 @@ __published:	// IDE-managed Components
         TRzDBCheckBox *RzDBCheckBox1;
         TAdvGlassButton *AdvGlassButton2;
         TRzDBCheckBox *RzDBCheckBox24;
+        TLabel *Label51;
+        TRzDBCheckBox *RzDBCheckBox25;
         void __fastcall btnCloseClick(TObject *Sender);
         void __fastcall FormCreate(TObject *Sender);
         void __fastcall AdvGlassButton1Click(TObject *Sender);

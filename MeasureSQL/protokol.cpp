@@ -780,6 +780,19 @@ void __fastcall TProtokolForm::LotSpcChange(TObject *Sender)
 {
 ActionList1->Actions[21]->Execute();
 
+RQ_Data->LotNumbers->Active=false;
+ RQ_Data->LotNumbers->SQL->Clear();
+ RQ_Data->LotNumbers->SQL->Add("Select distinct `ЗаказДата` from `заказы1С_новые` where `ЗаказНомер`='"+LotNumber->Text+"' and `Номенклатура`='"+LotSpc->Text+"'");
+ RQ_Data->LotNumbers->Active=true;
+ RQ_Data->LotNumbers->First();
+ ZakazData_Combo->Items->Clear();
+ for (int i=0; i<RQ_Data->LotNumbers->RecordCount; i++){
+      ZakazData_Combo->Items->Add(RQ_Data->LotNumbers->FieldByName("ЗаказДата")->AsString);
+      RQ_Data->LotNumbers->Next();
+ }
+ RQ_Data->LotNumbers->Active=false;
+ ZakazData_Combo->ItemIndex=0;
+
 }
 //---------------------------------------------------------------------------
 
@@ -3271,7 +3284,7 @@ else {
         ActionList1->Actions[3]->Execute();
  }
 
- if (edtProtokol->Text=="Протокол ОТК"){
+ if (edtProtokol->Text=="Протокол ОТК" || edtProtokol->Text=="Измерение мощности"){
 
             DataModule2->psiData->Active=false;
            DataModule2->psiData->SQL->Clear();
@@ -3581,17 +3594,17 @@ for (int i=0;i<DataModule2->ResonatorType->RecordCount;i++){
 }
  RQ_Data->LotNumbers->Active=false;
  RQ_Data->LotNumbers->SQL->Clear();
- RQ_Data->LotNumbers->SQL->Add("Select distinct `Name` from `Извещение`");
+ RQ_Data->LotNumbers->SQL->Add("Select distinct `ЗаказНомер` from `заказы1с_новые` where `ОсталосьВыпуститьПоГрафику`>'0'");
  RQ_Data->LotNumbers->Active=true;
  RQ_Data->LotNumbers->First();
  LotNumber->Items->Clear();
  for (int i=0; i<RQ_Data->LotNumbers->RecordCount; i++){
-      LotNumber->Items->Add(RQ_Data->LotNumbers->FieldByName("Name")->AsString);
+      LotNumber->Items->Add(RQ_Data->LotNumbers->FieldByName("ЗаказНомер")->AsString);
       RQ_Data->LotNumbers->Next();
  }
 
 
-  
+
   edtProtokol->Enabled=false;
   edtSpc->Enabled=false;
   btnPrint->Enabled=false;
@@ -3688,12 +3701,12 @@ void __fastcall TProtokolForm::LotChangeExecute(TObject *Sender)
 {
 RQ_Data->LotNumbers->Active=false;
  RQ_Data->LotNumbers->SQL->Clear();
- RQ_Data->LotNumbers->SQL->Add("Select `Spc` from `Извещение` where `Name`='"+LotNumber->Text+"'");
+ RQ_Data->LotNumbers->SQL->Add("Select distinct `Номенклатура` from `заказы1С_новые` where `ЗаказНомер`='"+LotNumber->Text+"' and `ОсталосьВыпуститьПоГрафику`>'0'");
  RQ_Data->LotNumbers->Active=true;
  RQ_Data->LotNumbers->First();
  LotSpc->Items->Clear();
  for (int i=0; i<RQ_Data->LotNumbers->RecordCount; i++){
-      LotSpc->Items->Add(RQ_Data->LotNumbers->FieldByName("Spc")->AsString);
+      LotSpc->Items->Add(RQ_Data->LotNumbers->FieldByName("Номенклатура")->AsString);
       RQ_Data->LotNumbers->Next();
  }
  RQ_Data->LotNumbers->Active=false;
@@ -3727,13 +3740,12 @@ void __fastcall TProtokolForm::GetCustomerExecute(TObject *Sender)
 {
 DataModule2->Notification->Active=false;
 DataModule2->Notification->SQL->Clear();
-DataModule2->Notification->SQL->Add("Select * from `Извещение` where `Name`='"+LotNumber->Text+"' and `Spc`='"+LotSpc->Text+"'");
+DataModule2->Notification->SQL->Add("Select * from `заказы1с_новые` where `ЗаказНомер`='"+LotNumber->Text+
+                                        "' and `Номенклатура`='"+LotSpc->Text+"' and `ЗаказДата`='"+ZakazData_Combo->Text+"'");
 DataModule2->Notification->Active=true;
-CustomerName=DataModule2->Notification->FieldByName("Customer")->AsString;
-Dogovor=DataModule2->Notification->FieldByName("Dogovor")->AsString;
-        if (Dogovor=="0"){
-           Dogovor="";
-        }
+CustomerName=DataModule2->Notification->FieldByName("ЗаказКонтрагент")->AsString+" "+ DataModule2->Notification->FieldByName("ГородКонтрагент")->AsString;
+Dogovor=DataModule2->Notification->FieldByName("ДоговорКонтрагентаРодитель")->AsString;
+
 
 }
 //---------------------------------------------------------------------------
@@ -3743,4 +3755,22 @@ Dogovor=DataModule2->Notification->FieldByName("Dogovor")->AsString;
 
 
 
+
+
+void __fastcall TProtokolForm::ZakazData_ComboChange(TObject *Sender)
+{
+RQ_Data->LotNumbers->Active=false;
+ RQ_Data->LotNumbers->SQL->Clear();
+ RQ_Data->LotNumbers->SQL->Add("Select * from `заказы1С_новые` where `ЗаказНомер`='"+LotNumber->Text+
+                                "' and `Номенклатура`='"+LotSpc->Text+"' and `ЗаказДата`='"+ZakazData_Combo->Text+"' and `ОсталосьВыпуститьПоГрафику`>'0'");
+ RQ_Data->LotNumbers->Active=true;
+ RQ_Data->LotNumbers->First();
+ Costumer_label->Caption=RQ_Data->LotNumbers->FieldByName("ЗаказКонтрагент")->AsString;
+ Dogovor_label->Caption=RQ_Data->LotNumbers->FieldByName("ДоговорКонтрагентаРодитель")->AsString;
+ Count_label->Caption= RQ_Data->LotNumbers->FieldByName("ОсталосьВыпуститьПоГрафику")->AsString;
+
+ RQ_Data->LotNumbers->Active=false;
+
+}
+//---------------------------------------------------------------------------
 

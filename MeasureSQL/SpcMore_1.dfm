@@ -279,6 +279,34 @@ object SpcMore1: TSpcMore1
     Height = 13
     Caption = #1047#1085#1072#1095#1077#1085#1080#1077' '#1091#1089#1090#1072#1085#1072#1074#1083#1080#1074#1072#1077#1084#1086#1081' '#1077#1084#1082#1086#1089#1090#1080' '#1085#1072#1075#1088#1091#1079#1082#1072' TTS-100, '#1087#1060
   end
+  object Label26: TLabel
+    Left = 424
+    Top = 464
+    Width = 131
+    Height = 13
+    Caption = #1052#1080#1085'. '#1095#1072#1089#1090#1086#1090#1072' '#1074' '#1080#1085#1090#1077#1088#1074#1072#1083#1077
+  end
+  object Label27: TLabel
+    Left = 424
+    Top = 440
+    Width = 137
+    Height = 13
+    Caption = #1052#1072#1082#1089'. '#1095#1072#1089#1090#1086#1090#1072' '#1074' '#1080#1085#1090#1077#1088#1074#1072#1083#1077
+  end
+  object Label28: TLabel
+    Left = 424
+    Top = 496
+    Width = 126
+    Height = 13
+    Caption = #1058#1086#1095#1085#1086#1089#1090#1100' '#1085#1072#1089#1090#1088#1086#1081#1082#1080',ppm'
+  end
+  object Label29: TLabel
+    Left = 424
+    Top = 400
+    Width = 81
+    Height = 13
+    Caption = #1040#1087#1087#1088#1086#1082#1089#1080#1084#1072#1094#1080#1103
+  end
   object btnClose: TAdvGlassButton
     Left = 920
     Top = 640
@@ -1225,6 +1253,240 @@ object SpcMore1: TSpcMore1
     TextHighlightColor = clLime
     TextShadowColor = clLime
     TabOrder = 49
+    TransparentColor = clMaroon
+    WinMaskColor = clRed
+  end
+  object RzDBCheckBox12: TRzDBCheckBox
+    Left = 624
+    Top = 432
+    Width = 25
+    Height = 17
+    DataField = 'Fmax_int'
+    DataSource = DataModule1.SpecificationSource
+    ValueChecked = 'True'
+    ValueUnchecked = 'False'
+    DisabledColor = clGreen
+    FillColor = clBlack
+    FocusColor = clBlack
+    FrameColor = clYellow
+    HighlightColor = clLime
+    HotTrack = True
+    TextHighlightColor = clLime
+    TextShadowColor = clLime
+    TabOrder = 50
+    TransparentColor = clMaroon
+    WinMaskColor = clRed
+  end
+  object RzDBCheckBox13: TRzDBCheckBox
+    Left = 624
+    Top = 464
+    Width = 25
+    Height = 17
+    DataField = 'Fmin_int'
+    DataSource = DataModule1.SpecificationSource
+    ValueChecked = 'True'
+    ValueUnchecked = 'False'
+    DisabledColor = clGreen
+    FillColor = clBlack
+    FocusColor = clBlack
+    FrameColor = clYellow
+    HighlightColor = clLime
+    HotTrack = True
+    TextHighlightColor = clLime
+    TextShadowColor = clLime
+    TabOrder = 51
+    TransparentColor = clMaroon
+    WinMaskColor = clRed
+  end
+  object RzDBEdit36: TRzDBEdit
+    Left = 664
+    Top = 464
+    Width = 97
+    Height = 21
+    DataSource = DataModule1.SpecificationSource
+    DataField = 'Fmin_int_Min'
+    Color = clBlack
+    DisabledColor = clBlack
+    FocusColor = clNavy
+    FrameColor = clYellow
+    FrameHotColor = clRed
+    FrameHotTrack = True
+    FrameVisible = True
+    ParentColor = True
+    ReadOnlyColor = clSilver
+    TabOrder = 52
+  end
+  object RzDBEdit39: TRzDBEdit
+    Left = 664
+    Top = 432
+    Width = 97
+    Height = 21
+    DataSource = DataModule1.SpecificationSource
+    DataField = 'Fmax_int_Min'
+    Color = clBlack
+    DisabledColor = clBlack
+    FocusColor = clNavy
+    FrameColor = clYellow
+    FrameHotColor = clRed
+    FrameHotTrack = True
+    FrameVisible = True
+    ParentColor = True
+    ReadOnlyColor = clSilver
+    TabOrder = 53
+  end
+  object RzDBEdit40: TRzDBEdit
+    Left = 792
+    Top = 432
+    Width = 97
+    Height = 21
+    DataSource = DataModule1.SpecificationSource
+    DataField = 'Fmax_int_Max'
+    Color = clBlack
+    DisabledColor = clBlack
+    FocusColor = clNavy
+    FrameColor = clYellow
+    FrameHotColor = clRed
+    FrameHotTrack = True
+    FrameVisible = True
+    ParentColor = True
+    ReadOnlyColor = clSilver
+    TabOrder = 54
+  end
+  object RzDBEdit41: TRzDBEdit
+    Left = 792
+    Top = 464
+    Width = 97
+    Height = 21
+    DataSource = DataModule1.SpecificationSource
+    DataField = 'Fmin_int_Max'
+    Color = clBlack
+    DisabledColor = clBlack
+    FocusColor = clNavy
+    FrameColor = clYellow
+    FrameHotColor = clRed
+    FrameHotTrack = True
+    FrameVisible = True
+    ParentColor = True
+    ReadOnlyColor = clSilver
+    TabOrder = 55
+  end
+  object RzDBCheckBox10: TRzDBCheckBox
+    Left = 624
+    Top = 496
+    Width = 25
+    Height = 17
+    DataField = 'F_int'
+    DataSource = DataModule1.SpecificationSource
+    ValueChecked = 'True'
+    ValueUnchecked = 'False'
+    DisabledColor = clGreen
+    FillColor = clBlack
+    FocusColor = clBlack
+    FrameColor = clYellow
+    HighlightColor = clLime
+    HotTrack = True
+    TextHighlightColor = clLime
+    TextShadowColor = clLime
+    TabOrder = 56
+    TransparentColor = clMaroon
+    WinMaskColor = clRed
+  end
+  object RzDBEdit42: TRzDBEdit
+    Left = 664
+    Top = 496
+    Width = 97
+    Height = 21
+    DataSource = DataModule1.SpecificationSource
+    DataField = 'Fint_Min'
+    Color = clBlack
+    DisabledColor = clBlack
+    FocusColor = clNavy
+    FrameColor = clYellow
+    FrameHotColor = clRed
+    FrameHotTrack = True
+    FrameVisible = True
+    ParentColor = True
+    ReadOnlyColor = clSilver
+    TabOrder = 57
+  end
+  object RzDBEdit43: TRzDBEdit
+    Left = 792
+    Top = 496
+    Width = 97
+    Height = 21
+    DataSource = DataModule1.SpecificationSource
+    DataField = 'Fint_Max'
+    Color = clBlack
+    DisabledColor = clBlack
+    FocusColor = clNavy
+    FrameColor = clYellow
+    FrameHotColor = clRed
+    FrameHotTrack = True
+    FrameVisible = True
+    ParentColor = True
+    ReadOnlyColor = clSilver
+    TabOrder = 58
+  end
+  object RzDBEdit57: TRzDBEdit
+    Left = 904
+    Top = 496
+    Width = 97
+    Height = 21
+    DataSource = DataModule1.SpecificationSource
+    DataField = 'Tnastr'
+    Alignment = taRightJustify
+    Color = clBlack
+    DisabledColor = clBlack
+    FocusColor = clNavy
+    FrameColor = clYellow
+    FrameHotColor = clRed
+    FrameHotTrack = True
+    FrameVisible = True
+    ParentColor = True
+    ReadOnlyColor = clSilver
+    TabOrder = 59
+  end
+  object RzDBCheckBox11: TRzDBCheckBox
+    Left = 536
+    Top = 400
+    Width = 137
+    Height = 17
+    DataField = 'F_correction'
+    DataSource = DataModule1.SpecificationSource
+    ValueChecked = 'True'
+    ValueUnchecked = 'False'
+    Caption = #1090#1086#1095#1085#1086#1089#1090#1100' '#1085#1072#1089#1090#1088#1086#1081#1082#1080
+    DisabledColor = clGreen
+    FillColor = clBlack
+    FocusColor = clBlack
+    FrameColor = clYellow
+    HighlightColor = clLime
+    HotTrack = True
+    TextHighlightColor = clLime
+    TextShadowColor = clLime
+    TabOrder = 60
+    TransparentColor = clMaroon
+    WinMaskColor = clRed
+  end
+  object RzDBCheckBox14: TRzDBCheckBox
+    Left = 704
+    Top = 400
+    Width = 137
+    Height = 17
+    DataField = 'TCH_correction'
+    DataSource = DataModule1.SpecificationSource
+    ValueChecked = 'True'
+    ValueUnchecked = 'False'
+    Caption = #1058#1063#1061
+    DisabledColor = clGreen
+    FillColor = clBlack
+    FocusColor = clBlack
+    FrameColor = clYellow
+    HighlightColor = clLime
+    HotTrack = True
+    TextHighlightColor = clLime
+    TextShadowColor = clLime
+    TabOrder = 61
     TransparentColor = clMaroon
     WinMaskColor = clRed
   end

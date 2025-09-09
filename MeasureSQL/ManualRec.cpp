@@ -2197,3 +2197,4 @@ void __fastcall TRecForm::LotNumberChange(TObject *Sender)
 
 
 
+

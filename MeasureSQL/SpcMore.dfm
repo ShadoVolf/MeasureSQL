@@ -2008,6 +2008,7 @@ object FormMore: TFormMore
     Height = 21
     DataField = 'TCH_Approx_Type'
     DataSource = DataModule1.SpecificationSource
+    AutoComplete = False
     Color = clBlack
     Ctl3D = False
     FlatButtonColor = clBlack

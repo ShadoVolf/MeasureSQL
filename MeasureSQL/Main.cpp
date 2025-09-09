@@ -1952,6 +1952,7 @@ int l3=0;
 
 
     }
+ Status2="Good";
  //****************************************************************************************************************
  //максимальное сопротивление******************************************
  if(DataModule1->SqlSpecification->FieldByName("Rmx")->AsString=="True"){
@@ -1968,8 +1969,15 @@ int l3=0;
                                                   DataModule1->ProfileData1->First();
                                                for (int y=0;y<DataModule1->ProfileData1->RecordCount;y++){
                                                   if (DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat==DataModule1->ProfileData1->FieldByName("Temperature")->AsFloat){
-                                                           if (DataModule1->SQLCrystalData->FieldByName("fRr")->AsFloat>Rmax){
-                                                               Rmax=DataModule1->SQLCrystalData->FieldByName("fRr")->AsFloat;
+                                                           if (DataModule1->SQLCrystalData->FieldByName("fRr")->AsFloat>0){
+                                                                   if (DataModule1->SQLCrystalData->FieldByName("fRr")->AsFloat>Rmax){
+                                                                       Rmax=DataModule1->SQLCrystalData->FieldByName("fRr")->AsFloat;
+
+                                                                   }
+                                                           }
+                                                           else {
+                                                              Status2="BAD";
+                                                              DataModule1->SQLPSIData->FieldByName("Status2")->AsString="BAD";
 
                                                            }
 
@@ -1984,8 +1992,9 @@ int l3=0;
                 }
 
         ResultForm->ResultGrid->Cells[Nar[14]][i+1]= SEdit1->Text;
+        Rmax=SEdit1->AsFloat;
                    if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
-                     if (DataModule1->SQLPostProcessData->FieldByName("fRmax")->AsFloat>-10000 & DataModule1->SQLPostProcessData->FieldByName("fRmax")->AsFloat<10000 ){
+                     if (Rmax>0 & Rmax<10000){
                             DataModule1->SQLPSIData->FieldByName("Rmax")->AsString=ResultForm->ResultGrid->Cells[Nar[14]][i+1];
                           }
                       else {
@@ -2153,7 +2162,7 @@ if(DataModule1->SqlSpecification->FieldByName("Rmn")->AsString=="True"){
 
  //****************************************************************************************************************************
 
-Status2="Good";
+
 //Номер**********************************************************************
  if(DataModule1->SqlSpecification->FieldByName("Snumber")->AsString=="True"){
 
@@ -4102,6 +4111,7 @@ if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
                                                                                       else {
                                                                                               ResultForm->ResultGrid->Cells[Nar[4]][i+1]=0;
                                                                                               DataModule1->SQLPSIData->FieldByName("R")->AsString="0";
+                                                                                              DataModule1->SQLPSIData->FieldByName("Status2")->AsString="BAD";
                                                                                               z=0;
                                                                                               }
 
@@ -4291,7 +4301,15 @@ if(DataModule1->SqlSpecification->FieldByName("C0_C1")->AsString=="True"){
                   DataModule1->SQLCrystalData->First();
                                      for(int j=0;j<Nt;j++){
                                                     if(DataModule1->SqlSpecification->FieldByName("C0_C1_T")->AsFloat==DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat){
-                                                                    SEdit1->AsFloat=DataModule1->SQLCrystalData->FieldByName("fC0")->AsFloat/DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat;
+                                                                    if (DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat > 0){
+                                                                        SEdit1->AsFloat=DataModule1->SQLCrystalData->FieldByName("fC0")->AsFloat/DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat;
+
+                                                                    }
+                                                                    else {
+
+                                                                        SEdit1->AsFloat = 0;
+                                                                    }
+
                                                                     ResultForm->ResultGrid->Cells[Nar[22]][i+1]=SEdit1->Text;
                                                                                 if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
                                                                                             if (DataModule1->SQLSetupData->FieldByName("strQCStatus2")->AsString!=" Dead"){
@@ -4331,7 +4349,13 @@ if(DataModule1->SqlSpecification->FieldByName("C0_C1")->AsString=="True"){
                                                                                ResultForm->ResultGrid->Cells[Nar[22]][N+3]=y;
                                                                  }
                                 }
-                  z=DataModule1->SQLCrystalData->FieldByName("fC0")->AsFloat/DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat;
+                                if (DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat > 0){
+                                          z=DataModule1->SQLCrystalData->FieldByName("fC0")->AsFloat/DataModule1->SQLCrystalData->FieldByName("fC1")->AsFloat;
+                                }
+                                else {
+                                 z=0;
+                                }
+          
                               if(DataModule1->SqlSpecification->FieldByName("C0_C1max")->AsString!="no"){
                                                         if(z>x){
                                                                  ResultForm->ResultGrid->Cells[Nar[22]][i+1]=ResultForm->ResultGrid->Cells[Nar[22]][i+1]+"+";
@@ -5151,7 +5175,12 @@ if(DataModule1->SqlSpecification->FieldByName("M")->AsString=="True"){
                                               }
                                              DataModule1->SQLCrystalData->Next();
                                             }
-                                            RR2=Rmax/R;
+                                            if (R != 0 ){
+                                                    RR2=Rmax/R;
+                                                    }
+                                            else {
+                                                    RR2 = 0;    
+                                            }
 
         }
         SEdit1->AsFloat=RR2;

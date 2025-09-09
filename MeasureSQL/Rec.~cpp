@@ -95,6 +95,21 @@ for (int j=0; j<RzStringGrid1->RowCount;j++){
                               AnsiString dat=RzStringGrid1->Cells[count][j+1];
                               if (!dat.IsEmpty()){
                               DataModule2->psiData->FieldByName(typeField)->AsString=RzStringGrid1->Cells[count][j+1];
+                                  if (typeField == "Uust_T1" ||  typeField == "iust")
+                                     {
+                                      if  (DataModule2->psiData->FieldByName("Uust_T1")->AsFloat > 0 & DataModule2->psiData->FieldByName("iust")->AsFloat > 0)
+                                           {
+                                             DataModule2->psiData->FieldByName("P_ust_t1")->AsFloat = DataModule2->psiData->FieldByName("Uust_T1")->AsFloat *  DataModule2->psiData->FieldByName("iust")->AsFloat;
+                                            }
+                                      }
+                                  if (typeField == "Uust_T2" ||  typeField == "Iust_T1")
+                                     {
+                                      if  (DataModule2->psiData->FieldByName("Uust_T2")->AsFloat > 0 & DataModule2->psiData->FieldByName("Iust_T1")->AsFloat > 0)
+                                           {
+                                             DataModule2->psiData->FieldByName("P_ust_t1")->AsFloat = DataModule2->psiData->FieldByName("Uust_T2")->AsFloat *  DataModule2->psiData->FieldByName("Iust_T1")->AsFloat;
+                                            }
+                                      }
+
                               }
                               else {
                               DataModule2->psiData->FieldByName(typeField)->AsString=100000;
@@ -215,6 +230,20 @@ for (int j=0; j<RzStringGrid1->RowCount;j++){
                               AnsiString dat=RzStringGrid1->Cells[count][j+1];
                               if (!dat.IsEmpty()){
                               DataModule2->psiData->FieldByName(typeField)->AsString=RzStringGrid1->Cells[count][j+1];
+                              if (typeField == "Uust_T1" ||  typeField == "iust")
+                                     {
+                                      if  (DataModule2->psiData->FieldByName("Uust_T1")->AsFloat > 0 & DataModule2->psiData->FieldByName("iust")->AsFloat > 0)
+                                           {
+                                             DataModule2->psiData->FieldByName("P_ust_t1")->AsFloat = DataModule2->psiData->FieldByName("Uust_T1")->AsFloat *  DataModule2->psiData->FieldByName("iust")->AsFloat;
+                                            }
+                                      }
+                                  if (typeField == "Uust_T2" ||  typeField == "Iust_T1")
+                                     {
+                                      if  (DataModule2->psiData->FieldByName("Uust_T2")->AsFloat > 0 & DataModule2->psiData->FieldByName("Iust_T1")->AsFloat > 0)
+                                           {
+                                             DataModule2->psiData->FieldByName("P_ust_t1")->AsFloat = DataModule2->psiData->FieldByName("Uust_T2")->AsFloat *  DataModule2->psiData->FieldByName("Iust_T1")->AsFloat;
+                                            }
+                                      }
                               }
                               else {
                               DataModule2->psiData->FieldByName(typeField)->AsString=100000;

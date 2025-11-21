@@ -12,6 +12,7 @@
 #include "temperature.h"
 #include "SpcMore.h"
 #include "spc.h"
+#include "spc_spur_.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "VrButtons"
@@ -216,6 +217,12 @@ void __fastcall TSpcDetailForm::RzDBNavigator1Click(TObject *Sender,
           Solve_Date_edt->Visible=false;
           Label46->Visible=false;
    }        
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TSpcDetailForm::AdvGlassButton1Click(TObject *Sender)
+{
+Spc_Spur_Form->Show();
 }
 //---------------------------------------------------------------------------
 

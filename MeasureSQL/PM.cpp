@@ -512,11 +512,17 @@ for (int i=0; i<DataModule2->psiData->RecordCount; i++){
                            kk=random(100);
                            }
                    rr=kk/5000;
-
-                           temp=DataModule2->psiDataTemp->FieldByName("FL")->AsFloat+(DataModule2->psiDataTemp->FieldByName("FL")->AsFloat*rr*hhh);
-                           if (DataModule2->psiDataTemp->FieldByName("Temp")->AsFloat==DataModule2->SqlSpec->FieldByName("Tnastr")->AsFloat){
-                            temp=DataModule2->psiData2->FieldByName("Fn")->AsFloat;
+                           if  (DataModule2->psiDataTemp->FieldByName("FL")->AsString!="nan"){
+                                temp=DataModule2->psiDataTemp->FieldByName("FL")->AsFloat+(DataModule2->psiDataTemp->FieldByName("FL")->AsFloat*rr*hhh);
+                                   if (DataModule2->psiDataTemp->FieldByName("Temp")->AsFloat==DataModule2->SqlSpec->FieldByName("Tnastr")->AsFloat){
+                                            temp=DataModule2->psiData2->FieldByName("Fn")->AsFloat;
+                                       }
                            }
+                           else {
+                                temp = 0;
+
+                           }
+
                            DataModule2->psiDataTemp2->FieldByName("FL")->AsFloat=temp;
                            randomize();
                           kk=random(100);
@@ -656,9 +662,14 @@ for (int i=0; i<DataModule2->psiData->RecordCount; i++){
                                   DataModule2->psiData2->FieldByName("Status")->AsString="Незамер." ;
                                  }
                                  }
+                                 double RcRb;
                                   if (DataModule2->psiDataTemp2->FieldByName("Rb")->AsString!=""){
-                                       double RcRb =DataModule2->psiDataTemp2->FieldByName("R")->AsFloat/DataModule2->psiDataTemp2->FieldByName("Rb")->AsFloat;
-
+                                        if (DataModule2->psiDataTemp2->FieldByName("Rb")->AsFloat>0){
+                                               RcRb =DataModule2->psiDataTemp2->FieldByName("R")->AsFloat/DataModule2->psiDataTemp2->FieldByName("Rb")->AsFloat;
+                                          }
+                                          else {
+                                                 RcRb=0;
+                                          }
                                  if (RcRb>RcRbmax){
                                      RcRbmax=RcRb;
                                  }

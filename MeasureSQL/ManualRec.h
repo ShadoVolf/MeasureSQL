@@ -113,6 +113,14 @@ __published:	// IDE-managed Components
         TAdvGlassButton *btnSetSpc;
         TComboBox *cmbType;
         TComboBox *cmbSpc;
+        TRzComboBox *ZakazData_Combo;
+        TLabel *Label18;
+        TLabel *Label19;
+        TLabel *Costumer_label;
+        TLabel *Label20;
+        TLabel *Dogovor_label;
+        TLabel *Label21;
+        TLabel *Count_label;
         void __fastcall btnCloseClick(TObject *Sender);
         void __fastcall FormShow(TObject *Sender);
         void __fastcall edtTypeChange(TObject *Sender);
@@ -147,6 +155,7 @@ __published:	// IDE-managed Components
         void __fastcall LotClick(TObject *Sender);
         void __fastcall LotSpcChange(TObject *Sender);
         void __fastcall LotNumberChange(TObject *Sender);
+        void __fastcall ZakazData_ComboChange(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
         __fastcall TRecForm(TComponent* Owner);

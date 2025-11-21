@@ -12,6 +12,7 @@
 #include "protokol.h"
 #include "PassportNumbers.h"
 #include "Data_RQ.h"
+#include "PMN.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "RzButton"
@@ -80,16 +81,6 @@ for (int i=0;i<DataModule2->ResonatorType->RecordCount;i++){
 
                     DataModule3->psi_measure_parameters->Next();
                     }
-  RQ_Data->LotNumbers->Active=false;
- RQ_Data->LotNumbers->SQL->Clear();
- RQ_Data->LotNumbers->SQL->Add("Select distinct `Name` from `Извещение`");
- RQ_Data->LotNumbers->Active=true;
- RQ_Data->LotNumbers->First();
- LotNumber->Items->Clear();
- for (int i=0; i<RQ_Data->LotNumbers->RecordCount; i++){
-      LotNumber->Items->Add(RQ_Data->LotNumbers->FieldByName("Name")->AsString);
-      RQ_Data->LotNumbers->Next();
- }                  
 
      edtSpc->Enabled=false;
      edtType->Enabled=true;
@@ -2156,6 +2147,7 @@ void __fastcall TRecForm::LotSpcChange(TObject *Sender)
 {
 ProtokolForm->LotSpc->ItemIndex=LotSpc->ItemIndex;
 ProtokolForm->ActionList1->Actions[21]->Execute();
+/*
  RQ_Data->Spc_RQ->Active=false;
    RQ_Data->Spc_RQ->SQL->Clear();
    RQ_Data->Spc_RQ->SQL->Add("Select `номенклатура` from nomeklatura_rk where `наименование`='"+LotSpc->Text+"'");
@@ -2174,6 +2166,7 @@ RQ_Data->MSK_JOIN->Active=false;
  }
  RQ_Data->Spc_RQ->Active=false;
  RQ_Data->MSK_JOIN->Active=false;
+ */
 }
 //---------------------------------------------------------------------------
 
@@ -2181,20 +2174,27 @@ void __fastcall TRecForm::LotNumberChange(TObject *Sender)
 {
  ProtokolForm->LotNumber->Text=LotNumber->Text;
  ProtokolForm->ActionList1->Actions[20]->Execute();
-  RQ_Data->LotNumbers->Active=false;
-  RQ_Data->LotNumbers->SQL->Clear();
- RQ_Data->LotNumbers->SQL->Add("Select `Spc` from `Извещение` where `Name`='"+LotNumber->Text+"'");
- RQ_Data->LotNumbers->Active=true;
- RQ_Data->LotNumbers->First();
- LotSpc->Items->Clear();
- for (int i=0; i<RQ_Data->LotNumbers->RecordCount; i++){
-      LotSpc->Items->Add(RQ_Data->LotNumbers->FieldByName("Spc")->AsString);
-      RQ_Data->LotNumbers->Next();
- }
- RQ_Data->LotNumbers->Active=false;
+ 
+
 }
 //---------------------------------------------------------------------------
 
 
 
+
+void __fastcall TRecForm::ZakazData_ComboChange(TObject *Sender)
+{
+RQ_Data->LotNumbers->Active=false;
+ RQ_Data->LotNumbers->SQL->Clear();
+ RQ_Data->LotNumbers->SQL->Add("Select * from `заказы1С_новые` where `ЗаказНомер`='"+LotNumber->Text+
+                                "' and `Номенклатура`='"+LotSpc->Text+"' and `ЗаказДата`='"+ZakazData_Combo->Text+"' and `ОсталосьВыпуститьПоГрафику`>'0'");
+ RQ_Data->LotNumbers->Active=true;
+ RQ_Data->LotNumbers->First();
+ Costumer_label->Caption=RQ_Data->LotNumbers->FieldByName("ЗаказКонтрагент")->AsString;
+ Dogovor_label->Caption=RQ_Data->LotNumbers->FieldByName("ДоговорКонтрагентаРодитель")->AsString;
+ Count_label->Caption= RQ_Data->LotNumbers->FieldByName("ОсталосьВыпуститьПоГрафику")->AsString;
+
+ RQ_Data->LotNumbers->Active=false;
+}
+//---------------------------------------------------------------------------
 

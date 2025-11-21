@@ -192,6 +192,7 @@ __published:	// IDE-managed Components
         TRzDBComboBox *Solve_Date_edt;
         TRzDBCheckBox *RzDBCheckBox32;
         TRzDBComboBox *RzDBComboBox1;
+        TAdvGlassButton *AdvGlassButton1;
         void __fastcall btnCloseClick(TObject *Sender);
         void __fastcall btnOptionsClick(TObject *Sender);
         void __fastcall FormShow(TObject *Sender);
@@ -203,6 +204,7 @@ __published:	// IDE-managed Components
         void __fastcall edtTypeChange(TObject *Sender);
         void __fastcall RzDBNavigator1Click(TObject *Sender,
           TAdvNavigateBtn Button);
+        void __fastcall AdvGlassButton1Click(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
         __fastcall TSpcDetailForm(TComponent* Owner);

@@ -1,0 +1,51 @@
+//---------------------------------------------------------------------------
+
+#ifndef spc_spur_H
+#define spc_spur_H
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+#include "AdvGlassButton.hpp"
+#include "RzButton.hpp"
+#include "RzDBChk.hpp"
+#include "RzDBEdit.hpp"
+#include "RzEdit.hpp"
+#include "RzLine.hpp"
+#include "RzRadChk.hpp"
+#include <Mask.hpp>
+//---------------------------------------------------------------------------
+class TSpc_Spur_Form : public TForm
+{
+__published:	// IDE-managed Components
+        TAdvGlassButton *btnClose;
+        TLabel *Label34;
+        TRzDBCheckBox *RzDBCheckBox32;
+        TRzDBCheckBox *RzDBCheckBox23;
+        TLabel *Label35;
+        TRzDBCheckBox *RzDBCheckBox24;
+        TLabel *Label36;
+        TRzDBCheckBox *RzDBCheckBox25;
+        TRzDBEdit *RzDBEdit42;
+        TRzDBEdit *RzDBEdit45;
+        TRzDBEdit *RzDBEdit46;
+        TRzDBEdit *RzDBEdit50;
+        TRzDBEdit *RzDBEdit49;
+        TRzDBEdit *RzDBEdit47;
+        TRzDBEdit *RzDBEdit51;
+        TRzDBEdit *RzDBEdit52;
+        TRzDBEdit *RzDBEdit53;
+        TLabel *Label1;
+        TRzLine *RzLine2;
+        TRzDBCheckBox *RzDBCheckBox1;
+        TLabel *Label2;
+        void __fastcall btnCloseClick(TObject *Sender);
+private:	// User declarations
+public:		// User declarations
+        __fastcall TSpc_Spur_Form(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TSpc_Spur_Form *Spc_Spur_Form;
+//---------------------------------------------------------------------------
+#endif

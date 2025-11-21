@@ -1,6 +1,6 @@
 object RecForm: TRecForm
-  Left = 670
-  Top = 148
+  Left = 274
+  Top = 144
   BorderStyle = bsNone
   Caption = 'RecForm'
   ClientHeight = 592
@@ -330,7 +330,7 @@ object RecForm: TRecForm
   object Delivery: TAdvToolPanelTab
     Left = 0
     Top = 0
-    Width = 177
+    Width = 329
     Height = 592
     AutoDock = False
     Color = clWhite
@@ -353,8 +353,8 @@ object RecForm: TRecForm
     object AdvToolPanel1: TAdvToolPanel
       Left = 23
       Top = 0
-      Width = 0
-      Height = 0
+      Width = 306
+      Height = 592
       BackgroundTransparent = False
       BackGroundPosition = bpTopLeft
       Button3D = False
@@ -368,6 +368,11 @@ object RecForm: TRecForm
       GradientDirection = gdVertical
       DockDots = True
       Caption = #1055#1077#1095#1072#1090#1100' '#1087#1088#1086#1090#1086#1082#1086#1083#1086#1074
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
       CaptionGradientDirection = gdVertical
       FocusCaptionFontColor = clBlack
       FocusCaptionColor = 12316415
@@ -440,25 +445,45 @@ object RecForm: TRecForm
         Visible = False
       end
       object Label4: TLabel
-        Left = 88
-        Top = 328
+        Left = 8
+        Top = 296
         Width = 68
         Height = 13
         Caption = #1053#1086#1084#1077#1088' '#1079#1072#1082#1072#1079#1072
       end
       object Label16: TLabel
-        Left = 96
-        Top = 376
+        Left = 8
+        Top = 336
         Width = 73
         Height = 13
         Caption = #1053#1086#1084#1077#1085#1082#1083#1072#1090#1091#1088#1072
       end
       object Label17: TLabel
-        Left = 88
-        Top = 416
+        Left = 8
+        Top = 432
         Width = 82
         Height = 13
         Caption = #1044#1086#1089#1090#1091#1087#1085#1099#1077' '#1052#1057#1050
+      end
+      object Label18: TLabel
+        Left = 8
+        Top = 384
+        Width = 63
+        Height = 13
+        Caption = #1044#1072#1090#1072' '#1079#1072#1082#1072#1079#1072
+      end
+      object Label19: TLabel
+        Left = 8
+        Top = 472
+        Width = 60
+        Height = 13
+        Caption = #1050#1086#1085#1090#1088#1072#1075#1077#1085#1090
+      end
+      object Costumer_label: TLabel
+        Left = 11
+        Top = 488
+        Width = 286
+        Height = 13
       end
       object edtProtokol: TComboBox
         Left = 8
@@ -479,8 +504,8 @@ object RecForm: TRecForm
         Visible = False
       end
       object btnPrint: TAdvGlassButton
-        Left = 112
-        Top = 488
+        Left = 8
+        Top = 552
         Width = 137
         Height = 32
         BackColor = clPurple
@@ -677,7 +702,7 @@ object RecForm: TRecForm
       end
       object Lot: TCheckBox
         Left = 9
-        Top = 288
+        Top = 272
         Width = 96
         Height = 17
         Caption = #1047#1072#1082#1072#1079#1099
@@ -685,8 +710,8 @@ object RecForm: TRecForm
         OnClick = LotClick
       end
       object LotNumber: TRzComboBox
-        Left = 56
-        Top = 352
+        Left = 8
+        Top = 312
         Width = 137
         Height = 21
         Color = 15855846
@@ -713,8 +738,8 @@ object RecForm: TRecForm
         OnKeyPress = LotNumberKeyPress
       end
       object LotSpc: TRzComboBox
-        Left = 0
-        Top = 392
+        Left = 8
+        Top = 352
         Width = 249
         Height = 21
         Color = 15855846
@@ -740,8 +765,8 @@ object RecForm: TRecForm
         OnChange = LotSpcChange
       end
       object LotMSK: TRzComboBox
-        Left = 41
-        Top = 438
+        Left = 9
+        Top = 446
         Width = 161
         Height = 21
         Color = 15855846
@@ -765,12 +790,32 @@ object RecForm: TRecForm
         Sorted = True
         TabOrder = 16
       end
+      object ZakazData_Combo: TRzComboBox
+        Left = 8
+        Top = 400
+        Width = 185
+        Height = 21
+        Color = 15855846
+        Ctl3D = False
+        DisabledColor = clBlack
+        FlatButtonColor = clLime
+        FlatButtons = True
+        FrameColor = clRed
+        FrameHotColor = clFuchsia
+        FrameHotTrack = True
+        FrameVisible = True
+        ItemHeight = 13
+        ParentColor = True
+        ParentCtl3D = False
+        Sorted = True
+        TabOrder = 17
+      end
     end
     object AdvToolPanel2: TAdvToolPanel
       Left = 23
       Top = 0
-      Width = 154
-      Height = 592
+      Width = 0
+      Height = 0
       BackgroundTransparent = False
       BackGroundPosition = bpTopLeft
       Button3D = False
@@ -888,7 +933,7 @@ object RecForm: TRecForm
         OnClick = btnNumbers2Click
       end
       object viewNumber2: TRzCheckList
-        Left = 9
+        Left = -7
         Top = 280
         Width = 136
         Height = 177

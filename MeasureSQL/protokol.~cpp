@@ -13,6 +13,7 @@
 #include "ProtokolData.h"
 #include "MathLib.h"
 #include "Data_RQ.h"
+#include "ManualRec.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "VrButtons"
@@ -167,11 +168,13 @@ if (edtProtokol->Text=="Паспорт" || edtProtokol->Text=="Протокол ВП-РК" || edtPr
    edtDate1->Visible=true;
    setDate1->Visible=true;
    Label8->Visible=true;
+   /*
      for (int l=0; l<PNForm->viewNumber->Count; l++){
 
                                 PNForm->viewNumber->ItemState[l]=1;
 
                      }
+  */                   
 }
 else {
  btnNum->Enabled=false;
@@ -782,7 +785,7 @@ ActionList1->Actions[21]->Execute();
 
 RQ_Data->LotNumbers->Active=false;
  RQ_Data->LotNumbers->SQL->Clear();
- RQ_Data->LotNumbers->SQL->Add("Select `ЗаказДата` from `заказы1С_новые` where `ЗаказНомер`='"+LotNumber->Text+"' and `Номенклатура`='"+LotSpc->Text+"'");
+ RQ_Data->LotNumbers->SQL->Add("Select distinct `ЗаказДата` from `заказы1С_новые` where `ЗаказНомер`='"+LotNumber->Text+"' and `Номенклатура`='"+LotSpc->Text+"'");
  RQ_Data->LotNumbers->Active=true;
  RQ_Data->LotNumbers->First();
  ZakazData_Combo->Items->Clear();
@@ -3598,10 +3601,13 @@ for (int i=0;i<DataModule2->ResonatorType->RecordCount;i++){
  RQ_Data->LotNumbers->Active=true;
  RQ_Data->LotNumbers->First();
  LotNumber->Items->Clear();
+ RecForm->LotNumber->Items->Clear();
  for (int i=0; i<RQ_Data->LotNumbers->RecordCount; i++){
+      RecForm->LotNumber->Items->Add(RQ_Data->LotNumbers->FieldByName("ЗаказНомер")->AsString);
       LotNumber->Items->Add(RQ_Data->LotNumbers->FieldByName("ЗаказНомер")->AsString);
       RQ_Data->LotNumbers->Next();
  }
+ 
 
 
 
@@ -3701,12 +3707,14 @@ void __fastcall TProtokolForm::LotChangeExecute(TObject *Sender)
 {
 RQ_Data->LotNumbers->Active=false;
  RQ_Data->LotNumbers->SQL->Clear();
- RQ_Data->LotNumbers->SQL->Add("Select `Номенклатура` from `заказы1С_новые` where `ЗаказНомер`='"+LotNumber->Text+"' and `ОсталосьВыпуститьПоГрафику`>'0'");
+ RQ_Data->LotNumbers->SQL->Add("Select distinct `Номенклатура` from `заказы1С_новые` where `ЗаказНомер`='"+LotNumber->Text+"' and `ОсталосьВыпуститьПоГрафику`>'0'");
  RQ_Data->LotNumbers->Active=true;
  RQ_Data->LotNumbers->First();
  LotSpc->Items->Clear();
+ RecForm->LotSpc->Items->Clear();
  for (int i=0; i<RQ_Data->LotNumbers->RecordCount; i++){
       LotSpc->Items->Add(RQ_Data->LotNumbers->FieldByName("Номенклатура")->AsString);
+      RecForm->LotSpc->Items->Add(RQ_Data->LotNumbers->FieldByName("Номенклатура")->AsString);
       RQ_Data->LotNumbers->Next();
  }
  RQ_Data->LotNumbers->Active=false;
@@ -3715,24 +3723,41 @@ RQ_Data->LotNumbers->Active=false;
 
 void __fastcall TProtokolForm::SpcChangeLotExecute(TObject *Sender)
 {
+ //Выбираем данные из таблицы номенклатуры
  RQ_Data->Spc_RQ->Active=false;
    RQ_Data->Spc_RQ->SQL->Clear();
    RQ_Data->Spc_RQ->SQL->Add("Select `номенклатура` from nomeklatura_rk where `наименование`='"+LotSpc->Text+"'");
    RQ_Data->Spc_RQ->Active=true;
    RQ_Data->Spc_RQ->First();
-
+ //Подбираем измеренные МСК с текущей номенклатурой
 RQ_Data->MSK_JOIN->Active=false;
  RQ_Data->MSK_JOIN->SQL->Clear();
  RQ_Data->MSK_JOIN->SQL->Add("Select `Msk_Name` from `MSK_Join` where `MSK_NOM_ID`='"+RQ_Data->Spc_RQ->FieldByName("номенклатура")->AsString+"'");
  RQ_Data->MSK_JOIN->Active=true;
  RQ_Data->MSK_JOIN->First();
  LotMSK->Items->Clear();
+ RecForm->LotMSK->Items->Clear();
  for (int i=0; i<RQ_Data->MSK_JOIN->RecordCount; i++){
       LotMSK->Items->Add(RQ_Data->MSK_JOIN->FieldByName("Msk_Name")->AsString);
+      RecForm->LotMSK->Items->Add(RQ_Data->MSK_JOIN->FieldByName("Msk_Name")->AsString);
       RQ_Data->MSK_JOIN->Next();
  }
  RQ_Data->Spc_RQ->Active=false;
  RQ_Data->MSK_JOIN->Active=false;
+  //Выбираем доступные даты заказов
+ RQ_Data->LotNumbers->Active=false;
+ RQ_Data->LotNumbers->SQL->Clear();
+ RQ_Data->LotNumbers->SQL->Add("Select distinct `ЗаказДата` from `заказы1С_новые` where `ЗаказНомер`='"+LotNumber->Text+"' and `Номенклатура`='"+LotSpc->Text+"'");
+ RQ_Data->LotNumbers->Active=true;
+ RQ_Data->LotNumbers->First();
+ ZakazData_Combo->Items->Clear();
+ for (int i=0; i<RQ_Data->LotNumbers->RecordCount; i++){
+      ZakazData_Combo->Items->Add(RQ_Data->LotNumbers->FieldByName("ЗаказДата")->AsString);
+      RQ_Data->LotNumbers->Next();
+ }
+ RQ_Data->LotNumbers->Active=false;
+ ZakazData_Combo->ItemIndex=0;
+
 }
 //---------------------------------------------------------------------------
 

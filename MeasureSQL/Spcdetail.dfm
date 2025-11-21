@@ -2647,4 +2647,26 @@ object SpcDetailForm: TSpcDetailForm
     OnChange = edtTypeChange
     OnSelect = edtTypeSelect
   end
+  object AdvGlassButton1: TAdvGlassButton
+    Left = 672
+    Top = 744
+    Width = 105
+    Height = 32
+    BackColor = clWhite
+    Caption = #1053'. '#1088#1077#1079#1086#1085#1072#1085#1089#1099
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ForeColor = clWhite
+    GlowColor = 16760205
+    InnerBorderColor = clBlack
+    OuterBorderColor = clWhite
+    ParentFont = False
+    ShineColor = clWhite
+    TabOrder = 114
+    Version = '1.2.3.0'
+    OnClick = AdvGlassButton1Click
+  end
 end

@@ -113,6 +113,10 @@ __published:	// IDE-managed Components
         TAdvGlassButton *btnSetSpc;
         TComboBox *cmbType;
         TComboBox *cmbSpc;
+        TRzComboBox *ZakazData_Combo;
+        TLabel *Label18;
+        TLabel *Label19;
+        TLabel *Costumer_label;
         void __fastcall btnCloseClick(TObject *Sender);
         void __fastcall FormShow(TObject *Sender);
         void __fastcall edtTypeChange(TObject *Sender);

@@ -7,6 +7,9 @@
 #include "Main.h"
 #include "data1.h"
 #include "Data_MeasureModule.h"
+#include "spc_spur_.h"
+#include "spc.h"
+#include "Spcdetail.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "DBAccess"

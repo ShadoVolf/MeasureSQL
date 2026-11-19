@@ -71,6 +71,7 @@ USEFORM("New_Data4.cpp", New_Data); /* TDataModule: File Type */
 USEFORM("Data_MeasureModule.cpp", Data_Measure); /* TDataModule: File Type */
 USEFORM("Config_View.cpp", Config_View_Form);
 USEFORM("Machine_Change.cpp", Machine_Change_Form);
+USEFORM("spc_spur_.cpp", Spc_Spur_Form);
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
@@ -125,6 +126,7 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
                  Application->CreateForm(__classid(TTempMainForm), &TempMainForm);
                  Application->CreateForm(__classid(TTempDataModule), &TempDataModule);
                  Application->CreateForm(__classid(TBarCodeMskForm), &BarCodeMskForm);
+                 Application->CreateForm(__classid(TSpc_Spur_Form), &Spc_Spur_Form);
                  Application->CreateForm(__classid(TSpcSelectForm), &SpcSelectForm);
                  Application->CreateForm(__classid(TFileLoadForm), &FileLoadForm);
                  Application->CreateForm(__classid(TProtokol_Select_Form), &Protokol_Select_Form);

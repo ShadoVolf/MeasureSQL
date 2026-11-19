@@ -487,7 +487,7 @@ DataModule1->CreateLianozTable->SQL->Add("   `Date` char(20) default NULL,  `NN`
 DataModule1->CreateLianozTable->SQL->Add("   `Fmin` float(9,3) default NULL,  `Ftgk` float(9,3) default NULL,  `Rtgk` float(9,3) default NULL,  `Measure_Protokol_ID` int(11) default NULL, `Measure_ID` int(11) default NULL,`PMI` tinyint(1) default NULL,");
 DataModule1->CreateLianozTable->SQL->Add("   `Ft1` float(9,3) default NULL,  `Ft2` float(9,3) default NULL,  `Ft3` float(9,3) default NULL, `C1_2C0` float(9,3) default NULL, `Shum_1` float(9,3) default NULL,`G` float(9,4) default NULL,");
 DataModule1->CreateLianozTable->SQL->Add("   `Variant` char(50) default NULL,`Fn` float(9,3) default NULL,`PH_OCS` char(50) default NULL,`PH_Analyser` char(50) default NULL,`PH_Analyser_SN` char(50) default NULL,`TurnOver` float(9,3) default NULL,");
-DataModule1->CreateLianozTable->SQL->Add("   `Customer` varchar(100) default NULL,`Dogovor` varchar(10) default NULL,");
+DataModule1->CreateLianozTable->SQL->Add("   `Customer` varchar(100) default NULL,`Dogovor` varchar(100) default NULL,");
 DataModule1->CreateLianozTable->SQL->Add("   PRIMARY KEY  (`ID`),  UNIQUE KEY `ID` USING BTREE (`ID`)) ENGINE=MEMORY AUTO_INCREMENT=3 DEFAULT CHARSET=cp1251 MAX_ROWS=1000 ROW_FORMAT=FIXED;");
 }
 //---------------------------------------------------------------------------

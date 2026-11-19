@@ -13,6 +13,7 @@
 #include "SpcMore.h"
 #include "spc.h"
 #include "spc_spur_.h"
+#include "data1.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "VrButtons"

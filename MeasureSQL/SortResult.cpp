@@ -250,15 +250,31 @@ for (int i=0;i<DataModule2->psiData->RecordCount; i++){
            for (int j=0;j<DataModule2->psiData4->RecordCount; j++){
                       if (DataModule2->psiData->FieldByName("N")->AsString==DataModule2->psiData4->FieldByName("N")->AsString){
                           DataModule2->psiData->Edit();
-                          DataModule2->psiData->FieldByName("F")->AsFloat=DataModule2->psiData4->FieldByName("F")->AsFloat;
-                          DataModule2->psiData->FieldByName("R")->AsFloat=DataModule2->psiData4->FieldByName("R")->AsFloat;
-                          DataModule2->psiData->FieldByName("C0")->AsFloat=DataModule2->psiData4->FieldByName("C0")->AsFloat;
-                          DataModule2->psiData->FieldByName("Cq")->AsFloat=DataModule2->psiData4->FieldByName("Cq")->AsFloat;
-                          DataModule2->psiData->FieldByName("L")->AsFloat=DataModule2->psiData4->FieldByName("L")->AsFloat;
-                          DataModule2->psiData->FieldByName("Q")->AsFloat=DataModule2->psiData4->FieldByName("Q")->AsFloat;
+                           if (!chk_spur_only->Checked) {
+                                  DataModule2->psiData->FieldByName("F")->AsFloat=DataModule2->psiData4->FieldByName("F")->AsFloat;
+                                  DataModule2->psiData->FieldByName("R")->AsFloat=DataModule2->psiData4->FieldByName("R")->AsFloat;
+                                  DataModule2->psiData->FieldByName("C0")->AsFloat=DataModule2->psiData4->FieldByName("C0")->AsFloat;
+                                  DataModule2->psiData->FieldByName("Cq")->AsFloat=DataModule2->psiData4->FieldByName("Cq")->AsFloat;
+                                  DataModule2->psiData->FieldByName("L")->AsFloat=DataModule2->psiData4->FieldByName("L")->AsFloat;
+                                  DataModule2->psiData->FieldByName("Q")->AsFloat=DataModule2->psiData4->FieldByName("Q")->AsFloat;
+                           }
+
+                          if (chk_add_spur->Checked) {
+
+                                  DataModule2->psiData->FieldByName("Spur")->AsFloat   = DataModule2->psiData4->FieldByName("Spur")->AsFloat;
+                                  DataModule2->psiData->FieldByName("Rsp1")->AsFloat   = DataModule2->psiData4->FieldByName("Rsp1")->AsFloat;
+                                  DataModule2->psiData->FieldByName("Rsp2")->AsFloat   = DataModule2->psiData4->FieldByName("Rsp2")->AsFloat;
+                                  DataModule2->psiData->FieldByName("Rsp3")->AsFloat   = DataModule2->psiData4->FieldByName("Rsp3")->AsFloat;
+                                  DataModule2->psiData->FieldByName("FSpur1")->AsFloat = DataModule2->psiData4->FieldByName("FSpur1")->AsFloat;
+                                  DataModule2->psiData->FieldByName("FSpur2")->AsFloat = DataModule2->psiData4->FieldByName("FSpur2")->AsFloat;
+                                  DataModule2->psiData->FieldByName("FSpur3")->AsFloat = DataModule2->psiData4->FieldByName("FSpur3")->AsFloat;
+                            }
+
                           DataModule2->psiData->Post();
                           break;
                       }
+
+
 
                  DataModule2->psiData4->Next();
            }//for temp 25

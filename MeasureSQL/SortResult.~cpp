@@ -154,7 +154,7 @@ void __fastcall TSortResultForm::edtSpc1Change(TObject *Sender)
 {
 edtMsk1->Items->Clear();
 
-AnsiString S,S1,S2;
+AnsiString S,S1;
 VrProgressBar1->Position=0;
 
 DataModule2->psiData->Active=false;
@@ -162,9 +162,8 @@ DataModule2->psiData->SQL->Clear();
 DataModule2->psiData->SQL->Add("Select * from psidata where Spc='"+edtSpc1->Text+"' ORDER BY msk");
 DataModule2->psiData->Active=true;
 DataModule2->psiData->First();
-cmb_ID2->Clear() ;
+cmb_ID1->Clear() ;
 VrProgressBar1->MaxValue=DataModule2->psiData->RecordCount;
-edtMsk->Items->Add(DataModule2->psiData->FieldByName("Msk")->AsString);
 S=DataModule2->psiData->FieldByName("Msk")->AsString;
 edtMsk1->Items->Add(DataModule2->psiData->FieldByName("Msk")->AsString);
 for (int i=0;i<DataModule2->psiData->RecordCount;i++){
@@ -177,20 +176,7 @@ for (int i=0;i<DataModule2->psiData->RecordCount;i++){
                       edtMsk1->Items->Add(DataModule2->psiData->FieldByName("Msk")->AsString);
                       S=DataModule2->psiData->FieldByName("Msk")->AsString;
              }
-               int p1=1;
-         S2=DataModule2->psiData->FieldByName("Measure_ID")->AsString;
-         for (int j1=0;j1<cmb_ID1->Items->Count; j1++){
-               if (S2==cmb_ID1->Items->Strings[j1]){
-               p1=0;
-               break;
-               }
-             p1=1;
-          }
-          if (p1==1){
-           cmb_ID1->Items->Add(S2);
-
-          }
-
+         
 
       }
  edtMsk1->Enabled=true;
@@ -273,6 +259,16 @@ for (int i=0;i<DataModule2->psiData->RecordCount; i++){
                           DataModule2->psiData->Post();
                           break;
                       }
+
+                      if (chk_add_spur->Checked) {
+                                  DataModule2->psiData->FieldByName("Spur")->AsFloat   = DataModule2->psiData4->FieldByName("Spur")->AsFloat;
+                                  DataModule2->psiData->FieldByName("Rsp1")->AsFloat   = DataModule2->psiData4->FieldByName("Rsp1")->AsFloat;
+                                  DataModule2->psiData->FieldByName("Rsp2")->AsFloat   = DataModule2->psiData4->FieldByName("Rsp2")->AsFloat;
+                                  DataModule2->psiData->FieldByName("Rsp3")->AsFloat   = DataModule2->psiData4->FieldByName("Rsp3")->AsFloat;
+                                  DataModule2->psiData->FieldByName("FSpur1")->AsFloat = DataModule2->psiData4->FieldByName("FSpur1")->AsFloat;
+                                  DataModule2->psiData->FieldByName("FSpur2")->AsFloat = DataModule2->psiData4->FieldByName("FSpur2")->AsFloat;
+                                  DataModule2->psiData->FieldByName("FSpur3")->AsFloat = DataModule2->psiData4->FieldByName("FSpur3")->AsFloat;
+                            }
 
                  DataModule2->psiData4->Next();
            }//for temp 25
@@ -560,6 +556,27 @@ void __fastcall TSortResultForm::cmb_id3KeyPress(TObject *Sender,
  cmb_ID2->ItemIndex=0;
     }
 }
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TSortResultForm::edtMsk1Change(TObject *Sender)
+{
+
+DataModule2->psiData->Active=false;
+DataModule2->psiData->SQL->Clear();
+DataModule2->psiData->SQL->Add("Select distinct `Measure_ID` from psidata where Msk='"+edtMsk1->Text+"' ORDER BY Measure_ID");
+DataModule2->psiData->Active=true;
+DataModule2->psiData->First();
+
+
+for (int i=0;i<DataModule2->psiData->RecordCount;i++){
+         cmb_ID1->Items->Add(DataModule2->psiData->FieldByName("Measure_ID")->AsString);
+         DataModule2->psiData->Next();
+          }
+
+ edtMsk1->Enabled=true;
+ chkUse1->Checked=true;
+ 
 }
 //---------------------------------------------------------------------------
 

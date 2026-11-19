@@ -163,9 +163,9 @@ object ZapacForm: TZapacForm
   object Label19: TLabel
     Left = 200
     Top = 387
-    Width = 90
+    Width = 82
     Height = 13
-    Caption = #1052#1086#1085#1086#1090#1086#1085#1085#1085#1086#1089#1090#1100' %'
+    Caption = #1052#1086#1085#1086#1090#1086#1085#1085#1085#1086#1089#1090#1100' '
   end
   object edtR: TRzDBEdit
     Left = 128

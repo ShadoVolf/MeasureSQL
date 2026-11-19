@@ -1,6 +1,6 @@
 object DostupForm: TDostupForm
-  Left = 593
-  Top = 487
+  Left = 1075
+  Top = 418
   BorderStyle = bsSingle
   Caption = #1052#1086#1088#1080#1086#1085
   ClientHeight = 339

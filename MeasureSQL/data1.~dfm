@@ -2,12 +2,12 @@ object DataModule2: TDataModule2
   OldCreateOrder = False
   Left = 570
   Top = 196
-  Height = 726
-  Width = 1022
+  Height = 746
+  Width = 1084
   object SqlSpec: TMyQuery
     Connection = DataModule1.CoordinatorDB
     SQL.Strings = (
-      'select * from specification where ID='#39'15678'#39)
+      'select * from specification where ID='#39'15748'#39)
     AutoCalcFields = False
     Left = 88
     Top = 104
@@ -29,7 +29,7 @@ object DataModule2: TDataModule2
   object psiData: TMyQuery
     Connection = DataModule1.CoordinatorDB
     SQL.Strings = (
-      'select * from psidata where Measure_ID='#39'161359'#39' order by N')
+      'select * from psidata where Measure_ID='#39'271056'#39' order by N')
     Options.FullRefresh = True
     Options.UpdateAllFields = True
     DetailFields = 'N'
@@ -271,7 +271,7 @@ object DataModule2: TDataModule2
       'Select * from nomeklatura_rk_psi')
     MasterSource = DataModule1.CrystalDataSource
     DetailFields = 'N'
-    Left = 576
+    Left = 592
     Top = 304
   end
   object Nomenklatura_RK: TMyQuery
@@ -504,8 +504,8 @@ object DataModule2: TDataModule2
     Connection = DataModule1.CoordinatorDB
     SQL.Strings = (
       'select SQL_NO_CACHE * from Factory_name')
-    Left = 672
-    Top = 240
+    Left = 648
+    Top = 224
   end
   object psiDataTemp4: TMyQuery
     Connection = DataModule1.CoordinatorDB

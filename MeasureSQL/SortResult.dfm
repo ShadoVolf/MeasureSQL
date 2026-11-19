@@ -467,4 +467,20 @@ object SortResultForm: TSortResultForm
     TabOrder = 20
     OnKeyPress = cmb_id3KeyPress
   end
+  object chk_add_spur: TCheckBox
+    Left = 306
+    Top = 264
+    Width = 284
+    Height = 17
+    Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1085#1077#1078#1077#1083#1072#1090#1077#1083#1100#1085#1099#1077' '#1088#1077#1079#1086#1085#1072#1085#1089#1099
+    TabOrder = 21
+  end
+  object chk_spur_only: TCheckBox
+    Left = 306
+    Top = 288
+    Width = 284
+    Height = 17
+    Caption = #1058#1086#1083#1100#1082#1086' '#1085#1077#1078#1077#1083#1072#1090#1077#1083#1100#1085#1099#1077' '#1088#1077#1079#1086#1085#1072#1085#1089#1099
+    TabOrder = 22
+  end
 end

@@ -78,6 +78,21 @@ TMainForm *MainForm;
 int numberSelect;
 AnsiString MeasureID;
 int FileSelect_index=0;
+
+static double SpurFreqToKHz(double rawFreq, double nominalMHz)
+{
+    if (rawFreq <= 0.0 || rawFreq >= 1.0E30)
+        return 0.0;
+
+    double freqHz;
+    if (rawFreq > 10000.0)
+        freqHz = rawFreq;          // уже Гц
+    else
+        freqHz = rawFreq * 1.0E6;  // МГц -> Гц
+
+    double nominalHz = nominalMHz * 1.0E6;
+    return (freqHz - nominalHz) / 1000.0; // кГц относительно номинала
+}
 //---------------------------------------------------------------------------
 __fastcall TMainForm::TMainForm(TComponent* Owner)
         : TForm(Owner)
@@ -1992,7 +2007,7 @@ int l3=0;
                 }
 
         ResultForm->ResultGrid->Cells[Nar[14]][i+1]= SEdit1->Text;
-        Rmax=SEdit1->Text;
+        Rmax=SEdit1->AsFloat;
                    if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
                      if (Rmax>0 & Rmax<10000){
                             DataModule1->SQLPSIData->FieldByName("Rmax")->AsString=ResultForm->ResultGrid->Cells[Nar[14]][i+1];
@@ -4792,211 +4807,458 @@ if(DataModule1->SqlSpecification->FieldByName("M")->AsString=="True"){
                                                    }
                                }
    }
-//****************************************Spur#1********************************************************************************************************
- if(DataModule1->SqlSpecification->FieldByName("Rsp1")->AsString=="True" || DataModule1->SqlSpecification->FieldByName("Spur_Use")->AsString=="True"){
-            DataModule1->SQLSetupData->First();
-            double x1,x2,x3,Y1,Y2;
-            Y1=0;Y2=0;
-            x1=StrToFloat(DataModule1->SqlSpecification->FieldByName("Rsp1tBegin")->AsString);
 
-          for(int j=0;j<Nt;j++){
-                  x3=DataModule1->SQLSetupData->FieldByName("fSetTemperature")->AsFloat;
-                       if(x3==x1){
-                               if (DataModule1->SQLSetupData->FieldByName("fValue5")->AsFloat>0 & DataModule1->SQLSetupData->FieldByName("fValue5")->AsFloat<1E30){
-                                         Y1=20*log10(DataModule1->SQLSetupData->FieldByName("fValue5")->AsFloat);
-                                   }
-                                   else { Y1==0;}
-                                      if (Y1>Y2){
-                                                Y2=Y1;
-                                       }
+
+ /**************************************** Spur #1********************************************************************************************************/
+if(DataModule1->SqlSpecification->FieldByName("Rsp1")->AsString=="True" && DataModule1->SqlSpecification->FieldByName("Spur_Use")->AsString=="True"){
+    DataModule1->SQLSetupData->First();
+    double x1, x2, x3, Y1, Y2;
+    double spur_f_1;
+    Y1 = 0; Y2 = 0;
+    x1 = StrToFloat(DataModule1->SqlSpecification->FieldByName("Rsp1tBegin")->AsString);
+    double spur_1;
+    double spur_r_1;
+
+    // Считываем флаг переключения единиц: True - считаем по амплитуде, False/no - по сопротивлению
+    bool use_amplitude = (DataModule1->SqlSpecification->FieldByName("Spur_F_1_AMP_Unit")->AsString == "True");
+
+    for(int j = 0; j < Nt; j++){
+        x3 = DataModule1->SQLSetupData->FieldByName("fSetTemperature")->AsFloat;
+        spur_1 = DataModule1->SQLSetupData->FieldByName("fValue5")->AsFloat; // Перенесли внутрь цикла для корректного считывания на каждом шаге
+        spur_r_1 = DataModule1->SQLSetupData->FieldByName("fValue4")->AsFloat;
+        if(x3 == x1){
+            if (spur_1 > 0 && spur_1 < 1E30){
+                
+                // --- ЛОГИКА ПЕРЕКЛЮЧЕНИЯ: АМПЛИТУДА vs СОПРОТИВЛЕНИЕ ---
+                if (use_amplitude) {
+                    // 1. Ищем R1 (fRr) на ТЕКУЩЕЙ температуре x3 в таблице SQLCrystalData
+                    double r1_val = 0.0;
+                    bool r1_found = false;
+                    
+                    DataModule1->SQLCrystalData->First();
+                    while(!DataModule1->SQLCrystalData->Eof) {
+                        // Предполагаем, что поле температуры в SQLCrystalData называется аналогично, например "fSetTemperature" или "Temperature"
+                        // ЗАМЕНИТЕ "fSetTemperature" ниже на реальное имя поля температуры в вашей таблице кристаллов, если оно отличается!
+                        if(DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat == x3) {
+                            r1_val = DataModule1->SQLCrystalData->FieldByName("fRr")->AsFloat;
+                            r1_found = true;
+                            break; // Температура найдена, выходим из поиска R1
                         }
-                  DataModule1->SQLSetupData->Next();
-                  SEdit1->AsFloat=Y2;
-                  ResultForm->ResultGrid->Cells[Nar[24]][i+1]=SEdit1->Text;
-         if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
-                if (DataModule1->SQLSetupData->FieldByName("fValue5")->AsFloat>=0){
-                DataModule1->SQLPSIData->FieldByName("Spur")->AsString=ResultForm->ResultGrid->Cells[Nar[24]][i+1];
-                DataModule1->SQLPSIData->FieldByName("Rsp1")->AsString=ResultForm->ResultGrid->Cells[Nar[24]][i+1];
-                DataModule1->SQLPSIData->FieldByName("FSpur1")->AsString=DataModule1->SQLSetupData->FieldByName("fValue6")->AsString;
+                        DataModule1->SQLCrystalData->Next();
+                    }
+
+                    // Если вдруг температура в таблице кристаллов не нашлась, берем среднее/номинальное значение, чтобы не делить на 0
+                    if(!r1_found || r1_val <= 0) {
+                        r1_val = 12.0; // Безопасное дефолтное значение
+                    }
+
+                    // 2. Считаем SPDB (амплитудное относительное подавление в дБ)
+                    // spur_1 здесь выступает как Rsp (сопротивление побочного резонанса)
+                    Y1 = -20 * log10((25.0 + r1_val) / (25.0 + spur_r_1));
                 }
-           }
-           }
- double x,y,z;
-               z=Y2;
-                if (MinRsp1==0){
-                               MinRsp1=z;
-                               }
-                SumRsp1=SumRsp1+z;
-               if (z>MaxRsp1){
-                              MaxRsp1=z;
-                 }
-               if (z<MinRsp1){
-                              if (z!=0){
-                                       MinRsp1=z;
-                                       }
-                   }
+                else {
+                    // Стандартный расчет по чистому сопротивлению в дБ (Spur_DB = 20*lg(Rsp))
+                    // Примечание: в вашей исходной формуле считался логарифм самого сопротивления, сохраняем эту логику
+                    Y1 = -20 * log10(spur_1);
+                }
+
+            }
+            else {
+                Y1 = 0; // Исправлена синтаксическая ошибка: вместо оператора сравнения '==' теперь оператор присваивания '='
+            }
+            
+            //if (Y1 > Y2){
+                Y2 = Y1;
+           // }
+        }
+        DataModule1->SQLSetupData->Next();
+    }
+
+    SEdit1->AsFloat = Y2;
+    ResultForm->ResultGrid->Cells[Nar[24]][i+1] = SEdit1->Text;
+
+    // Для записи частоты шпора возвращаем указатель SetupData обратно на First() или организуем логику,
+    // но в оригинальном коде здесь считывалась частота с текущей (последней) позиции курсора. Сохраняем:
+    spur_f_1 = SpurFreqToKHz(
+    DataModule1->SQLSetupData->FieldByName("fValue6")->AsFloat,
+    DataModule1->SqlSpecification->FieldByName("Nominal")->AsFloat
+);
+/*
+    if (DataModule1->SqlSpecification->FieldByName("Spur_F_1_use")->AsString=="True"){
+        if (DataModule1->SQLSetupData->FieldByName("fValue6")->AsFloat < 1E30){
+            spur_f_1 = DataModule1->SQLSetupData->FieldByName("fValue6")->AsFloat;
+        }
+        else {
+            spur_f_1 = 0;
+        }
+    }
+  */
+    if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
+        if (DataModule1->SQLSetupData->FieldByName("fValue5")->AsFloat >= 0){
+            DataModule1->SQLPSIData->FieldByName("Spur")->AsString = ResultForm->ResultGrid->Cells[Nar[24]][i+1];
+            DataModule1->SQLPSIData->FieldByName("Rsp1")->AsString = ResultForm->ResultGrid->Cells[Nar[24]][i+1];
+            DataModule1->SQLPSIData->FieldByName("FSpur1")->AsString = FloatToStr(spur_f_1);
+            //DataModule1->SQLPSIData->FieldByName("FSpur1")->AsString = DataModule1->SQLSetupData->FieldByName("fValue6")->AsString;
+        }
+    }
+
+    double x, y, z;
+    z = Y2;
+    if (MinRsp1 == 0){
+        MinRsp1 = z;
+    }
+    SumRsp1 = SumRsp1 + z;
+    if (z > MaxRsp1){
+        MaxRsp1 = z;
+    }
+    if (z < MinRsp1){
+        if (z != 0){
+            MinRsp1 = z;
+        }
+    }
+
+    bool spur_freq_max = true;
+    bool spur_freq_min = true;
+    
+    if (DataModule1->SqlSpecification->FieldByName("Spur_F_1_use")->AsString=="True"){
+        if(DataModule1->SqlSpecification->FieldByName("Spur_F_1_Max")->AsString!="no"){
+            if (spur_f_1 <= DataModule1->SqlSpecification->FieldByName("Spur_F_1_Max")->AsFloat){
+                spur_freq_max = true;
+            }
+            else {
+                spur_freq_max = false;
+            }
+        }
+        if(DataModule1->SqlSpecification->FieldByName("Spur_F_1_Min")->AsString!="no"){
+            if (spur_f_1 >= DataModule1->SqlSpecification->FieldByName("Spur_F_1_Min")->AsFloat){
+                spur_freq_min = true;
+            }
+            else {
+                spur_freq_min = false;
+            }
+        }
+    }
+    
+    if(DataModule1->SqlSpecification->FieldByName("Rsp1")->AsString=="True"){
+        if(DataModule1->SqlSpecification->FieldByName("Rsp1max")->AsString!="no"){
+            x = DataModule1->SqlSpecification->FieldByName("Rsp1max")->AsFloat;
+            if(z > x){
+                if (spur_freq_max && spur_freq_min){
+                    ResultForm->ResultGrid->Cells[Nar[24]][i+1] = ResultForm->ResultGrid->Cells[Nar[24]][i+1] + "+";
+                    g = 1;
+                    counterRsp1++;
+                }
+            }
+        }
+        if(DataModule1->SqlSpecification->FieldByName("Rsp1min")->AsString!="no"){
+            y = DataModule1->SqlSpecification->FieldByName("Rsp1min")->AsFloat;
+            if(z < y){
+                if (spur_freq_max && spur_freq_min){
+                    ResultForm->ResultGrid->Cells[Nar[24]][i+1] = ResultForm->ResultGrid->Cells[Nar[24]][i+1] + "-";
+                    g = 1;
+                    counterRsp1++;
+                }
+            }
+        }
+    }
+}
 
 
-                  if(DataModule1->SqlSpecification->FieldByName("Rsp1")->AsString=="True"){
-                          if(DataModule1->SqlSpecification->FieldByName("Rsp1max")->AsString!="no"){
-                                  x=DataModule1->SqlSpecification->FieldByName("Rsp1max")->AsFloat;
-                                  if(z>x){
-                                          ResultForm->ResultGrid->Cells[Nar[24]][i+1]=ResultForm->ResultGrid->Cells[Nar[24]][i+1]+"+";
-                                          g=1;
-                                          counterRsp1++;
-                                 }
-                           }
-                            if(DataModule1->SqlSpecification->FieldByName("Rsp1min")->AsString!="no"){
-                                  y=DataModule1->SqlSpecification->FieldByName("Rsp1min")->AsFloat;
-                                  if(z<y){
-                                          ResultForm->ResultGrid->Cells[Nar[24]][i+1]=ResultForm->ResultGrid->Cells[Nar[24]][i+1]+"-";
-                                          g=1;
-                                          counterRsp1++;
-                                 }
-                           }
-
-                   }
 
 
-
- }
 //**********************************************************************************************************************************************************
- //****************************************Spur#2********************************************************************************************************
- if(DataModule1->SqlSpecification->FieldByName("Rsp2")->AsString=="True"){
-            DataModule1->SQLSetupData->First();
-            double x1,x2,x3,Y1,Y2;
-            Y1=0;Y2=0;
-            x1=StrToFloat(DataModule1->SqlSpecification->FieldByName("Rsp2tBegin")->AsString);
 
-          for(int j=0;j<Nt;j++){
-                  x3=DataModule1->SQLSetupData->FieldByName("fSetTemperature")->AsFloat;
-                       if(x3==x1){
-                               if (DataModule1->SQLSetupData->FieldByName("fValue11")->AsFloat>0 & DataModule1->SQLSetupData->FieldByName("fValue11")->AsFloat<1E30){
-                                         Y1=20*log10(DataModule1->SQLSetupData->FieldByName("fValue11")->AsFloat);
-                                   }
-                                   else { Y1==0;}
-                                      if (Y1>Y2){
-                                                Y2=Y1;
-                                       }
+  /****************************************Spur#2********************************************************************************************************/
+if(DataModule1->SqlSpecification->FieldByName("Rsp2")->AsString=="True" && DataModule1->SqlSpecification->FieldByName("Spur_Use")->AsString=="True"){
+    DataModule1->SQLSetupData->First();
+    double x1, x2, x3, Y1, Y2;
+    Y1 = 0; Y2 = 0;
+    double spur_f_2;
+    double spur_r_2;
+    x1 = StrToFloat(DataModule1->SqlSpecification->FieldByName("Rsp2tBegin")->AsString);
+
+    // Считываем флаг переключения единиц для второго побочного резонанса
+    bool use_amplitude_2 = (DataModule1->SqlSpecification->FieldByName("Spur_F_2_AMP_Unit")->AsString == "True");
+
+    for(int j = 0; j < Nt; j++){
+        x3 = DataModule1->SQLSetupData->FieldByName("fSetTemperature")->AsFloat;
+        double spur_2 = DataModule1->SQLSetupData->FieldByName("fValue8")->AsFloat; // Вынесли значение шпора в переменную для удобства
+        spur_r_2 = DataModule1->SQLSetupData->FieldByName("fValue7")->AsFloat;
+        if(x3 == x1){
+            if (spur_2 > 0 && spur_2 < 1E30){
+
+                // --- ЛОГИКА ПЕРЕКЛЮЧЕНИЯ: АМПЛИТУДА (дБ) vs СОПРОТИВЛЕНИЕ (Ом) ---
+                if (use_amplitude_2) {
+                    // 1. Ищем R1 (fRr) на ТЕКУЩЕЙ температуре x3 в таблице SQLCrystalData
+                    double r1_val = 0.0;
+                    bool r1_found = false;
+
+                    DataModule1->SQLCrystalData->First();
+                    while(!DataModule1->SQLCrystalData->Eof) {
+                        if(DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat == x3) {
+                            r1_val = DataModule1->SQLCrystalData->FieldByName("fRr")->AsFloat;
+                            r1_found = true;
+                            break; // Нашли соответствие по температуре, выходим из цикла поиска R1
                         }
-                  DataModule1->SQLSetupData->Next();
-                  SEdit1->AsFloat=Y2;
-                  ResultForm->ResultGrid->Cells[Nar[38]][i+1]=SEdit1->Text;
-         if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
-                if (DataModule1->SQLSetupData->FieldByName("fValue8")->AsFloat>0 & DataModule1->SQLSetupData->FieldByName("fValue8")->AsFloat<1E30){
-                DataModule1->SQLPSIData->FieldByName("Rsp2")->AsString=ResultForm->ResultGrid->Cells[Nar[38]][i+1];
-                DataModule1->SQLPSIData->FieldByName("FSpur2")->AsString=DataModule1->SQLSetupData->FieldByName("fValue8")->AsString;
+                        DataModule1->SQLCrystalData->Next();
+                    }
+
+                    // Защита от деления на ноль, если температура не найдена или R1 некорректен
+                    if(!r1_found || r1_val <= 0) {
+                        r1_val = 12.0; 
+                    }
+
+                    // 2. Расчет относительного амплитудного затухания SPDB для шпора №2
+                    Y1 = -20 * log10((25.0 + r1_val) / (25.0 + spur_r_2));
                 }
-           }
-           }
- double x,y,z;
-               z=Y2;
-                if (MinRsp2==0){
-                               MinRsp2=z;
-                               }
-                SumRsp2=SumRsp2+z;
-               if (z>MaxRsp2){
-                              MaxRsp2=z;
-                 }
-               if (z<MinRsp2){
-                              if (z!=0){
-                                       MinRsp2=z;
-                                       }
-                   }
+                else {
+                    // Стандартный логарифмический расчет по чистому сопротивлению
+                    Y1 = -20 * log10(spur_2);
+                }
+            }
+            else { 
+                Y1 = 0; // Исправлена синтаксическая ошибка '==' на '='
+            }
+            
+            //if (Y1 > Y2){
+                Y2 = Y1;
+           // }
+        }
+
+        DataModule1->SQLSetupData->Next();
+    }
+    
+    SEdit1->AsFloat = Y2;
+    ResultForm->ResultGrid->Cells[Nar[38]][i+1] = SEdit1->Text;
+   /*
+    if (DataModule1->SqlSpecification->FieldByName("Spur_F_2_use")->AsString == "True"){
+        if (DataModule1->SQLSetupData->FieldByName("fValue9")->AsFloat < 1E30){
+            spur_f_2 = DataModule1->SQLSetupData->FieldByName("fValue9")->AsFloat;
+        }
+        else {
+            spur_f_2 = 0;
+        }
+    }
+    */
+      spur_f_2 = SpurFreqToKHz(
+    DataModule1->SQLSetupData->FieldByName("fValue9")->AsFloat,
+    DataModule1->SqlSpecification->FieldByName("Nominal")->AsFloat
+);
+    if (DataModule1->SqlSpecification->FieldByName("BD")->AsString == "True"){
+        if (DataModule1->SQLSetupData->FieldByName("fValue9")->AsFloat < 1E30){
+            DataModule1->SQLPSIData->FieldByName("Rsp2")->AsString = ResultForm->ResultGrid->Cells[Nar[38]][i+1];
+             DataModule1->SQLPSIData->FieldByName("FSpur2")->AsString = FloatToStr(spur_f_2);
+            //DataModule1->SQLPSIData->FieldByName("FSpur2")->AsString = DataModule1->SQLSetupData->FieldByName("fValue9")->AsString;
+        }
+    }
+
+    double x, y, z;
+    z = Y2;
+    if (MinRsp2 == 0){
+        MinRsp2 = z;
+    }
+    SumRsp2 = SumRsp2 + z;
+    if (z > MaxRsp2){
+        MaxRsp2 = z;
+    }
+    if (z < MinRsp2){
+        if (z != 0){
+            MinRsp2 = z;
+        }
+    }
+
+    bool spur_freq_max = true;
+    bool spur_freq_min = true;
+    
+    if (DataModule1->SqlSpecification->FieldByName("Spur_F_2_use")->AsString == "True"){
+        if(DataModule1->SqlSpecification->FieldByName("Spur_F_2_Max")->AsString != "no"){
+            if (spur_f_2 <= DataModule1->SqlSpecification->FieldByName("Spur_F_2_Max")->AsFloat){
+                spur_freq_max = true;
+            }
+            else {
+                spur_freq_max = false;
+            }
+        }
+        if(DataModule1->SqlSpecification->FieldByName("Spur_F_2_Min")->AsString != "no"){
+            if (spur_f_2 >= DataModule1->SqlSpecification->FieldByName("Spur_F_2_Min")->AsFloat){
+                spur_freq_min = true;
+            }
+            else {
+                spur_freq_min = false;
+            }
+        }
+    }
+
+    if(DataModule1->SqlSpecification->FieldByName("Rsp2max")->AsString != "no"){
+        x = DataModule1->SqlSpecification->FieldByName("Rsp2max")->AsFloat;
+        if(z > x){
+            if (spur_freq_max && spur_freq_min){
+                ResultForm->ResultGrid->Cells[Nar[38]][i+1] = ResultForm->ResultGrid->Cells[Nar[38]][i+1] + "+";
+                g = 1;
+                counterRsp2++;
+            }
+        }
+    }
+    
+    if(DataModule1->SqlSpecification->FieldByName("Rsp2min")->AsString != "no"){
+        y = DataModule1->SqlSpecification->FieldByName("Rsp2min")->AsFloat;
+        if(z < y){
+            if (spur_freq_max && spur_freq_min){
+                ResultForm->ResultGrid->Cells[Nar[38]][i+1] = ResultForm->ResultGrid->Cells[Nar[38]][i+1] + "-";
+                g = 1;
+                counterRsp2++;
+            }
+        }
+    }
+}
 
 
 
-                          if(DataModule1->SqlSpecification->FieldByName("Rsp2max")->AsString!="no"){
-                                  x=DataModule1->SqlSpecification->FieldByName("Rsp2max")->AsFloat;
-                                  if(z>x){
-                                          ResultForm->ResultGrid->Cells[Nar[38]][i+1]=ResultForm->ResultGrid->Cells[Nar[38]][i+1]+"+";
-                                          g=1;
-                                          counterRsp2++;
-                                 }
-                           }
-                            if(DataModule1->SqlSpecification->FieldByName("Rsp2min")->AsString!="no"){
-                                  y=DataModule1->SqlSpecification->FieldByName("Rsp2min")->AsFloat;
-                                  if(z<y){
-                                          ResultForm->ResultGrid->Cells[Nar[38]][i+1]=ResultForm->ResultGrid->Cells[Nar[38]][i+1]+"-";
-                                          g=1;
-                                          counterRsp2++;
-                                 }
-                           }
+ 
 
+ /****************************************Spur#3********************************************************************************************************/
+if(DataModule1->SqlSpecification->FieldByName("Rsp3")->AsString=="True" && DataModule1->SqlSpecification->FieldByName("Spur_Use")->AsString=="True"){
+    DataModule1->SQLSetupData->First();
+    double x1, x2, x3, Y1, Y2;
+    Y1 = 0; Y2 = 0;
+    double spur_f_3;
+    double spur_r_3;
+    x1 = StrToFloat(DataModule1->SqlSpecification->FieldByName("Rsp3tBegin")->AsString);
 
+    // Считываем флаг переключения единиц для третьего побочного резонанса
+    bool use_amplitude_3 = (DataModule1->SqlSpecification->FieldByName("Spur_F_3_AMP_Unit")->AsString == "True");
 
+    for(int j = 0; j < Nt; j++){
+        x3 = DataModule1->SQLSetupData->FieldByName("fSetTemperature")->AsFloat;
+        double spur_3 = DataModule1->SQLSetupData->FieldByName("fValue15")->AsFloat; // Значение сопротивления побочного резонанса №3
+        spur_r_3 = DataModule1->SQLSetupData->FieldByName("fValue14")->AsFloat;
+        if(x3 == x1){
+            if (spur_3 > 0 && spur_3 < 1E30){
 
-
- }
-
- //****************************************Spur#3********************************************************************************************************
- if(DataModule1->SqlSpecification->FieldByName("Rsp3")->AsString=="True"){
-            DataModule1->SQLSetupData->First();
-            double x1,x2,x3,Y1,Y2;
-            Y1=0;Y2=0;
-            x1=StrToFloat(DataModule1->SqlSpecification->FieldByName("Rsp3tBegin")->AsString);
-
-          for(int j=0;j<Nt;j++){
-                  x3=DataModule1->SQLSetupData->FieldByName("fSetTemperature")->AsFloat;
-                       if(x3==x1){
-                               if (DataModule1->SQLSetupData->FieldByName("fValue15")->AsFloat>0 & DataModule1->SQLSetupData->FieldByName("fValue15")->AsFloat<1E30){
-                                         Y1=20*log10(DataModule1->SQLSetupData->FieldByName("fValue15")->AsFloat);
-                                   }
-                                   else { Y1==0;}
-                                      if (Y1>Y2){
-                                                Y2=Y1;
-                                       }
+                // --- ЛОГИКА ПЕРЕКЛЮЧЕНИЯ: АМПЛИТУДА (дБ) vs СОПРОТИВЛЕНИЕ (Ом) ---
+                if (use_amplitude_3) {
+                    // 1. Ищем R1 (fRr) на ТЕКУЩЕЙ температуре x3 в таблице SQLCrystalData
+                    double r1_val = 0.0;
+                    bool r1_found = false;
+                    
+                    DataModule1->SQLCrystalData->First();
+                    while(!DataModule1->SQLCrystalData->Eof) {
+                        if(DataModule1->SQLCrystalData->FieldByName("fSetTemperature")->AsFloat == x3) {
+                            r1_val = DataModule1->SQLCrystalData->FieldByName("fRr")->AsFloat;
+                            r1_found = true;
+                            break; // Нашли соответствие по температуре, выходим из цикла поиска R1
                         }
-                  DataModule1->SQLSetupData->Next();
-                  SEdit1->AsFloat=Y2;
-                  ResultForm->ResultGrid->Cells[Nar[39]][i+1]=SEdit1->Text;
-         if (DataModule1->SqlSpecification->FieldByName("BD")->AsString=="True"){
-                if (DataModule1->SQLSetupData->FieldByName("fValue12")->AsFloat>0 & DataModule1->SQLSetupData->FieldByName("fValue12")->AsFloat<1E30){
-                DataModule1->SQLPSIData->FieldByName("Rsp3")->AsString=ResultForm->ResultGrid->Cells[Nar[39]][i+1];
-                DataModule1->SQLPSIData->FieldByName("FSpur3")->AsString=DataModule1->SQLSetupData->FieldByName("fValue12")->AsString;
+                        DataModule1->SQLCrystalData->Next();
+                    }
+                    
+                    // Защита от деления на ноль, если температура не найдена или значение R1 повреждено
+                    if(!r1_found || r1_val <= 0) {
+                        r1_val = 12.0; // Дефолтное безопасное значение
+                    }
+
+                    // 2. Расчет относительного амплитудного затухания SPDB для шпора №3
+                    Y1 = -20 * log10((25.0 + r1_val) / (25.0 + spur_r_3));
                 }
-           }
-           }
- double x,y,z;
-               z=Y2;
-                if (MinRsp3==0){
-                               MinRsp3=z;
-                               }
-                SumRsp3=SumRsp3+z;
-               if (z>MaxRsp3){
-                              MaxRsp3=z;
-                 }
-               if (z<MinRsp3){
-                              if (z!=0){
-                                       MinRsp3=z;
-                                       }
-                   }
+                else {
+                    // Стандартный логарифмический расчет по чистому сопротивлению
+                    Y1 = -20 * log10(spur_3);
+                }
+            }
+            else { 
+                Y1 = 0; // Исправлена синтаксическая ошибка '==' на '='
+            }
+            
+           // if (Y1 > Y2){
+                Y2 = Y1;
+           // }
+        }
+        DataModule1->SQLSetupData->Next();
+    }
+    
+    SEdit1->AsFloat = Y2;
+    ResultForm->ResultGrid->Cells[Nar[39]][i+1] = SEdit1->Text;
+    /*
+    if (DataModule1->SqlSpecification->FieldByName("Spur_F_3_use")->AsString == "True"){
+        if (DataModule1->SQLSetupData->FieldByName("fValue12")->AsFloat < 1E30){
+            spur_f_3 = DataModule1->SQLSetupData->FieldByName("fValue12")->AsFloat;
+        }
+        else {
+            spur_f_3 = 0;
+        }
+    }
+    */
+    spur_f_3 = SpurFreqToKHz(
+    DataModule1->SQLSetupData->FieldByName("fValue12")->AsFloat,
+    DataModule1->SqlSpecification->FieldByName("Nominal")->AsFloat
+);
+    if (DataModule1->SqlSpecification->FieldByName("BD")->AsString == "True"){
+        if (DataModule1->SQLSetupData->FieldByName("fValue12")->AsFloat < 1E30){
+            DataModule1->SQLPSIData->FieldByName("Rsp3")->AsString = ResultForm->ResultGrid->Cells[Nar[39]][i+1];
+            DataModule1->SQLPSIData->FieldByName("FSpur3")->AsString = FloatToStr(spur_f_3);
+//            DataModule1->SQLPSIData->FieldByName("FSpur3")->AsString = DataModule1->SQLSetupData->FieldByName("fValue12")->AsString;
+        }
+    }
 
+    double x, y, z;
+    z = Y2;
+    if (MinRsp3 == 0){
+        MinRsp3 = z;
+    }
+    SumRsp3 = SumRsp3 + z;
+    if (z > MaxRsp3){
+        MaxRsp3 = z;
+    }
+    if (z < MinRsp3){
+        if (z != 0){
+            MinRsp3 = z;
+        }
+    }
 
+    bool spur_freq_max = true;
+    bool spur_freq_min = true;
+    
+    if (DataModule1->SqlSpecification->FieldByName("Spur_F_3_use")->AsString == "True"){
+        if(DataModule1->SqlSpecification->FieldByName("Spur_F_3_Max")->AsString != "no"){
+            if (spur_f_3 <= DataModule1->SqlSpecification->FieldByName("Spur_F_3_Max")->AsFloat){
+                spur_freq_max = true;
+            }
+            else {
+                spur_freq_max = false;
+            }
+        }
+        if(DataModule1->SqlSpecification->FieldByName("Spur_F_3_Min")->AsString != "no"){
+            if (spur_f_3 >= DataModule1->SqlSpecification->FieldByName("Spur_F_3_Min")->AsFloat){
+                spur_freq_min = true;
+            }
+            else {
+                spur_freq_min = false;
+            }
+        }
+    }
 
-                          if(DataModule1->SqlSpecification->FieldByName("Rsp3max")->AsString!="no"){
-                                  x=DataModule1->SqlSpecification->FieldByName("Rsp3max")->AsFloat;
-                                  if(z>x){
-                                          ResultForm->ResultGrid->Cells[Nar[39]][i+1]=ResultForm->ResultGrid->Cells[Nar[39]][i+1]+"+";
-                                          g=1;
-                                          counterRsp3++;
-                                 }
-                           }
-                            if(DataModule1->SqlSpecification->FieldByName("Rsp3min")->AsString!="no"){
-                                  y=DataModule1->SqlSpecification->FieldByName("Rsp3min")->AsFloat;
-                                  if(z<y){
-                                          ResultForm->ResultGrid->Cells[Nar[39]][i+1]=ResultForm->ResultGrid->Cells[Nar[39]][i+1]+"-";
-                                          g=1;
-                                          counterRsp3++;
-                                 }
-                           }
-
-
-
-
-
- }
-
+    if(DataModule1->SqlSpecification->FieldByName("Rsp3max")->AsString != "no"){
+        x = DataModule1->SqlSpecification->FieldByName("Rsp3max")->AsFloat;
+        if(z > x){
+            if (spur_freq_max && spur_freq_min){
+                ResultForm->ResultGrid->Cells[Nar[39]][i+1] = ResultForm->ResultGrid->Cells[Nar[39]][i+1] + "+";
+                g = 1;
+                counterRsp3++;
+            }
+        }
+    }
+    
+    if(DataModule1->SqlSpecification->FieldByName("Rsp3min")->AsString != "no"){
+        y = DataModule1->SqlSpecification->FieldByName("Rsp3min")->AsFloat;
+        if(z < y){
+            if (spur_freq_max && spur_freq_min){
+                ResultForm->ResultGrid->Cells[Nar[39]][i+1] = ResultForm->ResultGrid->Cells[Nar[39]][i+1] + "-";
+                g = 1;
+                counterRsp3++;
+            }
+        }
+    }
+}
+ 
 
 //****************************************Радиус Сферы********************************************************************************************************
  if(DataModule1->SqlSpecification->FieldByName("Rsphere")->AsString=="True"){
@@ -10925,7 +11187,68 @@ if(DataModule1->SqlSpecification->FieldByName("S")->AsString=="True"){
 
      }
 
+ if(DataModule1->SqlSpecification->FieldByName("Rsp1")->AsString=="True" & DataModule1->SqlSpecification->FieldByName("Spur_Use")->AsString=="True"){
+  Nar[35]=k;
+  ResultForm->ResultGrid->Cells[k][0]="Spur#1";
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+             ResultForm->ResultGrid->Cells[Nar[35]][N+2]=DataModule1->SqlSpecification->FieldByName("Rsp1max")->AsString;
+             ResultForm->ResultGrid->Cells[Nar[35]][N+3]=DataModule1->SqlSpecification->FieldByName("Rsp1min")->AsString;
+         }
 
+  k=k+1;
+  if(DataModule1->SqlSpecification->FieldByName("Spur_F_1_use")->AsString=="True"){
+          Nar[36]=k;
+          ResultForm->ResultGrid->Cells[k][0]="Spur_F_#1";
+           if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                     ResultForm->ResultGrid->Cells[Nar[36]][N+2]=DataModule1->SqlSpecification->FieldByName("Spur_F_1_Max")->AsString;
+                     ResultForm->ResultGrid->Cells[Nar[36]][N+3]=DataModule1->SqlSpecification->FieldByName("Spur_F_1_Min")->AsString;
+                 }
+
+                  k=k+1;
+          }
+  }
+ //*****************************************************************************************************************************************************
+   if(DataModule1->SqlSpecification->FieldByName("Rsp2")->AsString=="True" & DataModule1->SqlSpecification->FieldByName("Spur_Use")->AsString=="True"){
+  Nar[37]=k;
+  ResultForm->ResultGrid->Cells[k][0]="Spur#2";
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+             ResultForm->ResultGrid->Cells[Nar[37]][N+2]=DataModule1->SqlSpecification->FieldByName("Rsp2max")->AsString;
+             ResultForm->ResultGrid->Cells[Nar[37]][N+3]=DataModule1->SqlSpecification->FieldByName("Rsp2min")->AsString;
+         }
+
+  k=k+1;
+  if(DataModule1->SqlSpecification->FieldByName("Spur_F_2_use")->AsString=="True"){
+          Nar[38]=k;
+          ResultForm->ResultGrid->Cells[k][0]="Spur_F_#2";
+           if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                     ResultForm->ResultGrid->Cells[Nar[38]][N+2]=DataModule1->SqlSpecification->FieldByName("Spur_F_2_Max")->AsString;
+                     ResultForm->ResultGrid->Cells[Nar[38]][N+3]=DataModule1->SqlSpecification->FieldByName("Spur_F_2_Min")->AsString;
+                 }
+
+                  k=k+1;
+          }
+  }
+ //*****************************************************************************************************************************************************
+   if(DataModule1->SqlSpecification->FieldByName("Rsp3")->AsString=="True" & DataModule1->SqlSpecification->FieldByName("Spur_Use")->AsString=="True"){
+  Nar[39]=k;
+  ResultForm->ResultGrid->Cells[k][0]="Spur#3";
+   if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+             ResultForm->ResultGrid->Cells[Nar[39]][N+2]=DataModule1->SqlSpecification->FieldByName("Rsp3max")->AsString;
+             ResultForm->ResultGrid->Cells[Nar[39]][N+3]=DataModule1->SqlSpecification->FieldByName("Rsp3min")->AsString;
+         }
+
+  k=k+1;
+  if(DataModule1->SqlSpecification->FieldByName("Spur_F_3_use")->AsString=="True"){
+          Nar[40]=k;
+          ResultForm->ResultGrid->Cells[k][0]="Spur_F_#3";
+           if(DataModule1->SqlSpecification->FieldByName("norm")->AsString=="True"){
+                     ResultForm->ResultGrid->Cells[Nar[40]][N+2]=DataModule1->SqlSpecification->FieldByName("Spur_F_3_Max")->AsString;
+                     ResultForm->ResultGrid->Cells[Nar[40]][N+3]=DataModule1->SqlSpecification->FieldByName("Spur_F_3_Min")->AsString;
+                 }
+
+                  k=k+1;
+          }
+  }
 
 //---------------------------------------------------------------------------------------------------------------------------------
   if(DataModule1->SqlSpecification->FieldByName("Status")->AsString=="True"){
@@ -11062,6 +11385,19 @@ int counterRR5;
 double MinTo,MaxTo;
 double SumTo;
 int counterTo;
+//****************Rps1
+double MinRsp1, MaxRsp1;
+double SumRsp1;
+int counterRsp1;
+//********************Rsp2
+double MinRsp2, MaxRsp2;
+double SumRsp2;
+int counterRsp2;
+//**********************Rsp3
+double MinRsp3, MaxRsp3;
+double SumRsp3;
+int counterRsp3;
+
 //**********FT
 double MinFT,MaxFT,MinFt1,MaxFt1,MinFt2,MaxFt2,MinFt3,MaxFt3,MinFt4,MaxFt4;
 double SumFT,SumFt1,SumFt2,SumFt3,SumFt4;
@@ -11797,6 +12133,343 @@ if(DataModule1->SqlSpecification->FieldByName("Cqmax")->AsString!="no"){
                                                               SumC0=SumC0+C0;
                                                            }
                                             }
+
+ /****************************************Spur#1 (KH7700)********************************************************************************************************/
+if(DataModule1->SqlSpecification->FieldByName("Rsp1")->AsString=="True" && DataModule1->SqlSpecification->FieldByName("Spur_Use")->AsString=="True"){
+
+    double Y1;
+    Y1 = 0;
+
+    if (DataModule1->SqlSpecification->FieldByName("Rsp1tBegin")->AsString == DataModule1->KH7700_Temp->FieldByName("TEMP")->AsString){
+
+        double spur_r1_raw = DataModule1->KH7700_Temp->FieldByName("SSCAN_RS1")->AsFloat;
+
+        if (spur_r1_raw > 0 && spur_r1_raw < 1E30){
+            double Rs = DataModule1->KH7700_Temp->FieldByName("RS")->AsFloat;
+            double Spur_r1 = spur_r1_raw;
+            
+            // Проверяем флаг переключения единиц: True - по амплитуде, False/no - по сопротивлению в дБ
+            bool use_amplitude = (DataModule1->SqlSpecification->FieldByName("Spur_F_1_AMP_Unit")->AsString == "True");
+            
+            // --- ЛОГИКА ПЕРЕКЛЮЧЕНИЯ: АМПЛИТУДА vs ЧИСТОЕ ОТНОШЕНИЕ СОПРОТИВЛЕНИЙ ---
+            if (use_amplitude) {
+                // Амплитудное относительное затухание в четырехполюснике 25 Ом (SPDB)
+                Y1 = 20 * log10((25.0 + Rs) / (25.0 + Spur_r1));
+            }
+            else {
+                // Исходный расчет чистого отношения сопротивлений в дБ (Spur_DB)
+                // Заметка: -20*log10(Rs/Spur_r1) математически абсолютно равно значению 20*log10(Spur_r1/Rs)
+                Y1 = 20 * log10(Rs / Spur_r1);
+            }
+        }
+        else { 
+            Y1 = 0; // Исправлена синтаксическая ошибка '==' на '='
+        }
+
+        SEdit1->AsFloat = Y1;
+        ResultForm->ResultGrid->Cells[Nar[35]][i+1] = SEdit1->Text;
+        
+        double spur_f_1 = DataModule1->KH7700_Temp->FieldByName("SSCAN_FS1")->AsFloat - DataModule1->KH7700_Temp->FieldByName("FS")->AsFloat;
+        spur_f_1 = spur_f_1 / 1000;
+        SEdit1->AsFloat = spur_f_1;
+        
+        if (DataModule1->SqlSpecification->FieldByName("Spur_F_1_use")->AsString == "True"){
+            ResultForm->ResultGrid->Cells[Nar[36]][i+1] = SEdit1->Text;
+        }
+        
+        if (DataModule1->SqlSpecification->FieldByName("BD")->AsString == "True"){
+            if (DataModule1->KH7700_Temp->FieldByName("SSCAN_RS1")->AsFloat > 0){
+                DataModule1->SQLPSIData->FieldByName("Spur")->AsString = ResultForm->ResultGrid->Cells[Nar[35]][i+1];
+                DataModule1->SQLPSIData->FieldByName("Rsp1")->AsString = ResultForm->ResultGrid->Cells[Nar[35]][i+1];
+                DataModule1->SQLPSIData->FieldByName("FSpur1")->AsString = spur_f_1;
+            }
+        }
+
+        double x, y, z;
+        z = Y1;
+        if (MinRsp1 == 0){
+            MinRsp1 = z;
+        }
+        SumRsp1 = SumRsp1 + z;
+        if (z > MaxRsp1){
+            MaxRsp1 = z;
+        }
+        if (z < MinRsp1){
+            if (z != 0){
+                MinRsp1 = z;
+            }
+        }
+
+        bool spur_freq_max = true;
+        bool spur_freq_min = true;
+        
+        if (DataModule1->SqlSpecification->FieldByName("Spur_F_1_use")->AsString == "True"){
+            if(DataModule1->SqlSpecification->FieldByName("Spur_F_1_Max")->AsString != "no"){
+                if (spur_f_1 <= DataModule1->SqlSpecification->FieldByName("Spur_F_1_Max")->AsFloat){
+                    spur_freq_max = true;
+                }
+                else {
+                    spur_freq_max = false;
+                }
+            }
+            if(DataModule1->SqlSpecification->FieldByName("Spur_F_1_Min")->AsString != "no"){
+                if (spur_f_1 >= DataModule1->SqlSpecification->FieldByName("Spur_F_1_Min")->AsFloat){
+                    spur_freq_min = true;
+                }
+                else {
+                    spur_freq_min = false;
+                }
+            }
+        }
+        
+        if(DataModule1->SqlSpecification->FieldByName("Rsp1")->AsString == "True"){
+            if(DataModule1->SqlSpecification->FieldByName("Rsp1max")->AsString != "no"){
+                x = DataModule1->SqlSpecification->FieldByName("Rsp1max")->AsFloat;
+                if(z > x){
+                    if (spur_freq_max && spur_freq_min){
+                        ResultForm->ResultGrid->Cells[Nar[35]][i+1] = ResultForm->ResultGrid->Cells[Nar[35]][i+1] + "+";
+                        status = 1;
+                        counterRsp1++;
+                    }
+                }
+            }
+            if(DataModule1->SqlSpecification->FieldByName("Rsp1min")->AsString != "no"){
+                y = DataModule1->SqlSpecification->FieldByName("Rsp1min")->AsFloat;
+                if(z < y){
+                    if (spur_freq_max && spur_freq_min){
+                        ResultForm->ResultGrid->Cells[Nar[35]][i+1] = ResultForm->ResultGrid->Cells[Nar[35]][i+1] + "-";
+                        status = 1;
+                        counterRsp1++;
+                    }
+                }
+            }
+        }
+    }
+}
+
+//**********************************************************************************************************************************************************
+
+
+ /****************************************Spur#2 (KH7700)********************************************************************************************************/
+if(DataModule1->SqlSpecification->FieldByName("Rsp2")->AsString=="True" && DataModule1->SqlSpecification->FieldByName("Spur_Use")->AsString=="True"){
+    double Y1;
+    Y1 = 0;
+
+    if (DataModule1->SqlSpecification->FieldByName("Rsp2tBegin")->AsString == DataModule1->KH7700_Temp->FieldByName("TEMP")->AsString){
+        double spur_r2_raw = DataModule1->KH7700_Temp->FieldByName("SSCAN_RS2")->AsFloat;
+
+        if (spur_r2_raw > 0 && spur_r2_raw < 1E30){
+            double Rs = DataModule1->KH7700_Temp->FieldByName("RS")->AsFloat;
+            double Spur_r2 = spur_r2_raw; // Локальная переменная для второго шпора
+            
+            // Считываем флаг переключения единиц для второго побочного резонанса
+            bool use_amplitude_2 = (DataModule1->SqlSpecification->FieldByName("Spur_F_2_AMP_Unit")->AsString == "True");
+            
+            // --- ЛОГИКА ПЕРЕКЛЮЧЕНИЯ: АМПЛИТУДА vs ЧИСТОЕ ОТНОШЕНИЕ СОПРОТИВЛЕНИЙ ---
+            if (use_amplitude_2) {
+                // Расчет амплитудного относительного затухания в четырехполюснике 25 Ом
+                Y1 = 20 * log10((25.0 + Rs) / (25.0 + Spur_r2));
+            }
+            else {
+                // Исходный логарифмический расчет по чистому отношению сопротивлений
+                Y1 = 20 * log10(Rs / Spur_r2);
+            }
+        }
+        else { 
+            Y1 = 0; // Исправлена синтаксическая ошибка '==' на '='
+        }
+        
+        SEdit1->AsFloat = Y1;
+        ResultForm->ResultGrid->Cells[Nar[37]][i+1] = SEdit1->Text;
+        
+        double spur_f_2 = DataModule1->KH7700_Temp->FieldByName("SSCAN_FS2")->AsFloat - DataModule1->KH7700_Temp->FieldByName("FS")->AsFloat;
+        spur_f_2 = spur_f_2 / 1000;
+        SEdit1->AsFloat = spur_f_2;
+        
+        if (DataModule1->SqlSpecification->FieldByName("Spur_F_2_use")->AsString == "True"){
+            ResultForm->ResultGrid->Cells[Nar[38]][i+1] = SEdit1->Text;
+        }
+        
+        if (DataModule1->SqlSpecification->FieldByName("BD")->AsString == "True"){
+            if (DataModule1->KH7700_Temp->FieldByName("SSCAN_RS2")->AsFloat > 0){
+                DataModule1->SQLPSIData->FieldByName("Rsp2")->AsString = ResultForm->ResultGrid->Cells[Nar[37]][i+1];
+                DataModule1->SQLPSIData->FieldByName("FSpur2")->AsString = spur_f_2;
+            }
+        }
+
+        double x, y, z;
+        z = Y1;
+        if (MinRsp2 == 0){
+            MinRsp2 = z;
+        }
+        SumRsp2 = SumRsp2 + z;
+        if (z > MaxRsp2){
+            MaxRsp2 = z;
+        }
+        if (z < MinRsp2){
+            if (z != 0){
+                MinRsp2 = z;
+            }
+        }
+
+        bool spur_freq_max = true;
+        bool spur_freq_min = true;
+        
+        if (DataModule1->SqlSpecification->FieldByName("Spur_F_2_use")->AsString == "True"){
+            if(DataModule1->SqlSpecification->FieldByName("Spur_F_2_Max")->AsString != "no"){
+                if (spur_f_2 <= DataModule1->SqlSpecification->FieldByName("Spur_F_2_Max")->AsFloat){
+                    spur_freq_max = true;
+                }
+                else {
+                    spur_freq_max = false;
+                }
+            }
+            if(DataModule1->SqlSpecification->FieldByName("Spur_F_2_Min")->AsString != "no"){
+                if (spur_f_2 >= DataModule1->SqlSpecification->FieldByName("Spur_F_2_Min")->AsFloat){
+                    spur_freq_min = true;
+                }
+                else {
+                    spur_freq_min = false;
+                }
+            }
+        }
+        
+        if(DataModule1->SqlSpecification->FieldByName("Rsp2")->AsString == "True"){
+            if(DataModule1->SqlSpecification->FieldByName("Rsp2max")->AsString != "no"){
+                x = DataModule1->SqlSpecification->FieldByName("Rsp2max")->AsFloat;
+                if(z > x){
+                    if (spur_freq_max && spur_freq_min){
+                        ResultForm->ResultGrid->Cells[Nar[37]][i+1] = ResultForm->ResultGrid->Cells[Nar[37]][i+1] + "+";
+                        status = 1;
+                        counterRsp2++;
+                    }
+                }
+            }
+            if(DataModule1->SqlSpecification->FieldByName("Rsp2min")->AsString != "no"){
+                y = DataModule1->SqlSpecification->FieldByName("Rsp2min")->AsFloat;
+                if(z < y){
+                    if (spur_freq_max && spur_freq_min){
+                        ResultForm->ResultGrid->Cells[Nar[37]][i+1] = ResultForm->ResultGrid->Cells[Nar[37]][i+1] + "-";
+                        status = 1;
+                        counterRsp2++;
+                    }
+                }
+            }
+        }
+    }
+}
+
+ //****************************************Spur#3********************************************************************************************************
+
+ /****************************************Spur#3 (KH7700)********************************************************************************************************/
+if(DataModule1->SqlSpecification->FieldByName("Rsp3")->AsString=="True" && DataModule1->SqlSpecification->FieldByName("Spur_Use")->AsString=="True"){
+    double Y1;
+    Y1 = 0;
+    
+    if (DataModule1->SqlSpecification->FieldByName("Rsp3tBegin")->AsString == DataModule1->KH7700_Temp->FieldByName("TEMP")->AsString){
+        double spur_r3_raw = DataModule1->KH7700_Temp->FieldByName("SSCAN_RS3")->AsFloat;
+
+        if (spur_r3_raw > 0 && spur_r3_raw < 1E30){
+            double Rs = DataModule1->KH7700_Temp->FieldByName("RS")->AsFloat;
+            double Spur_r3 = spur_r3_raw; // Локальная переменная для третьего шпора
+
+            // Считываем флаг переключения единиц для третьего побочного резонанса
+            bool use_amplitude_3 = (DataModule1->SqlSpecification->FieldByName("Spur_F_3_AMP_Unit")->AsString == "True");
+            
+            // --- ЛОГИКА ПЕРЕКЛЮЧЕНИЯ: АМПЛИТУДА vs ЧИСТОЕ ОТНОШЕНИЕ СОПРОТИВЛЕНИЙ ---
+            if (use_amplitude_3) {
+                // Расчет амплитудного относительного затухания в четырехполюснике 25 Ом (SPDB)
+                Y1 = 20 * log10((25.0 + Rs) / (25.0 + Spur_r3));
+            }
+            else {
+                // Исходный логарифмический расчет по чистому отношению сопротивлений (Spur_DB)
+                Y1 = 20 * log10(Rs / Spur_r3);
+            }
+        }
+        else { 
+            Y1 = 0; // Исправлена синтаксическая ошибка '==' на '='
+        }
+        
+        SEdit1->AsFloat = Y1;
+        ResultForm->ResultGrid->Cells[Nar[39]][i+1] = SEdit1->Text;
+        
+        double spur_f_3 = DataModule1->KH7700_Temp->FieldByName("SSCAN_FS3")->AsFloat - DataModule1->KH7700_Temp->FieldByName("FS")->AsFloat;
+        spur_f_3 = spur_f_3 / 1000;
+        SEdit1->AsFloat = spur_f_3;
+        
+        if (DataModule1->SqlSpecification->FieldByName("Spur_F_3_use")->AsString == "True"){
+            ResultForm->ResultGrid->Cells[Nar[40]][i+1] = SEdit1->Text;
+        }
+        
+        if (DataModule1->SqlSpecification->FieldByName("BD")->AsString == "True"){
+            if (DataModule1->KH7700_Temp->FieldByName("SSCAN_RS3")->AsFloat > 0){
+                DataModule1->SQLPSIData->FieldByName("Rsp3")->AsString = ResultForm->ResultGrid->Cells[Nar[39]][i+1];
+                DataModule1->SQLPSIData->FieldByName("FSpur3")->AsString = spur_f_3;
+            }
+        }
+
+        double x, y, z;
+        z = Y1;
+        if (MinRsp3 == 0){
+            MinRsp3 = z;
+        }
+        SumRsp3 = SumRsp3 + z;
+        if (z > MaxRsp3){
+            MaxRsp3 = z;
+        }
+        if (z < MinRsp3){
+            if (z != 0){
+                MinRsp3 = z;
+            }
+        }
+
+        bool spur_freq_max = true;
+        bool spur_freq_min = true;
+        
+        if (DataModule1->SqlSpecification->FieldByName("Spur_F_3_use")->AsString == "True"){
+            if(DataModule1->SqlSpecification->FieldByName("Spur_F_3_Max")->AsString != "no"){
+                if (spur_f_3 <= DataModule1->SqlSpecification->FieldByName("Spur_F_3_Max")->AsFloat){
+                    spur_freq_max = true;
+                }
+                else {
+                    spur_freq_max = false;
+                }
+            }
+            if(DataModule1->SqlSpecification->FieldByName("Spur_F_3_Min")->AsString != "no"){
+                if (spur_f_3 >= DataModule1->SqlSpecification->FieldByName("Spur_F_3_Min")->AsFloat){
+                    spur_freq_min = true;
+                }
+                else {
+                    spur_freq_min = false;
+                }
+            }
+        }
+        
+        if(DataModule1->SqlSpecification->FieldByName("Rsp3")->AsString == "True"){
+            if(DataModule1->SqlSpecification->FieldByName("Rsp3max")->AsString != "no"){
+                x = DataModule1->SqlSpecification->FieldByName("Rsp3max")->AsFloat;
+                if(z > x){
+                    if (spur_freq_max && spur_freq_min){
+                        ResultForm->ResultGrid->Cells[Nar[39]][i+1] = ResultForm->ResultGrid->Cells[Nar[39]][i+1] + "+";
+                        status = 1;
+                        counterRsp3++;
+                    }
+                }
+            }
+            if(DataModule1->SqlSpecification->FieldByName("Rsp3min")->AsString != "no"){
+                y = DataModule1->SqlSpecification->FieldByName("Rsp3min")->AsFloat;
+                if(z < y){
+                    if (spur_freq_max && spur_freq_min){
+                        ResultForm->ResultGrid->Cells[Nar[39]][i+1] = ResultForm->ResultGrid->Cells[Nar[39]][i+1] + "-";
+                        status = 1;
+                        counterRsp3++;
+                    }
+                }
+            }
+        }
+    }
+}
+
  //********************************************************************************************************************************************************************************************************
  //-------------------------------------------------------------------------------Cq-----------------------------------------------------------------------------------------------------------------
                                             if(DataModule1->SqlSpecification->FieldByName("Cq")->AsString=="True"){
@@ -15513,4 +16186,5 @@ void __fastcall TMainForm::Change_Machine_BClick(TObject *Sender)
 Machine_Change_Form-> Show();
 }
 //---------------------------------------------------------------------------
+
 

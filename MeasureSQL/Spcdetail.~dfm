@@ -2667,6 +2667,6 @@ object SpcDetailForm: TSpcDetailForm
     ShineColor = clWhite
     TabOrder = 114
     Version = '1.2.3.0'
-    OnClick = btnOptionsClick
+    OnClick = AdvGlassButton1Click
   end
 end

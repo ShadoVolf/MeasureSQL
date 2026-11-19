@@ -126,6 +126,7 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
                  Application->CreateForm(__classid(TTempMainForm), &TempMainForm);
                  Application->CreateForm(__classid(TTempDataModule), &TempDataModule);
                  Application->CreateForm(__classid(TBarCodeMskForm), &BarCodeMskForm);
+                 Application->CreateForm(__classid(TSpc_Spur_Form), &Spc_Spur_Form);
                  Application->CreateForm(__classid(TSpcSelectForm), &SpcSelectForm);
                  Application->CreateForm(__classid(TFileLoadForm), &FileLoadForm);
                  Application->CreateForm(__classid(TProtokol_Select_Form), &Protokol_Select_Form);
@@ -146,7 +147,6 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
                  Application->CreateForm(__classid(TData_Measure), &Data_Measure);
                  Application->CreateForm(__classid(TConfig_View_Form), &Config_View_Form);
                  Application->CreateForm(__classid(TMachine_Change_Form), &Machine_Change_Form);
-                 Application->CreateForm(__classid(TSpc_Spur_Form), &Spc_Spur_Form);
                  Application->Run();
         }
         catch (Exception &exception)

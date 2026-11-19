@@ -1,8 +1,8 @@
 object WriteForm: TWriteForm
   Left = 420
   Top = 221
-  BorderStyle = bsNone
-  Caption = 'WriteForm'
+  BorderStyle = bsSingle
+  Caption = #1047#1072#1087#1080#1089#1100' '#1080#1079' '#1092#1072#1081#1083#1072
   ClientHeight = 294
   ClientWidth = 580
   Color = clBlack
@@ -12,7 +12,7 @@ object WriteForm: TWriteForm
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
-  Position = poDesktopCenter
+  Position = poMainFormCenter
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
@@ -186,7 +186,7 @@ object WriteForm: TWriteForm
     ParentFont = False
     ShineColor = clWhite
     TabOrder = 6
-    Version = '1.2.2.0'
+    Version = '1.2.3.0'
     OnClick = btnCloseClick
   end
   object btnSave: TAdvGlassButton
@@ -208,7 +208,7 @@ object WriteForm: TWriteForm
     ParentFont = False
     ShineColor = clWhite
     TabOrder = 7
-    Version = '1.2.2.0'
+    Version = '1.2.3.0'
     OnClick = btnSaveClick
   end
   object btnView: TAdvGlassButton
@@ -230,7 +230,7 @@ object WriteForm: TWriteForm
     ParentFont = False
     ShineColor = clWhite
     TabOrder = 8
-    Version = '1.2.2.0'
+    Version = '1.2.3.0'
     OnClick = btnViewClick
   end
   object btnOpen: TAdvGlassButton
@@ -252,7 +252,7 @@ object WriteForm: TWriteForm
     ParentFont = False
     ShineColor = clWhite
     TabOrder = 9
-    Version = '1.2.2.0'
+    Version = '1.2.3.0'
     OnClick = btnOpenClick
   end
   object edtType: TRzComboBox
@@ -361,7 +361,7 @@ object WriteForm: TWriteForm
     ParentFont = False
     ShineColor = clWhite
     TabOrder = 15
-    Version = '1.2.2.0'
+    Version = '1.2.3.0'
   end
   object OpenDialog1: TOpenDialog
     Filter = 'Excel|*.xls|Excel2007|*.xlsx|ALL|*.*'

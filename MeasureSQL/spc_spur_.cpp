@@ -15,6 +15,7 @@
 #pragma link "RzRadChk"
 #pragma link "RzCmboBx"
 #pragma link "RzDBCmbo"
+#pragma link "DBAdvNavigator"
 #pragma resource "*.dfm"
 TSpc_Spur_Form *Spc_Spur_Form;
 //---------------------------------------------------------------------------

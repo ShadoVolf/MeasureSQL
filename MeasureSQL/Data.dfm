@@ -1,8 +1,8 @@
 object DataModule1: TDataModule1
   OldCreateOrder = False
   OnCreate = DataModuleCreate
-  Left = 250
-  Top = 39
+  Left = 182
+  Top = 109
   Height = 1049
   Width = 1473
   object CoordinatorDB: TMyConnection

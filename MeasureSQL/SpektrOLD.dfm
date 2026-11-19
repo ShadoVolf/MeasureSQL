@@ -229,7 +229,6 @@ object SpektrOLDForm: TSpektrOLDForm
     Connection = DataModule1.CoordinatorDB
     SQL.Strings = (
       'select * from old where Old_ID='#39'1726'#39)
-    Active = True
     Left = 112
     Top = 152
   end
@@ -237,7 +236,6 @@ object SpektrOLDForm: TSpektrOLDForm
     Connection = DataModule1.CoordinatorDB
     SQL.Strings = (
       'Select * from specification')
-    Active = True
     Left = 160
     Top = 152
   end

@@ -53,6 +53,8 @@ __published:	// IDE-managed Components
         TAdvGlassButton *AdvGlassButton1;
         TLabel *Label8;
         TRzComboBox *cmb_id3;
+        TCheckBox *chk_add_spur;
+        TCheckBox *chk_spur_only;
         void __fastcall btnCloseClick(TObject *Sender);
         void __fastcall FormShow(TObject *Sender);
         void __fastcall edtTypeChange(TObject *Sender);

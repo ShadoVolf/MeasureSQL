@@ -120,6 +120,7 @@ void __fastcall TProtokolForm::btnPrintClick(TObject *Sender)
 {
 CustomerName="";
 Dogovor="";
+ActionList1->Actions[22]->Execute();
 ActionList1->Actions[17]->Execute();
 }
 //---------------------------------------------------------------------------
@@ -805,6 +806,7 @@ void __fastcall TProtokolForm::Create_LOT_RQExecute(TObject *Sender)
 if (Lot->Checked==true){
 
 AnsiString Numbers;
+AnsiString SPC_FULL;
 SYSTEMTIME st;
           GetLocalTime(&st);
           AnsiString stD,stMn,stY,stH,stM,stS;
@@ -818,10 +820,11 @@ int count=NumbersG->Count;
 
           RQ_Data->Spc_RQ->Active=false;
           RQ_Data->Spc_RQ->SQL->Clear();
-          RQ_Data->Spc_RQ->SQL->Add("Select `номенклатура` from nomeklatura_rk where `наименование`='"+LotSpc->Text+"'");
+          RQ_Data->Spc_RQ->SQL->Add("Select `номенклатура`, `наименование` from nomeklatura_rk where `наименование`='"+LotSpc->Text+"'");
           RQ_Data->Spc_RQ->Active=true;
           RQ_Data->Spc_RQ->First();
 AnsiString MSK_NOM_ID=RQ_Data->Spc_RQ->FieldByName("номенклатура")->AsString;
+SPC_FULL =  RQ_Data->Spc_RQ->FieldByName("наименование")->AsString;
 
 AnsiString sql="Select * from `MSK_Join` where  `Msk_Name`='"+LotMSK->Text+"' and `MSK_NOM_ID`='"+MSK_NOM_ID+"'";
           RQ_Data->MSK_JOIN->Active=false;
@@ -871,7 +874,7 @@ if (countEx==count){
    AnsiString LotCode, LotCustomer;
         RQ_Data->LotNumbers->Active=false;
         RQ_Data->LotNumbers->SQL->Clear();
-        RQ_Data->LotNumbers->SQL->Add("Select `Code`,`Customer` from `Извещение` where `Name`='"+LotNumber->Text+"' and `Spc`='"+LotSpc->Text+"'");
+        RQ_Data->LotNumbers->SQL->Add("Select `Code`,`Customer` from `Извещение` where `Name`='"+LotNumber->Text+"' and `Spc`='"+SPC_FULL+"'");
         RQ_Data->LotNumbers->Active=true;
         RQ_Data->LotNumbers->First();
         LotCode=RQ_Data->LotNumbers->FieldByName("Code")->AsString;
@@ -1528,7 +1531,66 @@ void __fastcall TProtokolForm::InsertLianozExecute(TObject *Sender)
                       DataModule2->Lianoz->FieldByName("IT")->AsFloat=DataModule2->psiData->FieldByName("TurnOver")->AsFloat;
                      DataModule2->Lianoz->FieldByName("Tmax")->AsFloat=DataModule2->psiData->FieldByName("Tmax")->AsFloat;
                      DataModule2->Lianoz->FieldByName("Mono")->AsFloat=DataModule2->psiData->FieldByName("Mono")->AsFloat;
-                     DataModule2->Lianoz->FieldByName("Spur")->AsFloat=DataModule2->psiData->FieldByName("Spur")->AsFloat;
+                     DataModule2->Lianoz->FieldByName("Spur")->AsFloat=DataModule2->psiData->FieldByName("Rsp1")->AsFloat;
+                     bool spurFound = false;
+    double spurMin = 0.0;
+
+    const int spurCnt = 3;
+
+    AnsiString useFields[spurCnt]  = {"Spur_F_1_use", "Spur_F_2_use", "Spur_F_3_use"};
+    AnsiString minFields[spurCnt]  = {"Spur_F_1_Min", "Spur_F_2_Min", "Spur_F_3_Min"};
+    AnsiString maxFields[spurCnt]  = {"Spur_F_1_Max", "Spur_F_2_Max", "Spur_F_3_Max"};
+    AnsiString freqFields[spurCnt] = {"FSpur1", "FSpur2", "FSpur3"};
+    AnsiString rspFields[spurCnt]  = {"Rsp1", "Rsp2", "Rsp3"};
+
+    for (int i = 0; i < spurCnt; ++i)
+    {
+        AnsiString useVal = DataModule2->SqlSpec->FieldByName(useFields[i])->AsString.Trim();
+
+        // Использовать индекс, если Spur_F_N_use = 1 или True
+        if (!(useVal == "1" || SameText(useVal, "True")))
+            continue;
+
+        bool freqOk = true;
+
+        AnsiString minVal = DataModule2->SqlSpec->FieldByName(minFields[i])->AsString.Trim();
+        AnsiString maxVal = DataModule2->SqlSpec->FieldByName(maxFields[i])->AsString.Trim();
+
+        double fSpur = DataModule2->psiData->FieldByName(freqFields[i])->AsFloat;
+
+        if (minVal != "" && !SameText(minVal, "no"))
+        {
+            double fMin = StrToFloatDef(minVal, 0.0);
+            if (fSpur < fMin)
+                freqOk = false;
+        }
+
+        if (maxVal != "" && !SameText(maxVal, "no"))
+        {
+            double fMax = StrToFloatDef(maxVal, 0.0);
+            if (fSpur > fMax)
+                freqOk = false;
+        }
+
+        if (freqOk)
+        {
+            double rsp = DataModule2->psiData->FieldByName(rspFields[i])->AsFloat;
+
+            if (!spurFound || rsp < spurMin)
+            {
+                spurFound = true;
+                spurMin = rsp;
+            }
+        }
+    }
+
+    if (spurFound)
+    {
+        DataModule2->Lianoz->FieldByName("Spur")->AsFloat = spurMin;
+    }
+
+
+
                      DataModule2->Lianoz->FieldByName("C1_2C0")->AsFloat=DataModule2->psiData->FieldByName("C1_2C0")->AsFloat;
                      DataModule2->Lianoz->FieldByName("Slope")->AsFloat=DataModule2->psiData->FieldByName("Slope")->AsFloat;
                      DataModule2->Lianoz->FieldByName("Shum")->AsFloat=DataModule2->psiData->FieldByName("Shum")->AsFloat;
@@ -1731,18 +1793,191 @@ void __fastcall TProtokolForm::RazbrakovkaExecute(TObject *Sender)
                                     kl=true;
                               }
                       }
-              if (DataModule2->SqlSpec->FieldByName("Rsp1")->AsString=="True"){
-                 if (DataModule2->SqlSpec->FieldByName("Rsp1max")->AsString!="no"){
-                                          if(DataModule2->psiData->FieldByName("Spur")->AsFloat>(SRmax-DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat)){
-                                              kl=true;
-                                            }
-                   }
-               if (DataModule2->SqlSpec->FieldByName("Rsp1min")->AsString!="no"){
-                              if(DataModule2->psiData->FieldByName("Spur")->AsFloat<(SRmin+DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat)){
-                                    kl=true;
-                              }
-                      }
-                  }
+               // разбраковка нежелательных резонансов
+                if (DataModule2->SqlSpec->FieldByName("Spur_Use")->AsString=="True"){
+
+                        if (DataModule2->SqlSpec->FieldByName("Rsp1")->AsString=="True"){
+                        //Разбраковка с учетом частоты нежелательного резонанса
+                                 if (DataModule2->SqlSpec->FieldByName("Spur_F_1_use")->AsString=="True"){
+                                       bool spur_freq = false;
+                                       bool spur_max =  true;
+                                       bool spur_min = true;
+                                     if (DataModule2->SqlSpec->FieldByName("Spur_F_1_Max")->AsString!="no"){
+                                                if (DataModule2->psiData->FieldByName("FSpur1")->AsFloat<=DataModule2->SqlSpec->FieldByName("Spur_F_1_Max")->AsFloat){
+                                                       spur_max = true;
+                                                }
+                                                else {
+                                                 spur_max = false;
+                                                }
+                                     }
+                                      if (DataModule2->SqlSpec->FieldByName("Spur_F_1_Min")->AsString!="no"){
+                                                if (DataModule2->psiData->FieldByName("FSpur1")->AsFloat>=DataModule2->SqlSpec->FieldByName("Spur_F_1_Min")->AsFloat){
+                                                       spur_min = true;
+                                                }
+                                                else {
+                                                 spur_min = false;
+                                                }
+                                     }
+                                      if (spur_max & spur_min) {
+                                        spur_freq =  true;
+                                      }
+                                      else{
+                                       spur_freq =  false;
+                                      }
+                                     if (DataModule2->SqlSpec->FieldByName("Rsp1max")->AsString!="no"){
+
+                                                          if(DataModule2->psiData->FieldByName("Rsp1")->AsFloat>(SRmax-SRmax*(DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat/100))){
+                                                                if (spur_freq == true){
+                                                                              kl=true;
+                                                                 }
+                                                            }
+                                           }
+                                      if (DataModule2->SqlSpec->FieldByName("Rsp1min")->AsString!="no"){
+                                                             if(DataModule2->psiData->FieldByName("Rsp1")->AsFloat<(SRmin+SRmin*(DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat)/100)){
+                                                                   if (spur_freq == true){
+                                                                              kl=true;
+                                                                 }
+                                                                }
+                                                }
+                                 }
+                        //разбраковка по значениею нежелательного резонанса
+                                 else {
+                                         if (DataModule2->SqlSpec->FieldByName("Rsp1max")->AsString!="no"){
+                                                          if(DataModule2->psiData->FieldByName("Rsp1")->AsFloat>(SRmax-SRmax*(DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat/100))){
+                                                              kl=true;
+                                                            }
+                                           }
+                                         if (DataModule2->SqlSpec->FieldByName("Rsp1min")->AsString!="no"){
+                                                             if(DataModule2->psiData->FieldByName("Rsp1")->AsFloat<(SRmin+SRmin*(DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat)/100)){
+                                                                    kl=true;
+                                                                }
+                                                }
+                                         }
+                        }
+  //*****************************************************************************************************************************
+                 if (DataModule2->SqlSpec->FieldByName("Rsp2")->AsString=="True"){
+                        //Разбраковка с учетом частоты нежелательного резонанса
+                                 if (DataModule2->SqlSpec->FieldByName("Spur_F_2_use")->AsString=="True"){
+                                       bool spur_freq = false;
+                                       bool spur_max =  true;
+                                       bool spur_min = true;
+                                     if (DataModule2->SqlSpec->FieldByName("Spur_F_2_Max")->AsString!="no"){
+                                                if (DataModule2->psiData->FieldByName("FSpur2")->AsFloat<=DataModule2->SqlSpec->FieldByName("Spur_F_2_Max")->AsFloat){
+                                                       spur_max = true;
+                                                }
+                                                else {
+                                                 spur_max = false;
+                                                }
+                                     }
+                                      if (DataModule2->SqlSpec->FieldByName("Spur_F_2_Min")->AsString!="no"){
+                                                if (DataModule2->psiData->FieldByName("FSpur2")->AsFloat>=DataModule2->SqlSpec->FieldByName("Spur_F_2_Min")->AsFloat){
+                                                       spur_min = true;
+                                                }
+                                                else {
+                                                 spur_min = false;
+                                                }
+                                     }
+                                      if (spur_max & spur_min) {
+                                        spur_freq =  true;
+                                      }
+                                      else{
+                                       spur_freq =  false;
+                                      }
+                                     if (DataModule2->SqlSpec->FieldByName("Rsp2max")->AsString!="no"){
+
+                                                          if(DataModule2->psiData->FieldByName("Rsp2")->AsFloat>(SRmax-SRmax*(DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat/100))){
+                                                                if (spur_freq == true){
+                                                                              kl=true;
+                                                                 }
+                                                            }
+                                           }
+                                     if (DataModule2->SqlSpec->FieldByName("Rsp2min")->AsString!="no"){
+                                                             if(DataModule2->psiData->FieldByName("Rsp2")->AsFloat<(SRmin+SRmin*(DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat)/100)){
+                                                                    if (spur_freq == true){
+                                                                              kl=true;
+                                                                 }
+                                                                }
+                                                }
+                                 }
+                        //разбраковка по значениею нежелательного резонанса
+                                 else {
+                                         if (DataModule2->SqlSpec->FieldByName("Rsp2max")->AsString!="no"){
+                                                          if(DataModule2->psiData->FieldByName("Rsp2")->AsFloat>(SRmax-SRmax*(DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat/100))){
+                                                              kl=true;
+                                                            }
+                                           }
+                                         if (DataModule2->SqlSpec->FieldByName("Rsp2min")->AsString!="no"){
+                                                             if(DataModule2->psiData->FieldByName("Rsp2")->AsFloat<(SRmin+SRmin*(DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat)/100)){
+                                                                    kl=true;
+                                                                }
+                                                }
+                                         }
+                        }
+  //*********************************************************************************************************************************************************************
+   //*****************************************************************************************************************************
+                 if (DataModule2->SqlSpec->FieldByName("Rsp3")->AsString=="True"){
+                        //Разбраковка с учетом частоты нежелательного резонанса
+                                 if (DataModule2->SqlSpec->FieldByName("Spur_F_3_use")->AsString=="True"){
+                                       bool spur_freq = false;
+                                       bool spur_max =  true;
+                                       bool spur_min = true;
+                                     if (DataModule2->SqlSpec->FieldByName("Spur_F_3_Max")->AsString!="no"){
+                                                if (DataModule2->psiData->FieldByName("FSpur3")->AsFloat<=DataModule2->SqlSpec->FieldByName("Spur_F_3_Max")->AsFloat){
+                                                       spur_max = true;
+                                                }
+                                                else {
+                                                 spur_max = false;
+                                                }
+                                     }
+                                      if (DataModule2->SqlSpec->FieldByName("Spur_F_3_Min")->AsString!="no"){
+                                                if (DataModule2->psiData->FieldByName("FSpur3")->AsFloat>=DataModule2->SqlSpec->FieldByName("Spur_F_3_Min")->AsFloat){
+                                                       spur_min = true;
+                                                }
+                                                else {
+                                                 spur_min = false;
+                                                }
+                                     }
+                                      if (spur_max & spur_min) {
+                                        spur_freq =  true;
+                                      }
+                                      else{
+                                       spur_freq =  false;
+                                      }
+                                     if (DataModule2->SqlSpec->FieldByName("Rsp3max")->AsString!="no"){
+
+                                                          if(DataModule2->psiData->FieldByName("Rsp2")->AsFloat>(SRmax-SRmax*(DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat/100))){
+                                                                if (spur_freq == true){
+                                                                              kl=true;
+                                                                 }
+                                                            }
+                                           }
+                                     if (DataModule2->SqlSpec->FieldByName("Rsp3min")->AsString!="no"){
+                                                             if(DataModule2->psiData->FieldByName("Rsp3")->AsFloat<(SRmin+SRmin*(DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat)/100)){
+                                                                    if (spur_freq == true){
+                                                                              kl=true;
+                                                                 }
+                                                                }
+                                                }
+                                 }
+                        //разбраковка по значениею нежелательного резонанса
+                                 else {
+                                         if (DataModule2->SqlSpec->FieldByName("Rsp3max")->AsString!="no"){
+                                                          if(DataModule2->psiData->FieldByName("Rsp2")->AsFloat>(SRmax-SRmax*(DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat/100))){
+                                                              kl=true;
+                                                            }
+                                           }
+                                         if (DataModule2->SqlSpec->FieldByName("Rsp3min")->AsString!="no"){
+                                                             if(DataModule2->psiData->FieldByName("Rsp3")->AsFloat<(SRmin+SRmin*(DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat)/100)){
+                                                                    kl=true;
+                                                                }
+                                                }
+                                         }
+                        }
+  //*******************************************************************************************************************************************************
+
+
+                }
+ //*******************************************************************************************************************************************************************
                     if (DataModule2->SqlSpec->FieldByName("Fmaxmax")->AsString!="no"){
                               if (DataModule2->SqlSpec->FieldByName("DopuskFi")->AsFloat>0){
                                           if(fabs(DataModule2->psiData->FieldByName("Fmaxm")->AsFloat)>(Fmaxmax-Fmaxmax*(DataModule2->SqlSpec->FieldByName("DopuskFi")->AsFloat/100))){
@@ -1797,12 +2032,12 @@ void __fastcall TProtokolForm::RazbrakovkaExecute(TObject *Sender)
                               }
                       }
                  if (DataModule2->SqlSpec->FieldByName("Mmax")->AsString!="no"){
-                                          if(DataModule2->psiData->FieldByName("Mono")->AsFloat>Mmax){
+                                          if(DataModule2->psiData->FieldByName("Mono")->AsFloat> (Mmax - DataModule2->SqlSpec->FieldByName("Dopusk_M")->AsFloat)){
                                               kl=true;
                                             }
                    }
                if (DataModule2->SqlSpec->FieldByName("Mmin")->AsString!="no"){
-                              if(DataModule2->psiData->FieldByName("Mono")->AsFloat<Mmin){
+                              if(DataModule2->psiData->FieldByName("Mono")->AsFloat< (Mmin + DataModule2->SqlSpec->FieldByName("Dopusk_M")->AsFloat)){
                                     kl=true;
                               }
                       }
@@ -2076,6 +2311,196 @@ void __fastcall TProtokolForm::Razbrakovka_bez_ZPExecute(TObject *Sender)
                                     kl=true;
                               }
                       }
+
+
+               // разбраковка нежелательных резонансов
+                if (DataModule2->SqlSpec->FieldByName("Spur_Use")->AsString=="True"){
+
+                        if (DataModule2->SqlSpec->FieldByName("Rsp1")->AsString=="True"){
+                        //Разбраковка с учетом частоты нежелательного резонанса
+                                 if (DataModule2->SqlSpec->FieldByName("Spur_F_1_use")->AsString=="True"){
+                                       bool spur_freq = false;
+                                       bool spur_max =  true;
+                                       bool spur_min = true;
+                                     if (DataModule2->SqlSpec->FieldByName("Spur_F_1_Max")->AsString!="no"){
+                                                if (DataModule2->psiData->FieldByName("FSpur1")->AsFloat<=DataModule2->SqlSpec->FieldByName("Spur_F_1_Max")->AsFloat){
+                                                       spur_max = true;
+                                                }
+                                                else {
+                                                 spur_max = false;
+                                                }
+                                     }
+                                      if (DataModule2->SqlSpec->FieldByName("Spur_F_1_Min")->AsString!="no"){
+                                                if (DataModule2->psiData->FieldByName("FSpur1")->AsFloat>=DataModule2->SqlSpec->FieldByName("Spur_F_1_Min")->AsFloat){
+                                                       spur_min = true;
+                                                }
+                                                else {
+                                                 spur_min = false;
+                                                }
+                                     }
+                                      if (spur_max & spur_min) {
+                                        spur_freq =  true;
+                                      }
+                                      else{
+                                       spur_freq =  false;
+                                      }
+                                     if (DataModule2->SqlSpec->FieldByName("Rsp1max")->AsString!="no"){
+
+                                                          if(DataModule2->psiData->FieldByName("Rsp1")->AsFloat>SRmax){
+                                                                if (spur_freq == true){
+                                                                              kl=true;
+                                                                 }
+                                                            }
+                                           }
+                                      if (DataModule2->SqlSpec->FieldByName("Rsp1min")->AsString!="no"){
+                                                             if(DataModule2->psiData->FieldByName("Rsp1")->AsFloat<SRmin){
+                                                                   if (spur_freq == true){
+                                                                              kl=true;
+                                                                 }
+                                                                }
+                                                }
+                                 }
+                        //разбраковка по значениею нежелательного резонанса
+                                 else {
+                                         if (DataModule2->SqlSpec->FieldByName("Rsp1max")->AsString!="no"){
+                                                          if(DataModule2->psiData->FieldByName("Rsp1")->AsFloat>SRmax){
+                                                              kl=true;
+                                                            }
+                                           }
+                                         if (DataModule2->SqlSpec->FieldByName("Rsp1min")->AsString!="no"){
+                                                             if(DataModule2->psiData->FieldByName("Rsp1")->AsFloat<SRmin){
+                                                                    kl=true;
+                                                                }
+                                                }
+                                         }
+                        }
+  //*****************************************************************************************************************************
+                 if (DataModule2->SqlSpec->FieldByName("Rsp2")->AsString=="True"){
+                        //Разбраковка с учетом частоты нежелательного резонанса
+                                 if (DataModule2->SqlSpec->FieldByName("Spur_F_2_use")->AsString=="True"){
+                                       bool spur_freq = false;
+                                       bool spur_max =  true;
+                                       bool spur_min = true;
+                                     if (DataModule2->SqlSpec->FieldByName("Spur_F_2_Max")->AsString!="no"){
+                                                if (DataModule2->psiData->FieldByName("FSpur2")->AsFloat<=DataModule2->SqlSpec->FieldByName("Spur_F_2_Max")->AsFloat){
+                                                       spur_max = true;
+                                                }
+                                                else {
+                                                 spur_max = false;
+                                                }
+                                     }
+                                      if (DataModule2->SqlSpec->FieldByName("Spur_F_2_Min")->AsString!="no"){
+                                                if (DataModule2->psiData->FieldByName("FSpur2")->AsFloat>=DataModule2->SqlSpec->FieldByName("Spur_F_2_Min")->AsFloat){
+                                                       spur_min = true;
+                                                }
+                                                else {
+                                                 spur_min = false;
+                                                }
+                                     }
+                                      if (spur_max & spur_min) {
+                                        spur_freq =  true;
+                                      }
+                                      else{
+                                       spur_freq =  false;
+                                      }
+                                     if (DataModule2->SqlSpec->FieldByName("Rsp2max")->AsString!="no"){
+
+                                                          if(DataModule2->psiData->FieldByName("Rsp2")->AsFloat>SRmax){
+                                                                if (spur_freq = true){
+                                                                              kl=true;
+                                                                 }
+                                                            }
+                                           }
+                                     if (DataModule2->SqlSpec->FieldByName("Rsp2min")->AsString!="no"){
+                                                             if(DataModule2->psiData->FieldByName("Rsp2")->AsFloat<SRmin){
+                                                                    if (spur_freq = true){
+                                                                              kl=true;
+                                                                 }
+                                                                }
+                                                }
+                                 }
+                        //разбраковка по значениею нежелательного резонанса
+                                 else {
+                                         if (DataModule2->SqlSpec->FieldByName("Rsp2max")->AsString!="no"){
+                                                          if(DataModule2->psiData->FieldByName("Rsp2")->AsFloat>SRmax){
+                                                              kl=true;
+                                                            }
+                                           }
+                                         if (DataModule2->SqlSpec->FieldByName("Rsp2min")->AsString!="no"){
+                                                             if(DataModule2->psiData->FieldByName("Rsp2")->AsFloat<SRmin){
+                                                                    kl=true;
+                                                                }
+                                                }
+                                         }
+                        }
+  //*********************************************************************************************************************************************************************
+   //*****************************************************************************************************************************
+                 if (DataModule2->SqlSpec->FieldByName("Rsp3")->AsString=="True"){
+                        //Разбраковка с учетом частоты нежелательного резонанса
+                                 if (DataModule2->SqlSpec->FieldByName("Spur_F_3_use")->AsString=="True"){
+                                       bool spur_freq = false;
+                                       bool spur_max =  true;
+                                       bool spur_min = true;
+                                     if (DataModule2->SqlSpec->FieldByName("Spur_F_3_Max")->AsString!="no"){
+                                                if (DataModule2->psiData->FieldByName("FSpur3")->AsFloat<=DataModule2->SqlSpec->FieldByName("Spur_F_3_Max")->AsFloat){
+                                                       spur_max = true;
+                                                }
+                                                else {
+                                                 spur_max = false;
+                                                }
+                                     }
+                                      if (DataModule2->SqlSpec->FieldByName("Spur_F_3_Min")->AsString!="no"){
+                                                if (DataModule2->psiData->FieldByName("FSpur3")->AsFloat>=DataModule2->SqlSpec->FieldByName("Spur_F_3_Min")->AsFloat){
+                                                       spur_min = true;
+                                                }
+                                                else {
+                                                 spur_min = false;
+                                                }
+                                     }
+                                      if (spur_max & spur_min) {
+                                        spur_freq =  true;
+                                      }
+                                      else{
+                                       spur_freq =  false;
+                                      }
+                                     if (DataModule2->SqlSpec->FieldByName("Rsp3max")->AsString!="no"){
+
+                                                          if(DataModule2->psiData->FieldByName("Rsp2")->AsFloat>SRmax){
+                                                                if (spur_freq = true){
+                                                                              kl=true;
+                                                                 }
+                                                            }
+                                           }
+                                     if (DataModule2->SqlSpec->FieldByName("Rsp3min")->AsString!="no"){
+                                                             if(DataModule2->psiData->FieldByName("Rsp3")->AsFloat<SRmin){
+                                                                    if (spur_freq = true){
+                                                                              kl=true;
+                                                                 }
+                                                                }
+                                                }
+                                 }
+                        //разбраковка по значениею нежелательного резонанса
+                                 else {
+                                         if (DataModule2->SqlSpec->FieldByName("Rsp3max")->AsString!="no"){
+                                                          if(DataModule2->psiData->FieldByName("Rsp2")->AsFloat>SRmax){
+                                                              kl=true;
+                                                            }
+                                           }
+                                         if (DataModule2->SqlSpec->FieldByName("Rsp3min")->AsString!="no"){
+                                                             if(DataModule2->psiData->FieldByName("Rsp3")->AsFloat<SRmin){
+                                                                    kl=true;
+                                                                }
+                                                }
+                                         }
+                        }
+  //*******************************************************************************************************************************************************
+
+
+                }
+
+
+
+                /*
                 if (DataModule2->SqlSpec->FieldByName("Rsp1")->AsString=="True"){
                  if (DataModule2->SqlSpec->FieldByName("Rsp1max")->AsString!="no"){
                                           if(DataModule2->psiData->FieldByName("Spur")->AsFloat>SRmax){
@@ -2088,6 +2513,7 @@ void __fastcall TProtokolForm::Razbrakovka_bez_ZPExecute(TObject *Sender)
                               }
                       }
                   }
+                 */ 
                     if (DataModule2->SqlSpec->FieldByName("Fmaxmax")->AsString!="no"){
                                           if(fabs(DataModule2->psiData->FieldByName("Fmaxm")->AsFloat)>Fmaxmax){
                                               kl=true;
@@ -2382,25 +2808,199 @@ if (DataModule2->psiData->FieldByName("F")->AsFloat*DataModule2->psiData->FieldB
                                                             kl=true;
                                                      }
                                  }
-                                if (DataModule2->SqlSpec->FieldByName("Rsp1")->AsString=="True"){
-                                   if (DataModule2->SqlSpec->FieldByName("Rsp1max")->AsString!="no"){
-                                               if(DataModule2->psiData->FieldByName("Spur")->AsFloat>(SRmax-DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat) & DataModule2->psiData->FieldByName("Spur")->AsFloat<SRmax){
-                                                   kl=true;
-                                                   }
-                                }
 
-                              if (DataModule2->SqlSpec->FieldByName("Rsp1min")->AsString!="no"){
-                                                      if(DataModule2->psiData->FieldByName("Spur")->AsFloat<(SRmin+DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat) & DataModule2->psiData->FieldByName("Spur")->AsFloat>SRmin){
-                                                            kl=true;
-                                                     }
-                                 }
-                               }
                                     if (DataModule2->SqlSpec->FieldByName("Fmaxmax")->AsString!="no"){
                                                if(DataModule2->psiData->FieldByName("Fmaxm")->AsFloat>(Fmaxmax-Fmaxmax*(DataModule2->SqlSpec->FieldByName("DopuskFi")->AsFloat/100)) & DataModule2->psiData->FieldByName("Fmaxm")->AsFloat<Fmaxmax){
                                                    kl=true;
                                                    }
                                 }
+                                // разбраковка нежелательных резонансов
+                if (DataModule2->SqlSpec->FieldByName("Spur_Use")->AsString=="True"){
 
+                        if (DataModule2->SqlSpec->FieldByName("Rsp1")->AsString=="True"){
+                        //Разбраковка с учетом частоты нежелательного резонанса
+                                 if (DataModule2->SqlSpec->FieldByName("Spur_F_1_use")->AsString=="True"){
+                                       bool spur_freq = false;
+                                       bool spur_max =  true;
+                                       bool spur_min = true;
+                                     if (DataModule2->SqlSpec->FieldByName("Spur_F_1_Max")->AsString!="no"){
+                                                if (DataModule2->psiData->FieldByName("FSpur1")->AsFloat<=DataModule2->SqlSpec->FieldByName("Spur_F_1_Max")->AsFloat){
+                                                       spur_max = true;
+                                                }
+                                                else {
+                                                 spur_max = false;
+                                                }
+                                     }
+                                      if (DataModule2->SqlSpec->FieldByName("Spur_F_1_Min")->AsString!="no"){
+                                                if (DataModule2->psiData->FieldByName("FSpur1")->AsFloat>=DataModule2->SqlSpec->FieldByName("Spur_F_1_Min")->AsFloat){
+                                                       spur_min = true;
+                                                }
+                                                else {
+                                                 spur_min = false;
+                                                }
+                                     }
+                                      if (spur_max & spur_min) {
+                                        spur_freq =  true;
+                                      }
+                                      else{
+                                       spur_freq =  false;
+                                      }
+                                     if (DataModule2->SqlSpec->FieldByName("Rsp1max")->AsString!="no"){
+
+                                                          if(DataModule2->psiData->FieldByName("Rsp1")->AsFloat>(SRmax-DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat) & DataModule2->psiData->FieldByName("Rsp1")->AsFloat<SRmax){
+                                                                if (spur_freq = true){
+                                                                              kl=true;
+                                                                 }
+                                                            }
+                                           }
+                                     if (DataModule2->SqlSpec->FieldByName("Rsp1min")->AsString!="no"){
+                                                      if(DataModule2->psiData->FieldByName("Rsp1")->AsFloat<(SRmin+DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat) & DataModule2->psiData->FieldByName("Rsp1")->AsFloat>SRmin){
+                                                            if (spur_freq = true){
+                                                                              kl=true;
+                                                                 }
+                                                     }
+                                      }
+                                 }
+                        //разбраковка по значениею нежелательного резонанса
+                                 else {
+                                         if (DataModule2->SqlSpec->FieldByName("Rsp1max")->AsString!="no"){
+                                               if(DataModule2->psiData->FieldByName("Rsp1")->AsFloat>(SRmax-DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat) & DataModule2->psiData->FieldByName("Rsp1")->AsFloat<SRmax){
+                                                   kl=true;
+                                                   }
+                                }
+
+                              if (DataModule2->SqlSpec->FieldByName("Rsp1min")->AsString!="no"){
+                                                      if(DataModule2->psiData->FieldByName("Rsp1")->AsFloat<(SRmin+DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat) & DataModule2->psiData->FieldByName("Rsp1")->AsFloat>SRmin){
+                                                            kl=true;
+                                                     }
+                                 }
+
+                               }
+
+                        }
+  //*****************************************************************************************************************************
+                 if (DataModule2->SqlSpec->FieldByName("Rsp2")->AsString=="True"){
+                        //Разбраковка с учетом частоты нежелательного резонанса
+                                 if (DataModule2->SqlSpec->FieldByName("Spur_F2_use")->AsString=="True"){
+                                       bool spur_freq = false;
+                                       bool spur_max =  true;
+                                       bool spur_min = true;
+                                     if (DataModule2->SqlSpec->FieldByName("Spur_F_2_Max")->AsString!="no"){
+                                                if (DataModule2->psiData->FieldByName("FSpur2")->AsFloat<=DataModule2->SqlSpec->FieldByName("Spur_F_2_Max")->AsFloat){
+                                                       spur_max = true;
+                                                }
+                                                else {
+                                                 spur_max = false;
+                                                }
+                                     }
+                                      if (DataModule2->SqlSpec->FieldByName("Spur_F_2_Min")->AsString!="no"){
+                                                if (DataModule2->psiData->FieldByName("FSpur2")->AsFloat>=DataModule2->SqlSpec->FieldByName("Spur_F_2_Min")->AsFloat){
+                                                       spur_min = true;
+                                                }
+                                                else {
+                                                 spur_min = false;
+                                                }
+                                     }
+                                      if (spur_max & spur_min) {
+                                        spur_freq =  true;
+                                      }
+                                      else{
+                                       spur_freq =  false;
+                                      }
+                                     if (DataModule2->SqlSpec->FieldByName("Rsp2max")->AsString!="no"){
+
+                                                           if(DataModule2->psiData->FieldByName("Rsp2")->AsFloat>(SRmax-DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat) & DataModule2->psiData->FieldByName("Rsp2")->AsFloat<SRmax){
+                                                                if (spur_freq = true){
+                                                                              kl=true;
+                                                                 }
+                                                            }
+                                           }
+                                        if (DataModule2->SqlSpec->FieldByName("Rsp2min")->AsString!="no"){
+                                                      if(DataModule2->psiData->FieldByName("Rsp2")->AsFloat<(SRmin+DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat) & DataModule2->psiData->FieldByName("Rsp2")->AsFloat>SRmin){
+                                                            if (spur_freq = true){
+                                                                              kl=true;
+                                                                 }
+                                                     }
+                                      }
+                                 }
+                        //разбраковка по значениею нежелательного резонанса
+                                 else {
+                                        if (DataModule2->SqlSpec->FieldByName("Rsp2max")->AsString!="no"){
+                                               if(DataModule2->psiData->FieldByName("Rsp2")->AsFloat>(SRmax-DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat) & DataModule2->psiData->FieldByName("Rsp2")->AsFloat<SRmax){
+                                                   kl=true;
+                                                   }
+                                }
+
+                              if (DataModule2->SqlSpec->FieldByName("Rsp2min")->AsString!="no"){
+                                                      if(DataModule2->psiData->FieldByName("Rsp2")->AsFloat<(SRmin+DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat) & DataModule2->psiData->FieldByName("Rsp2")->AsFloat>SRmin){
+                                                            kl=true;
+                                                     }
+                                 }
+
+
+
+                                         }
+                        }
+  //*********************************************************************************************************************************************************************
+   //*****************************************************************************************************************************
+                 if (DataModule2->SqlSpec->FieldByName("Rsp3")->AsString=="True"){
+                        //Разбраковка с учетом частоты нежелательного резонанса
+                                 if (DataModule2->SqlSpec->FieldByName("Spur_F3_use")->AsString=="True"){
+                                       bool spur_freq = false;
+                                       bool spur_max =  true;
+                                       bool spur_min = true;
+                                     if (DataModule2->SqlSpec->FieldByName("Spur_F_3_Max")->AsString!="no"){
+                                                if (DataModule2->psiData->FieldByName("FSpur3")->AsFloat<=DataModule2->SqlSpec->FieldByName("Spur_F_3_Max")->AsFloat){
+                                                       spur_max = true;
+                                                }
+                                                else {
+                                                 spur_max = false;
+                                                }
+                                     }
+                                      if (DataModule2->SqlSpec->FieldByName("Spur_F_3_Min")->AsString!="no"){
+                                                if (DataModule2->psiData->FieldByName("FSpur3")->AsFloat>=DataModule2->SqlSpec->FieldByName("Spur_F_3_Min")->AsFloat){
+                                                       spur_min = true;
+                                                }
+                                                else {
+                                                 spur_min = false;
+                                                }
+                                     }
+                                      if (spur_max & spur_min) {
+                                        spur_freq =  true;
+                                      }
+                                      else{
+                                       spur_freq =  false;
+                                      }
+                                     if (DataModule2->SqlSpec->FieldByName("Rsp3max")->AsString!="no"){
+
+                                                          if(DataModule2->psiData->FieldByName("Rsp2")->AsFloat>(SRmax-SRmax*(DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat/100))){
+                                                                if (spur_freq = true){
+                                                                              kl=true;
+                                                                 }
+                                                            }
+                                           }
+                                 }
+                        //разбраковка по значениею нежелательного резонанса
+                                 else {
+                                            if (DataModule2->SqlSpec->FieldByName("Rsp3max")->AsString!="no"){
+                                               if(DataModule2->psiData->FieldByName("Rsp3")->AsFloat>(SRmax-DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat) & DataModule2->psiData->FieldByName("Rsp3")->AsFloat<SRmax){
+                                                   kl=true;
+                                                   }
+                                }
+
+                              if (DataModule2->SqlSpec->FieldByName("Rsp3min")->AsString!="no"){
+                                                      if(DataModule2->psiData->FieldByName("Rsp3")->AsFloat<(SRmin+DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat) & DataModule2->psiData->FieldByName("Rsp3")->AsFloat>SRmin){
+                                                            kl=true;
+                                                     }
+                                 }
+
+                                         }
+                        }
+  //*******************************************************************************************************************************************************
+
+
+                }
+ //*******************************************************************************************************************************************************************
                               if (DataModule2->SqlSpec->FieldByName("Fminmin")->AsString!="no"){
                                                       if(DataModule2->psiData->FieldByName("Fmaxm")->AsFloat<(Fminmin+Fminmin*(DataModule2->SqlSpec->FieldByName("DopuskFi")->AsFloat/100)) & DataModule2->psiData->FieldByName("Fmaxm")->AsFloat>Fminmin){
                                                             kl=true;
@@ -2804,18 +3404,170 @@ void __fastcall TProtokolForm::Razbrakovka_RKExecute(TObject *Sender)
                                     kl=true;
                               }
                       }
-                if (DataModule2->SqlSpec->FieldByName("Rsp1")->AsString=="True"){
-                 if (DataModule2->SqlSpec->FieldByName("Rsp1max")->AsString!="no"){
-                                          if(DataModule2->psiData->FieldByName("Spur")->AsFloat>(SRmax-SRmax*(DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat/100))){
-                                              kl=true;
-                                            }
-                   }
-               if (DataModule2->SqlSpec->FieldByName("Rsp1min")->AsString!="no"){
-                              if(DataModule2->psiData->FieldByName("Spur")->AsFloat<(SRmin+SRmin*(DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat)/100)){
-                                    kl=true;
-                              }
-                      }
-                 }
+               // разбраковка нежелательных резонансов
+                if (DataModule2->SqlSpec->FieldByName("Spur_Use")->AsString=="True"){
+
+                        if (DataModule2->SqlSpec->FieldByName("Rsp1")->AsString=="True"){
+                        //Разбраковка с учетом частоты нежелательного резонанса
+                                 if (DataModule2->SqlSpec->FieldByName("Spur_F_1_use")->AsString=="True"){
+                                       bool spur_freq = false;
+                                       bool spur_max =  true;
+                                       bool spur_min = true;
+                                     if (DataModule2->SqlSpec->FieldByName("Spur_F_1_Max")->AsString!="no"){
+                                                if (DataModule2->psiData->FieldByName("FSpur1")->AsFloat<=DataModule2->SqlSpec->FieldByName("Spur_F_1_Max")->AsFloat){
+                                                       spur_max = true;
+                                                }
+                                                else {
+                                                 spur_max = false;
+                                                }
+                                     }
+                                      if (DataModule2->SqlSpec->FieldByName("Spur_F_1_Min")->AsString!="no"){
+                                                if (DataModule2->psiData->FieldByName("FSpur1")->AsFloat>=DataModule2->SqlSpec->FieldByName("Spur_F_1_Min")->AsFloat){
+                                                       spur_min = true;
+                                                }
+                                                else {
+                                                 spur_min = false;
+                                                }
+                                     }
+                                      if (spur_max & spur_min) {
+                                        spur_freq =  true;
+                                      }
+                                      else{
+                                       spur_freq =  false;
+                                      }
+                                     if (DataModule2->SqlSpec->FieldByName("Rsp1max")->AsString!="no"){
+
+                                                          if(DataModule2->psiData->FieldByName("Rsp1")->AsFloat>(SRmax-SRmax*(DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat/100))){
+                                                                if (spur_freq = true){
+                                                                              kl=true;
+                                                                 }
+                                                            }
+                                           }
+                                 }
+                        //разбраковка по значениею нежелательного резонанса
+                                 else {
+                                         if (DataModule2->SqlSpec->FieldByName("Rsp1max")->AsString!="no"){
+                                                          if(DataModule2->psiData->FieldByName("Rsp1")->AsFloat>(SRmax-SRmax*(DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat/100))){
+                                                              kl=true;
+                                                            }
+                                           }
+                                         if (DataModule2->SqlSpec->FieldByName("Rsp1min")->AsString!="no"){
+                                                             if(DataModule2->psiData->FieldByName("Rsp1")->AsFloat<(SRmin+SRmin*(DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat)/100)){
+                                                                    kl=true;
+                                                                }
+                                                }
+                                         }
+                        }
+  //*****************************************************************************************************************************
+                 if (DataModule2->SqlSpec->FieldByName("Rsp2")->AsString=="True"){
+                        //Разбраковка с учетом частоты нежелательного резонанса
+                                 if (DataModule2->SqlSpec->FieldByName("Spur_F_2_use")->AsString=="True"){
+                                       bool spur_freq = false;
+                                       bool spur_max =  true;
+                                       bool spur_min = true;
+                                     if (DataModule2->SqlSpec->FieldByName("Spur_F_2_Max")->AsString!="no"){
+                                                if (DataModule2->psiData->FieldByName("FSpur2")->AsFloat<=DataModule2->SqlSpec->FieldByName("Spur_F_2_Max")->AsFloat){
+                                                       spur_max = true;
+                                                }
+                                                else {
+                                                 spur_max = false;
+                                                }
+                                     }
+                                      if (DataModule2->SqlSpec->FieldByName("Spur_F_2_Min")->AsString!="no"){
+                                                if (DataModule2->psiData->FieldByName("FSpur2")->AsFloat>=DataModule2->SqlSpec->FieldByName("Spur_F_2_Min")->AsFloat){
+                                                       spur_min = true;
+                                                }
+                                                else {
+                                                 spur_min = false;
+                                                }
+                                     }
+                                      if (spur_max & spur_min) {
+                                        spur_freq =  true;
+                                      }
+                                      else{
+                                       spur_freq =  false;
+                                      }
+                                     if (DataModule2->SqlSpec->FieldByName("Rsp2max")->AsString!="no"){
+
+                                                          if(DataModule2->psiData->FieldByName("Rsp2")->AsFloat>(SRmax-SRmax*(DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat/100))){
+                                                                if (spur_freq = true){
+                                                                              kl=true;
+                                                                 }
+                                                            }
+                                           }
+                                 }
+                        //разбраковка по значениею нежелательного резонанса
+                                 else {
+                                         if (DataModule2->SqlSpec->FieldByName("Rsp2max")->AsString!="no"){
+                                                          if(DataModule2->psiData->FieldByName("Rsp2")->AsFloat>(SRmax-SRmax*(DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat/100))){
+                                                              kl=true;
+                                                            }
+                                           }
+                                         if (DataModule2->SqlSpec->FieldByName("Rsp2min")->AsString!="no"){
+                                                             if(DataModule2->psiData->FieldByName("Rsp2")->AsFloat<(SRmin+SRmin*(DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat)/100)){
+                                                                    kl=true;
+                                                                }
+                                                }
+                                         }
+                        }
+  //*********************************************************************************************************************************************************************
+   //*****************************************************************************************************************************
+                 if (DataModule2->SqlSpec->FieldByName("Rsp3")->AsString=="True"){
+                        //Разбраковка с учетом частоты нежелательного резонанса
+                                 if (DataModule2->SqlSpec->FieldByName("Spur_F_3_use")->AsString=="True"){
+                                       bool spur_freq = false;
+                                       bool spur_max =  true;
+                                       bool spur_min = true;
+                                     if (DataModule2->SqlSpec->FieldByName("Spur_F_3_Max")->AsString!="no"){
+                                                if (DataModule2->psiData->FieldByName("FSpur3")->AsFloat<=DataModule2->SqlSpec->FieldByName("Spur_F_3_Max")->AsFloat){
+                                                       spur_max = true;
+                                                }
+                                                else {
+                                                 spur_max = false;
+                                                }
+                                     }
+                                      if (DataModule2->SqlSpec->FieldByName("Spur_F_3_Min")->AsString!="no"){
+                                                if (DataModule2->psiData->FieldByName("FSpur3")->AsFloat>=DataModule2->SqlSpec->FieldByName("Spur_F_3_Min")->AsFloat){
+                                                       spur_min = true;
+                                                }
+                                                else {
+                                                 spur_min = false;
+                                                }
+                                     }
+                                      if (spur_max & spur_min) {
+                                        spur_freq =  true;
+                                      }
+                                      else{
+                                       spur_freq =  false;
+                                      }
+                                     if (DataModule2->SqlSpec->FieldByName("Rsp3max")->AsString!="no"){
+
+                                                          if(DataModule2->psiData->FieldByName("Rsp2")->AsFloat>(SRmax-SRmax*(DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat/100))){
+                                                                if (spur_freq = true){
+                                                                              kl=true;
+                                                                 }
+                                                            }
+                                           }
+                                 }
+                        //разбраковка по значениею нежелательного резонанса
+                                 else {
+                                         if (DataModule2->SqlSpec->FieldByName("Rsp3max")->AsString!="no"){
+                                                          if(DataModule2->psiData->FieldByName("Rsp2")->AsFloat>(SRmax-SRmax*(DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat/100))){
+                                                              kl=true;
+                                                            }
+                                           }
+                                         if (DataModule2->SqlSpec->FieldByName("Rsp3min")->AsString!="no"){
+                                                             if(DataModule2->psiData->FieldByName("Rsp3")->AsFloat<(SRmin+SRmin*(DataModule2->SqlSpec->FieldByName("DopuskSR")->AsFloat)/100)){
+                                                                    kl=true;
+                                                                }
+                                                }
+                                         }
+                        }
+  //*******************************************************************************************************************************************************
+
+
+                }
+ //*******************************************************************************************************************************************************************
                     if (DataModule2->SqlSpec->FieldByName("Fmaxmax")->AsString!="no"){
                        if(DataModule2->SqlSpec->FieldByName("DopuskFi")->AsFloat>0){
                                           if(fabs(DataModule2->psiData->FieldByName("Fmaxm")->AsFloat)>(Fmaxmax-Fmaxmax*(DataModule2->SqlSpec->FieldByName("DopuskFi")->AsFloat/100))){
@@ -3706,7 +4458,7 @@ for (int l=0; l<PNForm->viewNumber->Count; l++){
 void __fastcall TProtokolForm::LotChangeExecute(TObject *Sender)
 {
 RQ_Data->LotNumbers->Active=false;
- RQ_Data->LotNumbers->SQL->Clear();
+RQ_Data->LotNumbers->SQL->Clear();
  RQ_Data->LotNumbers->SQL->Add("Select distinct `Номенклатура` from `заказы1С_новые` where `ЗаказНомер`='"+LotNumber->Text+"' and `ОсталосьВыпуститьПоГрафику`>'0'");
  RQ_Data->LotNumbers->Active=true;
  RQ_Data->LotNumbers->First();

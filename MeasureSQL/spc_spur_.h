@@ -17,6 +17,8 @@
 #include <Mask.hpp>
 #include "RzCmboBx.hpp"
 #include "RzDBCmbo.hpp"
+#include "DBAdvNavigator.hpp"
+#include <ExtCtrls.hpp>
 //---------------------------------------------------------------------------
 class TSpc_Spur_Form : public TForm
 {
@@ -63,6 +65,14 @@ __published:	// IDE-managed Components
         TRzDBEdit *RzDBEdit10;
         TRzDBEdit *RzDBEdit12;
         TLabel *Label13;
+        TDBAdvNavigator *RzDBNavigator1;
+        TRzDBComboBox *cbName;
+        TLabel *Label14;
+        TRzDBCheckBox *RzDBCheckBox3;
+        TLabel *Label15;
+        TLabel *Label16;
+        TRzDBCheckBox *RzDBCheckBox6;
+        TRzDBCheckBox *RzDBCheckBox7;
         void __fastcall btnCloseClick(TObject *Sender);
 private:	// User declarations
 public:		// User declarations

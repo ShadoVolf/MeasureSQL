@@ -64,7 +64,6 @@ __published:	// IDE-managed Components
         TLabel *Label18;
         TRzDBEdit *RzDBEdit8;
         TLabel *Label19;
-        TRzDBEdit *RzDBEdit9;
         TRzDBEdit *RzDBEdit10;
         void __fastcall btnCloseClick(TObject *Sender);
 private:	// User declarations

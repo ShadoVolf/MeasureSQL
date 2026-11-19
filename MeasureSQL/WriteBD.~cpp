@@ -1770,12 +1770,21 @@ DataModule2->psiData->Active=true;
                                  }
                                  VrProgressBar1->Position=0;
                                  VrProgressBar1->MaxValue=WriteTableForm->Table->RowCount-1;
-                   for (int i=0;i<WriteTableForm->Table->RowCount-1;i++){
-                                 DataModule2->PsiData1->Active=false;
+                                  DataModule2->PsiData1->Active=false;
                                  DataModule2->PsiData1->SQL->Clear();
-                                 DataModule2->PsiData1->SQL->Add("Select ID,Msk,N,Rsp1,Rsp2,Rsp3,Spur from psidata  where msk='"+edtMsk->Text+"' order by N");
+                                 AnsiString Sql;
+                                  if (cmb_ID->Text!=""){
+                                  Sql="Select ID,Msk,N,Rsp1,Rsp2,Rsp3,Spur from psidata  where Measure_ID='"+cmb_ID->Text+"' order by N" ;
+                                  }
+                                   else if (edtMsk->ItemIndex!=-1){
+                                     Sql="Select ID,Msk,N,Rsp1,Rsp2,Rsp3,Spur from psidata  where msk='"+edtMsk->Text+"' order by N";
+                                   }
+
+                                 DataModule2->PsiData1->SQL->Add(Sql);
                                  DataModule2->PsiData1->Active=true;
-                                 DataModule2->PsiData1->First();
+
+                   for (int i=0;i<WriteTableForm->Table->RowCount-1;i++){
+                                  DataModule2->PsiData1->First();
                                  N=WriteTableForm->Table->Cells[crystal][i+1];
                                        for (int j=0;j<DataModule2->PsiData1->RecordCount; j++){
                                                     if (N==DataModule2->PsiData1->FieldByName("N")->AsString){
@@ -1914,4 +1923,31 @@ for (int i=0; i<k;i++){
 
 
 
+
+void __fastcall TWriteForm::cmb_IDChange(TObject *Sender)
+{
+AnsiString MSK,Spc,File;
+  AnsiString Measure_ID=cmb_ID->Text;
+
+ DataModule2->psiData->Active=false;
+ DataModule2->psiData->SQL->Clear();
+ AnsiString Sql="Select * from psidata where Measure_ID='"+cmb_ID->Text+"'";
+ DataModule2->psiData->SQL->Add(Sql);
+ DataModule2->psiData->Active=true;
+ if (DataModule2->psiData->RecordCount>0){
+ DataModule2->psiData->First();
+ MSK=DataModule2->psiData->FieldByName("MSK")->AsString;
+ Spc=DataModule2->psiData->FieldByName("Spc")->AsString;
+ File=DataModule2->psiData->FieldByName("File")->AsString;
+ VrProgressBar1->MaxValue=DataModule2->psiData->RecordCount;
+ edtMsk->Clear();
+ edtMsk->Items->Add(MSK);
+ edtMsk->ItemIndex=0;
+ edtSpc->Clear();
+ edtSpc->Items->Add(Spc);
+ edtSpc->ItemIndex=0;
+ edtFile->Text=File;
+ }
+}
+//---------------------------------------------------------------------------
 

@@ -288,7 +288,7 @@ object SpektrOLDForm: TSpektrOLDForm
     PrintOptions.Printer = 'Default'
     PrintOptions.PrintOnSheet = 0
     ReportOptions.CreateDate = 40623.4751934954
-    ReportOptions.LastChange = 43153.7012835185
+    ReportOptions.LastChange = 44307.562840081
     ScriptLanguage = 'BasicScript'
     ScriptText.Strings = (
       'Dim count1 As Integer'
@@ -339,19 +339,19 @@ object SpektrOLDForm: TSpektrOLDForm
       
         'IF temp=1 Then Memo50.Color=clSilver                            ' +
         '  '
-      'IF temp=1 Then Memo50.Color=clNone'
+      'IF temp=0 Then Memo50.Color=clNone'
       
         'IF temp=1 Then Memo49.Color=clSilver                            ' +
         '  '
-      'IF temp=1 Then Memo49.Color=clNone'
+      'IF temp=0 Then Memo49.Color=clNone'
       
         'IF temp=1 Then Memo24.Color=clSilver                            ' +
         '  '
-      'IF temp=1 Then Memo24.Color=clNone    '
+      'IF temp=0 Then Memo24.Color=clNone    '
       
         'IF temp=1 Then OldStatus.Color=clSilver                         ' +
         '     '
-      'IF temp=1 Then OldStatus.Color=clNone    '
+      'IF temp=0 Then OldStatus.Color=clNone    '
       ''
       'end sub')
     Left = 24

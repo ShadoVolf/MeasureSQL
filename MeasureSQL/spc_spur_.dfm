@@ -1,7 +1,7 @@
 object Spc_Spur_Form: TSpc_Spur_Form
-  Left = 595
-  Top = 166
-  BorderStyle = bsNone
+  Left = 795
+  Top = 334
+  BorderStyle = bsSingle
   Caption = #1057#1087#1077#1094#1080#1092#1080#1082#1072#1094#1080#1103', '#1053#1077#1078#1077#1083#1072#1090#1077#1083#1100#1085#1099#1077' '#1088#1077#1079#1086#1085#1072#1089#1099
   ClientHeight = 570
   ClientWidth = 775
@@ -12,6 +12,8 @@ object Spc_Spur_Form: TSpc_Spur_Form
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
+  Position = poMainFormCenter
+  PrintScale = poPrintToFit
   PixelsPerInch = 96
   TextHeight = 16
   object Label1: TLabel
@@ -43,7 +45,7 @@ object Spc_Spur_Form: TSpc_Spur_Form
     Caption = #1053#1086#1084#1077#1088' 1'
   end
   object Label3: TLabel
-    Left = 80
+    Left = 64
     Top = 138
     Width = 97
     Height = 16
@@ -64,7 +66,7 @@ object Spc_Spur_Form: TSpc_Spur_Form
     Caption = #1042#1077#1088#1093#1085#1103#1103' '#1075#1088#1072#1085#1080#1094#1072
   end
   object Label6: TLabel
-    Left = 584
+    Left = 504
     Top = 98
     Width = 90
     Height = 16
@@ -92,7 +94,7 @@ object Spc_Spur_Form: TSpc_Spur_Form
     Caption = #1053#1086#1084#1077#1088' 2'
   end
   object Label10: TLabel
-    Left = 80
+    Left = 64
     Top = 274
     Width = 97
     Height = 16
@@ -106,7 +108,7 @@ object Spc_Spur_Form: TSpc_Spur_Form
     Caption = #1053#1086#1084#1077#1088' 3'
   end
   object Label12: TLabel
-    Left = 80
+    Left = 64
     Top = 410
     Width = 97
     Height = 16
@@ -118,6 +120,27 @@ object Spc_Spur_Form: TSpc_Spur_Form
     Width = 104
     Height = 16
     Caption = #1054#1087#1088#1077#1076#1077#1083#1103#1090#1100' '#1082#1072#1082
+  end
+  object Label14: TLabel
+    Left = 64
+    Top = 178
+    Width = 93
+    Height = 16
+    Caption = #1055#1086' '#1072#1084#1087#1083#1080#1090#1091#1076#1077
+  end
+  object Label15: TLabel
+    Left = 64
+    Top = 306
+    Width = 93
+    Height = 16
+    Caption = #1055#1086' '#1072#1084#1087#1083#1080#1090#1091#1076#1077
+  end
+  object Label16: TLabel
+    Left = 64
+    Top = 442
+    Width = 93
+    Height = 16
+    Caption = #1055#1086' '#1072#1084#1087#1083#1080#1090#1091#1076#1077
   end
   object btnClose: TAdvGlassButton
     Left = 692
@@ -286,7 +309,7 @@ object Spc_Spur_Form: TSpc_Spur_Form
     Width = 105
     Height = 24
     DataSource = DataModule1.SpecificationSource
-    DataField = 'Rsp3max'
+    DataField = 'Rsp1max'
     Color = clBlack
     DisabledColor = clBlack
     FocusColor = clNavy
@@ -322,7 +345,7 @@ object Spc_Spur_Form: TSpc_Spur_Form
     Width = 113
     Height = 24
     DataSource = DataModule1.SpecificationSource
-    DataField = 'Rsp1max'
+    DataField = 'Rsp3max'
     Color = clBlack
     DisabledColor = clBlack
     FocusColor = clNavy
@@ -664,5 +687,115 @@ object Spc_Spur_Form: TSpc_Spur_Form
     ParentColor = True
     ReadOnlyColor = clSilver
     TabOrder = 27
+  end
+  object RzDBNavigator1: TDBAdvNavigator
+    Left = 8
+    Top = 529
+    Width = 276
+    Height = 25
+    AutoThemeAdapt = False
+    DataSource = DataModule1.SpecificationSource
+    VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast, nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh, nbSetBookmark, nbGotoBookMark]
+    BorderColor = clRed
+    BorderHotColor = clRed
+    Color = clBlack
+    ColorTo = clNone
+    ColorDown = clLime
+    ColorDownTo = clLime
+    ColorHot = clRed
+    ColorHotTo = clRed
+    DeleteDisabled = False
+    InsertDisabled = False
+    GlyphSize = gsSmall
+    GlyphCustomSize = 0
+    Orientation = noHorizontal
+    TabOrder = 28
+    Version = '1.3.1.1'
+  end
+  object cbName: TRzDBComboBox
+    Left = 272
+    Top = 16
+    Width = 209
+    Height = 24
+    DataField = 'Name'
+    DataSource = DataModule1.SpecificationSource
+    Color = clBlack
+    Ctl3D = False
+    DisabledColor = clMoneyGreen
+    FlatButtonColor = clBlack
+    FlatButtons = True
+    FocusColor = clNavy
+    FrameColor = clYellow
+    FrameHotColor = clRed
+    FrameHotTrack = True
+    FrameVisible = True
+    ItemHeight = 16
+    ParentColor = True
+    ParentCtl3D = False
+    ReadOnlyColor = clGrayText
+    TabOrder = 29
+  end
+  object RzDBCheckBox3: TRzDBCheckBox
+    Left = 192
+    Top = 178
+    Width = 17
+    Height = 17
+    DataField = 'Spur_F_1_AMP_Unit'
+    DataSource = DataModule1.SpecificationSource
+    ValueChecked = 'True'
+    ValueUnchecked = 'False'
+    DisabledColor = clGreen
+    FillColor = clBlack
+    FocusColor = clBlack
+    FrameColor = clYellow
+    HighlightColor = clLime
+    HotTrack = True
+    TextHighlightColor = clLime
+    TextShadowColor = clLime
+    TabOrder = 30
+    TransparentColor = clMaroon
+    WinMaskColor = clRed
+  end
+  object RzDBCheckBox6: TRzDBCheckBox
+    Left = 192
+    Top = 306
+    Width = 17
+    Height = 17
+    DataField = 'Spur_F_2_AMP_Unit'
+    DataSource = DataModule1.SpecificationSource
+    ValueChecked = 'True'
+    ValueUnchecked = 'False'
+    DisabledColor = clGreen
+    FillColor = clBlack
+    FocusColor = clBlack
+    FrameColor = clYellow
+    HighlightColor = clLime
+    HotTrack = True
+    TextHighlightColor = clLime
+    TextShadowColor = clLime
+    TabOrder = 31
+    TransparentColor = clMaroon
+    WinMaskColor = clRed
+  end
+  object RzDBCheckBox7: TRzDBCheckBox
+    Left = 192
+    Top = 442
+    Width = 17
+    Height = 17
+    DataField = 'Spur_F_3_AMP_Unit'
+    DataSource = DataModule1.SpecificationSource
+    ValueChecked = 'True'
+    ValueUnchecked = 'False'
+    DisabledColor = clGreen
+    FillColor = clBlack
+    FocusColor = clBlack
+    FrameColor = clYellow
+    HighlightColor = clLime
+    HotTrack = True
+    TextHighlightColor = clLime
+    TextShadowColor = clLime
+    TabOrder = 32
+    TransparentColor = clMaroon
+    WinMaskColor = clRed
   end
 end

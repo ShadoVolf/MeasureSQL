@@ -17,7 +17,7 @@ object ZapacForm: TZapacForm
   object Label44: TLabel
     Left = 8
     Top = 12
-    Width = 175
+    Width = 176
     Height = 21
     Caption = #1058#1077#1093#1085#1086#1083#1086#1075#1080#1095#1077#1089#1082#1080#1081' '#1079#1072#1087#1072#1089
     Font.Charset = RUSSIAN_CHARSET
@@ -159,6 +159,13 @@ object ZapacForm: TZapacForm
     Width = 78
     Height = 13
     Caption = #1055#1077#1088#1077#1089#1090#1088#1086#1081#1082#1072' %'
+  end
+  object Label19: TLabel
+    Left = 200
+    Top = 387
+    Width = 90
+    Height = 13
+    Caption = #1052#1086#1085#1086#1090#1086#1085#1085#1085#1086#1089#1090#1100' %'
   end
   object edtR: TRzDBEdit
     Left = 128
@@ -549,7 +556,7 @@ object ZapacForm: TZapacForm
   end
   object RzDBEdit7: TRzDBEdit
     Left = 320
-    Top = 350
+    Top = 342
     Width = 55
     Height = 21
     DataSource = DataModule1.SpecificationSource
@@ -584,5 +591,24 @@ object ZapacForm: TZapacForm
     ParentColor = True
     ReadOnlyColor = clSilver
     TabOrder = 21
+  end
+  object RzDBEdit10: TRzDBEdit
+    Left = 320
+    Top = 382
+    Width = 55
+    Height = 21
+    DataSource = DataModule1.SpecificationSource
+    DataField = 'Dopusk_M'
+    Alignment = taRightJustify
+    Color = clBlack
+    DisabledColor = clBlack
+    FocusColor = clRed
+    FrameColor = clYellow
+    FrameHotColor = clRed
+    FrameHotTrack = True
+    FrameVisible = True
+    ParentColor = True
+    ReadOnlyColor = clSilver
+    TabOrder = 22
   end
 end

@@ -7,9 +7,8 @@ object DataModule2: TDataModule2
   object SqlSpec: TMyQuery
     Connection = DataModule1.CoordinatorDB
     SQL.Strings = (
-      'select * from specification where ID='#39'15542'#39)
+      'select * from specification where ID='#39'5241'#39)
     AutoCalcFields = False
-    Active = True
     Left = 88
     Top = 104
   end
@@ -24,13 +23,14 @@ object DataModule2: TDataModule2
     Connection = DataModule1.CoordinatorDB
     SQL.Strings = (
       'select * from psi')
+    Active = True
     Left = 232
     Top = 104
   end
   object psiData: TMyQuery
     Connection = DataModule1.CoordinatorDB
     SQL.Strings = (
-      'select * from psidata where Measure_ID='#39'161359'#39' order by N')
+      'select * from psidata where Measure_ID='#39'274849'#39' order by N')
     Options.FullRefresh = True
     Options.UpdateAllFields = True
     DetailFields = 'N'

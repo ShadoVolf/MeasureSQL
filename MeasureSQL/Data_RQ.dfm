@@ -1,7 +1,7 @@
 object RQ_Data: TRQ_Data
   OldCreateOrder = False
-  Left = 290
-  Top = 208
+  Left = 2402
+  Top = 275
   Height = 339
   Width = 1083
   object ResonatorTypes: TMyTable

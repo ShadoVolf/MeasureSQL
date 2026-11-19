@@ -280,7 +280,7 @@ for (int i=0; i<DataModule2->psiData->RecordCount; i++){
                      DataModule2->psiData2->FieldByName("variant")->AsString=DataModule2->psiData->FieldByName("variant")->AsString;
 
 
-                      DataModule2->psiData2->FieldByName("Machine_Call_Date")->AsString="05.08.2025";
+                      DataModule2->psiData2->FieldByName("Machine_Call_Date")->AsString="05.08.2026";
                        DataModule2->psiData2->FieldByName("Version")->AsString=DataModule2->psiData->FieldByName("Version")->AsString;
                     if (DataModule2->psiData->FieldByName("Status")->AsString=="Аномал." || DataModule2->psiData->FieldByName("Status")->AsString=="Незамер."){
                      DataModule2->psiData2->FieldByName("Status")->AsString=DataModule2->psiData->FieldByName("Status")->AsString;
@@ -386,11 +386,45 @@ for (int i=0; i<DataModule2->psiData->RecordCount; i++){
                    kk=random(100);
                    rr=kk/5000;
 
-                   temp=DataModule2->psiData->FieldByName("Spur")->AsFloat+(DataModule2->psiData->FieldByName("Spur")->AsFloat*rr*hhh);
+
+                   temp=DataModule2->psiData->FieldByName("Rsp1")->AsFloat+(DataModule2->psiData->FieldByName("Rsp1")->AsFloat*rr*hhh);
+                   DataModule2->psiData2->FieldByName("Rsp1")->AsFloat=temp;
                    DataModule2->psiData2->FieldByName("Spur")->AsFloat=temp;
                    randomize();
                    kk=random(100);
                    rr=kk/5000;
+
+                   temp=DataModule2->psiData->FieldByName("Rsp2")->AsFloat+(DataModule2->psiData->FieldByName("Rsp2")->AsFloat*rr*hhh);
+                   DataModule2->psiData2->FieldByName("Rsp2")->AsFloat=temp;
+                   randomize();
+                   kk=random(100);
+                   rr=kk/5000;
+
+                   temp=DataModule2->psiData->FieldByName("Rsp3")->AsFloat+(DataModule2->psiData->FieldByName("Rsp3")->AsFloat*rr*hhh);
+                   DataModule2->psiData2->FieldByName("Rsp3")->AsFloat=temp;
+                   randomize();
+                   kk=random(100);
+                   rr=kk/20000;
+
+                   temp=DataModule2->psiData->FieldByName("FSpur1")->AsFloat+(DataModule2->psiData->FieldByName("FSpur1")->AsFloat*rr*hhh);
+                   DataModule2->psiData2->FieldByName("FSpur1")->AsFloat=temp;
+                   randomize();
+                   kk=random(100);
+                   rr=kk/20000;
+
+                   temp=DataModule2->psiData->FieldByName("FSpur2")->AsFloat+(DataModule2->psiData->FieldByName("FSpur2")->AsFloat*rr*hhh);
+                   DataModule2->psiData2->FieldByName("FSpur2")->AsFloat=temp;
+                   randomize();
+                   kk=random(100);
+                   rr=kk/20000;
+
+                   temp=DataModule2->psiData->FieldByName("FSpur3")->AsFloat+(DataModule2->psiData->FieldByName("FSpur3")->AsFloat*rr*hhh);
+                   DataModule2->psiData2->FieldByName("FSpur3")->AsFloat=temp;
+                   randomize();
+                   kk=random(100);
+                   rr=kk/5000;
+
+
 
                    temp=DataModule2->psiData->FieldByName("C1_2C0")->AsFloat+(DataModule2->psiData->FieldByName("C1_2C0")->AsFloat*rr*hhh);
                    DataModule2->psiData2->FieldByName("C1_2C0")->AsFloat=temp;

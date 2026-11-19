@@ -1789,10 +1789,24 @@ DataModule2->psiData->Active=true;
                                        for (int j=0;j<DataModule2->PsiData1->RecordCount; j++){
                                                     if (N==DataModule2->PsiData1->FieldByName("N")->AsString){
                                                        DataModule2->PsiData1->Edit();
+                                                       double v1 = StrToFloat(WriteTableForm->Table->Cells[spur][i+1]);  // бывшее значение для Rsp1
+                                                       double v2 = StrToFloat(WriteTableForm->Table->Cells[sprr][i+1]); // бывшее значение для Rsp2
+                                                       double v3 = StrToFloat(WriteTableForm->Table->Cells[ssdb][i+1]); // бывшее значение для Rsp3
+
+                                                                double rsp1 = (v1 > 0.0) ? -20.0 * log10(v1) : 0.0;
+                                                                double rsp2 = (v2 > 0.0) ? -20.0 * log10(v2) : 0.0;
+                                                                double rsp3 = (v3 > 0.0) ? -20.0 * log10(v3) : 0.0;
+
+                                                        DataModule2->PsiData1->FieldByName("Rsp1")->AsFloat = rsp1;
+                                                        DataModule2->PsiData1->FieldByName("Spur")->AsFloat = rsp1; // одинаково с Rsp1
+                                                        DataModule2->PsiData1->FieldByName("Rsp2")->AsFloat = rsp2;
+                                                        DataModule2->PsiData1->FieldByName("Rsp3")->AsFloat = rsp3;
+                                                           /*
                                                        DataModule2->PsiData1->FieldByName("Rsp1")->AsFloat=StrToFloat(WriteTableForm->Table->Cells[spur][i+1]);
                                                        DataModule2->PsiData1->FieldByName("Rsp2")->AsFloat=StrToFloat(WriteTableForm->Table->Cells[sprr][i+1]);
                                                        DataModule2->PsiData1->FieldByName("Rsp3")->AsFloat=StrToFloat(WriteTableForm->Table->Cells[ssdb][i+1]);
                                                        DataModule2->PsiData1->FieldByName("Spur")->AsFloat=20*log10(StrToFloat(WriteTableForm->Table->Cells[sprr][i+1]));
+                                                       */
                                                        DataModule2->PsiData1->Post();
                                                       break;
                                                       }

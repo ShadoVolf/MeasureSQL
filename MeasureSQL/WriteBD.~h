@@ -54,6 +54,7 @@ __published:	// IDE-managed Components
         void __fastcall FormShow(TObject *Sender);
         void __fastcall edtTypeSelect(TObject *Sender);
         void __fastcall edtSpcSelect(TObject *Sender);
+        void __fastcall cmb_IDChange(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
         __fastcall TWriteForm(TComponent* Owner);
